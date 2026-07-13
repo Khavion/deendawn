@@ -1,0 +1,51 @@
+appId: com.khavion.deendawn
+---
+# First-run onboarding: welcome -> city -> notifications -> Today.
+# Requires a fresh data container (clearState) so 'onboarded.v1' is unset.
+- launchApp:
+    stopApp: true
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: 'ob-begin'
+    timeout: 30000
+- takeScreenshot: docs/screens/onboarding-welcome
+- tapOn:
+    id: 'ob-begin'
+- extendedWaitUntil:
+    visible:
+      id: 'ob-city'
+    timeout: 10000
+- takeScreenshot: docs/screens/onboarding-city
+- tapOn:
+    id: 'ob-city'
+- extendedWaitUntil:
+    visible:
+      id: 'city-search'
+    timeout: 10000
+- tapOn:
+    id: 'city-search'
+- inputText: 'Houston'
+- tapOn:
+    id: 'city-houston-us'
+- extendedWaitUntil:
+    visible:
+      id: 'ob-reminders'
+    timeout: 10000
+- takeScreenshot: docs/screens/onboarding-notifications
+- tapOn:
+    id: 'ob-skip'
+- extendedWaitUntil:
+    visible:
+      id: 'prayer-row-fajr'
+    timeout: 20000
+- takeScreenshot: docs/screens/onboarding-done-today
+# Relaunch (no clearState): onboarding must NOT reappear.
+- launchApp:
+    stopApp: true
+- extendedWaitUntil:
+    visible:
+      id: 'prayer-row-fajr'
+    timeout: 20000
+- assertNotVisible:
+    id: 'ob-begin'

@@ -100,6 +100,10 @@ export default function RootLayout() {
               <Stack.Screen name="library" options={{ headerBackButtonDisplayMode: 'minimal' }} />
               <Stack.Screen name="about" options={{ headerBackButtonDisplayMode: 'minimal' }} />
               <Stack.Screen
+                name="onboarding"
+                options={{ headerShown: false, gestureEnabled: false }}
+              />
+              <Stack.Screen
                 name="thinker/[key]"
                 options={{ headerBackButtonDisplayMode: 'minimal' }}
               />

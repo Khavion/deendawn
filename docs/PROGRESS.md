@@ -128,7 +128,11 @@ Done: Maestro installed; e2e/smoke.yaml green twice on iPhone 17 sim (Today -> M
 
 - About screen renders the pipeline-generated attribution manifest (all 10 artifacts w/ licenses; Tanzil visible-attribution requirement now guarded by a test), the privacy promise (i18n ×3), version, and dev-only badges for placeholder content. /about via More.
 
-## Next: E11 continues — onboarding first-run flow, recitation audio vs placeholder (BLOCKERS B), tip jar (RevenueCat sandbox), offline E2E suite, store prep; then E9 native session
+## Session 2026-07-13 (cont. 11) — E11: Onboarding first-run flow
+
+- Three-step onboarding (welcome → city → reminders): `onboarded.v1` kv flag, Today route redirects until set, city picked via the existing CityPickerModal (persists settings), reminders step calls ensurePermission(true) + rescheduleAll, skip path honored. i18n ×3, 3 RTL tests, Maestro e2e/onboarding.yaml drives the whole flow with clearState and asserts onboarding does NOT reappear on relaunch. Screenshots in docs/screens/onboarding-*.
+
+## Next: E11 continues — recitation audio vs placeholder (BLOCKERS B), tip jar (RevenueCat sandbox), offline E2E suite, store prep; then E9 native session
 
 ## Next: start here
 

@@ -216,5 +216,18 @@
     "sources": "Texts, translations & fonts",
     "devOnly": "Development placeholder — final selection pending review",
     "madeWith": "Free forever. Built with care for the ummah."
+  },
+  "onboarding": {
+    "welcomeTitle": "As-salamu alaykum",
+    "welcomeBody": "Prayer times, the Quran, qibla, and more — free forever, no ads, no accounts. Everything stays on your phone.",
+    "begin": "Begin",
+    "cityTitle": "Where do you pray?",
+    "cityBody": "Pick your city so prayer times are right. You can change it anytime in Settings.",
+    "chooseCity": "Choose your city",
+    "notifTitle": "Prayer reminders",
+    "notifBody": "Get a gentle reminder at each prayer time. Your iPhone will ask for permission — you can change your mind anytime.",
+    "enableReminders": "Turn on reminders",
+    "skip": "Not now",
+    "done": "Open DeenDawn"
   }
 }
