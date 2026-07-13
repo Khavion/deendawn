@@ -149,7 +149,12 @@ Done: Maestro installed; e2e/smoke.yaml green twice on iPhone 17 sim (Today -> M
 - fastlane/metadata drafted: name/subtitle/keywords (≤100 chars), full description (honest privacy framing), promotional text, reviewer notes (4.3 differentiation = Data Not Collected + offline-first + deterministic on-device Ask; 3.2.1 tip framing), privacy_answers_draft.md (Data Not Collected rationale + RevenueCat re-check note), copyright. support_url/privacy_url marked PENDING-HUMAN (Zohaib needs public pages — gate 2). READY FOR HUMAN SUBMIT checklist added to BLOCKERS: Apple keys are the single item between Zohaib and TestFlight on his phone.
 - GATE: store metadata drafted; TestFlight upload + listing publication await Apple keys and Zohaib's go-ahead.
 
-## Next: E9 native session (dedicated): op-sqlite static-libs FIRST + verify xcodebuild, then llama.rn, vectors.db, Tier B UI, Ask source filter. Design backlog: FlashList pass, Dynamic Type + RTL audits.
+## Session 2026-07-13 (cont. 16) — E9 native stack lands
+
+- op-sqlite 17.1.2 (+sqliteVec) broke the SDK 54 precompiled React core at link time → RN now builds from source (plugins/withRNFromSource.js), which surfaced the known fmt-11/Apple-Clang-21 consteval breakage → fixed by compiling the fmt pod as C++17 AFTER react_native_post_install (plugins/withFmtConstevalFix.js). llama.rn 0.12.6 then landed with zero extra patches. Full stack builds; smoke/onboarding/audio flows green on the new binary. Clean builds now ~20 min (from-source) until SDK 56.
+- VectorStore (memory + sqlite-vec impls, 384-dim, rowid=ayahId, vectors.db separate from quran.db), llamaRuntime adapter for the tested LlmRuntime contract, TierBCard download/manage UI (gate-7 invisible; all states tested), ask.tierb i18n ×3. 333 tests green.
+
+## Next: E9 remainder is model-blocked (BLOCKERS A). Unblocked queue: Ask library source filter, AskScreen Tier B dormant wiring, FlashList pass, Dynamic Type + RTL audits.
 
 ## Next: start here
 

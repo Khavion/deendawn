@@ -132,3 +132,9 @@ Constitution requires "one clearly-redistributable translation from Tanzil's col
 - Building from source then hits fmt 11.0.2 consteval errors under Apple Clang 21 (Xcode 26.x) — known ecosystem issue (facebook/react-native#55601). A `FMT_USE_CONSTEVAL=0` preprocessor define CANNOT fix it (fmt's header guard redefines the macro unconditionally). Working fix: compile only the fmt pod as C++17 (`plugins/withFmtConstevalFix.js`), and the patch must be inserted AFTER `react_native_post_install`, which resets CLANG_CXX_LANGUAGE_STANDARD to c++20 on every pod target. Remove both plugins when RN ≥ 0.83.9 / SDK 56 (bundles fmt 12).
 - Cost accepted: clean iOS builds go from ~2 min (prebuilt) to ~15-25 min (from source). EAS builds inherit the plugins automatically.
 - vectors.db (op-sqlite + sqlite-vec, rowid = ayah id, 384-dim MiniLM) is a separate file from quran.db (expo-sqlite) by constitutional design; VectorStore interface has a brute-force cosine memory implementation so all Tier B logic stays testable without native code.
+
+## 2026-07-13 — llama.rn lands cleanly on the from-source stack
+
+- llama.rn 0.12.6 (MIT) added after op-sqlite: pods + codegen + xcodebuild green with no extra patches once RN builds from source. Full E9 native stack (op-sqlite 17.1.2 + sqlite-vec + llama.rn) now compiles; smoke flow green on the new binary.
+- `llamaRuntime.ts` adapts llama.rn to the tested LlmRuntime contract (n_ctx 2048, temperature 0.2 — faithful paraphrase, not creativity; Metal via n_gpu_layers with CPU fallback). Model files remain download-only artifacts (model.lock, BLOCKERS A) — nothing bundled.
+- E9 remaining is model-blocked: verse-embedding generation, on-device inference checks, and Tier B end-to-end. UI (TierBCard) and vector store are built and tested; AskScreen wiring stays dormant behind gate 7.
