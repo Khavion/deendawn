@@ -112,7 +112,13 @@ Done: Maestro installed; e2e/smoke.yaml green twice on iPhone 17 sim (Today -> M
 
 - Full Rule-1.5 enforcement pipeline built pure + 26 tests green (see DECISIONS: E9 core-first sequencing). Gate 7 flag committed OFF with a do-not-flip comment. Native llama.rn/op-sqlite wiring deferred to a dedicated fresh session (dual-sqlite build risk + nothing validatable until model uploads).
 
-## Next: E10 philosophers library (pipeline extension, PD-verified corpus, library.db, thinker pages w/ gate 9), then E9 native session, then E11 (audio/tips/onboarding/store-prep)
+## Session 2026-07-13 (cont. 8) — E10 corpus + thinker data
+
+- Three works license-verified per-item on their Gutenberg pages (Public domain in the USA) and pinned: Claud Field's Confessions of Al-Ghazali (1909, #58977), F. Hadland Davis's Persian Mystics: Rumi (1907, #45159), Syed Nawab Ali's Teachings of Al-Ghazali (1920, #73140). Whinfield Masnavi not on Gutenberg — skipped rather than sourced loosely.
+- Pipeline: gutenberg-txt format (marker + metadata + public-domain-license structural checks in verify), library.db build (works + ~1200-char paragraph sections + FTS, meta hashes) — 3 works / 308 sections; golden tests enforce license-log completeness, pre-1930 years, gutenberg-host allowlist, checksums.
+- 16 thinker pages drafted (era/school/works/neutral key-idea one-liners) in a data file, Gate 9 flagged as a whole; UR/AR versions deferred to the same review cycle.
+
+## Next: E10b Library UI (thinker list/detail, work reader over library.db via expo-asset copy + openDatabaseSync, search, More row, i18n chrome ×3, Ask source filter), then E9 native session, then E11
 
 ## Next: start here
 

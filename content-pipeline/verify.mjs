@@ -113,6 +113,15 @@ export function runVerify() {
       }
       if (entry.concatSha256 && concatHash(verses) !== entry.concatSha256)
         fail(`${src.id}: parsed-verse concat hash mismatch`);
+    } else if (src.format === 'gutenberg-txt') {
+      assertUtf8(buf, src.id);
+      const text = buf.toString('utf8');
+      if (!/\*\*\* START OF/.test(text) || !/\*\*\* END OF/.test(text))
+        fail(`${src.id}: Gutenberg START/END markers missing`);
+      if (!src.library || !src.library.translator || !src.library.year || !src.library.title)
+        fail(`${src.id}: library metadata (title/translator/year) incomplete`);
+      if (!/public domain/i.test(src.license))
+        fail(`${src.id}: license line must state public domain`);
     } else if (src.format === 'tanzil-xml') {
       assertUtf8(buf, src.id);
       try {

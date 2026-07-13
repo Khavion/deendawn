@@ -148,12 +148,56 @@ describe('attribution manifest', () => {
       expect(a.license).toBeTruthy();
       // Only pinned hosts may appear: Tanzil (text) and official font releases.
       expect(a.url).toMatch(
-        /^https:\/\/(tanzil\.net\/|github\.com\/(aliftype\/amiri|googlefonts\/literata|adobe-fonts\/source-sans|notofonts\/nastaliq)\/releases\/download\/)/
+        /^https:\/\/(tanzil\.net\/|www\.gutenberg\.org\/cache\/epub\/|github\.com\/(aliftype\/amiri|googlefonts\/literata|adobe-fonts\/source-sans|notofonts\/nastaliq)\/releases\/download\/)/
       );
       expect(a.sha256).toBe(lock.artifacts[a.id].sha256);
     }
     expect(manifest.artifacts.find((a: { id: string }) => a.id === 'en-pickthall').devOnly).toBe(
       true
     );
+  });
+});
+
+describe('library.db golden checks (E10)', () => {
+  const LIB = path.join(ROOT, 'assets', 'db', 'library.db');
+
+  test('exists with fully-attributed public-domain works and sane sections', () => {
+    expect(existsSync(LIB)).toBe(true);
+    const lib = new Database(LIB, { readonly: true, fileMustExist: true });
+    const works = lib
+      .prepare('SELECT artifact_id, translator, year, license, source_url FROM works')
+      .all() as {
+      artifact_id: string;
+      translator: string;
+      year: number;
+      license: string;
+      source_url: string;
+    }[];
+    expect(works.length).toBeGreaterThanOrEqual(3);
+    for (const w of works) {
+      expect(w.translator.length).toBeGreaterThan(0);
+      expect(w.year).toBeGreaterThan(1800);
+      expect(w.year).toBeLessThan(1930); // US public-domain era for this corpus
+      expect(w.license).toMatch(/public domain/i);
+      expect(w.source_url).toMatch(/^https:\/\/www\.gutenberg\.org\//);
+      expect(lock.artifacts[w.artifact_id]?.sha256).toMatch(/^[0-9a-f]{64}$/);
+      const meta = lib
+        .prepare('SELECT value FROM meta WHERE key = ?')
+        .get('sha256:' + w.artifact_id) as { value: string } | undefined;
+      expect(meta?.value).toBe(lock.artifacts[w.artifact_id].sha256);
+      const n = (
+        lib
+          .prepare(
+            'SELECT COUNT(*) n FROM sections s JOIN works w ON w.id = s.work_id WHERE w.artifact_id = ?'
+          )
+          .get(w.artifact_id) as { n: number }
+      ).n;
+      expect(n).toBeGreaterThanOrEqual(10);
+    }
+    const hits = lib
+      .prepare('SELECT rowid FROM sections_fts WHERE sections_fts MATCH ? LIMIT 3')
+      .all('"knowledge"') as { rowid: number }[];
+    expect(hits.length).toBeGreaterThan(0);
+    lib.close();
   });
 });

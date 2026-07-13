@@ -180,6 +180,91 @@ for (const src of sources) {
   }
 }
 
+// library.db — public-domain scholar texts (E10), sections + FTS.
+const libSources = sources.filter((s) => s.format === 'gutenberg-txt');
+if (libSources.length > 0) {
+  const libPath = path.join(REPO_ROOT, 'assets', 'db', 'library.db');
+  rmSync(libPath, { force: true });
+  const lib = new Database(libPath);
+  lib.pragma('journal_mode = OFF');
+  lib.exec(`
+    CREATE TABLE meta (key TEXT PRIMARY KEY, value TEXT NOT NULL);
+    CREATE TABLE works (
+      id INTEGER PRIMARY KEY,
+      artifact_id TEXT NOT NULL UNIQUE,
+      author_key TEXT NOT NULL,
+      title TEXT NOT NULL,
+      translator TEXT NOT NULL,
+      year INTEGER NOT NULL,
+      license TEXT NOT NULL,
+      source_url TEXT NOT NULL
+    );
+    CREATE TABLE sections (
+      id INTEGER PRIMARY KEY,
+      work_id INTEGER NOT NULL REFERENCES works(id),
+      section_index INTEGER NOT NULL,
+      body TEXT NOT NULL,
+      UNIQUE(work_id, section_index)
+    );
+    CREATE VIRTUAL TABLE sections_fts USING fts5(body, tokenize = 'unicode61 remove_diacritics 2');
+  `);
+  const insWork = lib.prepare(
+    'INSERT INTO works (artifact_id, author_key, title, translator, year, license, source_url) VALUES (?,?,?,?,?,?,?)'
+  );
+  const insSection = lib.prepare(
+    'INSERT INTO sections (work_id, section_index, body) VALUES (?,?,?)'
+  );
+  const insFts = lib.prepare('INSERT INTO sections_fts (rowid, body) VALUES (?,?)');
+  const insLibMeta = lib.prepare('INSERT INTO meta VALUES (?,?)');
+  let sectionRowId = 0;
+  lib.transaction(() => {
+    for (const src of libSources) {
+      const text = readFileSync(path.join(DATA_DIR, src.file), 'utf8');
+      const start = text.search(/\*\*\* START OF[^\n]*\n/);
+      const end = text.search(/\*\*\* END OF/);
+      const body = text.slice(text.indexOf('\n', start) + 1, end).replace(/\r/g, '');
+      // Paragraphs -> retrieval sections of up to ~1200 chars.
+      const paragraphs = body
+        .split(/\n\s*\n/)
+        .map((p) => p.replace(/\s+/g, ' ').trim())
+        .filter((p) => p.length >= 40);
+      const sections = [];
+      let current = '';
+      for (const p of paragraphs) {
+        if (current && current.length + p.length > 1200) {
+          sections.push(current);
+          current = p;
+        } else {
+          current = current ? current + '\n\n' + p : p;
+        }
+      }
+      if (current) sections.push(current);
+      if (sections.length < 10)
+        throw new Error(`${src.id}: implausibly few sections (${sections.length})`);
+      const workId = insWork.run(
+        src.id,
+        src.library.authorKey,
+        src.library.title,
+        src.library.translator,
+        src.library.year,
+        src.license,
+        src.url
+      ).lastInsertRowid;
+      sections.forEach((s, i) => {
+        sectionRowId++;
+        insSection.run(workId, i + 1, s);
+        insFts.run(sectionRowId, s.toLowerCase());
+      });
+    }
+    for (const src of libSources) insLibMeta.run(`sha256:${src.id}`, lock.artifacts[src.id].sha256);
+  })();
+  lib.exec('VACUUM;');
+  const workCount = lib.prepare('SELECT COUNT(*) n FROM works').get().n;
+  const sectionCount = lib.prepare('SELECT COUNT(*) n FROM sections').get().n;
+  lib.close();
+  console.log(`library.db: ${workCount} works, ${sectionCount} sections`);
+}
+
 // Attribution manifest — rendered on the About screen.
 const attribution = {
   generatedFrom: 'content-pipeline/sources.json',

@@ -29,8 +29,14 @@
       "license": "SIL Open Font License 1.1 (OFL.txt inside the archive; subsetting permitted)",
       "attribution": "Amiri Quran font by Khaled Hosny / Alif Type (github.com/aliftype/amiri), SIL OFL 1.1",
       "extract": [
-        { "from": "Amiri-1.003/AmiriQuran.ttf", "to": "assets/fonts/AmiriQuran.ttf" },
-        { "from": "Amiri-1.003/OFL.txt", "to": "assets/fonts/AmiriQuran-OFL.txt" }
+        {
+          "from": "Amiri-1.003/AmiriQuran.ttf",
+          "to": "assets/fonts/AmiriQuran.ttf"
+        },
+        {
+          "from": "Amiri-1.003/OFL.txt",
+          "to": "assets/fonts/AmiriQuran-OFL.txt"
+        }
       ]
     },
     {
@@ -42,10 +48,22 @@
       "license": "SIL Open Font License 1.1 (OFL.txt in archive)",
       "attribution": "Literata by TypeTogether for Google Fonts (github.com/googlefonts/literata), SIL OFL 1.1",
       "extract": [
-        { "from": "fonts/ttf/Literata-Regular.ttf", "to": "assets/fonts/Literata-Regular.ttf" },
-        { "from": "fonts/ttf/Literata-Medium.ttf", "to": "assets/fonts/Literata-Medium.ttf" },
-        { "from": "fonts/ttf/Literata-SemiBold.ttf", "to": "assets/fonts/Literata-SemiBold.ttf" },
-        { "from": "OFL.txt", "to": "assets/fonts/Literata-OFL.txt" }
+        {
+          "from": "fonts/ttf/Literata-Regular.ttf",
+          "to": "assets/fonts/Literata-Regular.ttf"
+        },
+        {
+          "from": "fonts/ttf/Literata-Medium.ttf",
+          "to": "assets/fonts/Literata-Medium.ttf"
+        },
+        {
+          "from": "fonts/ttf/Literata-SemiBold.ttf",
+          "to": "assets/fonts/Literata-SemiBold.ttf"
+        },
+        {
+          "from": "OFL.txt",
+          "to": "assets/fonts/Literata-OFL.txt"
+        }
       ]
     },
     {
@@ -57,9 +75,18 @@
       "license": "SIL Open Font License 1.1 (Adobe Source Sans 3; LICENSE.md in the source repo)",
       "attribution": "Source Sans 3 by Paul D. Hunt / Adobe (github.com/adobe-fonts/source-sans), SIL OFL 1.1",
       "extract": [
-        { "from": "TTF/SourceSans3-Regular.ttf", "to": "assets/fonts/SourceSans3-Regular.ttf" },
-        { "from": "TTF/SourceSans3-Medium.ttf", "to": "assets/fonts/SourceSans3-Medium.ttf" },
-        { "from": "TTF/SourceSans3-Semibold.ttf", "to": "assets/fonts/SourceSans3-Semibold.ttf" }
+        {
+          "from": "TTF/SourceSans3-Regular.ttf",
+          "to": "assets/fonts/SourceSans3-Regular.ttf"
+        },
+        {
+          "from": "TTF/SourceSans3-Medium.ttf",
+          "to": "assets/fonts/SourceSans3-Medium.ttf"
+        },
+        {
+          "from": "TTF/SourceSans3-Semibold.ttf",
+          "to": "assets/fonts/SourceSans3-Semibold.ttf"
+        }
       ]
     },
     {
@@ -75,7 +102,10 @@
           "from": "NotoNastaliqUrdu/full/ttf/NotoNastaliqUrdu-Regular.ttf",
           "to": "assets/fonts/NotoNastaliqUrdu-Regular.ttf"
         },
-        { "from": "OFL.txt", "to": "assets/fonts/NotoNastaliqUrdu-OFL.txt" }
+        {
+          "from": "OFL.txt",
+          "to": "assets/fonts/NotoNastaliqUrdu-OFL.txt"
+        }
       ]
     },
     {
@@ -86,6 +116,51 @@
       "format": "tanzil-xml",
       "license": "Tanzil metadata — free to use with attribution to tanzil.net",
       "attribution": "Surah/juz metadata from Tanzil (tanzil.net)"
+    },
+    {
+      "id": "lib-ghazali-confessions",
+      "file": "pg58977-ghazali-confessions.txt",
+      "url": "https://www.gutenberg.org/cache/epub/58977/pg58977.txt",
+      "kind": "library-text",
+      "format": "gutenberg-txt",
+      "license": "Public domain in the USA (Project Gutenberg #58977; verified on the ebook page 2026-07-13)",
+      "attribution": "The Confessions of Al Ghazzali, translated by Claud Field (1909), via Project Gutenberg",
+      "library": {
+        "authorKey": "ghazali",
+        "title": "The Confessions of Al-Ghazali",
+        "translator": "Claud Field",
+        "year": 1909
+      }
+    },
+    {
+      "id": "lib-rumi-persian-mystics",
+      "file": "pg45159-rumi-persian-mystics.txt",
+      "url": "https://www.gutenberg.org/cache/epub/45159/pg45159.txt",
+      "kind": "library-text",
+      "format": "gutenberg-txt",
+      "license": "Public domain in the USA (Project Gutenberg #45159; verified on the ebook page 2026-07-13)",
+      "attribution": "The Persian Mystics: Jalálu’d-dín Rúmí by F. Hadland Davis (1907), via Project Gutenberg",
+      "library": {
+        "authorKey": "rumi",
+        "title": "The Persian Mystics: Rumi",
+        "translator": "F. Hadland Davis",
+        "year": 1907
+      }
+    },
+    {
+      "id": "lib-ghazali-teachings",
+      "file": "pg73140-ghazali-teachings.txt",
+      "url": "https://www.gutenberg.org/cache/epub/73140/pg73140.txt",
+      "kind": "library-text",
+      "format": "gutenberg-txt",
+      "license": "Public domain in the USA (Project Gutenberg #73140; verified on the ebook page 2026-07-13)",
+      "attribution": "Some Religious and Moral Teachings of Al-Ghazzali, translated by Syed Nawab Ali (1920), via Project Gutenberg",
+      "library": {
+        "authorKey": "ghazali",
+        "title": "Religious and Moral Teachings of Al-Ghazali",
+        "translator": "Syed Nawab Ali",
+        "year": 1920
+      }
     }
   ]
 }

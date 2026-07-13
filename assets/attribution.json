@@ -64,6 +64,33 @@
       "url": "https://tanzil.net/res/text/metadata/quran-data.xml",
       "sha256": "8867c1d88191472adec9db694b3cd9f135b1a2ef580574d32cf888dcb22c5c7a",
       "pinnedAt": "2026-07-13"
+    },
+    {
+      "id": "lib-ghazali-confessions",
+      "kind": "library-text",
+      "attribution": "The Confessions of Al Ghazzali, translated by Claud Field (1909), via Project Gutenberg",
+      "license": "Public domain in the USA (Project Gutenberg #58977; verified on the ebook page 2026-07-13)",
+      "url": "https://www.gutenberg.org/cache/epub/58977/pg58977.txt",
+      "sha256": "6ded1a2be85e7035b17c063cc9af6a4262f6a22249a66e2a869c9e3da51bd06d",
+      "pinnedAt": "2026-07-13"
+    },
+    {
+      "id": "lib-rumi-persian-mystics",
+      "kind": "library-text",
+      "attribution": "The Persian Mystics: Jalálu’d-dín Rúmí by F. Hadland Davis (1907), via Project Gutenberg",
+      "license": "Public domain in the USA (Project Gutenberg #45159; verified on the ebook page 2026-07-13)",
+      "url": "https://www.gutenberg.org/cache/epub/45159/pg45159.txt",
+      "sha256": "7a33d4139bea523c823ca2b2994d459f055f207398d8cf904e1cb1e5d79f3844",
+      "pinnedAt": "2026-07-13"
+    },
+    {
+      "id": "lib-ghazali-teachings",
+      "kind": "library-text",
+      "attribution": "Some Religious and Moral Teachings of Al-Ghazzali, translated by Syed Nawab Ali (1920), via Project Gutenberg",
+      "license": "Public domain in the USA (Project Gutenberg #73140; verified on the ebook page 2026-07-13)",
+      "url": "https://www.gutenberg.org/cache/epub/73140/pg73140.txt",
+      "sha256": "0b6bd2073d9031aa724d8b6abcbccc840a348259f5835895ea572181934d083b",
+      "pinnedAt": "2026-07-13"
     }
   ]
 }
