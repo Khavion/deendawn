@@ -46,13 +46,19 @@
       "expo-sqlite",
       "expo-localization",
       "expo-background-task",
-      "expo-notifications",
+      [
+        "expo-notifications",
+        {
+          "sounds": ["./assets/sounds/adhan-clip-placeholder.wav"]
+        }
+      ],
       [
         "expo-location",
         {
           "locationWhenInUsePermission": "DeenDawn uses your location only on this device to point the qibla compass and compute prayer times. It is never transmitted anywhere."
         }
-      ]
+      ],
+      "expo-audio"
     ],
     "experiments": {
       "typedRoutes": true,

@@ -5,7 +5,7 @@ import { GeoCoordinates, PrayerSettings } from '../prayer-times/types';
 export const ADHAN_PRAYERS = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'] as const;
 export type AdhanPrayer = (typeof ADHAN_PRAYERS)[number];
 
-export type SoundKey = 'default' | 'silent';
+export type SoundKey = 'default' | 'silent' | 'clip' | 'fullAdhan';
 
 export interface NotificationPrefs {
   enabled: Record<AdhanPrayer, boolean>;

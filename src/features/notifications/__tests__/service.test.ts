@@ -109,6 +109,29 @@ describe('rescheduleAll', () => {
     expect(state.scheduleCalls).toBe(0);
   });
 
+  test('clip and full-adhan sounds map to the bundled file + data flag', async () => {
+    jest.requireMock('expo-notifications').scheduleNotificationAsync.mockClear();
+    const store = createMemoryKVStore({
+      'settings.v1': HOUSTON_SETTINGS,
+      'notificationPrefs.v1': JSON.stringify({
+        enabled: { fajr: true, dhuhr: true, asr: false, maghrib: false, isha: false },
+        sound: { fajr: 'clip', dhuhr: 'fullAdhan' },
+      }),
+    });
+    await rescheduleAll(NOW, store);
+    const Notifications = jest.requireMock('expo-notifications');
+    const calls = Notifications.scheduleNotificationAsync.mock.calls as {
+      identifier: string;
+      content: { sound?: unknown; data?: { fullAdhan?: boolean } };
+    }[][];
+    const fajr = calls.find(([r]) => r.identifier.startsWith('fajr-'))![0];
+    const dhuhr = calls.find(([r]) => r.identifier.startsWith('dhuhr-'))![0];
+    expect(fajr.content.sound).toBe('adhan-clip-placeholder.wav');
+    expect(fajr.content.data?.fullAdhan).toBe(false);
+    expect(dhuhr.content.sound).toBe('adhan-clip-placeholder.wav');
+    expect(dhuhr.content.data?.fullAdhan).toBe(true);
+  });
+
   test('disabled prayer prefs are honored', async () => {
     const store = createMemoryKVStore({
       'settings.v1': HOUSTON_SETTINGS,

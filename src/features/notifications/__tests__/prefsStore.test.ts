@@ -6,6 +6,7 @@ import {
   parseNotificationPrefs,
   saveNotificationPrefs,
   setPrayerEnabled,
+  setPrayerSound,
 } from '../prefsStore';
 import { DEFAULT_NOTIFICATION_PREFS } from '../scheduler';
 import { createMemoryKVStore } from '../../../lib/kvStore';
@@ -36,6 +37,18 @@ describe('notification prefs persistence', () => {
     expect(parsed.enabled.dhuhr).toBe(false);
     expect(parsed.sound.asr).toBe('default'); // unknown sound -> default
     expect(parsed.sound.maghrib).toBe('silent');
+  });
+
+  test('new sound keys parse and persist; setPrayerSound is immutable', () => {
+    const store = createMemoryKVStore();
+    let prefs = setPrayerSound(DEFAULT_NOTIFICATION_PREFS, 'fajr', 'fullAdhan');
+    prefs = setPrayerSound(prefs, 'dhuhr', 'clip');
+    saveNotificationPrefs(store, prefs);
+    const loaded = loadNotificationPrefs(store);
+    expect(loaded.sound.fajr).toBe('fullAdhan');
+    expect(loaded.sound.dhuhr).toBe('clip');
+    expect(loaded.sound.asr).toBe('default');
+    expect(DEFAULT_NOTIFICATION_PREFS.sound.fajr).toBe('default');
   });
 
   test('setPrayerEnabled does not mutate its input', () => {

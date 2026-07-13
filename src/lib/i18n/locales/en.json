@@ -5,7 +5,8 @@
   "common": {
     "close": "Close",
     "cancel": "Not now",
-    "restart": "Restart now"
+    "restart": "Restart now",
+    "stop": "Stop"
   },
   "tabs": {
     "today": "Today",
@@ -85,7 +86,13 @@
     "language": "Language",
     "privacyNote": "DeenDawn stores everything on your phone. No account, no ads, no tracking.",
     "restartTitle": "Restart required",
-    "restartBody": "Switching the app language needs a quick restart to change the layout direction."
+    "restartBody": "Switching the app language needs a quick restart to change the layout direction.",
+    "sound": "Sound",
+    "sound_default": "Standard ping",
+    "sound_silent": "Silent",
+    "sound_clip": "Short adhan clip",
+    "sound_fullAdhan": "Full adhan",
+    "fullAdhanHonesty": "iPhones cannot play a full-length adhan from a notification. With \"Full adhan\", the reminder plays the short clip, and the full adhan plays when you open the app from it."
   },
   "methods": {
     "MuslimWorldLeague": "Muslim World League",
@@ -102,6 +109,7 @@
     "Turkey": "Diyanet İşleri Başkanlığı, Turkey"
   },
   "notifications": {
-    "body": "It's time for {{prayer}} prayer."
+    "body": "It's time for {{prayer}} prayer.",
+    "playingFullAdhan": "Playing the {{prayer}} adhan"
   }
 }

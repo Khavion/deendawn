@@ -9,6 +9,7 @@ import 'react-native-reanimated';
 import { fonts, palette } from '@/src/lib/theme/tokens';
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { FullAdhanPlayer } from '@/src/features/notifications/FullAdhanPlayer';
 import { registerBackgroundRefresh } from '@/src/features/notifications/backgroundRefresh';
 import { installForegroundHandler } from '@/src/features/notifications/service';
 import { useNotificationScheduling } from '@/src/features/notifications/useNotificationScheduling';
@@ -86,6 +87,7 @@ export default function RootLayout() {
               <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
               <Stack.Screen name="surah/[id]" options={{ headerBackTitle: 'Quran' }} />
             </Stack>
+            <FullAdhanPlayer />
             <StatusBar style="auto" />
           </ThemeProvider>
         </SQLiteProvider>

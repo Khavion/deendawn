@@ -32,12 +32,21 @@ export async function ensurePermission(request: boolean): Promise<boolean> {
 
 function toContent(p: PlannedNotification): Notifications.NotificationContentInput {
   const prayerName = i18n.t(`prayers.${p.prayer}`);
+  // 'fullAdhan' plays the bundled clip at fire time; the app plays the full
+  // recording only when opened from the notification (iOS limitation — the
+  // picker says exactly that).
+  const sound =
+    p.sound === 'silent'
+      ? undefined
+      : p.sound === 'clip' || p.sound === 'fullAdhan'
+        ? 'adhan-clip-placeholder.wav'
+        : true;
   return {
     title: prayerName,
     body: i18n.t('notifications.body', { prayer: prayerName }),
-    sound: p.sound === 'silent' ? undefined : true,
+    sound,
     interruptionLevel: 'timeSensitive',
-    data: { prayer: p.prayer, plannedId: p.id },
+    data: { prayer: p.prayer, plannedId: p.id, fullAdhan: p.sound === 'fullAdhan' },
   };
 }
 

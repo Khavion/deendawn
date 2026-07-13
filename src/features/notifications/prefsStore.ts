@@ -8,7 +8,7 @@ import {
 import { KVStore } from '../../lib/kvStore';
 
 const KEY = 'notificationPrefs.v1';
-const SOUND_KEYS: SoundKey[] = ['default', 'silent'];
+const SOUND_KEYS: SoundKey[] = ['default', 'silent', 'clip', 'fullAdhan'];
 
 /** Defensive parse — malformed fields fall back per-prayer, not wholesale. */
 export function parseNotificationPrefs(raw: string | null): NotificationPrefs {
@@ -42,6 +42,14 @@ export function loadNotificationPrefs(store: KVStore): NotificationPrefs {
 
 export function saveNotificationPrefs(store: KVStore, prefs: NotificationPrefs): void {
   store.set(KEY, JSON.stringify(prefs));
+}
+
+export function setPrayerSound(
+  prefs: NotificationPrefs,
+  prayer: AdhanPrayer,
+  sound: SoundKey
+): NotificationPrefs {
+  return { ...prefs, sound: { ...prefs.sound, [prayer]: sound } };
 }
 
 export function setPrayerEnabled(

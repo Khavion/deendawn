@@ -17,8 +17,9 @@ import {
   loadNotificationPrefs,
   saveNotificationPrefs,
   setPrayerEnabled,
+  setPrayerSound,
 } from '../../notifications/prefsStore';
-import { ADHAN_PRAYERS } from '../../notifications/scheduler';
+import { ADHAN_PRAYERS, AdhanPrayer, SoundKey } from '../../notifications/scheduler';
 import { ensurePermission, rescheduleAll } from '../../notifications/service';
 import { loadNightWarm, saveNightWarm } from '../../quran/readerState';
 import { useSettings } from '../SettingsContext';
@@ -55,6 +56,7 @@ function PickerModal<T extends string>({
   onSelect,
   onClose,
   closeLabel,
+  hint,
 }: {
   visible: boolean;
   title: string;
@@ -63,6 +65,7 @@ function PickerModal<T extends string>({
   onSelect: (key: T) => void;
   onClose: () => void;
   closeLabel: string;
+  hint?: string;
 }) {
   const insets = useSafeAreaInsets();
   const scheme = useColorScheme() ?? 'light';
@@ -75,6 +78,7 @@ function PickerModal<T extends string>({
             <ThemedText type="link">{closeLabel}</ThemedText>
           </Pressable>
         </View>
+        {hint ? <ThemedText style={styles.sectionHint}>{hint}</ThemedText> : null}
         <ScrollView>
           {options.map((o) => (
             <Pressable
@@ -111,6 +115,7 @@ export function MoreScreen() {
   );
   const [prefs, setPrefs] = useState(() => loadNotificationPrefs(store));
   const [nightWarm, setNightWarm] = useState(() => loadNightWarm(store));
+  const [soundPickerFor, setSoundPickerFor] = useState<AdhanPrayer | null>(null);
   const location = resolveLocation(settings);
   const currentLanguage = (loadLanguage(store) ?? i18n.language) as LanguageCode;
 
@@ -121,6 +126,15 @@ export function MoreScreen() {
     saveNotificationPrefs(store, next);
     void rescheduleAll(new Date(), store);
   };
+
+  const selectSound = (prayer: AdhanPrayer, sound: SoundKey) => {
+    const next = setPrayerSound(prefs, prayer, sound);
+    setPrefs(next);
+    saveNotificationPrefs(store, next);
+    void rescheduleAll(new Date(), store);
+  };
+
+  const SOUND_KEYS: SoundKey[] = ['default', 'clip', 'fullAdhan', 'silent'];
 
   const selectLanguage = (code: LanguageCode) => {
     saveLanguage(store, code);
@@ -212,7 +226,17 @@ export function MoreScreen() {
         <ThemedText style={styles.sectionHint}>{t('more.notificationsHint')}</ThemedText>
         {ADHAN_PRAYERS.map((prayer) => (
           <View key={prayer} style={styles.settingRowInline}>
-            <ThemedText type="defaultSemiBold">{t(`prayers.${prayer}`)}</ThemedText>
+            <Pressable
+              accessibilityRole="button"
+              testID={`sound-${prayer}`}
+              style={styles.rowText}
+              onPress={() => setSoundPickerFor(prayer)}
+            >
+              <ThemedText type="defaultSemiBold">{t(`prayers.${prayer}`)}</ThemedText>
+              <ThemedText style={styles.settingValue}>
+                {t(`more.sound_${prefs.sound[prayer]}`)}
+              </ThemedText>
+            </Pressable>
             <Switch
               testID={`notif-${prayer}`}
               value={prefs.enabled[prayer]}
@@ -274,6 +298,16 @@ export function MoreScreen() {
         selected={settings.highLatRule}
         onSelect={(highLatRule) => update({ highLatRule })}
         onClose={() => setOpen(null)}
+      />
+      <PickerModal
+        visible={soundPickerFor !== null}
+        title={t('more.sound')}
+        closeLabel={t('common.close')}
+        hint={t('more.fullAdhanHonesty')}
+        options={SOUND_KEYS.map((k) => ({ key: k, label: t(`more.sound_${k}`) }))}
+        selected={soundPickerFor ? prefs.sound[soundPickerFor] : 'default'}
+        onSelect={(sound) => soundPickerFor && selectSound(soundPickerFor, sound)}
+        onClose={() => setSoundPickerFor(null)}
       />
       <PickerModal
         visible={open === 'language'}
