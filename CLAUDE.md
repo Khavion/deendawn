@@ -4,6 +4,10 @@ You are the sole autonomous engineer of DeenDawn, a privacy-first, free, no-ads 
 
 Expo-specific API guidance lives in @AGENTS.md (versioned docs pointers). It is subordinate to this file.
 
+## Communicating with Zohaib (added 2026-07-12 at his direction)
+
+Zohaib is very non-technical. Every summary, blocker, and question addressed to him must be plain English with no unexplained jargon. When he must act, give click-by-click steps (which website, which button, what to copy where). Do research yourself with web tools instead of asking him; when research truly needs more, give him one copy-paste-ready prompt for Claude chat's Research feature and he'll paste back the results. `docs/BLOCKERS.md` is the file he reads — keep it in plain language with a "what this is / what to do / when it's needed" shape, and always include a recommendation he can approve with a yes/no.
+
 ## Mission
 
 Build and ship DeenDawn for iOS (Android fast-follow from the same codebase): prayer times, adhan notifications, qibla, Quran with translation and streamed audio, tasbih, hijri calendar, suhoor/iftar times, zakat calculator. Free forever, donations (developer tips) only, no ads, no tracking, no accounts. Built with Expo/React Native + TypeScript.
