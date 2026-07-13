@@ -12,8 +12,11 @@ appId: com.khavion.deendawn
     visible:
       id: 'setting-method'
     timeout: 10000
-- assertVisible:
-    id: 'notif-fajr'
+- scrollUntilVisible:
+    element:
+      id: 'notif-fajr'
+    direction: DOWN
+    centerElement: true
 - takeScreenshot: docs/screens/smoke-more
 - tapOn: 'Quran, tab.*'
 - extendedWaitUntil:

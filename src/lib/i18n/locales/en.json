@@ -195,7 +195,21 @@
     "countAnswer_other": "{{count}} verses match “{{term}}” in the bundled translation",
     "redirect": "Questions about what is permissible deserve a qualified scholar, not an app — please ask one you trust. Verses related to your topic:",
     "empty": "Nothing in the text matches that — try a different word.",
-    "related": "Related verses"
+    "related": "Related verses",
+    "tierb": {
+      "title": "On-device AI answers (optional)",
+      "body": "A small AI model can rephrase retrieved verses into a short answer, entirely on your phone. It never goes online and never answers religious rulings.",
+      "ineligible": "This device does not have enough memory for the on-device model. Exact search answers remain fully available.",
+      "pendingUpload": "The model files are not published yet. Exact search answers remain fully available.",
+      "wifiOnly": "Waiting for Wi-Fi — the download is large and will not use cellular data unless you allow it.",
+      "download": "Download model ({{size}})",
+      "downloading": "Downloading… you can keep using the app.",
+      "verifying": "Verifying the download…",
+      "hashMismatch": "The downloaded file failed verification and was deleted. Try again.",
+      "failed": "Download failed. Check your connection and try again.",
+      "ready": "Model ready — answers are generated on this phone.",
+      "delete": "Delete model"
+    }
   },
   "library": {
     "title": "Thinkers & books",

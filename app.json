@@ -60,7 +60,9 @@
         }
       ],
       "expo-audio",
-      "expo-asset"
+      "expo-asset",
+      "./plugins/withRNFromSource.js",
+      "./plugins/withFmtConstevalFix.js"
     ],
     "experiments": {
       "typedRoutes": true,
