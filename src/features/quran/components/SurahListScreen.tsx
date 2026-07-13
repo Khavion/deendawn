@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
   },
   names: { flex: 1, gap: 2 },
   sub: { opacity: 0.6, fontSize: 13 },
-  arabicName: { fontFamily: 'AmiriQuran', fontSize: 20, lineHeight: 34 },
+  arabicName: { fontFamily: 'AmiriQuran', fontSize: 20, lineHeight: 36 },
   continueChip: {
     borderRadius: 12,
     padding: 14,

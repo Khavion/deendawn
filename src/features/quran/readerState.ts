@@ -8,6 +8,7 @@ export interface AyahRef {
 const BOOKMARKS_KEY = 'quran.bookmarks.v1';
 const LAST_READ_KEY = 'quran.lastRead.v1';
 const SHOW_TRANSLATION_KEY = 'quran.showTranslation.v1';
+const NIGHT_WARM_KEY = 'quran.nightWarm.v1';
 
 const isRef = (o: unknown): o is AyahRef =>
   typeof o === 'object' &&
@@ -59,4 +60,13 @@ export function loadShowTranslation(store: KVStore): boolean {
 
 export function saveShowTranslation(store: KVStore, show: boolean): void {
   store.set(SHOW_TRANSLATION_KEY, String(show));
+}
+
+/** Opt-in amber night-reading palette for the reader (docs/DESIGN.md). */
+export function loadNightWarm(store: KVStore): boolean {
+  return store.get(NIGHT_WARM_KEY) === 'true';
+}
+
+export function saveNightWarm(store: KVStore, on: boolean): void {
+  store.set(NIGHT_WARM_KEY, String(on));
 }

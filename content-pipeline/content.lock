@@ -42,6 +42,22 @@
       "url": "https://github.com/aliftype/amiri/releases/download/1.003/Amiri-1.003.zip",
       "license": "SIL Open Font License 1.1 (OFL.txt inside the archive; subsetting permitted)",
       "pinnedAt": "2026-07-13"
+    },
+    "literata-font": {
+      "file": "Literata-3.103.zip",
+      "sha256": "f7fb973cafb26cf785cbebaeaf51c18f87c15a3bcf4d82a7d4857564db5b056d",
+      "bytes": 17546949,
+      "url": "https://github.com/googlefonts/literata/releases/download/3.103/3.103.zip",
+      "license": "SIL Open Font License 1.1 (OFL.txt in archive)",
+      "pinnedAt": "2026-07-13"
+    },
+    "source-sans-font": {
+      "file": "TTF-source-sans-3.052R.zip",
+      "sha256": "1b0dd1ec44b39f1dd98bbd153a1a3815f083639874ddee02c842bd601bad3d21",
+      "bytes": 2478353,
+      "url": "https://github.com/adobe-fonts/source-sans/releases/download/3.052R/TTF-source-sans-3.052R.zip",
+      "license": "SIL Open Font License 1.1 (Adobe Source Sans 3; LICENSE.md in the source repo)",
+      "pinnedAt": "2026-07-13"
     }
   },
   "derived": {}

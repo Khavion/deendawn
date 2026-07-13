@@ -146,9 +146,9 @@ describe('attribution manifest', () => {
     );
     for (const a of manifest.artifacts) {
       expect(a.license).toBeTruthy();
-      // Only pinned hosts may appear: Tanzil (text) and Alif Type releases (font).
+      // Only pinned hosts may appear: Tanzil (text) and official font releases.
       expect(a.url).toMatch(
-        /^https:\/\/(tanzil\.net\/|github\.com\/aliftype\/amiri\/releases\/download\/)/
+        /^https:\/\/(tanzil\.net\/|github\.com\/(aliftype\/amiri|googlefonts\/literata|adobe-fonts\/source-sans)\/releases\/download\/)/
       );
       expect(a.sha256).toBe(lock.artifacts[a.id].sha256);
     }

@@ -7,12 +7,11 @@ import { computeDayTimes, isValidTime, nextPrayer } from '../engine';
 import { formatTimeInZone } from '../format';
 import { PRAYER_NAMES, PrayerName } from '../types';
 import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
 import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
 import { useSettings } from '@/src/features/settings/SettingsContext';
 import { resolveLocation, resolvePrayerConfig } from '@/src/features/settings/settingsStore';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { fonts, fontSize, radius, spacing } from '@/src/lib/theme/tokens';
+import { useTokens } from '@/src/lib/theme/useTokens';
 
 const PRAYER_LABELS: Record<PrayerName, string> = {
   fajr: 'Fajr',
@@ -42,7 +41,7 @@ function formatCountdown(ms: number): string {
 
 export function TodayScreen() {
   const insets = useSafeAreaInsets();
-  const scheme = useColorScheme() ?? 'light';
+  const t = useTokens();
   const { settings, update } = useSettings();
   const [pickerOpen, setPickerOpen] = useState(false);
   const now = useNow(1000);
@@ -60,12 +59,18 @@ export function TodayScreen() {
 
   if (!location) {
     return (
-      <ThemedView style={[styles.container, styles.empty, { paddingTop: insets.top + 24 }]}>
-        <IconSymbol name="location.fill" size={48} color={Colors[scheme].tint} />
+      <View
+        style={[
+          styles.container,
+          styles.empty,
+          { backgroundColor: t.bgCanvas, paddingTop: insets.top + spacing.xl },
+        ]}
+      >
+        <IconSymbol name="location.fill" size={44} color={t.accent} />
         <ThemedText type="title" style={styles.emptyTitle}>
           As-salamu alaykum
         </ThemedText>
-        <ThemedText style={styles.emptyBody}>
+        <ThemedText type="serifBody" style={[styles.emptyBody, { color: t.textSecondary }]}>
           Choose your city to see today&apos;s prayer times. Everything stays on your phone —
           nothing is sent anywhere.
         </ThemedText>
@@ -73,9 +78,9 @@ export function TodayScreen() {
           accessibilityRole="button"
           testID="choose-city"
           onPress={() => setPickerOpen(true)}
-          style={[styles.primaryButton, { backgroundColor: Colors[scheme].tint }]}
+          style={[styles.primaryButton, { backgroundColor: t.accent }]}
         >
-          <ThemedText style={styles.primaryButtonText} lightColor="#fff" darkColor="#10201A">
+          <ThemedText type="defaultSemiBold" style={{ color: t.textOnAccent }}>
             Choose your city
           </ThemedText>
         </Pressable>
@@ -87,12 +92,17 @@ export function TodayScreen() {
             setPickerOpen(false);
           }}
         />
-      </ThemedView>
+      </View>
     );
   }
 
   return (
-    <ThemedView style={[styles.container, { paddingTop: insets.top + 12 }]}>
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: t.bgCanvas, paddingTop: insets.top + spacing.m },
+      ]}
+    >
       <ScrollView contentContainerStyle={styles.scroll}>
         <View style={styles.header}>
           <Pressable
@@ -101,10 +111,10 @@ export function TodayScreen() {
             onPress={() => setPickerOpen(true)}
             style={styles.cityRow}
           >
-            <IconSymbol name="location.fill" size={16} color={Colors[scheme].tint} />
+            <IconSymbol name="location.fill" size={14} color={t.accent} />
             <ThemedText type="defaultSemiBold">{location.label}</ThemedText>
           </Pressable>
-          <ThemedText style={styles.date}>
+          <ThemedText type="caption" style={{ color: t.textSecondary }}>
             {now.toLocaleDateString(undefined, {
               weekday: 'long',
               month: 'long',
@@ -114,16 +124,16 @@ export function TodayScreen() {
         </View>
 
         {next && (
-          <View style={[styles.nextCard, { backgroundColor: Colors[scheme].tint }]}>
-            <ThemedText style={styles.nextLabel} lightColor="#E8FFF6" darkColor="#10201A">
+          <View style={[styles.nextCard, { backgroundColor: t.accent }]}>
+            <ThemedText type="defaultSemiBold" style={{ color: t.textOnAccent, opacity: 0.85 }}>
               {next.isTomorrow
                 ? `${PRAYER_LABELS[next.prayer]} (tomorrow)`
                 : PRAYER_LABELS[next.prayer]}
             </ThemedText>
-            <ThemedText type="title" lightColor="#fff" darkColor="#10201A">
+            <ThemedText style={[styles.nextTime, { color: t.textOnAccent }]}>
               {formatTimeInZone(next.time)}
             </ThemedText>
-            <ThemedText style={styles.nextCountdown} lightColor="#E8FFF6" darkColor="#10201A">
+            <ThemedText style={{ color: t.textOnAccent, opacity: 0.85 }}>
               in {formatCountdown(next.time.getTime() - now.getTime())}
             </ThemedText>
           </View>
@@ -132,22 +142,25 @@ export function TodayScreen() {
         <View style={styles.list}>
           {times &&
             PRAYER_NAMES.map((p) => {
-              const t = times[p];
+              const time = times[p];
               const isNext = next && !next.isTomorrow && next.prayer === p;
               return (
                 <View
                   key={p}
                   testID={`prayer-row-${p}`}
-                  style={[
-                    styles.row,
-                    isNext && { backgroundColor: scheme === 'light' ? '#E4F5EE' : '#173229' },
-                  ]}
+                  style={[styles.row, isNext && { backgroundColor: t.accentSoft }]}
                 >
-                  <ThemedText type={isNext ? 'defaultSemiBold' : 'default'}>
+                  <ThemedText
+                    type={isNext ? 'defaultSemiBold' : 'default'}
+                    style={isNext ? { color: t.textOnAccentSoft } : undefined}
+                  >
                     {PRAYER_LABELS[p]}
                   </ThemedText>
-                  <ThemedText type={isNext ? 'defaultSemiBold' : 'default'}>
-                    {isValidTime(t) ? formatTimeInZone(t) : '—'}
+                  <ThemedText
+                    type={isNext ? 'defaultSemiBold' : 'default'}
+                    style={isNext ? { color: t.textOnAccentSoft } : { color: t.textSecondary }}
+                  >
+                    {isValidTime(time) ? formatTimeInZone(time) : '—'}
                   </ThemedText>
                 </View>
               );
@@ -162,41 +175,44 @@ export function TodayScreen() {
           setPickerOpen(false);
         }}
       />
-    </ThemedView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  scroll: { paddingHorizontal: 20, paddingBottom: 32 },
-  empty: { alignItems: 'center', justifyContent: 'center', padding: 32, gap: 12 },
+  scroll: { paddingHorizontal: spacing.xl, paddingBottom: spacing.xxl },
+  empty: { alignItems: 'center', justifyContent: 'center', padding: spacing.xxl, gap: spacing.m },
   emptyTitle: { textAlign: 'center' },
-  emptyBody: { textAlign: 'center', opacity: 0.8 },
+  emptyBody: { textAlign: 'center' },
   primaryButton: {
-    borderRadius: 12,
-    paddingHorizontal: 24,
-    paddingVertical: 14,
-    marginTop: 8,
+    borderRadius: radius.card,
+    paddingHorizontal: spacing.xl,
+    paddingVertical: spacing.l,
+    marginTop: spacing.s,
+    minHeight: 48,
+    justifyContent: 'center',
   },
-  primaryButtonText: { fontWeight: '600' },
-  header: { gap: 4, marginBottom: 16 },
-  cityRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
-  date: { opacity: 0.7 },
+  header: { gap: spacing.xs, marginBottom: spacing.l },
+  cityRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.s - 2 },
   nextCard: {
-    borderRadius: 16,
-    padding: 20,
+    borderRadius: radius.card,
+    padding: spacing.xl,
     alignItems: 'center',
-    gap: 4,
-    marginBottom: 16,
+    gap: spacing.xs,
+    marginBottom: spacing.l,
   },
-  nextLabel: { fontWeight: '600' },
-  nextCountdown: {},
-  list: { gap: 4 },
+  nextTime: {
+    fontFamily: fonts.serifSemiBold,
+    fontSize: fontSize.display,
+    lineHeight: 44,
+  },
+  list: { gap: spacing.xs },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: 14,
-    paddingHorizontal: 16,
-    borderRadius: 10,
+    paddingVertical: spacing.l - 2,
+    paddingHorizontal: spacing.l,
+    borderRadius: radius.control,
   },
 });

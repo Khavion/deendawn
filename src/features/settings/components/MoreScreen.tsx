@@ -9,6 +9,7 @@ import {
 } from '../../notifications/prefsStore';
 import { ADHAN_PRAYERS, AdhanPrayer } from '../../notifications/scheduler';
 import { ensurePermission, rescheduleAll } from '../../notifications/service';
+import { loadNightWarm, saveNightWarm } from '../../quran/readerState';
 import { CityPickerModal } from '../../prayer-times/components/CityPickerModal';
 import { METHOD_LABELS } from '../../prayer-times/methods';
 import { HighLatRuleKey, MadhabKey, METHOD_KEYS, MethodKey } from '../../prayer-times/types';
@@ -97,6 +98,7 @@ export function MoreScreen() {
   const { settings, update, store } = useSettings();
   const [open, setOpen] = useState<null | 'city' | 'method' | 'madhab' | 'highlat'>(null);
   const [prefs, setPrefs] = useState(() => loadNotificationPrefs(store));
+  const [nightWarm, setNightWarm] = useState(() => loadNightWarm(store));
   const location = resolveLocation(settings);
 
   const togglePrayer = async (prayer: AdhanPrayer, enabled: boolean) => {
@@ -178,6 +180,25 @@ export function MoreScreen() {
             />
           </View>
         ))}
+        <ThemedText type="title" style={[styles.title, styles.sectionTitle]}>
+          Reading
+        </ThemedText>
+        <View style={styles.settingRowInline}>
+          <View style={styles.rowText}>
+            <ThemedText type="defaultSemiBold">Night reading (warm)</ThemedText>
+            <ThemedText style={styles.settingValue}>
+              Amber tones in the Quran reader, easier on the eyes before dawn
+            </ThemedText>
+          </View>
+          <Switch
+            testID="night-warm"
+            value={nightWarm}
+            onValueChange={(v) => {
+              setNightWarm(v);
+              saveNightWarm(store, v);
+            }}
+          />
+        </View>
         <ThemedText style={styles.privacyNote}>
           DeenDawn stores everything on your phone. No account, no ads, no tracking.
         </ThemedText>
@@ -238,6 +259,7 @@ const styles = StyleSheet.create({
   },
   settingValue: { opacity: 0.6 },
   sectionTitle: { marginTop: 28, fontSize: 24, lineHeight: 30 },
+  rowText: { flex: 1, paddingRight: 12, gap: 2 },
   settingRowInline: {
     flexDirection: 'row',
     justifyContent: 'space-between',

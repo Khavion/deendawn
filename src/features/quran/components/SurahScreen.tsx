@@ -1,10 +1,11 @@
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { FlatList, Pressable, Share, StyleSheet, View, ViewToken } from 'react-native';
 
 import {
   isBookmarked,
+  loadNightWarm,
   loadShowTranslation,
   saveLastRead,
   saveShowTranslation,
@@ -12,17 +13,17 @@ import {
 } from '../readerState';
 import { AyahRow, buildShareText, getSurah, listAyahs } from '../repo';
 import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useSettings } from '@/src/features/settings/SettingsContext';
+import { fonts, quranType, radius, spacing } from '@/src/lib/theme/tokens';
+import { useTokens } from '@/src/lib/theme/useTokens';
 
 export function SurahScreen() {
-  const scheme = useColorScheme() ?? 'light';
   const db = useSQLiteContext();
   const { store } = useSettings();
   const params = useLocalSearchParams<{ id: string; ayah?: string }>();
   const surahNumber = Number(params.id);
+  const nightWarm = loadNightWarm(store);
+  const t = useTokens(nightWarm ? 'nightWarm' : undefined);
 
   const surah = useMemo(() => getSurah(db, surahNumber), [db, surahNumber]);
   const ayahs = useMemo(() => listAyahs(db, surahNumber), [db, surahNumber]);
@@ -35,8 +36,6 @@ export function SurahScreen() {
         ayahs.findIndex((a) => a.ayah === Number(params.ayah))
       )
     : 0;
-
-  const listRef = useRef<FlatList<AyahRow>>(null);
 
   const onToggleTranslation = () => {
     setShowTranslation((v) => {
@@ -55,14 +54,14 @@ export function SurahScreen() {
 
   if (!surah) {
     return (
-      <ThemedView style={styles.center}>
-        <ThemedText>Surah not found.</ThemedText>
-      </ThemedView>
+      <View style={[styles.center, { backgroundColor: t.bgCanvas }]}>
+        <ThemedText style={{ color: t.textPrimary }}>Surah not found.</ThemedText>
+      </View>
     );
   }
 
   return (
-    <ThemedView style={styles.container}>
+    <View style={[styles.container, { backgroundColor: t.bgCanvas }]}>
       <Stack.Screen
         options={{
           title: `${surah.number}. ${surah.name_transliteration}`,
@@ -79,10 +78,9 @@ export function SurahScreen() {
         }}
       />
       <FlatList
-        ref={listRef}
         data={ayahs}
         keyExtractor={(a) => String(a.id)}
-        initialNumToRender={12}
+        initialNumToRender={10}
         initialScrollIndex={initialIndex > 0 ? initialIndex : undefined}
         onScrollToIndexFailed={() => {}}
         onViewableItemsChanged={onViewableItemsChanged}
@@ -90,8 +88,11 @@ export function SurahScreen() {
         contentContainerStyle={styles.list}
         ListHeaderComponent={
           showTranslation && __DEV__ ? (
-            <View style={styles.devBadge} testID="dev-translation-badge">
-              <ThemedText style={styles.devBadgeText}>
+            <View
+              style={[styles.devBadge, { backgroundColor: t.ochreSoft }]}
+              testID="dev-translation-badge"
+            >
+              <ThemedText type="caption" style={{ color: t.ochre, textAlign: 'center' }}>
                 DEV translation (Pickthall, 1930) — final translation pending review
               </ThemedText>
             </View>
@@ -100,35 +101,42 @@ export function SurahScreen() {
         renderItem={({ item }) => {
           const bookmarked = isBookmarked(store, { surah: item.surah, ayah: item.ayah });
           return (
-            <View style={styles.ayahBlock} testID={`ayah-${item.surah}-${item.ayah}`}>
-              <ThemedText style={styles.arabic}>{item.text_uthmani}</ThemedText>
+            <View
+              style={[styles.ayahBlock, { borderBottomColor: t.border }]}
+              testID={`ayah-${item.surah}-${item.ayah}`}
+            >
+              <ThemedText style={[styles.arabic, { color: t.textPrimary }]}>
+                {item.text_uthmani}
+              </ThemedText>
               {showTranslation && (
-                <ThemedText style={styles.translation} testID={`translation-${item.ayah}`}>
+                <ThemedText
+                  type="serifBody"
+                  style={[styles.translation, { color: t.textSecondary }]}
+                  testID={`translation-${item.ayah}`}
+                >
                   {item.text_translation}
                 </ThemedText>
               )}
               <View style={styles.ayahFooter}>
-                <ThemedText style={[styles.ayahNumber, { color: Colors[scheme].tint }]}>
+                <ThemedText type="caption" style={{ color: t.accent }}>
                   {item.surah}:{item.ayah}
                 </ThemedText>
                 <View style={styles.actions}>
                   <Pressable
                     accessibilityRole="button"
                     testID={`bookmark-${item.ayah}`}
-                    hitSlop={8}
+                    hitSlop={12}
                     onPress={() => {
                       toggleBookmark(store, { surah: item.surah, ayah: item.ayah });
                       setBookmarkVersion((v) => v + 1);
                     }}
                   >
-                    <ThemedText style={{ color: Colors[scheme].tint }}>
-                      {bookmarked ? '★' : '☆'}
-                    </ThemedText>
+                    <ThemedText style={{ color: t.ochre }}>{bookmarked ? '★' : '☆'}</ThemedText>
                   </Pressable>
                   <Pressable
                     accessibilityRole="button"
                     testID={`share-${item.ayah}`}
-                    hitSlop={8}
+                    hitSlop={12}
                     onPress={() =>
                       void Share.share({
                         message: buildShareText(item, surah, {
@@ -137,45 +145,41 @@ export function SurahScreen() {
                       })
                     }
                   >
-                    <ThemedText style={{ color: Colors[scheme].tint }}>Share</ThemedText>
+                    <ThemedText style={{ color: t.accent }}>Share</ThemedText>
                   </Pressable>
                 </View>
               </View>
             </View>
           );
         }}
-        extraData={`${showTranslation}-${bookmarkVersion}`}
+        extraData={`${showTranslation}-${bookmarkVersion}-${nightWarm}`}
       />
-    </ThemedView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  list: { paddingHorizontal: 20, paddingBottom: 40, paddingTop: 8 },
+  list: { paddingHorizontal: spacing.xl, paddingBottom: spacing.xxl, paddingTop: spacing.s },
   devBadge: {
-    backgroundColor: 'rgba(255,180,0,0.15)',
-    borderRadius: 8,
-    padding: 8,
-    marginBottom: 8,
+    borderRadius: radius.control,
+    padding: spacing.s,
+    marginBottom: spacing.s,
   },
-  devBadgeText: { fontSize: 12, textAlign: 'center', opacity: 0.9 },
   ayahBlock: {
-    paddingVertical: 14,
-    gap: 10,
+    paddingVertical: spacing.l,
+    gap: spacing.m,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: 'rgba(128,128,128,0.25)',
   },
   arabic: {
-    fontFamily: 'AmiriQuran',
-    fontSize: 26,
-    lineHeight: 52,
+    fontFamily: fonts.quran,
+    fontSize: quranType.ayahSize,
+    lineHeight: quranType.ayahLineHeight,
     textAlign: 'right',
     writingDirection: 'rtl',
   },
-  translation: { opacity: 0.85, lineHeight: 22 },
+  translation: { maxWidth: 560 },
   ayahFooter: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  ayahNumber: { fontSize: 13, fontWeight: '600' },
-  actions: { flexDirection: 'row', gap: 20 },
+  actions: { flexDirection: 'row', gap: spacing.xl },
 });

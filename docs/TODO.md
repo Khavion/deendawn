@@ -40,6 +40,17 @@ Epics in build order. Top unblocked item is always the current task.
 - [x] Share-as-text with citation
 - [ ] Visual QA on simulator: ligatures, long surahs scroll perf (60fps budget)
 
+## 4b. Design system (brief from Zohaib, 2026-07-12 — docs/DESIGN.md)
+
+- [x] Tokens (light/dark/night-warm) + jest contrast enforcement
+- [x] Literata + Source Sans 3 pinned/extracted; type roles (serif reading, sans UI)
+- [x] Lapis/ochre/ivory identity applied: Today, reader, city picker, More, nav chrome, tab bar
+- [x] Night-warm reader mode (opt-in toggle)
+- [ ] FlashList perf pass for long surahs (measure first)
+- [ ] Manuscript-art editorial moments (Met/Smithsonian CC0 only, aniconism-safe, scholar sign-off) — onboarding + empty states
+- [ ] Haptics per spec (tasbih detents 33/99, adhan moment, tip success) — with respective epics
+- [ ] Dynamic Type large-size audit; RTL primitives audit
+
 ## 5. Qibla
 
 - [ ] Great-circle bearing to Kaaba (21.4225, 39.8262), unit-tested vs known city bearings

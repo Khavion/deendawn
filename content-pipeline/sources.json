@@ -34,6 +34,35 @@
       ]
     },
     {
+      "id": "literata-font",
+      "file": "Literata-3.103.zip",
+      "url": "https://github.com/googlefonts/literata/releases/download/3.103/3.103.zip",
+      "kind": "font",
+      "format": "zip",
+      "license": "SIL Open Font License 1.1 (OFL.txt in archive)",
+      "attribution": "Literata by TypeTogether for Google Fonts (github.com/googlefonts/literata), SIL OFL 1.1",
+      "extract": [
+        { "from": "fonts/ttf/Literata-Regular.ttf", "to": "assets/fonts/Literata-Regular.ttf" },
+        { "from": "fonts/ttf/Literata-Medium.ttf", "to": "assets/fonts/Literata-Medium.ttf" },
+        { "from": "fonts/ttf/Literata-SemiBold.ttf", "to": "assets/fonts/Literata-SemiBold.ttf" },
+        { "from": "OFL.txt", "to": "assets/fonts/Literata-OFL.txt" }
+      ]
+    },
+    {
+      "id": "source-sans-font",
+      "file": "TTF-source-sans-3.052R.zip",
+      "url": "https://github.com/adobe-fonts/source-sans/releases/download/3.052R/TTF-source-sans-3.052R.zip",
+      "kind": "font",
+      "format": "zip",
+      "license": "SIL Open Font License 1.1 (Adobe Source Sans 3; LICENSE.md in the source repo)",
+      "attribution": "Source Sans 3 by Paul D. Hunt / Adobe (github.com/adobe-fonts/source-sans), SIL OFL 1.1",
+      "extract": [
+        { "from": "TTF/SourceSans3-Regular.ttf", "to": "assets/fonts/SourceSans3-Regular.ttf" },
+        { "from": "TTF/SourceSans3-Medium.ttf", "to": "assets/fonts/SourceSans3-Medium.ttf" },
+        { "from": "TTF/SourceSans3-Semibold.ttf", "to": "assets/fonts/SourceSans3-Semibold.ttf" }
+      ]
+    },
+    {
       "id": "quran-metadata",
       "file": "quran-data.xml",
       "url": "https://tanzil.net/res/text/metadata/quran-data.xml",
