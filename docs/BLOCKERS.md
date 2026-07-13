@@ -1,5 +1,33 @@
 # Things waiting on Zohaib
 
+## NEW from Phase 2 (2026-07-12) — none of these stop my work
+
+### A. Upload the AI model files to your Cloudflare storage (needed before the "Ask" AI answers can be tested end-to-end)
+
+**What this is:** The optional on-phone AI needs three files hosted on your own storage (never from third-party sites, for supply-chain safety): the main model (Qwen3-1.7B, Apache-licensed), a smaller fallback model (Qwen3-0.6B), and a "meaning-matcher" model (all-MiniLM-L6-v2). I'll also generate a fourth file (pre-computed verse embeddings) myself.
+**What you'll do:** When I reach that epic (several weeks of work away), I'll give you exact download links and click-by-click upload steps. Nothing needed now — and item 1 on this list (.env with storage keys) may let me do the upload for you.
+
+### B. License-cleared adhan recordings
+
+**What this is:** For the call-to-prayer sound options, we need recordings we legally may ship: short clips (under 30 seconds) plus full-length recordings, with the reciter's (muezzin's) permission documented per recording.
+**What you'll do:** If you know a muezzin or own recordings with clear rights, send them over. Otherwise I'll research legally-clear sources and bring you a recommendation. I'm building the whole feature against a silent placeholder meanwhile, so nothing is blocked.
+
+### C. Name a human reviewer for Urdu and Arabic text
+
+**What this is:** I'm drafting the app's Urdu and Arabic interface text myself, but the rules we agreed say a human who reads those languages must approve every line before real users see it (English needs no review).
+**What you'll do:** Tell me who will review — a friend, family member, or community member is fine. They'll get a simple checklist document (docs/TRANSLATION_REVIEW.md).
+
+### D. Scholar sign-off queue (grows as I build)
+
+**What this is:** A running list of things that need a knowledgeable reviewer's blessing before shipping: the wording glossary, calendar labels (Eid, Ramadan etc.), the zakat disclaimer, the philosopher pages, and — most importantly — turning ON the AI answers feature for users.
+**What you'll do:** Eventually connect me with a scholar or knowledgeable reviewer; I keep the queue organized in docs/SCHOLAR_REVIEW.md.
+
+### E. AI model choice — speak up only if you object
+
+The plan uses Qwen3 (Apache 2.0 license — free, no strings attached). You already approved the overall directive; flag it only if you want a different model.
+
+---
+
 Written in plain English. **Nothing on this list is urgent right now** — the app is being built just fine without these. Each item says what it is, when it's needed, and exactly what to do (I'll also walk you through each one step-by-step when the time comes).
 
 ---

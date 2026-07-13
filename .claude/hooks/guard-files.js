@@ -48,11 +48,20 @@ process.stdin.on('end', () => {
   }
 
   // Arabic-script detection (Arabic, Supplement, Extended-A, Presentation Forms A/B).
-  const arabic = /[؀-ۿݐ-ݿࢠ-ࣿﭐ-﷿ﹰ-﻿]/;
-  if (written && arabic.test(written)) {
+  // Gate 8 exception (owner-approved 2026-07-12): machine-DRAFTED Urdu/Arabic
+  // UI strings are permitted ONLY in locale files and review logs, where they
+  // stay @draft until a human reviewer clears them (docs/TRANSLATION_REVIEW.md).
+  // Scripture and all other files remain fully blocked.
+  const gate8Allowed =
+    /^src\/lib\/i18n\/locales\//.test(rel) ||
+    rel === 'docs/TRANSLATION_REVIEW.md' ||
+    rel === 'docs/SCHOLAR_REVIEW.md';
+  const arabic = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/;
+  if (written && arabic.test(written) && !gate8Allowed) {
     console.error(
       'BLOCKED: attempted to write Arabic-script text with an editing tool. ' +
-        'Quranic/religious Arabic text enters the repo byte-for-byte via the content pipeline only (NO-AI ZONE, CLAUDE.md rule 1).'
+        'Quranic/religious Arabic text enters the repo byte-for-byte via the content pipeline only (NO-AI ZONE, CLAUDE.md rule 1). ' +
+        'Machine-drafted UI strings are allowed only in src/lib/i18n/locales/ and the review logs (Gate 8).'
     );
     process.exit(2);
   }

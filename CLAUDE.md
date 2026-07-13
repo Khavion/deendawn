@@ -16,11 +16,17 @@ Build and ship DeenDawn for iOS (Android fast-follow from the same codebase): pr
 
 ### 1. Religious content integrity — the NO-AI ZONE
 
-- Quran text, translations, adhkar, du'as, hadith, and any religious ruling are NEVER written, completed, corrected, paraphrased, "fixed," or reformatted-with-content-changes by you. They are imported byte-for-byte from pinned, verified sources through the content pipeline.
+- Quran text, translations, adhkar, du'as, hadith, philosopher source texts, and any religious ruling are NEVER written, completed, corrected, paraphrased-into-storage, or modified by you. They enter the app only through the content pipeline, byte-for-byte from pinned verified sources, checksummed in content.lock. A separate, clearly-bounded GENERATED ANSWERS LAYER (Rule 1.5) may compose short answer sentences at runtime, under hard constraints. Nothing that layer produces is ever stored as content, presented as scripture, or presented as a ruling.
 - Every religious text artifact has a SHA-256 recorded in `content-pipeline/content.lock`. A checksum mismatch fails the build. You never regenerate a checksum to make a failure pass; you investigate why the bytes changed.
 - If a test, linter, or formatter would alter religious text (trailing whitespace, unicode normalization, anything), exempt those files. Normalization for SEARCH INDEXES happens in derived columns only; source text is immutable.
 - You never invent citations, surah/ayah numbers, hadith numbers, or attributions. Metadata comes from the dataset or does not exist.
 - UI copy ABOUT religion (labels, onboarding text) is allowed, but any sentence that states a religious position gets flagged `// SCHOLAR-REVIEW` and logged in `docs/SCHOLAR_REVIEW.md`.
+
+### 1.5 Generated answers layer (the "Ask" feature)
+
+- Two tiers. TIER A (universal, all devices): deterministic retrieval only — FTS matches, exact counts, verse lists with deep-links. No generation. TIER B (capability-gated, optional download): a small local LLM that may ONLY paraphrase or summarize the passages retrieved in the current query, with citations. No cloud API of any kind, ever.
+- Tier B hard constraints, enforced in code and tests: (a) answers must cite retrieved verses; a post-processor rejects any answer whose citations are empty or that references content absent from the retrieved set; (b) empty retrieval → the fixed refusal string, never an answer; (c) ruling-seeking queries (halal/haram/permissible/should-I patterns) → fixed redirect-to-scholars response plus related verses, never an opinion; (d) answer style: as few words as possible, max ~40 words / 2 sentences, citations rendered as tappable [1][2][3] deep-links; a blocklist post-processor strips LLM filler ("I'd be happy to", "If you want", "Certainly", offers of further help, closing questions) — presence of blocklist phrases fails the response and triggers regeneration or Tier A fallback; (e) counting and "which verses" questions are ALWAYS routed to Tier A exact FTS counts, never the model; (f) the model file itself is a pinned artifact: SHA-256 in model.lock, downloaded only from our R2 bucket, verified before load.
+- Honesty of methodology: count answers are phrased as verifiable facts about the corpus, e.g. "4 verses match 'bribery' in the bundled translation [1][2][3][4]" — never as absolute theological claims.
 
 ### 2. Privacy invariants
 
@@ -49,6 +55,9 @@ Everything not on this list: proceed autonomously without asking.
 4. Deleting remote resources (R2 objects/buckets, TestFlight builds, git history rewrites on origin).
 5. Final selection and release sign-off of: the shipping translation, reciter audio set, adhkar dataset, and any `SCHOLAR-REVIEW` item.
 6. Changing bundle ID, app name, entitlements that affect privacy (location, notifications already approved).
+7. Enabling Tier B (generated answers) for end users — build and test it fully, but it ships OFF behind a flag until Zohaib + scholar sign-off.
+8. Releasing Urdu and Arabic UI strings — you draft them, mark them machine-drafted in docs/TRANSLATION_REVIEW.md, and they ship only after a human reviewer clears them. English ships freely.
+9. Publishing any philosopher biography or "key ideas" copy — draft freely, flag every one in docs/SCHOLAR_REVIEW.md, ship only after sign-off.
 
 When you hit a gate: write the exact context and your recommendation to `docs/BLOCKERS.md`, print `GATE: <one-line summary>`, then continue with other TODO items. Never idle.
 
@@ -68,6 +77,9 @@ All App Store operations go through App Store Connect API keys + EAS/Fastlane he
 - IAP: react-native-purchases (RevenueCat). Errors: none in v1 (privacy) — structured local logging only.
 - Fonts: Amiri Quran / Scheherazade New (SIL OFL; subsetting allowed). KFGQPC Uthmanic Hafs may be bundled UNMODIFIED only — never subset or convert it (license prohibits modification).
 - Audio hosting: Cloudflare R2, HTTPS streaming with range requests.
+- i18n: react-i18next + expo-localization, typed keys. RTL switch via I18nManager + expo-updates reloadAsync.
+- Ask feature: llama.rn (MIT) for Tier B inference; op-sqlite + sqlite-vec (MIT/Apache-2.0) for the vector store in a SEPARATE database file from the expo-sqlite Quran DB (dual-SQLite compile conflict is a known iOS build risk — use the static-libraries approach and verify the build after adding op-sqlite); Qwen3-1.7B Q4 GGUF (Apache 2.0) default model, Qwen3-0.6B Q4 fallback; all-MiniLM-L6-v2 (Apache 2.0) embeddings. Models and embeddings are OPTIONAL downloads from our R2 bucket only — never bundled (binary stays <100MB), never fetched from Hugging Face or any third-party domain.
+- Urdu font: Noto Nastaliq Urdu (SIL OFL) with generous line-height (~1.9–2.1); Naskh-style fallback for dense UI chrome.
 - Marketing site: separate repo later; out of scope here.
 
 ## Repo layout

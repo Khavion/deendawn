@@ -1,6 +1,22 @@
-# TODO — DeenDawn v1
+# TODO — DeenDawn
 
 Epics in build order. Top unblocked item is always the current task.
+
+## PHASE 2 (owner-confirmed 2026-07-12 — specs in docs/PHASE_2_DIRECTIVE.md, takes priority over remaining v1 backlog below)
+
+- [ ] E1. Localization foundation EN/UR/AR (CURRENT) — i18n keys everywhere, missing-key CI test, AR plural forms, language picker + RTL restart, Noto Nastaliq Urdu pinned, machine-drafted UR/AR flagged @draft (gate 8), 3-locale screenshots
+- [ ] E2. Qibla compass — bearing math tests (≥8 cities both hemispheres), heading + low-pass filter, calibration UX, alignment haptics, a11y announcements
+- [ ] E3. Adhan notification sound options — Silent/Ping/Clip/Full per prayer, <30s pipeline test, Android channel-per-sound, honesty copy, silent placeholder until cleared recordings arrive
+- [ ] E4. Hijri calendar + Ramadan mode — month grid, Umm al-Qura ±1 offset, key dates (SCHOLAR_REVIEW), Suhoor/Iftar surfacing, pre-Fajr reminder
+- [ ] E5. Tasbih counter — haptic detents 33/99, daily history, no Arabic dhikr text (scholar gate)
+- [ ] E6. Zakat calculator — 2.5% math tests, user-entered nisab prices, disclaimer (SCHOLAR_REVIEW), 3-locale currency layout tests
+- [ ] E7. Navigation feel pass — native stack, freeze, durations 200–280ms, reduce-motion, no shared-element transitions, profile reader open
+- [ ] E8. Ask Tier A — deterministic retrieval, query router (count/list/ruling-redirect), synonym map, eval harness ≥60 fixtures (gates E9)
+- [ ] E9. Ask Tier B — llama.rn + op-sqlite/sqlite-vec vectors.db, R2-only model downloads w/ model.lock, generation contract + post-processor, grounding/refusal/style harnesses, SHIPS OFF (gate 7)
+- [ ] E10. Philosophers library — PD-verified corpus via pipeline, library.db + FTS, thinker pages (gate 9), Ask integration
+- [ ] E11. Remaining v1 backlog below (audio, tips, onboarding, store prep), i18n-native
+
+## v1 backlog (superseded ordering — E-epics above absorb qibla/tasbih/hijri/zakat specs)
 
 ## 1. Content pipeline (DONE 2026-07-12)
 
