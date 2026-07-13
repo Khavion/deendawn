@@ -12,7 +12,8 @@ Epics in build order. Top unblocked item is always the current task.
 - [x] E6. Zakat calculator — DONE 2026-07-13 (pure 2.5% math w/ min-of-metals nisab + needPrices/belowNisab states, user-entered prices only, Arabic-Indic numeral input parsing, live result card, disclaimer + nisab constants flagged SCHOLAR-REVIEW, i18n ×3 incl. AR long-value layout test)
 - [x] E7. Navigation feel pass — DONE 2026-07-13 (enableScreens/enableFreeze, freezeOnBlur tabs, tokenized nav chrome pre-existing, native push kept for system Reduce Motion, reader load deferred past transition; real-device profile on TESTPLAN)
 - [x] E8. Ask Tier A — DONE 2026-07-13 (query router count/list/ruling/topical incl. Arabic patterns, conservative synonym expansion, exact FTS counts phrased as corpus facts, fixed ruling redirect (SCHOLAR flag), 64 ground-truth fixtures derived from the committed db, 72-test harness that gates E9, terse UI w/ tappable citation deep-links, 5th tab, Maestro flow green, i18n ×3 incl. AR 6-form count plurals)
-- [ ] E9. Ask Tier B (CURRENT — model uploads are BLOCKERS item A; build against stub)
+- [~] E9. Ask Tier B — CORE DONE 2026-07-13 (contract+harness 26 tests: grounding/refusal/style suites, gate-7 flag OFF, capability gate, hybrid merge, R2-only download manager, inert model.lock). REMAINING: llama.rn+op-sqlite native wiring (dedicated session, static-libs approach, verify build first), embeddings pipeline (needs models — BLOCKERS A), Tier B UI, on-device inference checks (TESTPLAN)
+- [ ] E10. Philosophers library (CURRENT)
 - [ ] E7. Navigation feel pass — native stack, freeze, durations 200–280ms, reduce-motion, no shared-element transitions, profile reader open
 - [ ] E10. Philosophers library — PD-verified corpus via pipeline, library.db + FTS, thinker pages (gate 9), Ask integration
 - [ ] E11. Remaining v1 backlog below (audio, tips, onboarding, store prep), i18n-native

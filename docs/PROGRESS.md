@@ -108,7 +108,11 @@ Done: Maestro installed; e2e/smoke.yaml green twice on iPhone 17 sim (Today -> M
 - UI: 5th tab (Ask), terse serif count sentence + tappable [s:a] chips deep-linking into the reader, verse rows for topicals, ochre redirect card. i18n ×3 with AR count plurals across all 6 forms. Maestro flow green on sim (count + redirect paths, screenshots in docs/screens).
 - Lesson reinforced: assumed 2:188 contains "bribe" in Pickthall — it does not; test now derives refs from the corpus (never assume religious-text facts).
 
-## Next: E9 Ask Tier B (build against stub artifacts — real models are BLOCKERS item A), then E10 philosophers library, then E11 (audio/tips/onboarding/store-prep)
+## Session 2026-07-13 (cont. 7) — E9 Tier B core
+
+- Full Rule-1.5 enforcement pipeline built pure + 26 tests green (see DECISIONS: E9 core-first sequencing). Gate 7 flag committed OFF with a do-not-flip comment. Native llama.rn/op-sqlite wiring deferred to a dedicated fresh session (dual-sqlite build risk + nothing validatable until model uploads).
+
+## Next: E10 philosophers library (pipeline extension, PD-verified corpus, library.db, thinker pages w/ gate 9), then E9 native session, then E11 (audio/tips/onboarding/store-prep)
 
 ## Next: start here
 

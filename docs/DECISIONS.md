@@ -34,6 +34,12 @@ Word-by-word Quran data: QUL/hablullah WBW is CC BY-NC-ND — unusable (tip jar 
 - Zero custom motion exists app-wide by design (floor discipline): the only "animations" are color flashes (tasbih milestones), which Reduce Motion guidance permits. If motion is ever added, gate via AccessibilityInfo.isReduceMotionEnabled.
 - Reader open (the profile target): ayah materialization deferred past the push via InteractionManager; FlatList initialNumToRender 10. Real-device frame profiling added to the TESTPLAN device pass (simulators do not exhibit real thermals/frame pacing).
 
+## 2026-07-13 — E9 core-first sequencing
+
+- Built the entire Tier B safety core PURE and fully tested (26 tests): generation contract enforcing Rule 1.5a–d (citations ⊆ retrieved, INSUFFICIENT honored, ≤40 words/2 sentences, filler blocklist, one regeneration then Tier A fallback, empty retrieval never reaches the model), capability gate (3.5GB + non-low-RAM + A14+/iPhone13,x map), hybrid merge (both>vector-by-score>fts, deduped), download manager (R2-only, Wi-Fi default, hash-verify-or-delete, resumable interface, delete-all), model.lock with PENDING-UPLOAD hashes so Tier B is provably inert until BLOCKERS item A lands.
+- llama.rn + op-sqlite native installation DEFERRED to a dedicated session: the directive itself flags the dual-SQLite iOS build conflict as a known risk; with zero model files uploaded there is nothing end-to-end to validate, and destabilizing a green build for an untestable path is bad sequencing. The LlmRuntime/DownloadPlatform/VectorStore interfaces are the exact seams the native impls plug into. First task of that session: add op-sqlite with the static-libraries approach and verify xcodebuild BEFORE any other change.
+- Tier B UI surface (download offer, settings row, answer card) lands with the native session so it can be driven end-to-end against the stub artifact.
+
 ## 2026-07-12 — Phase 2 directive adopted
 
 Zohaib pasted the research assistant's PHASE_2_DIRECTIVE (archived at docs/PHASE_2_DIRECTIVE.md) and explicitly confirmed the CLAUDE.md amendments — including Rule 1.5 (generated answers layer) and Human Gates 7–9 — via a direct yes in-session. Epic order: E1 i18n → E2 qibla → E3 adhan sounds → E4 hijri/Ramadan → E5 tasbih → E6 zakat → E7 navigation feel → E8 Ask Tier A → E9 Ask Tier B (ships OFF, gate 7) → E10 philosophers library → E11 remaining v1 backlog.
