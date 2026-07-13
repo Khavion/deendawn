@@ -166,6 +166,20 @@ if (
   throw new Error('POST-BUILD CHECK FAILED: ayah 1:1 bytes differ from pinned spot-check');
 db.close();
 
+// Extract pinned font archives (bytes verified above) into assets/fonts.
+const { execFileSync } = await import('node:child_process');
+for (const src of sources) {
+  if (src.format !== 'zip' || !src.extract) continue;
+  const zipPath = path.join(DATA_DIR, src.file);
+  for (const { from, to } of src.extract) {
+    const dest = path.join(REPO_ROOT, to);
+    mkdirSync(path.dirname(dest), { recursive: true });
+    const bytes = execFileSync('unzip', ['-p', zipPath, from], { maxBuffer: 64 * 1024 * 1024 });
+    writeFileSync(dest, bytes);
+    console.log(`extracted ${from} -> ${to} (${bytes.length} bytes)`);
+  }
+}
+
 // Attribution manifest — rendered on the About screen.
 const attribution = {
   generatedFrom: 'content-pipeline/sources.json',

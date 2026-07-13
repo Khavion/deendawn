@@ -34,6 +34,14 @@
       "url": "https://tanzil.net/res/text/metadata/quran-data.xml",
       "license": "Tanzil metadata — free to use with attribution to tanzil.net",
       "pinnedAt": "2026-07-13"
+    },
+    "amiri-font": {
+      "file": "Amiri-1.003.zip",
+      "sha256": "81af0aff7d2086d8af24cea7202f7546130997982534691373485cd96744d05e",
+      "bytes": 1033533,
+      "url": "https://github.com/aliftype/amiri/releases/download/1.003/Amiri-1.003.zip",
+      "license": "SIL Open Font License 1.1 (OFL.txt inside the archive; subsetting permitted)",
+      "pinnedAt": "2026-07-13"
     }
   },
   "derived": {}

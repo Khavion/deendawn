@@ -21,6 +21,15 @@
       "devOnly": true
     },
     {
+      "id": "amiri-font",
+      "kind": "font",
+      "attribution": "Amiri Quran font by Khaled Hosny / Alif Type (github.com/aliftype/amiri), SIL OFL 1.1",
+      "license": "SIL Open Font License 1.1 (OFL.txt inside the archive; subsetting permitted)",
+      "url": "https://github.com/aliftype/amiri/releases/download/1.003/Amiri-1.003.zip",
+      "sha256": "81af0aff7d2086d8af24cea7202f7546130997982534691373485cd96744d05e",
+      "pinnedAt": "2026-07-13"
+    },
+    {
       "id": "quran-metadata",
       "kind": "metadata",
       "attribution": "Surah/juz metadata from Tanzil (tanzil.net)",

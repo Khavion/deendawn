@@ -45,8 +45,19 @@ Done:
 - iOS native build green via prebuild + xcodebuild (first full compile of the app). ios/ stays gitignored (regenerated on demand).
 - 75 tests green repo-wide; all gates green.
 
+## Session 2026-07-12 (cont. 3) — Quran reader
+
+Done:
+
+- Amiri Quran font (SIL OFL 1.1) pinned as a content-pipeline artifact (Amiri-1.003.zip from aliftype GitHub releases, sha in content.lock); build extracts AmiriQuran.ttf + OFL.txt into assets/fonts. Loaded at runtime via useFonts.
+- metro.config.js bundles .db as asset; quran.db opens read-only via SQLiteProvider assetSource at root.
+- Quran repo (surahs/ayahs/FTS search/share text) behind a sync db interface — node tests run the SAME queries against the REAL committed quran.db via better-sqlite3.
+- TS Arabic query folding parity-tested byte-identical to the pipeline-built FTS index (no Arabic authored: source rows normalized and compared to derived column).
+- Screens: surah list (114, Arabic names in Amiri, search bar switching to FTS results with ayah deep-links, continue-reading chip), surah reader (RTL Uthmani text, translation toggle persisted + DEV badge, bookmarks, share with citation, last-read tracking via viewability).
+- 17 quran tests; repo-wide suite green.
+
 ## Next: start here
 
-1. Quran reader epic: surah list + ayah view from bundled quran.db via expo-sqlite (read-only), Uthmani font (fetch Amiri Quran / Scheherazade New via pinned source), translation toggle + DEV badge, bookmarks/last-read in kv store, FTS search screen, share-as-text with citation.
-2. Then qibla (bearing math already available via adhan Qibla()).
-3. Simulator smoke run + screenshots for Zohaib once Quran reader lands.
+1. Qibla epic: great-circle bearing (adhan Qibla()) + magnetometer heading (expo-sensors) + declination correction (expo-location true heading), calibration UX. Bearing unit tests vs known city bearings.
+2. Simulator smoke run + screenshots into docs/screens/ for Zohaib (Today, Quran list, surah view, More).
+3. Then tasbih/hijri/zakat cluster (pure logic + small screens), then audio (needs R2 dev set — still blocked), tips, onboarding polish.

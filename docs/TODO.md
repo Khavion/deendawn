@@ -32,12 +32,13 @@ Epics in build order. Top unblocked item is always the current task.
 
 ## 4. Quran reader
 
-- [ ] Surah list + ayah view from quran.db (read-only)
-- [ ] Uthmani rendering QA: RTL, ligatures, font (Amiri Quran or Scheherazade New)
-- [ ] Translation toggle with `__DEV__` "DEV translation" badge
-- [ ] Bookmarks + last-read (user db)
-- [ ] FTS search on normalized derived columns
-- [ ] Share-as-text with citation
+- [x] Surah list + ayah view from quran.db (read-only, SQLiteProvider assetSource; repo tested against real db bytes)
+- [x] Uthmani rendering: RTL + Amiri Quran font (pinned OFL artifact via content pipeline); visual ligature QA on simulator still pending
+- [x] Translation toggle with `__DEV__` "DEV translation" badge
+- [x] Bookmarks + last-read (user db) + continue-reading chip
+- [x] FTS search on normalized derived columns (Arabic folding parity-tested byte-identical to the index)
+- [x] Share-as-text with citation
+- [ ] Visual QA on simulator: ligatures, long surahs scroll perf (60fps budget)
 
 ## 5. Qibla
 

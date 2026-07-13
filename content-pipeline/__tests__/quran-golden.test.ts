@@ -146,7 +146,10 @@ describe('attribution manifest', () => {
     );
     for (const a of manifest.artifacts) {
       expect(a.license).toBeTruthy();
-      expect(a.url).toMatch(/^https:\/\/tanzil\.net\//);
+      // Only pinned hosts may appear: Tanzil (text) and Alif Type releases (font).
+      expect(a.url).toMatch(
+        /^https:\/\/(tanzil\.net\/|github\.com\/aliftype\/amiri\/releases\/download\/)/
+      );
       expect(a.sha256).toBe(lock.artifacts[a.id].sha256);
     }
     expect(manifest.artifacts.find((a: { id: string }) => a.id === 'en-pickthall').devOnly).toBe(

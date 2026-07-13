@@ -21,6 +21,19 @@
       "attribution": "DEV English translation: Mohammed Marmaduke Pickthall, The Meaning of the Glorious Koran (1930), via tanzil.net — final shipping translation pending human review (Human Gate #5)"
     },
     {
+      "id": "amiri-font",
+      "file": "Amiri-1.003.zip",
+      "url": "https://github.com/aliftype/amiri/releases/download/1.003/Amiri-1.003.zip",
+      "kind": "font",
+      "format": "zip",
+      "license": "SIL Open Font License 1.1 (OFL.txt inside the archive; subsetting permitted)",
+      "attribution": "Amiri Quran font by Khaled Hosny / Alif Type (github.com/aliftype/amiri), SIL OFL 1.1",
+      "extract": [
+        { "from": "Amiri-1.003/AmiriQuran.ttf", "to": "assets/fonts/AmiriQuran.ttf" },
+        { "from": "Amiri-1.003/OFL.txt", "to": "assets/fonts/AmiriQuran-OFL.txt" }
+      ]
+    },
+    {
       "id": "quran-metadata",
       "file": "quran-data.xml",
       "url": "https://tanzil.net/res/text/metadata/quran-data.xml",
