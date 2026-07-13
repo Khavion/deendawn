@@ -18,11 +18,17 @@ TaskManager.defineTask(TASK_NAME, async () => {
  */
 export async function registerBackgroundRefresh(): Promise<void> {
   try {
+    const status = await BackgroundTask.getStatusAsync();
+    if (status !== BackgroundTask.BackgroundTaskStatus.Available) {
+      // Expected on simulators and when Background App Refresh is off; the
+      // foreground/fire listeners still keep the schedule fresh.
+      log.info('notifications', 'background refresh unavailable', { status });
+      return;
+    }
     await BackgroundTask.registerTaskAsync(TASK_NAME, {
       minimumInterval: 60 * 12, // minutes; at most twice a day is plenty
     });
   } catch (e) {
-    // Unavailable in Expo Go / simulator background-refresh-off — not fatal.
     log.warn('notifications', 'background task registration failed', { message: String(e) });
   }
 }

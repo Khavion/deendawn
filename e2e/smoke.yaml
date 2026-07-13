@@ -1,0 +1,30 @@
+appId: com.khavion.deendawn
+---
+- launchApp:
+    stopApp: true
+- extendedWaitUntil:
+    visible:
+      id: 'prayer-row-fajr'
+    timeout: 20000
+- takeScreenshot: docs/screens/smoke-today
+- tapOn: 'More, tab.*'
+- extendedWaitUntil:
+    visible:
+      id: 'setting-method'
+    timeout: 10000
+- assertVisible:
+    id: 'notif-fajr'
+- takeScreenshot: docs/screens/smoke-more
+- tapOn: 'Quran, tab.*'
+- extendedWaitUntil:
+    visible:
+      id: 'quran-search'
+    timeout: 10000
+- takeScreenshot: docs/screens/smoke-quran-list
+- tapOn:
+    id: 'surah-1'
+- extendedWaitUntil:
+    visible:
+      id: 'ayah-1-1'
+    timeout: 10000
+- takeScreenshot: docs/screens/smoke-surah
