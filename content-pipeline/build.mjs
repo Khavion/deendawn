@@ -224,10 +224,20 @@ if (libSources.length > 0) {
       const end = text.search(/\*\*\* END OF/);
       const body = text.slice(text.indexOf('\n', start) + 1, end).replace(/\r/g, '');
       // Paragraphs -> retrieval sections of up to ~1200 chars.
-      const paragraphs = body
+      let paragraphs = body
         .split(/\n\s*\n/)
         .map((p) => p.replace(/\s+/g, ' ').trim())
-        .filter((p) => p.length >= 40);
+        .filter((p) => p.length >= 40)
+        // Non-authorial boilerplate: production notes, imprints, TOC lines.
+        .filter(
+          (p) =>
+            !/^(produced by|e-text prepared|edited by|printed by|translated for the first time|london john murray|transcriber|\[illustration)/i.test(
+              p
+            ) && !(p.length <= 140 && /\s\d{1,3}$/.test(p))
+        );
+      // Reading view starts at the first substantial prose paragraph.
+      const firstProse = paragraphs.findIndex((p) => p.length >= 400);
+      if (firstProse > 0) paragraphs = paragraphs.slice(firstProse);
       const sections = [];
       let current = '';
       for (const p of paragraphs) {

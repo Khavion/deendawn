@@ -118,7 +118,13 @@ Done: Maestro installed; e2e/smoke.yaml green twice on iPhone 17 sim (Today -> M
 - Pipeline: gutenberg-txt format (marker + metadata + public-domain-license structural checks in verify), library.db build (works + ~1200-char paragraph sections + FTS, meta hashes) — 3 works / 308 sections; golden tests enforce license-log completeness, pre-1930 years, gutenberg-host allowlist, checksums.
 - 16 thinker pages drafted (era/school/works/neutral key-idea one-liners) in a data file, Gate 9 flagged as a whole; UR/AR versions deferred to the same review cycle.
 
-## Next: E10b Library UI (thinker list/detail, work reader over library.db via expo-asset copy + openDatabaseSync, search, More row, i18n chrome ×3, Ask source filter), then E9 native session, then E11
+## Session 2026-07-13 (cont. 9) — E10b Library UI
+
+- libraryDb opener (expo-asset -> Documents/SQLite copy, size-compared refresh on bundle updates) + repo (works/sections/FTS w/ injection-safe tokens) tested against the real committed library.db (5 tests).
+- Screens: Library (thinker list + book FTS search + gate-9 pending-review banner), Thinker (era/school/key ideas/major works + read-in-app cards), WorkReader (serif sections, PD attribution line, section deep-links from search). Routes /library, /thinker/[key], /work/[id]; More row; i18n chrome ×3. Thinker content stays EN data pending gate 9 review.
+- expo-file-system added (new File/Directory API).
+
+## Next: E11 — recitation audio player vs stub (BLOCKERS B), tip jar (RevenueCat), onboarding + About/attribution/privacy screens, offline E2E suite, store prep; then E9 native session (llama.rn + op-sqlite, static libs, verify build first)
 
 ## Next: start here
 

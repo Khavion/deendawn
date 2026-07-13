@@ -106,7 +106,8 @@
     "suhoorReminder_off": "Off",
     "suhoorReminder_minutes": "{{count}} minutes before Fajr",
     "tasbih": "Tasbih counter",
-    "zakat": "Zakat calculator"
+    "zakat": "Zakat calculator",
+    "library": "Thinkers & books"
   },
   "methods": {
     "MuslimWorldLeague": "Muslim World League",
@@ -193,5 +194,17 @@
     "redirect": "Questions about what is permissible deserve a qualified scholar, not an app — please ask one you trust. Verses related to your topic:",
     "empty": "Nothing in the text matches that — try a different word.",
     "related": "Related verses"
+  },
+  "library": {
+    "title": "Thinkers & books",
+    "searchPlaceholder": "Search the bundled books…",
+    "noMatches": "No matches in the bundled books.",
+    "reviewPending": "Draft summaries — pending scholar review before public release.",
+    "keyIdeas": "Key ideas",
+    "majorWorks": "Major works",
+    "readInApp": "Read in the app",
+    "translatedBy": "Translated by {{translator}} ({{year}})",
+    "publicDomain": "Public domain",
+    "notFound": "Not found."
   }
 }

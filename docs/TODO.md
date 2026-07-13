@@ -14,10 +14,8 @@ Epics in build order. Top unblocked item is always the current task.
 - [x] E8. Ask Tier A — DONE 2026-07-13 (query router count/list/ruling/topical incl. Arabic patterns, conservative synonym expansion, exact FTS counts phrased as corpus facts, fixed ruling redirect (SCHOLAR flag), 64 ground-truth fixtures derived from the committed db, 72-test harness that gates E9, terse UI w/ tappable citation deep-links, 5th tab, Maestro flow green, i18n ×3 incl. AR 6-form count plurals)
 - [~] E9. Ask Tier B — CORE DONE 2026-07-13 (contract+harness 26 tests: grounding/refusal/style suites, gate-7 flag OFF, capability gate, hybrid merge, R2-only download manager, inert model.lock). REMAINING: llama.rn+op-sqlite native wiring (dedicated session, static-libs approach, verify build first), embeddings pipeline (needs models — BLOCKERS A), Tier B UI, on-device inference checks (TESTPLAN)
 - [~] E10. Philosophers library — CORPUS+DATA DONE 2026-07-13 (3 PD-verified Gutenberg works pinned w/ per-page license verification: Field/Ghazali #58977, Davis/Rumi #45159, Nawab Ali/Ghazali #73140; library.db 308 FTS sections + golden tests incl. license-log completeness + pre-1930 gate; 16 thinker pages drafted + Gate 9 flagged). REMAINING: Library screens (list/thinker/reader/search), Ask source filter, i18n chrome
-- [ ] E10b. Library UI (CURRENT)
-- [ ] E7. Navigation feel pass — native stack, freeze, durations 200–280ms, reduce-motion, no shared-element transitions, profile reader open
-- [ ] E10. Philosophers library — PD-verified corpus via pipeline, library.db + FTS, thinker pages (gate 9), Ask integration
-- [ ] E11. Remaining v1 backlog below (audio, tips, onboarding, store prep), i18n-native
+- [x] E10b. Library UI — DONE 2026-07-13 (thinker list w/ pending-review banner, thinker pages w/ key ideas + linked bundled works, serif work reader w/ section deep-links + PD attribution line, FTS search over books, /library via More, i18n chrome ×3, library.db opened via expo-asset copy + size-compare refresh). Ask cross-source filter deferred to E9 native session
+- [ ] E11. Remaining v1 backlog: recitation audio (BLOCKERS B), tips, onboarding + About, store prep (CURRENT)
 
 ## v1 backlog (superseded ordering — E-epics above absorb qibla/tasbih/hijri/zakat specs)
 

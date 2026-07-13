@@ -107,7 +107,8 @@
     "suhoorReminder_off": "بند",
     "suhoorReminder_minutes": "فجر سے {{count}} منٹ پہلے",
     "tasbih": "تسبیح کاؤنٹر",
-    "zakat": "زکوٰۃ کیلکولیٹر"
+    "zakat": "زکوٰۃ کیلکولیٹر",
+    "library": "مفکرین اور کتب"
   },
   "methods": {
     "MuslimWorldLeague": "رابطہ عالم اسلامی",
@@ -194,5 +195,17 @@
     "redirect": "حلال و حرام کے سوالات کسی مستند عالم سے پوچھیں، ایپ سے نہیں۔ آپ کے موضوع سے متعلق آیات:",
     "empty": "متن میں کچھ نہیں ملا — کوئی اور لفظ آزمائیں۔",
     "related": "متعلقہ آیات"
+  },
+  "library": {
+    "title": "مفکرین اور کتب",
+    "searchPlaceholder": "شامل کتب میں تلاش کریں…",
+    "noMatches": "شامل کتب میں کچھ نہیں ملا۔",
+    "reviewPending": "مسودہ خلاصے — عوامی اجراء سے پہلے علمی نظرثانی درکار۔",
+    "keyIdeas": "اہم خیالات",
+    "majorWorks": "اہم تصانیف",
+    "readInApp": "ایپ میں پڑھیں",
+    "translatedBy": "ترجمہ: {{translator}} ({{year}})",
+    "publicDomain": "پبلک ڈومین",
+    "notFound": "نہیں ملا۔"
   }
 }
