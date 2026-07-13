@@ -5,11 +5,15 @@ import { useTranslation } from 'react-i18next';
 import { Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { ask, AskResponse } from '../router';
-import { AyahRow } from '../../quran/repo';
+import { ask, AskResponse, extractTerms } from '../router';
+import { askLibrary, LibraryAskResponse, sectionSnippet } from '../libraryAsk';
+import { openLibraryDb } from '../../library/libraryDb';
+import { AyahRow, QuranDb } from '../../quran/repo';
 import { ThemedText } from '@/components/themed-text';
 import { fonts, fontSize, radius, spacing } from '@/src/lib/theme/tokens';
 import { useTokens } from '@/src/lib/theme/useTokens';
+
+type AskSource = 'quran' | 'library';
 
 export function AskScreen() {
   const insets = useSafeAreaInsets();
@@ -18,11 +22,31 @@ export function AskScreen() {
   const router = useRouter();
   const db = useSQLiteContext();
   const [input, setInput] = useState('');
+  const [source, setSource] = useState<AskSource>('quran');
   const [response, setResponse] = useState<AskResponse | null>(null);
+  const [libResponse, setLibResponse] = useState<LibraryAskResponse | null>(null);
 
   const submit = () => {
     const q = input.trim();
+    if (source === 'library') {
+      setResponse(null);
+      if (!q) {
+        setLibResponse(null);
+        return;
+      }
+      void openLibraryDb().then((libDb) => {
+        setLibResponse(askLibrary(libDb as unknown as QuranDb, q));
+      });
+      return;
+    }
+    setLibResponse(null);
     setResponse(q ? ask(db, q) : null);
+  };
+
+  const switchSource = (next: AskSource) => {
+    setSource(next);
+    setResponse(null);
+    setLibResponse(null);
   };
 
   const openRef = (row: AyahRow) => router.push(`/surah/${row.surah}?ayah=${row.ayah}`);
@@ -89,10 +113,72 @@ export function AskScreen() {
         style={[styles.input, { color: t.textPrimary, borderColor: t.border }]}
       />
 
+      <View style={styles.sourceRow}>
+        {(['quran', 'library'] as const).map((s) => (
+          <Pressable
+            key={s}
+            accessibilityRole="button"
+            testID={`ask-source-${s}`}
+            onPress={() => switchSource(s)}
+            style={[
+              styles.sourceChip,
+              source === s
+                ? { backgroundColor: t.accent }
+                : { borderColor: t.border, borderWidth: 1 },
+            ]}
+          >
+            <ThemedText
+              type="defaultSemiBold"
+              style={{ color: source === s ? t.textOnAccent : t.textSecondary }}
+            >
+              {tr(s === 'quran' ? 'ask.sourceQuran' : 'ask.sourceLibrary')}
+            </ThemedText>
+          </Pressable>
+        ))}
+      </View>
+
       <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
-        {response === null && (
+        {response === null && libResponse === null && (
           <ThemedText type="serifBody" style={[styles.hint, { color: t.textSecondary }]}>
-            {tr('ask.hint')}
+            {tr(source === 'library' ? 'ask.hintLibrary' : 'ask.hint')}
+          </ThemedText>
+        )}
+
+        {libResponse?.kind === 'sections' && (
+          <View testID="ask-sections" style={styles.verseList}>
+            {libResponse.refs.map((ref) => (
+              <Pressable
+                key={ref.id}
+                accessibilityRole="button"
+                testID={`book-section-${ref.id}`}
+                onPress={() => router.push(`/work/${ref.work_id}?section=${ref.section_index}`)}
+                style={[styles.verseRow, { borderBottomColor: t.border }]}
+              >
+                <ThemedText type="defaultSemiBold" style={{ color: t.accent }}>
+                  {ref.title}
+                </ThemedText>
+                <ThemedText type="serifBody" numberOfLines={3} style={{ color: t.textSecondary }}>
+                  {sectionSnippet(ref.body, extractTerms(input))}
+                </ThemedText>
+              </Pressable>
+            ))}
+          </View>
+        )}
+
+        {libResponse?.kind === 'rulingRedirect' && (
+          <View
+            testID="ask-redirect-library"
+            style={[styles.redirectCard, { backgroundColor: t.ochreSoft }]}
+          >
+            <ThemedText type="serifBody" style={{ color: t.ochre }}>
+              {tr('ask.redirect')}
+            </ThemedText>
+          </View>
+        )}
+
+        {libResponse?.kind === 'empty' && (
+          <ThemedText testID="ask-empty-library" style={[styles.hint, { color: t.textSecondary }]}>
+            {tr('ask.empty')}
           </ThemedText>
         )}
 
@@ -138,6 +224,15 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.m,
     fontSize: fontSize.body,
     marginBottom: spacing.l,
+  },
+  sourceRow: { flexDirection: 'row', gap: spacing.s, marginBottom: spacing.l },
+  sourceChip: {
+    borderRadius: radius.control,
+    paddingHorizontal: spacing.l,
+    paddingVertical: spacing.s,
+    minHeight: 36,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   scroll: { paddingBottom: spacing.xxl },
   hint: { textAlign: 'center', marginTop: spacing.xl, opacity: 0.9 },

@@ -1,5 +1,7 @@
 appId: com.khavion.deendawn
 ---
+- launchApp:
+    stopApp: true
 - extendedWaitUntil:
     visible:
       id: 'prayer-row-fajr'
@@ -28,3 +30,26 @@ appId: com.khavion.deendawn
       id: 'ask-redirect'
     timeout: 10000
 - takeScreenshot: docs/screens/ask-redirect
+# Cross-source: switch to Books, search, expect section results deep-linkable
+- tapOn:
+    id: 'ask-source-library'
+- tapOn:
+    id: 'ask-input'
+- eraseText
+- inputText: 'knowledge of the soul'
+- pressKey: enter
+- extendedWaitUntil:
+    visible:
+      id: 'ask-sections'
+    timeout: 10000
+- takeScreenshot: docs/screens/ask-library
+# Ruling redirect applies to books too
+- tapOn:
+    id: 'ask-input'
+- eraseText
+- inputText: 'Is music halal?'
+- pressKey: enter
+- extendedWaitUntil:
+    visible:
+      id: 'ask-redirect-library'
+    timeout: 10000

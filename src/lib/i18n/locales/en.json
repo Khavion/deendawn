@@ -209,7 +209,10 @@
       "failed": "Download failed. Check your connection and try again.",
       "ready": "Model ready — answers are generated on this phone.",
       "delete": "Delete model"
-    }
+    },
+    "sourceQuran": "Quran",
+    "sourceLibrary": "Books",
+    "hintLibrary": "Search the classical works in the library — for example 'the soul' or 'knowledge'. Tap a passage to read it in its book."
   },
   "library": {
     "title": "Thinkers & books",

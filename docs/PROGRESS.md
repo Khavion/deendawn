@@ -154,7 +154,11 @@ Done: Maestro installed; e2e/smoke.yaml green twice on iPhone 17 sim (Today -> M
 - op-sqlite 17.1.2 (+sqliteVec) broke the SDK 54 precompiled React core at link time → RN now builds from source (plugins/withRNFromSource.js), which surfaced the known fmt-11/Apple-Clang-21 consteval breakage → fixed by compiling the fmt pod as C++17 AFTER react_native_post_install (plugins/withFmtConstevalFix.js). llama.rn 0.12.6 then landed with zero extra patches. Full stack builds; smoke/onboarding/audio flows green on the new binary. Clean builds now ~20 min (from-source) until SDK 56.
 - VectorStore (memory + sqlite-vec impls, 384-dim, rowid=ayahId, vectors.db separate from quran.db), llamaRuntime adapter for the tested LlmRuntime contract, TierBCard download/manage UI (gate-7 invisible; all states tested), ask.tierb i18n ×3. 333 tests green.
 
-## Next: E9 remainder is model-blocked (BLOCKERS A). Unblocked queue: Ask library source filter, AskScreen Tier B dormant wiring, FlashList pass, Dynamic Type + RTL audits.
+## Session 2026-07-13 (cont. 17) — Ask cross-source library filter (closes E10 remainder)
+
+- Ask gains a Quran/Books source toggle: Books searches the philosopher library's FTS sections with the same Tier A discipline (deterministic only, ruling queries still get the fixed scholar redirect, no synonym expansion on translated literary text). Results show work title + match-centered snippet and deep-link into the work reader at the exact section. askLibrary + snippet windowing unit-tested against the real committed library.db; Maestro ask flow extended and green; i18n ×3. 339 tests green.
+
+## Next: E9 remainder is model-blocked (BLOCKERS A). Unblocked queue: AskScreen Tier B dormant wiring, FlashList pass, Dynamic Type + RTL audits.
 
 ## Next: start here
 
