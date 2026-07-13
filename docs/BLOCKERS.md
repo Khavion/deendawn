@@ -86,3 +86,23 @@ Those keys get saved into one small private file on your computer (techies call 
 **Status: far off — listed so it's not a surprise.**
 
 Before the app ships to the public, a few choices are yours (ideally with a scholar's input): which English translation of the Quran ships in the final app (I'm building with a public-domain 1930 translation clearly labeled as temporary), which reciter's audio ships, and sign-off on any sentence in the app that states a religious position. I'll prepare researched recommendations for each so every decision is a yes/no for you.
+
+---
+
+## READY FOR HUMAN SUBMIT — the path from here to the App Store (written 2026-07-13)
+
+The app itself is feature-complete for a first test version, with 324 automated tests green and an offline test that proves everything works without internet. Store text (description, keywords, reviewer notes, privacy answers) is drafted in `fastlane/metadata/`. Here is the honest, ordered checklist of what remains — split by who does it.
+
+**You (whenever you're ready — I'll walk you through each click):**
+
+1. Apple Developer account keys → lets me upload a test build to TestFlight so the app appears on YOUR phone. This is the single item that unlocks your first real test.
+2. A support web page and a privacy policy web page (Apple requires both URLs for the store listing — a simple free page is enough; making anything public is your call, and I'll draft the pages).
+3. RevenueCat key (10-minute free signup, steps in item 1 above) — only if you want the tip jar live in v1; the app is fine without it.
+4. The 5-minute prayer-times spot check (item 3 above).
+5. Recitation recordings decision (item 2 above) — until then the app ships with the listen feature hidden (it hides itself automatically when no audio source is configured).
+
+**Reviewers (before PUBLIC release, not needed for your own TestFlight testing):** 6. Urdu/Arabic text review (item C) — English-only shipping is fine meanwhile. 7. Scholar sign-off queue (item D) — includes the final Quran translation choice; the current 1930 public-domain translation is clearly watermarked as temporary.
+
+**Me (no waiting on anyone):** 8. EAS preview/production build + TestFlight upload the moment item 1 lands. 9. Final store screenshots at Apple's required sizes (I'll capture them from the big-screen simulator). 10. In-app privacy policy screen already exists; I'll mirror it to the public page from item 2.
+
+Bottom line: **item 1 (Apple keys) is the only thing between you and testing DeenDawn on your own iPhone.** Say the word and I'll give you the click-by-click.

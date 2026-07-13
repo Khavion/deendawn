@@ -1,0 +1,13 @@
+Thank you for reviewing DeenDawn.
+
+WHAT IT IS: a privacy-first Islamic worship companion: prayer times, adhan notifications, Quran reader with streamed recitation, qibla compass, tasbih counter, hijri calendar, suhoor/iftar times, and a zakat calculator.
+
+NO ACCOUNT NEEDED: there is no login, no registration, and no server-side user data. To test: open the app, choose any city manually on the first screen (location permission is optional), and every feature is immediately available.
+
+DIFFERENTIATION (guideline 4.3): unlike most apps in this category, DeenDawn collects NO data (App Privacy: Data Not Collected), shows no ads, and works fully offline — prayer times, Quran text, qibla, and all tools function in airplane mode. The "Ask" feature computes exact, deterministic answers from the bundled Quran database on-device (no cloud AI); questions seeking religious rulings are redirected to qualified scholars rather than answered.
+
+IN-APP PURCHASES (guideline 3.2.1): the only purchase surface is an optional developer tip ("Support DeenDawn"). It is framed strictly as supporting app development — never as charity, zakat, or sadaqah collection — and no functionality is gated behind it.
+
+AUDIO: Quran recitation streams from our own storage; notification sounds are bundled and under 30 seconds.
+
+LOCATION: when-in-use only, processed on-device for prayer times and qibla bearing; never transmitted. Manual city entry is a full alternative.

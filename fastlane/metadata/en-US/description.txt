@@ -1,0 +1,24 @@
+DeenDawn is a privacy-first companion for daily worship. Free forever, with no ads, no accounts, and no tracking of any kind.
+
+PRAYER TIMES
+Accurate times for your city with all major calculation methods (ISNA, MWL, Umm al-Qura, and more), Asr madhab choice, and sensible handling of high-latitude locations. Pick your city manually or use on-device location — your position never leaves your phone.
+
+ADHAN REMINDERS
+Per-prayer notifications with your choice of sound. A rolling schedule keeps the days ahead covered, including an optional pre-Fajr suhoor reminder during Ramadan.
+
+QURAN
+The complete Quran in the Uthmani script with a readable English translation, verse-by-verse. Bookmarks, last-read position, full-text search, streaming recitation audio, and a warm night-reading mode.
+
+ASK
+Ask a question in plain words — "How many verses mention patience?" — and get exact, verifiable answers computed from the Quran text on your device, with tappable references. Questions about religious rulings are respectfully redirected to qualified scholars; DeenDawn never issues rulings.
+
+QIBLA
+A compass that points to the Kaaba, with true-north correction and honest calibration guidance.
+
+AND MORE
+Tasbih counter with haptics and daily history. Hijri calendar with key Islamic dates (clearly labeled as calculated — moonsighting may differ). Suhoor and iftar times in Ramadan. A zakat calculator that works entirely from values you enter. A small library of public-domain works from classical Muslim thinkers.
+
+PRIVACY, PLAINLY
+No accounts. No analytics. No ad networks. Location is used on your device only. Everything essential works in airplane mode. The only network use is streaming recitation audio you request.
+
+DeenDawn is free and complete — an optional tip in Settings supports development, and nothing is ever locked behind it.

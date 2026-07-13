@@ -144,7 +144,12 @@ Done: Maestro installed; e2e/smoke.yaml green twice on iPhone 17 sim (Today -> M
 
 - First Release-configuration build (BUILD SUCCEEDED, bundled JS) — also our first pre-TestFlight release verification. e2e/offline.yaml runs with Metro AND the dev audio server killed: onboarding from a wiped container, prayer times, Quran text, Ask exact counts, qibla, tasbih, zakat, hijri calendar, five offline cold starts, and the audio bar is asserted ABSENT in release (no configured source → no dead UI). Sim can't toggle airplane mode, so "no servers of any kind" is the documented proxy; true airplane-mode device pass added to TESTPLAN. Also: BLOCKERS item 2 updated with recitation-licensing research (Alafasy explicitly not free; EveryAyah NC-only vs our tip jar → recommend written-permission route; research prompt ready for Zohaib).
 
-## Next: E11 store prep (fastlane/metadata drafts, READY FOR HUMAN SUBMIT checklist); then E9 native session
+## Session 2026-07-13 (cont. 15) — E11: Store prep (drafts only, nothing submitted)
+
+- fastlane/metadata drafted: name/subtitle/keywords (≤100 chars), full description (honest privacy framing), promotional text, reviewer notes (4.3 differentiation = Data Not Collected + offline-first + deterministic on-device Ask; 3.2.1 tip framing), privacy_answers_draft.md (Data Not Collected rationale + RevenueCat re-check note), copyright. support_url/privacy_url marked PENDING-HUMAN (Zohaib needs public pages — gate 2). READY FOR HUMAN SUBMIT checklist added to BLOCKERS: Apple keys are the single item between Zohaib and TestFlight on his phone.
+- GATE: store metadata drafted; TestFlight upload + listing publication await Apple keys and Zohaib's go-ahead.
+
+## Next: E9 native session (dedicated): op-sqlite static-libs FIRST + verify xcodebuild, then llama.rn, vectors.db, Tier B UI, Ask source filter. Design backlog: FlashList pass, Dynamic Type + RTL audits.
 
 ## Next: start here
 
