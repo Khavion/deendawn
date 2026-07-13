@@ -28,4 +28,11 @@ Done:
 
 - Prayer engine wrapper complete: computeDayTimes (all 12 methods, madhab, high-lat auto/override), nextPrayer with midnight rollover + invalid-time skipping, locale defaults (ISNA US / MWL), zone-aware formatting.
 - 1,680-fixture reference matrix committed + 18 engine tests; 29 tests green repo-wide; all gates green.
-- Remaining in epic: manual-city fallback (offline city dataset) and Today screen UI — next session.
+- Manual-city fallback: bundled 135-city offline dataset (curated geographic facts, cross-checked against verified fixture-city coords in tests) + ranked diacritic-folding search. 39 tests green repo-wide.
+- Remaining in epic: Today screen UI (needs user-settings store on expo-sqlite user db + tab scaffold replacement) — top task for next session.
+
+## Next session: start here
+
+1. `src/lib/userDb.ts` — expo-sqlite user-data db (settings, bookmarks, tasbih history tables), thin repository with pure logic testable in node.
+2. Replace template tab screens with DeenDawn tabs (Today / Quran / Qibla / More); Today screen: next-prayer countdown + day times from engine, empty state when no location set (manual city picker sheet using searchCities).
+3. Then epic 3 (notification scheduler math as pure tested functions).

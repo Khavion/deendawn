@@ -17,7 +17,7 @@ Epics in build order. Top unblocked item is always the current task.
 - [x] All calculation methods selectable; ISNA default for US locale, MWL otherwise
 - [x] Asr madhab toggle (Shafi/Hanafi)
 - [x] High-latitude rule auto via `recommended()` + manual override
-- [ ] Manual city fallback (bundled offline city db, no network)
+- [x] Manual city fallback data+logic (bundled offline 135-city dataset, diacritic-folding ranked search; picker UI lands with settings epic)
 - [x] Fixture matrix tests: 8 cities × 8 dates × 12 methods × 2 madhabs + high-lat rule matrix, to-the-minute (1,680 fixtures)
 - [x] BLOCKERS.md task: human spot-check fixtures vs published timetables
 - [ ] Today screen UI: next prayer countdown, today's times
