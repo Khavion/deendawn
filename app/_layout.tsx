@@ -98,6 +98,7 @@ export default function RootLayout() {
               <Stack.Screen name="tasbih" options={{ headerBackButtonDisplayMode: 'minimal' }} />
               <Stack.Screen name="zakat" options={{ headerBackButtonDisplayMode: 'minimal' }} />
               <Stack.Screen name="library" options={{ headerBackButtonDisplayMode: 'minimal' }} />
+              <Stack.Screen name="about" options={{ headerBackButtonDisplayMode: 'minimal' }} />
               <Stack.Screen
                 name="thinker/[key]"
                 options={{ headerBackButtonDisplayMode: 'minimal' }}

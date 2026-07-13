@@ -124,7 +124,11 @@ Done: Maestro installed; e2e/smoke.yaml green twice on iPhone 17 sim (Today -> M
 - Screens: Library (thinker list + book FTS search + gate-9 pending-review banner), Thinker (era/school/key ideas/major works + read-in-app cards), WorkReader (serif sections, PD attribution line, section deep-links from search). Routes /library, /thinker/[key], /work/[id]; More row; i18n chrome ×3. Thinker content stays EN data pending gate 9 review.
 - expo-file-system added (new File/Directory API).
 
-## Next: E11 — recitation audio player vs stub (BLOCKERS B), tip jar (RevenueCat), onboarding + About/attribution/privacy screens, offline E2E suite, store prep; then E9 native session (llama.rn + op-sqlite, static libs, verify build first)
+## Session 2026-07-13 (cont. 10) — E11: About/attribution
+
+- About screen renders the pipeline-generated attribution manifest (all 10 artifacts w/ licenses; Tanzil visible-attribution requirement now guarded by a test), the privacy promise (i18n ×3), version, and dev-only badges for placeholder content. /about via More.
+
+## Next: E11 continues — onboarding first-run flow, recitation audio vs placeholder (BLOCKERS B), tip jar (RevenueCat sandbox), offline E2E suite, store prep; then E9 native session
 
 ## Next: start here
 

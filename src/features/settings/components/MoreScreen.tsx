@@ -208,6 +208,12 @@ export function MoreScreen() {
       onPress: () => router.push('/tasbih'),
     },
     {
+      id: 'about',
+      title: t('more.about'),
+      value: t('about.madeWith'),
+      onPress: () => router.push('/about'),
+    },
+    {
       id: 'library',
       title: t('more.library'),
       value: t('library.reviewPending').split('—')[0].trim(),
