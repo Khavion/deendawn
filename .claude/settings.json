@@ -1,0 +1,72 @@
+{
+  "enabledPlugins": {
+    "expo@claude-plugins-official": true
+  },
+  "permissions": {
+    "allow": [
+      "Bash(npm run:*)",
+      "Bash(npm test:*)",
+      "Bash(npm install:*)",
+      "Bash(npm i:*)",
+      "Bash(npm ls:*)",
+      "Bash(npx expo:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npx eslint:*)",
+      "Bash(npx jest:*)",
+      "Bash(npx prettier:*)",
+      "Bash(npx create-expo-app:*)",
+      "Bash(node:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git show:*)",
+      "Bash(git push)",
+      "Bash(git push origin main)",
+      "Bash(jest:*)",
+      "Bash(maestro:*)",
+      "Bash(xcodebuild:*)",
+      "Bash(xcrun simctl:*)",
+      "Bash(eas build:*)",
+      "Bash(eas whoami:*)",
+      "Bash(npx eas build:*)",
+      "Bash(shasum:*)",
+      "Bash(ls:*)",
+      "Bash(mkdir:*)",
+      "Bash(curl:*)"
+    ],
+    "deny": [
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)",
+      "Bash(eas submit:*)",
+      "Bash(npx eas submit:*)",
+      "Bash(fastlane deliver:*)",
+      "Bash(fastlane pilot:*)",
+      "Read(./.env)",
+      "Read(**/*.p8)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit|NotebookEdit|mcp__Desktop_Commander__write_file|mcp__Desktop_Commander__edit_block|mcp__Desktop_Commander__move_file",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/guard-files.js\""
+          }
+        ]
+      },
+      {
+        "matcher": "Bash|mcp__Desktop_Commander__start_process|mcp__Desktop_Commander__interact_with_process",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/guard-bash.js\""
+          }
+        ]
+      }
+    ]
+  }
+}

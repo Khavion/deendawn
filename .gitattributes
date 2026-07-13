@@ -1,0 +1,7 @@
+# NO-AI ZONE: religious text artifacts are byte-immutable. Prevent git from
+# performing EOL conversion or any text munging on them (CLAUDE.md rule 1).
+content-pipeline/data/** -text -diff
+content-pipeline/content.lock -text
+assets/db/** binary
+assets/fonts/** binary
+assets/sounds/** binary

@@ -1,0 +1,11 @@
+# NO-AI ZONE: religious text is byte-immutable — no formatter may touch it (CLAUDE.md rule 1)
+content-pipeline/data/
+content-pipeline/content.lock
+assets/db/
+assets/fonts/
+assets/sounds/
+node_modules/
+.expo/
+dist/
+ios/
+android/
