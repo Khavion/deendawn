@@ -103,7 +103,8 @@
     "hijriOffset_plus1": "One day later (+1)",
     "suhoorReminder": "Suhoor reminder (Ramadan)",
     "suhoorReminder_off": "Off",
-    "suhoorReminder_minutes": "{{count}} minutes before Fajr"
+    "suhoorReminder_minutes": "{{count}} minutes before Fajr",
+    "tasbih": "Tasbih counter"
   },
   "methods": {
     "MuslimWorldLeague": "Muslim World League",
@@ -151,5 +152,12 @@
     "title": "Islamic calendar",
     "disclaimer": "Calculated (Umm al-Qura) — may differ from local moonsighting. You can adjust by ±1 day in Settings.",
     "today": "Today"
+  },
+  "tasbih": {
+    "title": "Tasbih",
+    "tapAnywhere": "Tap anywhere in the circle to count",
+    "tapArea": "Counter at {{count}} of {{target}}. Tap to count.",
+    "reset": "Reset",
+    "labelPlaceholder": "Add your own label (optional)"
   }
 }

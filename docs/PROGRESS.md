@@ -87,7 +87,11 @@ Done: Maestro installed; e2e/smoke.yaml green twice on iPhone 17 sim (Today -> M
 - UI: dual-date month grid + legend + persistent disclaimer (/calendar via More), hijri date line on Today, ochre Ramadan card (suhoor ends / iftar), settings rows (calendar, ±1 adjustment, reminder Off/20/30/45/60), i18n ×3, SCHOLAR_REVIEW rows added.
 - Gotcha fixed: expo-asset needed as a direct dependency once bundled audio landed (Cannot find native module ExpoAsset).
 
-## Next: E5 tasbih counter (specs in docs/PHASE_2_DIRECTIVE.md)
+## Session 2026-07-13 (cont. 3) — E5 tasbih
+
+- Pure state module (tap/reset/target/label/history, 366-day rolling daily totals, defensive parsing) + screen with the spec haptic grammar (tick per count, Medium at 33-detents, Success on round completion, each paired with a ring-color flash), 33/99 targets, user-entered label only. 10 tests. Reached via More (tab layout revisited at E8 when Ask needs a slot).
+
+## Next: E6 zakat calculator (specs in docs/PHASE_2_DIRECTIVE.md)
 
 ## Next: start here
 

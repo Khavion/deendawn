@@ -202,6 +202,12 @@ export function MoreScreen() {
       onPress: () => setOpen('language'),
     },
     {
+      id: 'tasbih',
+      title: t('more.tasbih'),
+      value: t('tasbih.tapAnywhere'),
+      onPress: () => router.push('/tasbih'),
+    },
+    {
       id: 'calendar',
       title: t('more.calendar'),
       value: t('calendar.disclaimer').split('—')[0].trim(),

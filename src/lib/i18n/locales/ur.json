@@ -104,7 +104,8 @@
     "hijriOffset_plus1": "ایک دن بعد (+1)",
     "suhoorReminder": "سحری کی یاد دہانی (رمضان)",
     "suhoorReminder_off": "بند",
-    "suhoorReminder_minutes": "فجر سے {{count}} منٹ پہلے"
+    "suhoorReminder_minutes": "فجر سے {{count}} منٹ پہلے",
+    "tasbih": "تسبیح کاؤنٹر"
   },
   "methods": {
     "MuslimWorldLeague": "رابطہ عالم اسلامی",
@@ -152,5 +153,12 @@
     "title": "اسلامی کیلنڈر",
     "disclaimer": "حسابی (ام القریٰ) — مقامی رؤیتِ ہلال سے مختلف ہو سکتا ہے۔ ترتیبات میں ±1 دن ایڈجسٹ کر سکتے ہیں۔",
     "today": "آج"
+  },
+  "tasbih": {
+    "title": "تسبیح",
+    "tapAnywhere": "گننے کے لیے دائرے میں کہیں بھی دبائیں",
+    "tapArea": "{{target}} میں سے {{count}}۔ گننے کے لیے دبائیں۔",
+    "reset": "دوبارہ شروع",
+    "labelPlaceholder": "اپنا لیبل لکھیں (اختیاری)"
   }
 }

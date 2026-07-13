@@ -8,8 +8,8 @@ Epics in build order. Top unblocked item is always the current task.
 - [x] E2. Qibla compass — DONE 2026-07-13 (independent bearing math verified vs adhan reference to 0.01°, heading hook w/ low-pass + true-north fallback, calibration + magnetic chips, ±3° haptics, a11y label, i18n en/ur/ar, permission states; real-magnetometer checks on device pass list)
 - [x] E3. Adhan sound options — DONE 2026-07-13 (per-prayer Silent/Ping/Clip/Full picker w/ honesty copy in 3 locales; clip bundled via expo-notifications plugin; <30s WAV-header pipeline test; full-adhan plays in-app on open-from-notification w/ stop banner; SILENT PLACEHOLDERS until cleared recordings — BLOCKERS item B; Android channels deferred w/ v1 constitution)
 - [x] E4. Hijri calendar + Ramadan mode — DONE 2026-07-13 (@umalqura/core conversion verified vs published anchors, ±1 offset setting, dual-date month grid + key-date dots + legend + persistent disclaimer, hijri date on Today, Ramadan suhoor/iftar card, pre-Fajr reminder in the rolling scheduler, i18n en/ur/ar, SCHOLAR_REVIEW flags logged)
-- [ ] E5. Tasbih counter (CURRENT)
-- [ ] E6. Zakat calculator — 2.5% math tests, user-entered nisab prices, disclaimer (SCHOLAR_REVIEW), 3-locale currency layout tests
+- [x] E5. Tasbih counter — DONE 2026-07-13 (giant tap ring, selection tick per count, Medium detent at 33s, Success at round completion with visual flash pairing, 33/99 targets, user-typed label only — no Arabic dhikr text pending scholar gate, 7-day history, corrupt-storage-safe, i18n ×3)
+- [ ] E6. Zakat calculator (CURRENT)
 - [ ] E7. Navigation feel pass — native stack, freeze, durations 200–280ms, reduce-motion, no shared-element transitions, profile reader open
 - [ ] E8. Ask Tier A — deterministic retrieval, query router (count/list/ruling-redirect), synonym map, eval harness ≥60 fixtures (gates E9)
 - [ ] E9. Ask Tier B — llama.rn + op-sqlite/sqlite-vec vectors.db, R2-only model downloads w/ model.lock, generation contract + post-processor, grounding/refusal/style harnesses, SHIPS OFF (gate 7)

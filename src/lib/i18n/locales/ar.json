@@ -108,7 +108,8 @@
     "hijriOffset_plus1": "بعد بيوم (+1)",
     "suhoorReminder": "تذكير السحور (رمضان)",
     "suhoorReminder_off": "مغلق",
-    "suhoorReminder_minutes": "قبل الفجر بـ {{count}} دقيقة"
+    "suhoorReminder_minutes": "قبل الفجر بـ {{count}} دقيقة",
+    "tasbih": "عداد التسبيح"
   },
   "methods": {
     "MuslimWorldLeague": "رابطة العالم الإسلامي",
@@ -156,5 +157,12 @@
     "title": "التقويم الهجري",
     "disclaimer": "محسوب (أم القرى) — قد يختلف عن الرؤية المحلية للهلال. يمكن التعديل ±1 يوم من الإعدادات.",
     "today": "اليوم"
+  },
+  "tasbih": {
+    "title": "التسبيح",
+    "tapAnywhere": "اضغط في أي مكان داخل الدائرة للعد",
+    "tapArea": "{{count}} من {{target}}. اضغط للعد.",
+    "reset": "إعادة",
+    "labelPlaceholder": "أضف تسمية خاصة بك (اختياري)"
   }
 }
