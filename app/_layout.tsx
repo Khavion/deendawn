@@ -4,6 +4,7 @@ import { Stack } from 'expo-router';
 import { SQLiteProvider } from 'expo-sqlite';
 import { StatusBar } from 'expo-status-bar';
 import React, { Suspense, useMemo } from 'react';
+import { enableFreeze, enableScreens } from 'react-native-screens';
 import 'react-native-reanimated';
 
 import { fonts, palette } from '@/src/lib/theme/tokens';
@@ -20,6 +21,10 @@ import { getUserKVStore } from '@/src/lib/kvStore';
 export const unstable_settings = {
   anchor: '(tabs)',
 };
+
+// E7 navigation feel: native screens + freeze inactive screens (memory + frames).
+enableScreens(true);
+enableFreeze(true);
 
 installForegroundHandler();
 void registerBackgroundRefresh();

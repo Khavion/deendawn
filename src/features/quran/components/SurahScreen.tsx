@@ -1,8 +1,16 @@
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FlatList, Pressable, Share, StyleSheet, View, ViewToken } from 'react-native';
+import {
+  FlatList,
+  InteractionManager,
+  Pressable,
+  Share,
+  StyleSheet,
+  View,
+  ViewToken,
+} from 'react-native';
 
 import {
   isBookmarked,
@@ -28,7 +36,15 @@ export function SurahScreen() {
   const t = useTokens(nightWarm ? 'nightWarm' : undefined);
 
   const surah = useMemo(() => getSurah(db, surahNumber), [db, surahNumber]);
-  const ayahs = useMemo(() => listAyahs(db, surahNumber), [db, surahNumber]);
+  // E7: keep the push animation clean — heavy row materialization waits for
+  // the transition to finish (Interactions), then the list mounts.
+  const [ayahs, setAyahs] = useState<AyahRow[]>([]);
+  useEffect(() => {
+    const task = InteractionManager.runAfterInteractions(() => {
+      setAyahs(listAyahs(db, surahNumber));
+    });
+    return () => task.cancel();
+  }, [db, surahNumber]);
   const [showTranslation, setShowTranslation] = useState(() => loadShowTranslation(store));
   const [bookmarkVersion, setBookmarkVersion] = useState(0);
 

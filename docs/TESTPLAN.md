@@ -19,3 +19,4 @@ Checks that cannot run in the simulator; verify on a physical iPhone before exte
 - [ ] Background audio continues under screen lock; lock-screen controls work.
 - [ ] IAP sandbox purchase + restore on device.
 - [ ] Cold start < 2s on iPhone 12-class hardware.
+- [ ] Navigation frame profile on oldest supported hardware: open al-Baqara from the surah list, switch all tabs, language-switch restart — no visible hitching (E7).

@@ -10,9 +10,9 @@ Epics in build order. Top unblocked item is always the current task.
 - [x] E4. Hijri calendar + Ramadan mode — DONE 2026-07-13 (@umalqura/core conversion verified vs published anchors, ±1 offset setting, dual-date month grid + key-date dots + legend + persistent disclaimer, hijri date on Today, Ramadan suhoor/iftar card, pre-Fajr reminder in the rolling scheduler, i18n en/ur/ar, SCHOLAR_REVIEW flags logged)
 - [x] E5. Tasbih counter — DONE 2026-07-13 (giant tap ring, selection tick per count, Medium detent at 33s, Success at round completion with visual flash pairing, 33/99 targets, user-typed label only — no Arabic dhikr text pending scholar gate, 7-day history, corrupt-storage-safe, i18n ×3)
 - [x] E6. Zakat calculator — DONE 2026-07-13 (pure 2.5% math w/ min-of-metals nisab + needPrices/belowNisab states, user-entered prices only, Arabic-Indic numeral input parsing, live result card, disclaimer + nisab constants flagged SCHOLAR-REVIEW, i18n ×3 incl. AR long-value layout test)
-- [ ] E7. Navigation feel pass (CURRENT)
+- [x] E7. Navigation feel pass — DONE 2026-07-13 (enableScreens/enableFreeze, freezeOnBlur tabs, tokenized nav chrome pre-existing, native push kept for system Reduce Motion, reader load deferred past transition; real-device profile on TESTPLAN)
+- [ ] E8. Ask Tier A (CURRENT)
 - [ ] E7. Navigation feel pass — native stack, freeze, durations 200–280ms, reduce-motion, no shared-element transitions, profile reader open
-- [ ] E8. Ask Tier A — deterministic retrieval, query router (count/list/ruling-redirect), synonym map, eval harness ≥60 fixtures (gates E9)
 - [ ] E9. Ask Tier B — llama.rn + op-sqlite/sqlite-vec vectors.db, R2-only model downloads w/ model.lock, generation contract + post-processor, grounding/refusal/style harnesses, SHIPS OFF (gate 7)
 - [ ] E10. Philosophers library — PD-verified corpus via pipeline, library.db + FTS, thinker pages (gate 9), Ask integration
 - [ ] E11. Remaining v1 backlog below (audio, tips, onboarding, store prep), i18n-native

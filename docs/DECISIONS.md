@@ -28,6 +28,12 @@ Word-by-word Quran data: QUL/hablullah WBW is CC BY-NC-ND — unusable (tip jar 
 - Suhoor reminders live inside the SAME rolling plan/cap as adhans (deterministic suhoor-<date> ids) so the 64-notification budget stays one accounting.
 - expo-asset added as a direct dependency: autolinking missed it once require()d audio assets shipped (runtime "Cannot find native module ExpoAsset").
 
+## 2026-07-13 — E7 navigation feel choices
+
+- enableScreens + enableFreeze at root, freezeOnBlur on tabs; navigation chrome already tokenized (no white flash — DarkTheme pure-black never used). Native iOS push kept (system-standard timing/easing beats custom 200–280ms reimplementations and respects Reduce Motion automatically).
+- Zero custom motion exists app-wide by design (floor discipline): the only "animations" are color flashes (tasbih milestones), which Reduce Motion guidance permits. If motion is ever added, gate via AccessibilityInfo.isReduceMotionEnabled.
+- Reader open (the profile target): ayah materialization deferred past the push via InteractionManager; FlatList initialNumToRender 10. Real-device frame profiling added to the TESTPLAN device pass (simulators do not exhibit real thermals/frame pacing).
+
 ## 2026-07-12 — Phase 2 directive adopted
 
 Zohaib pasted the research assistant's PHASE_2_DIRECTIVE (archived at docs/PHASE_2_DIRECTIVE.md) and explicitly confirmed the CLAUDE.md amendments — including Rule 1.5 (generated answers layer) and Human Gates 7–9 — via a direct yes in-session. Epic order: E1 i18n → E2 qibla → E3 adhan sounds → E4 hijri/Ramadan → E5 tasbih → E6 zakat → E7 navigation feel → E8 Ask Tier A → E9 Ask Tier B (ships OFF, gate 7) → E10 philosophers library → E11 remaining v1 backlog.

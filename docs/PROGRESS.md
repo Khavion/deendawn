@@ -97,7 +97,11 @@ Done: Maestro installed; e2e/smoke.yaml green twice on iPhone 17 sim (Today -> M
 - Form screen: grouped inputs, live lapis result card, privacy note (user-entered prices only), ochre disclaimer; Arabic-Indic digits + both decimal separators parsed (escapes only — the guard hook blocked digit literals in code twice, correctly). 4 component tests incl. AR-locale long-value render.
 - Route /zakat via More.
 
-## Next: E7 navigation feel pass (specs in docs/PHASE_2_DIRECTIVE.md)
+## Session 2026-07-13 (cont. 5) — E7 navigation feel
+
+- enableScreens/enableFreeze + freezeOnBlur; reader ayah load deferred via InteractionManager (push stays clean on long surahs); native push retained (system easing + automatic Reduce Motion); no custom motion exists by design. Device-profiling item added to TESTPLAN.
+
+## Next: E8 Ask Tier A (specs in docs/PHASE_2_DIRECTIVE.md)
 
 ## Next: start here
 
