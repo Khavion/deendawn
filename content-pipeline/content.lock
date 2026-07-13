@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "artifacts": {
+    "quran-uthmani": {
+      "file": "quran-uthmani.txt",
+      "sha256": "bf4f57b968d03f4131c070b1e285da9be0e0a108a21c910e872801ca273312c8",
+      "bytes": 1370878,
+      "url": "https://tanzil.net/pub/download/index.php?quranType=uthmani&outType=txt-2&agree=true",
+      "license": "Creative Commons Attribution 3.0 — Tanzil terms: text must remain verbatim, attribution to tanzil.net required, copyright block in file must be retained",
+      "pinnedAt": "2026-07-13",
+      "spotChecks": {
+        "ayah-1:1": "ac1e6f8f64c2e83d0b5087625a5e1eb0067b99d4a8962d3ad30528709dcf3dd6",
+        "ayah-114:6": "afe439d2346201551930d0c231ab3a35f2c90f1a5ebb09fc797707059732d756"
+      },
+      "concatSha256": "36da55e256f54f4838b6fa1c78781734346c8d9ffde52daf5a3cbfa32626a08c"
+    },
+    "en-pickthall": {
+      "file": "en.pickthall.txt",
+      "sha256": "4aabbfa9d96796f5a6b0217d2c39dce1a3084f772bf6f2650e37082a774e3cc7",
+      "bytes": 864918,
+      "url": "https://tanzil.net/trans/en.pickthall",
+      "license": "Public domain (first published 1930); file distributed via Tanzil translations collection",
+      "pinnedAt": "2026-07-13",
+      "spotChecks": {
+        "ayah-1:1": "3378da21fe4d9f255e0336c517936ef15453fb07d4cf1d5842eaff0eaa30da0e",
+        "ayah-114:6": "d441541ba23bed57d8679fb1d70dcbe7625584f06e7d365b52e31c2ced70c70d"
+      },
+      "concatSha256": "c46125d8abd4d4fad41b2009a1a93dfc43b8a10e59354a4047617a0f8c30ba9a"
+    },
+    "quran-metadata": {
+      "file": "quran-data.xml",
+      "sha256": "8867c1d88191472adec9db694b3cd9f135b1a2ef580574d32cf888dcb22c5c7a",
+      "bytes": 77234,
+      "url": "https://tanzil.net/res/text/metadata/quran-data.xml",
+      "license": "Tanzil metadata — free to use with attribution to tanzil.net",
+      "pinnedAt": "2026-07-13"
+    }
+  },
+  "derived": {}
+}

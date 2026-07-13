@@ -2,16 +2,16 @@
 
 Epics in build order. Top unblocked item is always the current task.
 
-## 1. Content pipeline (CURRENT)
+## 1. Content pipeline (DONE 2026-07-12)
 
-- [ ] `content-pipeline/sources.json` with pinned URLs: Tanzil Uthmani text, one redistributable DEV translation, surah/juz metadata
-- [ ] `npm run content:fetch` — download pinned sources byte-for-byte
-- [ ] `npm run content:verify` — SHA-256 vs `content.lock`; structural validation (114 surahs, 6236 ayahs, no empty ayahs, UTF-8, spot-string checks for 1:1 and 114:6)
-- [ ] `npm run content:build` — emit `assets/db/quran.db` (source columns immutable, FTS on derived normalized columns) + attribution manifest
-- [ ] `content.lock` recorded in same commit as first fetch; source URL + license + date in DECISIONS.md
-- [ ] Golden Jest tests: db hashes vs content.lock, ayah counts, first/last ayah byte-equality
+- [x] `content-pipeline/sources.json` with pinned URLs: Tanzil Uthmani text, one redistributable DEV translation, surah/juz metadata
+- [x] `npm run content:fetch` — download pinned sources byte-for-byte
+- [x] `npm run content:verify` — SHA-256 vs `content.lock`; structural validation (114 surahs, 6236 ayahs, no empty ayahs, UTF-8, spot-string checks for 1:1 and 114:6)
+- [x] `npm run content:build` — emit `assets/db/quran.db` (source columns immutable, FTS on derived normalized columns) + attribution manifest
+- [x] `content.lock` recorded in same commit as first fetch; source URL + license + date in DECISIONS.md
+- [x] Golden Jest tests: db hashes vs content.lock, ayah counts, first/last ayah byte-equality
 
-## 2. Prayer times
+## 2. Prayer times (CURRENT)
 
 - [ ] Install `adhan`; engine wrapper in `src/features/prayer-times/`
 - [ ] All calculation methods selectable; ISNA default for US locale, MWL otherwise

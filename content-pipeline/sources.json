@@ -1,0 +1,33 @@
+{
+  "comment": "Pinned religious-content sources. NO-AI ZONE: bytes flow from these URLs into data/ and are verified against content.lock. Never edit data files or the lock by hand (CLAUDE.md rule 1).",
+  "artifacts": [
+    {
+      "id": "quran-uthmani",
+      "file": "quran-uthmani.txt",
+      "url": "https://tanzil.net/pub/download/index.php?quranType=uthmani&outType=txt-2&agree=true",
+      "kind": "quran-text",
+      "format": "tanzil-txt",
+      "license": "Creative Commons Attribution 3.0 — Tanzil terms: text must remain verbatim, attribution to tanzil.net required, copyright block in file must be retained",
+      "attribution": "Quran text (Uthmani) from Tanzil (tanzil.net), Uthmani script based on the Medina Mushaf"
+    },
+    {
+      "id": "en-pickthall",
+      "file": "en.pickthall.txt",
+      "url": "https://tanzil.net/trans/en.pickthall",
+      "kind": "translation",
+      "format": "tanzil-txt",
+      "devOnly": true,
+      "license": "Public domain (first published 1930); file distributed via Tanzil translations collection",
+      "attribution": "DEV English translation: Mohammed Marmaduke Pickthall, The Meaning of the Glorious Koran (1930), via tanzil.net — final shipping translation pending human review (Human Gate #5)"
+    },
+    {
+      "id": "quran-metadata",
+      "file": "quran-data.xml",
+      "url": "https://tanzil.net/res/text/metadata/quran-data.xml",
+      "kind": "metadata",
+      "format": "tanzil-xml",
+      "license": "Tanzil metadata — free to use with attribution to tanzil.net",
+      "attribution": "Surah/juz metadata from Tanzil (tanzil.net)"
+    }
+  ]
+}
