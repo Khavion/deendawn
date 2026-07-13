@@ -1,0 +1,97 @@
+{
+  "meta": { "nativeName": "English" },
+  "common": {
+    "close": "Close",
+    "cancel": "Not now",
+    "restart": "Restart now"
+  },
+  "tabs": {
+    "today": "Today",
+    "quran": "Quran",
+    "qibla": "Qibla",
+    "more": "More"
+  },
+  "prayers": {
+    "fajr": "Fajr",
+    "sunrise": "Sunrise",
+    "dhuhr": "Dhuhr",
+    "asr": "Asr",
+    "maghrib": "Maghrib",
+    "isha": "Isha"
+  },
+  "today": {
+    "greeting": "As-salamu alaykum",
+    "emptyBody": "Choose your city to see today's prayer times. Everything stays on your phone — nothing is sent anywhere.",
+    "chooseCity": "Choose your city",
+    "tomorrow": "{{prayer}} (tomorrow)",
+    "countdown": "in {{time}}",
+    "hoursMinutes": "{{hours}}h {{minutes}}m",
+    "minutesSeconds": "{{minutes}}m {{seconds}}s"
+  },
+  "cityPicker": {
+    "title": "Choose your city",
+    "placeholder": "Search city or country",
+    "noMatch": "No match — try the nearest big city.",
+    "hint": "Type a city name, e.g. Houston."
+  },
+  "quran": {
+    "title": "Quran",
+    "searchPlaceholder": "Search the Quran (Arabic or English)",
+    "noMatches": "No matches.",
+    "continueReading": "Continue reading — {{surah}}:{{ayah}}",
+    "verses_one": "{{count}} verse",
+    "verses_other": "{{count}} verses",
+    "arabicOnly": "Arabic only",
+    "translation": "Translation",
+    "devBadge": "DEV translation (Pickthall, 1930) — final translation pending review",
+    "share": "Share",
+    "notFound": "Surah not found."
+  },
+  "qibla": {
+    "title": "Qibla",
+    "comingSoon": "The qibla compass is coming in an upcoming update."
+  },
+  "more": {
+    "title": "Settings",
+    "hint": "Prayer time settings. If you are not sure, the automatic options follow the most common conventions for your region.",
+    "location": "Location",
+    "notSet": "Not set",
+    "method": "Calculation method",
+    "methodAuto": "Automatic",
+    "methodAutoRegion": "Automatic (based on your region)",
+    "asr": "Asr time (madhab)",
+    "madhab_shafi": "Standard (Shafi, Maliki, Hanbali)",
+    "madhab_hanafi": "Hanafi (later Asr)",
+    "highLat": "High-latitude nights",
+    "highLat_auto": "Automatic (recommended)",
+    "highLat_middleofthenight": "Middle of the night",
+    "highLat_seventhofthenight": "Seventh of the night",
+    "highLat_twilightangle": "Twilight angle",
+    "notifications": "Adhan notifications",
+    "notificationsHint": "Get a reminder at each prayer time. Your phone's silent switch and Focus modes can mute these — that is an iPhone setting, not the app.",
+    "reading": "Reading",
+    "nightWarm": "Night reading (warm)",
+    "nightWarmDesc": "Amber tones in the Quran reader, easier on the eyes before dawn",
+    "language": "Language",
+    "privacyNote": "DeenDawn stores everything on your phone. No account, no ads, no tracking.",
+    "restartTitle": "Restart required",
+    "restartBody": "Switching the app language needs a quick restart to change the layout direction."
+  },
+  "methods": {
+    "MuslimWorldLeague": "Muslim World League",
+    "Egyptian": "Egyptian General Authority of Survey",
+    "Karachi": "University of Islamic Sciences, Karachi",
+    "UmmAlQura": "Umm al-Qura University, Makkah",
+    "Dubai": "Dubai (UAE)",
+    "MoonsightingCommittee": "Moonsighting Committee Worldwide",
+    "NorthAmerica": "Islamic Society of North America (ISNA)",
+    "Kuwait": "Kuwait",
+    "Qatar": "Qatar",
+    "Singapore": "Majlis Ugama Islam Singapura",
+    "Tehran": "Institute of Geophysics, University of Tehran",
+    "Turkey": "Diyanet İşleri Başkanlığı, Turkey"
+  },
+  "notifications": {
+    "body": "It's time for {{prayer}} prayer."
+  }
+}

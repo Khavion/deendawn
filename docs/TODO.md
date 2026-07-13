@@ -4,8 +4,8 @@ Epics in build order. Top unblocked item is always the current task.
 
 ## PHASE 2 (owner-confirmed 2026-07-12 — specs in docs/PHASE_2_DIRECTIVE.md, takes priority over remaining v1 backlog below)
 
-- [ ] E1. Localization foundation EN/UR/AR (CURRENT) — i18n keys everywhere, missing-key CI test, AR plural forms, language picker + RTL restart, Noto Nastaliq Urdu pinned, machine-drafted UR/AR flagged @draft (gate 8), 3-locale screenshots
-- [ ] E2. Qibla compass — bearing math tests (≥8 cities both hemispheres), heading + low-pass filter, calibration UX, alignment haptics, a11y announcements
+- [x] E1. Localization foundation EN/UR/AR — DONE 2026-07-13 (i18n keys everywhere, jsx-no-literals lint gate, key-parity + AR 6-plural tests, language picker + bilingual RTL restart, Nastaliq pinned + line-height compensation, UR/AR @draft per gate 8, 3-locale screenshots in docs/screens). Pending gate 8: human review of UR/AR strings.
+- [ ] E2. Qibla compass (CURRENT)
 - [ ] E3. Adhan notification sound options — Silent/Ping/Clip/Full per prayer, <30s pipeline test, Android channel-per-sound, honesty copy, silent placeholder until cleared recordings arrive
 - [ ] E4. Hijri calendar + Ramadan mode — month grid, Umm al-Qura ±1 offset, key dates (SCHOLAR_REVIEW), Suhoor/Iftar surfacing, pre-Fajr reminder
 - [ ] E5. Tasbih counter — haptic detents 33/99, daily history, no Arabic dhikr text (scholar gate)

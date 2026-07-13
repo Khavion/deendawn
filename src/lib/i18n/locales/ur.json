@@ -1,0 +1,100 @@
+{
+  "meta": {
+    "nativeName": "اردو",
+    "status": "@draft machine-drafted — Gate 8, see docs/TRANSLATION_REVIEW.md"
+  },
+  "common": {
+    "close": "بند کریں",
+    "cancel": "ابھی نہیں",
+    "restart": "ابھی ری اسٹارٹ کریں"
+  },
+  "tabs": {
+    "today": "آج",
+    "quran": "قرآن",
+    "qibla": "قبلہ",
+    "more": "مزید"
+  },
+  "prayers": {
+    "fajr": "فجر",
+    "sunrise": "طلوعِ آفتاب",
+    "dhuhr": "ظہر",
+    "asr": "عصر",
+    "maghrib": "مغرب",
+    "isha": "عشاء"
+  },
+  "today": {
+    "greeting": "السلام علیکم",
+    "emptyBody": "آج کے نماز کے اوقات دیکھنے کے لیے اپنا شہر منتخب کریں۔ سب کچھ آپ کے فون پر رہتا ہے — کہیں نہیں بھیجا جاتا۔",
+    "chooseCity": "اپنا شہر منتخب کریں",
+    "tomorrow": "{{prayer}} (کل)",
+    "countdown": "{{time}} میں",
+    "hoursMinutes": "{{hours}} گھنٹے {{minutes}} منٹ",
+    "minutesSeconds": "{{minutes}} منٹ {{seconds}} سیکنڈ"
+  },
+  "cityPicker": {
+    "title": "اپنا شہر منتخب کریں",
+    "placeholder": "شہر یا ملک تلاش کریں",
+    "noMatch": "کوئی نتیجہ نہیں — قریبی بڑا شہر آزمائیں۔",
+    "hint": "شہر کا نام لکھیں، مثلاً کراچی۔"
+  },
+  "quran": {
+    "title": "قرآن",
+    "searchPlaceholder": "قرآن میں تلاش کریں (عربی یا انگریزی)",
+    "noMatches": "کوئی نتیجہ نہیں۔",
+    "continueReading": "پڑھنا جاری رکھیں — {{surah}}:{{ayah}}",
+    "verses_one": "{{count}} آیت",
+    "verses_other": "{{count}} آیات",
+    "arabicOnly": "صرف عربی",
+    "translation": "ترجمہ",
+    "devBadge": "عارضی ترجمہ (پکتھال، 1930) — حتمی ترجمہ نظرثانی کے بعد",
+    "share": "شیئر کریں",
+    "notFound": "سورت نہیں ملی۔"
+  },
+  "qibla": {
+    "title": "قبلہ",
+    "comingSoon": "قبلہ نما جلد آنے والا ہے۔"
+  },
+  "more": {
+    "title": "ترتیبات",
+    "hint": "نماز کے اوقات کی ترتیبات۔ اگر آپ کو یقین نہیں تو خودکار اختیارات آپ کے علاقے کے عام طریقوں پر چلتے ہیں۔",
+    "location": "مقام",
+    "notSet": "مقرر نہیں",
+    "method": "حسابی طریقہ",
+    "methodAuto": "خودکار",
+    "methodAutoRegion": "خودکار (آپ کے علاقے کے مطابق)",
+    "asr": "عصر کا وقت (مسلک)",
+    "madhab_shafi": "عام (شافعی، مالکی، حنبلی)",
+    "madhab_hanafi": "حنفی (عصر دیر سے)",
+    "highLat": "بلند عرض بلد کی راتیں",
+    "highLat_auto": "خودکار (تجویز کردہ)",
+    "highLat_middleofthenight": "نصف شب",
+    "highLat_seventhofthenight": "رات کا ساتواں حصہ",
+    "highLat_twilightangle": "شفق کا زاویہ",
+    "notifications": "اذان کی اطلاعات",
+    "notificationsHint": "ہر نماز کے وقت یاد دہانی پائیں۔ فون کا سائلنٹ سوئچ اور فوکس موڈ انہیں خاموش کر سکتے ہیں — یہ آئی فون کی ترتیب ہے، ایپ کی نہیں۔",
+    "reading": "مطالعہ",
+    "nightWarm": "شب کا مطالعہ (گرم رنگ)",
+    "nightWarmDesc": "قرآن ریڈر میں عنبری رنگ، سحری سے پہلے آنکھوں کے لیے آرام دہ",
+    "language": "زبان",
+    "privacyNote": "دین ڈان سب کچھ آپ کے فون پر رکھتی ہے۔ نہ اکاؤنٹ، نہ اشتہار، نہ ٹریکنگ۔",
+    "restartTitle": "ری اسٹارٹ درکار ہے",
+    "restartBody": "ایپ کی زبان بدلنے کے لیے مختصر ری اسٹارٹ ضروری ہے تاکہ سمت بدل سکے۔"
+  },
+  "methods": {
+    "MuslimWorldLeague": "رابطہ عالم اسلامی",
+    "Egyptian": "مصری جنرل اتھارٹی آف سروے",
+    "Karachi": "جامعہ علوم اسلامیہ، کراچی",
+    "UmmAlQura": "جامعہ ام القریٰ، مکہ",
+    "Dubai": "دبئی (متحدہ عرب امارات)",
+    "MoonsightingCommittee": "مون سائٹنگ کمیٹی ورلڈ وائیڈ",
+    "NorthAmerica": "اسلامک سوسائٹی آف نارتھ امریکہ (ISNA)",
+    "Kuwait": "کویت",
+    "Qatar": "قطر",
+    "Singapore": "مجلس اسلامی سنگاپور",
+    "Tehran": "انسٹیٹیوٹ آف جیو فزکس، جامعہ تہران",
+    "Turkey": "ادارہ مذہبی امور، ترکی"
+  },
+  "notifications": {
+    "body": "{{prayer}} کی نماز کا وقت ہو گیا ہے۔"
+  }
+}

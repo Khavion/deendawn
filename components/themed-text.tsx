@@ -1,7 +1,8 @@
+import { useTranslation } from 'react-i18next';
 import { StyleSheet, Text, type TextProps } from 'react-native';
 
 import { useThemeColor } from '@/hooks/use-theme-color';
-import { fonts, fontSize, MAX_FONT_SCALE } from '@/src/lib/theme/tokens';
+import { fonts, fontSize, MAX_FONT_SCALE, URDU_LINE_HEIGHT_FACTOR } from '@/src/lib/theme/tokens';
 
 export type ThemedTextProps = TextProps & {
   lightColor?: string;
@@ -18,6 +19,12 @@ export function ThemedText({
 }: ThemedTextProps) {
   const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
   const tint = useThemeColor({}, 'tint');
+  const { i18n } = useTranslation();
+  // Nastaliq hangs far below the baseline — swap family and open the leading.
+  const urdu =
+    i18n.language === 'ur'
+      ? { fontFamily: fonts.nastaliq, lineHeight: lineHeightFor(type) * URDU_LINE_HEIGHT_FACTOR }
+      : undefined;
 
   return (
     <Text
@@ -31,11 +38,27 @@ export function ThemedText({
         type === 'link' ? [styles.link, { color: tint }] : undefined,
         type === 'serifBody' ? styles.serifBody : undefined,
         type === 'caption' ? styles.caption : undefined,
+        urdu,
         style,
       ]}
       {...rest}
     />
   );
+}
+
+function lineHeightFor(type: NonNullable<ThemedTextProps['type']>): number {
+  switch (type) {
+    case 'title':
+      return 36;
+    case 'subtitle':
+      return 28;
+    case 'serifBody':
+      return 26;
+    case 'caption':
+      return 18;
+    default:
+      return 24;
+  }
 }
 
 const styles = StyleSheet.create({

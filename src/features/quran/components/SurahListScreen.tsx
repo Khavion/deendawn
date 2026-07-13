@@ -1,6 +1,7 @@
 import { useRouter } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import React, { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FlatList, Pressable, StyleSheet, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -18,6 +19,7 @@ export function SurahListScreen() {
   const router = useRouter();
   const db = useSQLiteContext();
   const { store } = useSettings();
+  const { t } = useTranslation();
   const [query, setQuery] = useState('');
 
   const surahs = useMemo(() => listSurahs(db), [db]);
@@ -31,13 +33,13 @@ export function SurahListScreen() {
   return (
     <ThemedView style={[styles.container, { paddingTop: insets.top + 12 }]}>
       <ThemedText type="title" style={styles.title}>
-        Quran
+        {t('quran.title')}
       </ThemedText>
       <TextInput
         testID="quran-search"
         value={query}
         onChangeText={setQuery}
-        placeholder="Search the Quran (Arabic or English)"
+        placeholder={t('quran.searchPlaceholder')}
         placeholderTextColor={Colors[scheme].icon}
         autoCorrect={false}
         style={[styles.input, { color: Colors[scheme].text, borderColor: Colors[scheme].icon }]}
@@ -48,7 +50,7 @@ export function SurahListScreen() {
           data={results}
           keyExtractor={(a) => String(a.id)}
           keyboardShouldPersistTaps="handled"
-          ListEmptyComponent={<ThemedText style={styles.hint}>No matches.</ThemedText>}
+          ListEmptyComponent={<ThemedText style={styles.hint}>{t('quran.noMatches')}</ThemedText>}
           renderItem={({ item }) => (
             <Pressable
               accessibilityRole="button"
@@ -79,7 +81,7 @@ export function SurahListScreen() {
                 style={[styles.continueChip, { backgroundColor: Colors[scheme].tint }]}
               >
                 <ThemedText lightColor="#fff" darkColor="#10201A" type="defaultSemiBold">
-                  Continue reading — {lastRead.surah}:{lastRead.ayah}
+                  {t('quran.continueReading', { surah: lastRead.surah, ayah: lastRead.ayah })}
                 </ThemedText>
               </Pressable>
             ) : null
@@ -97,7 +99,7 @@ export function SurahListScreen() {
               <View style={styles.names}>
                 <ThemedText type="defaultSemiBold">{item.name_transliteration}</ThemedText>
                 <ThemedText style={styles.sub}>
-                  {item.name_english} · {item.ayah_count} verses
+                  {item.name_english} · {t('quran.verses', { count: item.ayah_count })}
                 </ThemedText>
               </View>
               <ThemedText style={styles.arabicName}>{item.name_arabic}</ThemedText>

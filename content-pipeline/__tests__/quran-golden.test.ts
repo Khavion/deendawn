@@ -148,7 +148,7 @@ describe('attribution manifest', () => {
       expect(a.license).toBeTruthy();
       // Only pinned hosts may appear: Tanzil (text) and official font releases.
       expect(a.url).toMatch(
-        /^https:\/\/(tanzil\.net\/|github\.com\/(aliftype\/amiri|googlefonts\/literata|adobe-fonts\/source-sans)\/releases\/download\/)/
+        /^https:\/\/(tanzil\.net\/|github\.com\/(aliftype\/amiri|googlefonts\/literata|adobe-fonts\/source-sans|notofonts\/nastaliq)\/releases\/download\/)/
       );
       expect(a.sha256).toBe(lock.artifacts[a.id].sha256);
     }

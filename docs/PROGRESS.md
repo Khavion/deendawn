@@ -60,6 +60,14 @@ Done:
 
 Done: Maestro installed; e2e/smoke.yaml green twice on iPhone 17 sim (Today -> More -> Quran -> surah, id-based assertions — Maestro text matching vs RN accessibility labels is unreliable, use testIDs). Screenshots in docs/screens/. Background-refresh registration now availability-checked (no dev toast). Visual QA passed: Amiri Uthmani ligatures, RTL, countdown card, toggles.
 
+## Session 2026-07-12 (cont. 5) — Phase 2 adopted + E1 localization
+
+- PHASE_2_DIRECTIVE received from Zohaib (research-assistant authored); constitutional amendments explicitly confirmed by him in-session and applied verbatim (Rule 1 rewrite, Rule 1.5 generated-answers layer, Gates 7–9, stack additions). Directive archived at docs/PHASE_2_DIRECTIVE.md; epics E1–E11 merged into TODO; owner items in BLOCKERS (plain English); guard hook gained the Gate-8 locale-files exception (self-tested).
+- E1 in flight: react-i18next + intl-pluralrules wired; en/ur/ar locale files (UR/AR @draft, Gate 8); all screens + tabs + notification content through t(); jsx-no-literals lint gate ON; language picker with bilingual RTL-restart flow; NotoNastaliqUrdu pinned + ThemedText Urdu family/leading swap; i18n jest suite (key parity, AR 6 plural forms, draft flags).
+- E1 ACCEPTED 2026-07-13: EN/UR/AR verified on simulator with screenshots (docs/screens/locale-*.png); RTL layout confirmed (tab order, rows, highlighted state); Urdu in Nastaliq with compensated leading; Arabic localized dates; language switch round-trip EN->UR->AR->EN green via Maestro. Root-caused two real bugs on-device: React Compiler drops side-effectful useMemo (init moved to module scope, comment left) and i18next v26 sync-init needs initAsync:false.
+
+## Next: E2 qibla compass (specs in docs/PHASE_2_DIRECTIVE.md)
+
 ## Next: start here
 
 1. Qibla epic: great-circle bearing (adhan Qibla()) + magnetometer heading (expo-sensors) + declination correction, calibration UX. Bearing unit tests vs known city bearings. Needs npx expo install expo-sensors expo-location, then prebuild + pod install + xcodebuild.

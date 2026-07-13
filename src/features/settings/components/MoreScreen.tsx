@@ -1,5 +1,16 @@
+import * as Updates from 'expo-updates';
 import React, { useState } from 'react';
-import { Modal, Pressable, ScrollView, StyleSheet, Switch, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import {
+  Alert,
+  DevSettings,
+  Modal,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Switch,
+  View,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
@@ -7,30 +18,34 @@ import {
   saveNotificationPrefs,
   setPrayerEnabled,
 } from '../../notifications/prefsStore';
-import { ADHAN_PRAYERS, AdhanPrayer } from '../../notifications/scheduler';
+import { ADHAN_PRAYERS } from '../../notifications/scheduler';
 import { ensurePermission, rescheduleAll } from '../../notifications/service';
 import { loadNightWarm, saveNightWarm } from '../../quran/readerState';
-import { CityPickerModal } from '../../prayer-times/components/CityPickerModal';
-import { METHOD_LABELS } from '../../prayer-times/methods';
-import { HighLatRuleKey, MadhabKey, METHOD_KEYS, MethodKey } from '../../prayer-times/types';
 import { useSettings } from '../SettingsContext';
 import { resolveLocation } from '../settingsStore';
+import { CityPickerModal } from '../../prayer-times/components/CityPickerModal';
+import { HighLatRuleKey, MadhabKey, METHOD_KEYS, MethodKey } from '../../prayer-times/types';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import i18n, {
+  applyRtlForNextStart,
+  LanguageCode,
+  LANGUAGES,
+  loadLanguage,
+  nativeName,
+  needsRtlRestart,
+  saveLanguage,
+} from '@/src/lib/i18n';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
-const MADHAB_LABELS: Record<MadhabKey, string> = {
-  shafi: 'Standard (Shafi, Maliki, Hanbali)',
-  hanafi: 'Hanafi (later Asr)',
-};
-
-const HIGH_LAT_LABELS: Record<HighLatRuleKey, string> = {
-  auto: 'Automatic (recommended)',
-  middleofthenight: 'Middle of the night',
-  seventhofthenight: 'Seventh of the night',
-  twilightangle: 'Twilight angle',
-};
+const MADHABS: MadhabKey[] = ['shafi', 'hanafi'];
+const HIGH_LAT_RULES: HighLatRuleKey[] = [
+  'auto',
+  'middleofthenight',
+  'seventhofthenight',
+  'twilightangle',
+];
 
 function PickerModal<T extends string>({
   visible,
@@ -39,6 +54,7 @@ function PickerModal<T extends string>({
   selected,
   onSelect,
   onClose,
+  closeLabel,
 }: {
   visible: boolean;
   title: string;
@@ -46,6 +62,7 @@ function PickerModal<T extends string>({
   selected: T;
   onSelect: (key: T) => void;
   onClose: () => void;
+  closeLabel: string;
 }) {
   const insets = useSafeAreaInsets();
   const scheme = useColorScheme() ?? 'light';
@@ -55,7 +72,7 @@ function PickerModal<T extends string>({
         <View style={styles.modalHeader}>
           <ThemedText type="subtitle">{title}</ThemedText>
           <Pressable accessibilityRole="button" testID="close-option-picker" onPress={onClose}>
-            <ThemedText type="link">Close</ThemedText>
+            <ThemedText type="link">{closeLabel}</ThemedText>
           </Pressable>
         </View>
         <ScrollView>
@@ -85,23 +102,19 @@ function PickerModal<T extends string>({
   );
 }
 
-const ADHAN_LABELS: Record<AdhanPrayer, string> = {
-  fajr: 'Fajr',
-  dhuhr: 'Dhuhr',
-  asr: 'Asr',
-  maghrib: 'Maghrib',
-  isha: 'Isha',
-};
-
 export function MoreScreen() {
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
   const { settings, update, store } = useSettings();
-  const [open, setOpen] = useState<null | 'city' | 'method' | 'madhab' | 'highlat'>(null);
+  const [open, setOpen] = useState<null | 'city' | 'method' | 'madhab' | 'highlat' | 'language'>(
+    null
+  );
   const [prefs, setPrefs] = useState(() => loadNotificationPrefs(store));
   const [nightWarm, setNightWarm] = useState(() => loadNightWarm(store));
   const location = resolveLocation(settings);
+  const currentLanguage = (loadLanguage(store) ?? i18n.language) as LanguageCode;
 
-  const togglePrayer = async (prayer: AdhanPrayer, enabled: boolean) => {
+  const togglePrayer = async (prayer: (typeof ADHAN_PRAYERS)[number], enabled: boolean) => {
     if (enabled) await ensurePermission(true);
     const next = setPrayerEnabled(prefs, prayer, enabled);
     setPrefs(next);
@@ -109,35 +122,68 @@ export function MoreScreen() {
     void rescheduleAll(new Date(), store);
   };
 
+  const selectLanguage = (code: LanguageCode) => {
+    saveLanguage(store, code);
+    if (needsRtlRestart(code)) {
+      // Bilingual confirm: current language + target language wording.
+      const target = i18n.getFixedT(code);
+      Alert.alert(
+        `${t('more.restartTitle')} · ${target('more.restartTitle')}`,
+        `${t('more.restartBody')}\n\n${target('more.restartBody')}`,
+        [
+          { text: t('common.cancel'), style: 'cancel' },
+          {
+            text: `${t('common.restart')} · ${target('common.restart')}`,
+            onPress: () => {
+              applyRtlForNextStart(code);
+              Updates.reloadAsync().catch(() => DevSettings.reload());
+            },
+          },
+        ]
+      );
+    } else {
+      void i18n.changeLanguage(code);
+    }
+  };
+
   const methodOptions = [
-    { key: 'auto' as const, label: 'Automatic (based on your region)' },
-    ...METHOD_KEYS.map((k) => ({ key: k, label: METHOD_LABELS[k] })),
+    { key: 'auto' as const, label: t('more.methodAutoRegion') },
+    ...METHOD_KEYS.map((k) => ({ key: k, label: t(`methods.${k}`) })),
   ];
 
   const rows = [
     {
       id: 'city',
-      title: 'Location',
-      value: location?.label ?? 'Not set',
+      title: t('more.location'),
+      value: location?.label ?? t('more.notSet'),
       onPress: () => setOpen('city'),
     },
     {
       id: 'method',
-      title: 'Calculation method',
-      value: settings.method === 'auto' ? 'Automatic' : METHOD_LABELS[settings.method as MethodKey],
+      title: t('more.method'),
+      value:
+        settings.method === 'auto'
+          ? t('more.methodAuto')
+          : t(`methods.${settings.method as MethodKey}`),
       onPress: () => setOpen('method'),
     },
     {
       id: 'madhab',
-      title: 'Asr time (madhab)',
-      value: MADHAB_LABELS[settings.madhab],
+      title: t('more.asr'),
+      value: t(`more.madhab_${settings.madhab}`),
       onPress: () => setOpen('madhab'),
     },
     {
       id: 'highlat',
-      title: 'High-latitude nights',
-      value: HIGH_LAT_LABELS[settings.highLatRule],
+      title: t('more.highLat'),
+      value: t(`more.highLat_${settings.highLatRule}`),
       onPress: () => setOpen('highlat'),
+    },
+    {
+      id: 'language',
+      title: t('more.language'),
+      value: nativeName(currentLanguage),
+      onPress: () => setOpen('language'),
     },
   ];
 
@@ -145,12 +191,9 @@ export function MoreScreen() {
     <ThemedView style={[styles.container, { paddingTop: insets.top + 12 }]}>
       <ScrollView contentContainerStyle={styles.scroll}>
         <ThemedText type="title" style={styles.title}>
-          Settings
+          {t('more.title')}
         </ThemedText>
-        <ThemedText style={styles.sectionHint}>
-          Prayer time settings. If you are not sure, the automatic options follow the most common
-          conventions for your region.
-        </ThemedText>
+        <ThemedText style={styles.sectionHint}>{t('more.hint')}</ThemedText>
         {rows.map((row) => (
           <Pressable
             key={row.id}
@@ -164,15 +207,12 @@ export function MoreScreen() {
           </Pressable>
         ))}
         <ThemedText type="title" style={[styles.title, styles.sectionTitle]}>
-          Adhan notifications
+          {t('more.notifications')}
         </ThemedText>
-        <ThemedText style={styles.sectionHint}>
-          Get a reminder at each prayer time. Your phone&apos;s silent switch and Focus modes can
-          mute these — that is an iPhone setting, not the app.
-        </ThemedText>
+        <ThemedText style={styles.sectionHint}>{t('more.notificationsHint')}</ThemedText>
         {ADHAN_PRAYERS.map((prayer) => (
           <View key={prayer} style={styles.settingRowInline}>
-            <ThemedText type="defaultSemiBold">{ADHAN_LABELS[prayer]}</ThemedText>
+            <ThemedText type="defaultSemiBold">{t(`prayers.${prayer}`)}</ThemedText>
             <Switch
               testID={`notif-${prayer}`}
               value={prefs.enabled[prayer]}
@@ -181,14 +221,12 @@ export function MoreScreen() {
           </View>
         ))}
         <ThemedText type="title" style={[styles.title, styles.sectionTitle]}>
-          Reading
+          {t('more.reading')}
         </ThemedText>
         <View style={styles.settingRowInline}>
           <View style={styles.rowText}>
-            <ThemedText type="defaultSemiBold">Night reading (warm)</ThemedText>
-            <ThemedText style={styles.settingValue}>
-              Amber tones in the Quran reader, easier on the eyes before dawn
-            </ThemedText>
+            <ThemedText type="defaultSemiBold">{t('more.nightWarm')}</ThemedText>
+            <ThemedText style={styles.settingValue}>{t('more.nightWarmDesc')}</ThemedText>
           </View>
           <Switch
             testID="night-warm"
@@ -199,9 +237,7 @@ export function MoreScreen() {
             }}
           />
         </View>
-        <ThemedText style={styles.privacyNote}>
-          DeenDawn stores everything on your phone. No account, no ads, no tracking.
-        </ThemedText>
+        <ThemedText style={styles.privacyNote}>{t('more.privacyNote')}</ThemedText>
       </ScrollView>
 
       <CityPickerModal
@@ -214,7 +250,8 @@ export function MoreScreen() {
       />
       <PickerModal
         visible={open === 'method'}
-        title="Calculation method"
+        title={t('more.method')}
+        closeLabel={t('common.close')}
         options={methodOptions}
         selected={settings.method}
         onSelect={(method) => update({ method })}
@@ -222,24 +259,29 @@ export function MoreScreen() {
       />
       <PickerModal
         visible={open === 'madhab'}
-        title="Asr time (madhab)"
-        options={(Object.keys(MADHAB_LABELS) as MadhabKey[]).map((k) => ({
-          key: k,
-          label: MADHAB_LABELS[k],
-        }))}
+        title={t('more.asr')}
+        closeLabel={t('common.close')}
+        options={MADHABS.map((k) => ({ key: k, label: t(`more.madhab_${k}`) }))}
         selected={settings.madhab}
         onSelect={(madhab) => update({ madhab })}
         onClose={() => setOpen(null)}
       />
       <PickerModal
         visible={open === 'highlat'}
-        title="High-latitude nights"
-        options={(Object.keys(HIGH_LAT_LABELS) as HighLatRuleKey[]).map((k) => ({
-          key: k,
-          label: HIGH_LAT_LABELS[k],
-        }))}
+        title={t('more.highLat')}
+        closeLabel={t('common.close')}
+        options={HIGH_LAT_RULES.map((k) => ({ key: k, label: t(`more.highLat_${k}`) }))}
         selected={settings.highLatRule}
         onSelect={(highLatRule) => update({ highLatRule })}
+        onClose={() => setOpen(null)}
+      />
+      <PickerModal
+        visible={open === 'language'}
+        title={t('more.language')}
+        closeLabel={t('common.close')}
+        options={LANGUAGES.map((l) => ({ key: l.code, label: nativeName(l.code) }))}
+        selected={currentLanguage}
+        onSelect={selectLanguage}
         onClose={() => setOpen(null)}
       />
     </ThemedView>

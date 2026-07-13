@@ -1,0 +1,104 @@
+{
+  "meta": {
+    "nativeName": "العربية",
+    "status": "@draft machine-drafted — Gate 8, see docs/TRANSLATION_REVIEW.md"
+  },
+  "common": {
+    "close": "إغلاق",
+    "cancel": "ليس الآن",
+    "restart": "إعادة التشغيل الآن"
+  },
+  "tabs": {
+    "today": "اليوم",
+    "quran": "القرآن",
+    "qibla": "القبلة",
+    "more": "المزيد"
+  },
+  "prayers": {
+    "fajr": "الفجر",
+    "sunrise": "الشروق",
+    "dhuhr": "الظهر",
+    "asr": "العصر",
+    "maghrib": "المغرب",
+    "isha": "العشاء"
+  },
+  "today": {
+    "greeting": "السلام عليكم",
+    "emptyBody": "اختر مدينتك لعرض مواقيت الصلاة اليوم. كل شيء يبقى على هاتفك — لا يُرسل أي شيء.",
+    "chooseCity": "اختر مدينتك",
+    "tomorrow": "{{prayer}} (غدًا)",
+    "countdown": "بعد {{time}}",
+    "hoursMinutes": "{{hours}} س {{minutes}} د",
+    "minutesSeconds": "{{minutes}} د {{seconds}} ث"
+  },
+  "cityPicker": {
+    "title": "اختر مدينتك",
+    "placeholder": "ابحث عن مدينة أو بلد",
+    "noMatch": "لا نتائج — جرّب أقرب مدينة كبيرة.",
+    "hint": "اكتب اسم المدينة، مثل جدة."
+  },
+  "quran": {
+    "title": "القرآن",
+    "searchPlaceholder": "ابحث في القرآن (عربي أو إنجليزي)",
+    "noMatches": "لا نتائج.",
+    "continueReading": "تابع القراءة — {{surah}}:{{ayah}}",
+    "verses_zero": "{{count}} آية",
+    "verses_one": "آية واحدة",
+    "verses_two": "آيتان",
+    "verses_few": "{{count}} آيات",
+    "verses_many": "{{count}} آية",
+    "verses_other": "{{count}} آية",
+    "arabicOnly": "العربية فقط",
+    "translation": "الترجمة",
+    "devBadge": "ترجمة مؤقتة (بيكثال، 1930) — الترجمة النهائية قيد المراجعة",
+    "share": "مشاركة",
+    "notFound": "السورة غير موجودة."
+  },
+  "qibla": {
+    "title": "القبلة",
+    "comingSoon": "بوصلة القبلة قادمة في تحديث قريب."
+  },
+  "more": {
+    "title": "الإعدادات",
+    "hint": "إعدادات مواقيت الصلاة. إن لم تكن متأكدًا، تتبع الخيارات التلقائية الأعراف الأكثر شيوعًا في منطقتك.",
+    "location": "الموقع",
+    "notSet": "غير محدد",
+    "method": "طريقة الحساب",
+    "methodAuto": "تلقائي",
+    "methodAutoRegion": "تلقائي (حسب منطقتك)",
+    "asr": "وقت العصر (المذهب)",
+    "madhab_shafi": "الجمهور (الشافعي، المالكي، الحنبلي)",
+    "madhab_hanafi": "الحنفي (عصر متأخر)",
+    "highLat": "ليالي خطوط العرض العليا",
+    "highLat_auto": "تلقائي (مُوصى به)",
+    "highLat_middleofthenight": "منتصف الليل",
+    "highLat_seventhofthenight": "سُبع الليل",
+    "highLat_twilightangle": "زاوية الشفق",
+    "notifications": "تنبيهات الأذان",
+    "notificationsHint": "احصل على تذكير عند كل صلاة. قد يكتمها مفتاح الصامت وأوضاع التركيز — هذا إعداد في الآيفون وليس في التطبيق.",
+    "reading": "القراءة",
+    "nightWarm": "قراءة ليلية (دافئة)",
+    "nightWarmDesc": "ألوان كهرمانية في قارئ القرآن، أريح للعين قبل الفجر",
+    "language": "اللغة",
+    "privacyNote": "دين داون يحفظ كل شيء على هاتفك. لا حساب، لا إعلانات، لا تتبع.",
+    "restartTitle": "إعادة تشغيل مطلوبة",
+    "restartBody": "تغيير لغة التطبيق يتطلب إعادة تشغيل سريعة لتغيير اتجاه الواجهة."
+  },
+  "methods": {
+    "MuslimWorldLeague": "رابطة العالم الإسلامي",
+    "Egyptian": "الهيئة المصرية العامة للمساحة",
+    "Karachi": "جامعة العلوم الإسلامية، كراتشي",
+    "UmmAlQura": "جامعة أم القرى، مكة",
+    "Dubai": "دبي (الإمارات)",
+    "MoonsightingCommittee": "لجنة رؤية الهلال العالمية",
+    "NorthAmerica": "الجمعية الإسلامية لأمريكا الشمالية (ISNA)",
+    "Kuwait": "الكويت",
+    "Qatar": "قطر",
+    "Singapore": "المجلس الإسلامي في سنغافورة",
+    "Tehran": "معهد الجيوفيزياء، جامعة طهران",
+    "Turkey": "رئاسة الشؤون الدينية، تركيا"
+  },
+  "notifications": {
+    "body": "حان وقت صلاة {{prayer}}."
+  }
+}

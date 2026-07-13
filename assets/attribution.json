@@ -48,6 +48,15 @@
       "pinnedAt": "2026-07-13"
     },
     {
+      "id": "nastaliq-urdu-font",
+      "kind": "font",
+      "attribution": "Noto Nastaliq Urdu by Google/Noto Fonts (github.com/notofonts/nastaliq), SIL OFL 1.1",
+      "license": "SIL Open Font License 1.1 (OFL.txt in archive)",
+      "url": "https://github.com/notofonts/nastaliq/releases/download/NotoNastaliqUrdu-v4.000/NotoNastaliqUrdu-v4.000.zip",
+      "sha256": "0725a7a9dfd450961b18227445cc9a5d21624d68b1f88fa52e4c6a0fe7576728",
+      "pinnedAt": "2026-07-13"
+    },
+    {
       "id": "quran-metadata",
       "kind": "metadata",
       "attribution": "Surah/juz metadata from Tanzil (tanzil.net)",

@@ -4,6 +4,16 @@
 
 Word-by-word Quran data: QUL/hablullah WBW is CC BY-NC-ND — unusable (tip jar = commercial-adjacent; ND blocks derivatives). Feature deferred until a permissive dataset is sourced. corpus.quran.com morphology is GPL — do not link or bundle. Hadith remains out of scope pending a sunnah.com agreement. Wikipedia bios (CC BY-SA), Nicholson Rumi translations (Gibb Trust copyright), Rosenthal's Muqaddimah (1958, copyrighted), Stanford Encyclopedia of Philosophy: never bundle. Android full-adhan foreground service: deferred to post-v1 (new permission surface); do not scaffold.
 
+## 2026-07-12 — E1 i18n implementation choices
+
+- react-i18next with bundled JSON resources, synchronous init at root (no async splash dependency); `intl-pluralrules` polyfill because Hermes lacks Intl.PluralRules (needed for Arabic's 6 CLDR plural forms — tested explicitly).
+- Missing-key enforcement is two-layered: a jest suite diffs flattened key sets across en/ur/ar (plural-suffix-aware) and rejects empty values; eslint `react/jsx-no-literals` (scoped to app/ and feature components, locale-neutral symbols allowlisted) makes any hardcoded JSX string a lint ERROR — the "bypassed i18n" CI gate.
+- UR/AR drafts live only in `src/lib/i18n/locales/` — the guard hook's Gate-8 exception allows Arabic script exactly there and in the two review logs, nowhere else. Each draft file self-declares `meta.status: @draft`; a test asserts the flag until a reviewer clears it.
+- Native language names come from each locale's own file (`meta.nativeName`) so the picker renders each option in its own script without Arabic literals in code.
+- RTL switch: persisted language + I18nManager.forceRTL applied for NEXT start; bilingual (current+target) confirm dialog; Updates.reloadAsync with DevSettings.reload fallback in dev.
+- Urdu rendering: NotoNastaliqUrdu v4.000 pinned from the official notofonts release; ThemedText swaps family and multiplies line-height ×1.55 when language is ur (Nastaliq's deep descenders clip at Latin leading).
+- Notification content localizes at schedule time via i18n.t — reschedule-on-language-change comes free because the language picker lives in Settings whose changes already trigger rescheduleAll.
+
 ## 2026-07-12 — Phase 2 directive adopted
 
 Zohaib pasted the research assistant's PHASE_2_DIRECTIVE (archived at docs/PHASE_2_DIRECTIVE.md) and explicitly confirmed the CLAUDE.md amendments — including Rule 1.5 (generated answers layer) and Human Gates 7–9 — via a direct yes in-session. Epic order: E1 i18n → E2 qibla → E3 adhan sounds → E4 hijri/Ramadan → E5 tasbih → E6 zakat → E7 navigation feel → E8 Ask Tier A → E9 Ask Tier B (ships OFF, gate 7) → E10 philosophers library → E11 remaining v1 backlog.

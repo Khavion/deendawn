@@ -1,6 +1,7 @@
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import React, { useCallback, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FlatList, Pressable, Share, StyleSheet, View, ViewToken } from 'react-native';
 
 import {
@@ -20,6 +21,7 @@ import { useTokens } from '@/src/lib/theme/useTokens';
 export function SurahScreen() {
   const db = useSQLiteContext();
   const { store } = useSettings();
+  const { t: tr } = useTranslation();
   const params = useLocalSearchParams<{ id: string; ayah?: string }>();
   const surahNumber = Number(params.id);
   const nightWarm = loadNightWarm(store);
@@ -55,7 +57,7 @@ export function SurahScreen() {
   if (!surah) {
     return (
       <View style={[styles.center, { backgroundColor: t.bgCanvas }]}>
-        <ThemedText style={{ color: t.textPrimary }}>Surah not found.</ThemedText>
+        <ThemedText style={{ color: t.textPrimary }}>{tr('quran.notFound')}</ThemedText>
       </View>
     );
   }
@@ -72,7 +74,9 @@ export function SurahScreen() {
               onPress={onToggleTranslation}
               hitSlop={8}
             >
-              <ThemedText type="link">{showTranslation ? 'Arabic only' : 'Translation'}</ThemedText>
+              <ThemedText type="link">
+                {showTranslation ? tr('quran.arabicOnly') : tr('quran.translation')}
+              </ThemedText>
             </Pressable>
           ),
         }}
@@ -93,7 +97,7 @@ export function SurahScreen() {
               testID="dev-translation-badge"
             >
               <ThemedText type="caption" style={{ color: t.ochre, textAlign: 'center' }}>
-                DEV translation (Pickthall, 1930) — final translation pending review
+                {tr('quran.devBadge')}
               </ThemedText>
             </View>
           ) : null
@@ -145,7 +149,7 @@ export function SurahScreen() {
                       })
                     }
                   >
-                    <ThemedText style={{ color: t.accent }}>Share</ThemedText>
+                    <ThemedText style={{ color: t.accent }}>{tr('quran.share')}</ThemedText>
                   </Pressable>
                 </View>
               </View>

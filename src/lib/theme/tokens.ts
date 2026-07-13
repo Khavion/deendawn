@@ -114,7 +114,12 @@ export const fonts = {
   sansMedium: 'SourceSans3-Medium',
   sansSemiBold: 'SourceSans3-Semibold',
   quran: 'AmiriQuran',
+  /** Urdu content face — Nastaliq needs ~1.9-2.1 line-height (docs/DESIGN.md). */
+  nastaliq: 'NotoNastaliqUrdu',
 } as const;
+
+/** Multiplier applied to Latin line-heights when rendering Urdu Nastaliq. */
+export const URDU_LINE_HEIGHT_FACTOR = 1.55;
 
 /** Quranic Arabic sizing: generous size + ~2.0 leading for stacked tashkeel. */
 export const quranType = {

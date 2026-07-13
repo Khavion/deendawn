@@ -1,15 +1,15 @@
+import { useTranslation } from 'react-i18next';
 import { StyleSheet } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 
 export default function QiblaScreen() {
+  const { t } = useTranslation();
   return (
     <ThemedView style={styles.container}>
-      <ThemedText type="title">Qibla</ThemedText>
-      <ThemedText style={styles.body}>
-        The qibla compass is coming in an upcoming update.
-      </ThemedText>
+      <ThemedText type="title">{t('qibla.title')}</ThemedText>
+      <ThemedText style={styles.body}>{t('qibla.comingSoon')}</ThemedText>
     </ThemedView>
   );
 }

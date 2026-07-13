@@ -1,0 +1,18 @@
+appId: com.khavion.deendawn
+---
+# Switch EN -> UR via the picker, verify persisted UI, then AR, then back.
+- launchApp:
+    stopApp: true
+- extendedWaitUntil:
+    visible:
+      id: 'prayer-row-fajr'
+    timeout: 20000
+- tapOn: 'More, tab.*'
+- extendedWaitUntil:
+    visible:
+      id: 'setting-language'
+    timeout: 10000
+- tapOn:
+    id: 'setting-language'
+- tapOn:
+    id: 'option-ur'

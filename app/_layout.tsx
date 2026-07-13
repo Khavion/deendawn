@@ -13,6 +13,8 @@ import { registerBackgroundRefresh } from '@/src/features/notifications/backgrou
 import { installForegroundHandler } from '@/src/features/notifications/service';
 import { useNotificationScheduling } from '@/src/features/notifications/useNotificationScheduling';
 import { SettingsProvider } from '@/src/features/settings/SettingsContext';
+import { initI18n, loadLanguage } from '@/src/lib/i18n';
+import { getUserKVStore } from '@/src/lib/kvStore';
 
 export const unstable_settings = {
   anchor: '(tabs)',
@@ -20,6 +22,8 @@ export const unstable_settings = {
 
 installForegroundHandler();
 void registerBackgroundRefresh();
+// Module scope on purpose: the React Compiler may drop side-effectful useMemo.
+initI18n(loadLanguage(getUserKVStore()));
 
 /** Must render inside SettingsProvider to react to settings changes. */
 function NotificationScheduler() {
@@ -63,6 +67,7 @@ export default function RootLayout() {
     'SourceSans3-Regular': require('@/assets/fonts/SourceSans3-Regular.ttf'),
     'SourceSans3-Medium': require('@/assets/fonts/SourceSans3-Medium.ttf'),
     'SourceSans3-Semibold': require('@/assets/fonts/SourceSans3-Semibold.ttf'),
+    NotoNastaliqUrdu: require('@/assets/fonts/NotoNastaliqUrdu-Regular.ttf'),
   });
 
   if (!fontsLoaded) return null;

@@ -1,26 +1,18 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { CityPickerModal } from './CityPickerModal';
 import { computeDayTimes, isValidTime, nextPrayer } from '../engine';
 import { formatTimeInZone } from '../format';
-import { PRAYER_NAMES, PrayerName } from '../types';
+import { PRAYER_NAMES } from '../types';
 import { ThemedText } from '@/components/themed-text';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { useSettings } from '@/src/features/settings/SettingsContext';
 import { resolveLocation, resolvePrayerConfig } from '@/src/features/settings/settingsStore';
 import { fonts, fontSize, radius, spacing } from '@/src/lib/theme/tokens';
 import { useTokens } from '@/src/lib/theme/useTokens';
-
-const PRAYER_LABELS: Record<PrayerName, string> = {
-  fajr: 'Fajr',
-  sunrise: 'Sunrise',
-  dhuhr: 'Dhuhr',
-  asr: 'Asr',
-  maghrib: 'Maghrib',
-  isha: 'Isha',
-};
 
 function useNow(intervalMs: number): Date {
   const [now, setNow] = useState(() => new Date());
@@ -31,17 +23,19 @@ function useNow(intervalMs: number): Date {
   return now;
 }
 
-function formatCountdown(ms: number): string {
+function countdownParts(ms: number) {
   const total = Math.max(0, Math.floor(ms / 1000));
-  const h = Math.floor(total / 3600);
-  const m = Math.floor((total % 3600) / 60);
-  const s = total % 60;
-  return h > 0 ? `${h}h ${m}m` : `${m}m ${s}s`;
+  return {
+    hours: Math.floor(total / 3600),
+    minutes: Math.floor((total % 3600) / 60),
+    seconds: total % 60,
+  };
 }
 
 export function TodayScreen() {
   const insets = useSafeAreaInsets();
   const t = useTokens();
+  const { t: tr, i18n } = useTranslation();
   const { settings, update } = useSettings();
   const [pickerOpen, setPickerOpen] = useState(false);
   const now = useNow(1000);
@@ -68,11 +62,10 @@ export function TodayScreen() {
       >
         <IconSymbol name="location.fill" size={44} color={t.accent} />
         <ThemedText type="title" style={styles.emptyTitle}>
-          As-salamu alaykum
+          {tr('today.greeting')}
         </ThemedText>
         <ThemedText type="serifBody" style={[styles.emptyBody, { color: t.textSecondary }]}>
-          Choose your city to see today&apos;s prayer times. Everything stays on your phone —
-          nothing is sent anywhere.
+          {tr('today.emptyBody')}
         </ThemedText>
         <Pressable
           accessibilityRole="button"
@@ -81,7 +74,7 @@ export function TodayScreen() {
           style={[styles.primaryButton, { backgroundColor: t.accent }]}
         >
           <ThemedText type="defaultSemiBold" style={{ color: t.textOnAccent }}>
-            Choose your city
+            {tr('today.chooseCity')}
           </ThemedText>
         </Pressable>
         <CityPickerModal
@@ -115,7 +108,7 @@ export function TodayScreen() {
             <ThemedText type="defaultSemiBold">{location.label}</ThemedText>
           </Pressable>
           <ThemedText type="caption" style={{ color: t.textSecondary }}>
-            {now.toLocaleDateString(undefined, {
+            {now.toLocaleDateString(i18n.language, {
               weekday: 'long',
               month: 'long',
               day: 'numeric',
@@ -127,14 +120,21 @@ export function TodayScreen() {
           <View style={[styles.nextCard, { backgroundColor: t.accent }]}>
             <ThemedText type="defaultSemiBold" style={{ color: t.textOnAccent, opacity: 0.85 }}>
               {next.isTomorrow
-                ? `${PRAYER_LABELS[next.prayer]} (tomorrow)`
-                : PRAYER_LABELS[next.prayer]}
+                ? tr('today.tomorrow', { prayer: tr(`prayers.${next.prayer}`) })
+                : tr(`prayers.${next.prayer}`)}
             </ThemedText>
             <ThemedText style={[styles.nextTime, { color: t.textOnAccent }]}>
               {formatTimeInZone(next.time)}
             </ThemedText>
             <ThemedText style={{ color: t.textOnAccent, opacity: 0.85 }}>
-              in {formatCountdown(next.time.getTime() - now.getTime())}
+              {(() => {
+                const p = countdownParts(next.time.getTime() - now.getTime());
+                const time =
+                  p.hours > 0
+                    ? tr('today.hoursMinutes', { hours: p.hours, minutes: p.minutes })
+                    : tr('today.minutesSeconds', { minutes: p.minutes, seconds: p.seconds });
+                return tr('today.countdown', { time });
+              })()}
             </ThemedText>
           </View>
         )}
@@ -154,7 +154,7 @@ export function TodayScreen() {
                     type={isNext ? 'defaultSemiBold' : 'default'}
                     style={isNext ? { color: t.textOnAccentSoft } : undefined}
                   >
-                    {PRAYER_LABELS[p]}
+                    {tr(`prayers.${p}`)}
                   </ThemedText>
                   <ThemedText
                     type={isNext ? 'defaultSemiBold' : 'default'}

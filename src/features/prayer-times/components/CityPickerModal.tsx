@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FlatList, Modal, Pressable, StyleSheet, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -20,6 +21,7 @@ export function CityPickerModal({
 }) {
   const insets = useSafeAreaInsets();
   const scheme = useColorScheme() ?? 'light';
+  const { t } = useTranslation();
   const [query, setQuery] = useState('');
   const results = searchCities(query, 25);
 
@@ -27,16 +29,16 @@ export function CityPickerModal({
     <Modal visible={visible} animationType="slide" onRequestClose={onClose}>
       <ThemedView style={[styles.container, { paddingTop: insets.top + 12 }]}>
         <View style={styles.header}>
-          <ThemedText type="subtitle">Choose your city</ThemedText>
+          <ThemedText type="subtitle">{t('cityPicker.title')}</ThemedText>
           <Pressable accessibilityRole="button" testID="close-picker" onPress={onClose}>
-            <ThemedText type="link">Close</ThemedText>
+            <ThemedText type="link">{t('common.close')}</ThemedText>
           </Pressable>
         </View>
         <TextInput
           testID="city-search"
           value={query}
           onChangeText={setQuery}
-          placeholder="Search city or country"
+          placeholder={t('cityPicker.placeholder')}
           placeholderTextColor={Colors[scheme].icon}
           autoFocus
           autoCorrect={false}
@@ -48,9 +50,7 @@ export function CityPickerModal({
           keyboardShouldPersistTaps="handled"
           ListEmptyComponent={
             <ThemedText style={styles.hint}>
-              {query.trim()
-                ? 'No match — try the nearest big city.'
-                : 'Type a city name, e.g. Houston.'}
+              {query.trim() ? t('cityPicker.noMatch') : t('cityPicker.hint')}
             </ThemedText>
           }
           renderItem={({ item }) => (

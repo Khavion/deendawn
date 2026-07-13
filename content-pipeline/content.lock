@@ -58,6 +58,14 @@
       "url": "https://github.com/adobe-fonts/source-sans/releases/download/3.052R/TTF-source-sans-3.052R.zip",
       "license": "SIL Open Font License 1.1 (Adobe Source Sans 3; LICENSE.md in the source repo)",
       "pinnedAt": "2026-07-13"
+    },
+    "nastaliq-urdu-font": {
+      "file": "NotoNastaliqUrdu-v4.000.zip",
+      "sha256": "0725a7a9dfd450961b18227445cc9a5d21624d68b1f88fa52e4c6a0fe7576728",
+      "bytes": 2103531,
+      "url": "https://github.com/notofonts/nastaliq/releases/download/NotoNastaliqUrdu-v4.000/NotoNastaliqUrdu-v4.000.zip",
+      "license": "SIL Open Font License 1.1 (OFL.txt in archive)",
+      "pinnedAt": "2026-07-13"
     }
   },
   "derived": {}

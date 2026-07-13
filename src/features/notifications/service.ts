@@ -1,18 +1,12 @@
 import * as Notifications from 'expo-notifications';
 
+import i18n from '../../lib/i18n';
+
 import { loadNotificationPrefs } from './prefsStore';
 import { AdhanPrayer, diffPlans, planNotifications, PlannedNotification } from './scheduler';
 import { log } from '../../lib/log';
 import { getUserKVStore, KVStore } from '../../lib/kvStore';
 import { loadSettings, resolveLocation, resolvePrayerConfig } from '../settings/settingsStore';
-
-const PRAYER_TITLES: Record<AdhanPrayer, string> = {
-  fajr: 'Fajr',
-  dhuhr: 'Dhuhr',
-  asr: 'Asr',
-  maghrib: 'Maghrib',
-  isha: 'Isha',
-};
 
 /** Foreground presentation: show banner + play sound like a normal alert. */
 export function installForegroundHandler(): void {
@@ -37,9 +31,10 @@ export async function ensurePermission(request: boolean): Promise<boolean> {
 }
 
 function toContent(p: PlannedNotification): Notifications.NotificationContentInput {
+  const prayerName = i18n.t(`prayers.${p.prayer}`);
   return {
-    title: PRAYER_TITLES[p.prayer],
-    body: `It's time for ${PRAYER_TITLES[p.prayer]} prayer.`,
+    title: prayerName,
+    body: i18n.t('notifications.body', { prayer: prayerName }),
     sound: p.sound === 'silent' ? undefined : true,
     interruptionLevel: 'timeSensitive',
     data: { prayer: p.prayer, plannedId: p.id },
