@@ -12,7 +12,8 @@
     "today": "Today",
     "quran": "Quran",
     "qibla": "Qibla",
-    "more": "More"
+    "more": "More",
+    "ask": "Ask"
   },
   "prayers": {
     "fajr": "Fajr",
@@ -182,5 +183,15 @@
     "needPrices": "Enter at least one metal price to work out the nisab threshold.",
     "nisabLine": "Nisab threshold: {{amount}}",
     "disclaimer": "This is a calculation aid, not a religious ruling. Situations differ — please confirm with a knowledgeable scholar."
+  },
+  "ask": {
+    "title": "Ask",
+    "placeholder": "Ask about a topic, word, or count…",
+    "hint": "Search-powered answers from the Quran text itself — counts, verses, and topics. Tap any reference to read it in context.",
+    "countAnswer_one": "{{count}} verse matches “{{term}}” in the bundled translation",
+    "countAnswer_other": "{{count}} verses match “{{term}}” in the bundled translation",
+    "redirect": "Questions about what is permissible deserve a qualified scholar, not an app — please ask one you trust. Verses related to your topic:",
+    "empty": "Nothing in the text matches that — try a different word.",
+    "related": "Related verses"
   }
 }

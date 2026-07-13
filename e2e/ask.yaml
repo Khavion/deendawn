@@ -1,0 +1,30 @@
+appId: com.khavion.deendawn
+---
+- extendedWaitUntil:
+    visible:
+      id: "prayer-row-fajr"
+    timeout: 20000
+- tapOn: ".*, tab, 3 of 5"
+- extendedWaitUntil:
+    visible:
+      id: "ask-input"
+    timeout: 10000
+- tapOn:
+    id: "ask-input"
+- inputText: "How many verses mention patience?"
+- pressKey: enter
+- extendedWaitUntil:
+    visible:
+      id: "ask-count"
+    timeout: 10000
+- takeScreenshot: docs/screens/ask-count
+- tapOn:
+    id: "ask-input"
+- eraseText
+- inputText: "Is music halal?"
+- pressKey: enter
+- extendedWaitUntil:
+    visible:
+      id: "ask-redirect"
+    timeout: 10000
+- takeScreenshot: docs/screens/ask-redirect

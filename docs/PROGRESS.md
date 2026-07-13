@@ -101,7 +101,14 @@ Done: Maestro installed; e2e/smoke.yaml green twice on iPhone 17 sim (Today -> M
 
 - enableScreens/enableFreeze + freezeOnBlur; reader ayah load deferred via InteractionManager (push stays clean on long surahs); native push retained (system easing + automatic Reduce Motion); no custom motion exists by design. Device-profiling item added to TESTPLAN.
 
-## Next: E8 Ask Tier A (specs in docs/PHASE_2_DIRECTIVE.md)
+## Session 2026-07-13 (cont. 6) — E8 Ask Tier A
+
+- Router: intent detection (count/list/ruling incl. escaped Arabic patterns/topical), scaffolding-stripping term extraction, conservative engineering-authored synonym expansion, injection-safe OR-joined FTS, exact counts phrased as verifiable corpus facts, fixed ruling redirect (flagged SCHOLAR_REVIEW), fixed empty response.
+- Eval harness: 64 fixtures GENERATED from the committed db (ground truth = corpus; regeneration requires DECISIONS entry) + router-internals tests = 72 green. This harness gates E9 per the directive.
+- UI: 5th tab (Ask), terse serif count sentence + tappable [s:a] chips deep-linking into the reader, verse rows for topicals, ochre redirect card. i18n ×3 with AR count plurals across all 6 forms. Maestro flow green on sim (count + redirect paths, screenshots in docs/screens).
+- Lesson reinforced: assumed 2:188 contains "bribe" in Pickthall — it does not; test now derives refs from the corpus (never assume religious-text facts).
+
+## Next: E9 Ask Tier B (build against stub artifacts — real models are BLOCKERS item A), then E10 philosophers library, then E11 (audio/tips/onboarding/store-prep)
 
 ## Next: start here
 

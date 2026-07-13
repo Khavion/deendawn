@@ -1,0 +1,454 @@
+{
+  "generator": "scripts/generate-ask-fixtures.mjs",
+  "total": 64,
+  "fixtures": [
+    {
+      "query": "How many verses mention bribery?",
+      "expect": {
+        "kind": "count",
+        "count": 1,
+        "firstRefs": ["5:106"]
+      }
+    },
+    {
+      "query": "How many verses mention charity?",
+      "expect": {
+        "kind": "count",
+        "count": 27,
+        "firstRefs": ["2:196", "2:263", "2:264"]
+      }
+    },
+    {
+      "query": "How many verses mention patience?",
+      "expect": {
+        "kind": "count",
+        "count": 60,
+        "firstRefs": ["2:45", "2:153", "2:155"]
+      }
+    },
+    {
+      "query": "How many verses mention forgiveness?",
+      "expect": {
+        "kind": "count",
+        "count": 204,
+        "firstRefs": ["2:58", "2:109", "2:173"]
+      }
+    },
+    {
+      "query": "How many verses mention mercy?",
+      "expect": {
+        "kind": "count",
+        "count": 260,
+        "firstRefs": ["1:1", "1:3", "2:37"]
+      }
+    },
+    {
+      "query": "How many verses mention justice?",
+      "expect": {
+        "kind": "count",
+        "count": 33,
+        "firstRefs": ["2:259", "2:275", "3:18"]
+      }
+    },
+    {
+      "query": "How many verses mention fasting?",
+      "expect": {
+        "kind": "count",
+        "count": 28,
+        "firstRefs": ["2:63", "2:93", "2:183"]
+      }
+    },
+    {
+      "query": "How many verses mention usury?",
+      "expect": {
+        "kind": "count",
+        "count": 6,
+        "firstRefs": ["2:275", "2:276", "2:278"]
+      }
+    },
+    {
+      "query": "How many verses mention orphans?",
+      "expect": {
+        "kind": "count",
+        "count": 23,
+        "firstRefs": ["2:83", "2:177", "2:215"]
+      }
+    },
+    {
+      "query": "How many verses mention parents?",
+      "expect": {
+        "kind": "count",
+        "count": 24,
+        "firstRefs": ["2:83", "2:180", "2:215"]
+      }
+    },
+    {
+      "query": "How many verses mention lying?",
+      "expect": {
+        "kind": "count",
+        "count": 102,
+        "firstRefs": ["2:10", "2:42", "3:61"]
+      }
+    },
+    {
+      "query": "How many verses mention prayer?",
+      "expect": {
+        "kind": "count",
+        "count": 236,
+        "firstRefs": ["1:5", "2:3", "2:21"]
+      }
+    },
+    {
+      "query": "How many verses mention gratitude?",
+      "expect": {
+        "kind": "count",
+        "count": 58,
+        "firstRefs": ["2:52", "2:56", "2:152"]
+      }
+    },
+    {
+      "query": "How many verses mention knowledge?",
+      "expect": {
+        "kind": "count",
+        "count": 376,
+        "firstRefs": ["2:13", "2:22", "2:26"]
+      }
+    },
+    {
+      "query": "How many verses mention wealth?",
+      "expect": {
+        "kind": "count",
+        "count": 90,
+        "firstRefs": ["2:155", "2:177", "2:180"]
+      }
+    },
+    {
+      "query": "How many verses mention poverty?",
+      "expect": {
+        "kind": "count",
+        "count": 57,
+        "firstRefs": ["2:43", "2:83", "2:110"]
+      }
+    },
+    {
+      "query": "How many verses mention paradise?",
+      "expect": {
+        "kind": "count",
+        "count": 146,
+        "firstRefs": ["2:25", "2:35", "2:82"]
+      }
+    },
+    {
+      "query": "How many verses mention angels?",
+      "expect": {
+        "kind": "count",
+        "count": 93,
+        "firstRefs": ["2:30", "2:31", "2:34"]
+      }
+    },
+    {
+      "query": "How many verses mention prophets?",
+      "expect": {
+        "kind": "count",
+        "count": 386,
+        "firstRefs": ["2:61", "2:87", "2:91"]
+      }
+    },
+    {
+      "query": "How many verses mention believers?",
+      "expect": {
+        "kind": "count",
+        "count": 563,
+        "firstRefs": ["2:3", "2:4", "2:6"]
+      }
+    },
+    {
+      "query": "How many verses mention disbelievers?",
+      "expect": {
+        "kind": "count",
+        "count": 323,
+        "firstRefs": ["2:6", "2:19", "2:24"]
+      }
+    },
+    {
+      "query": "How many verses mention moses?",
+      "expect": {
+        "kind": "count",
+        "count": 148,
+        "firstRefs": ["2:51", "2:53", "2:54"]
+      }
+    },
+    {
+      "query": "How many verses mention abraham?",
+      "expect": {
+        "kind": "count",
+        "count": 65,
+        "firstRefs": ["2:124", "2:125", "2:126"]
+      }
+    },
+    {
+      "query": "How many verses mention jesus?",
+      "expect": {
+        "kind": "count",
+        "count": 25,
+        "firstRefs": ["2:87", "2:136", "2:253"]
+      }
+    },
+    {
+      "query": "How many verses mention mary?",
+      "expect": {
+        "kind": "count",
+        "count": 31,
+        "firstRefs": ["2:87", "2:253", "3:36"]
+      }
+    },
+    {
+      "query": "How many verses mention pharaoh?",
+      "expect": {
+        "kind": "count",
+        "count": 79,
+        "firstRefs": ["2:49", "2:50", "3:11"]
+      }
+    },
+    {
+      "query": "How many verses mention gold?",
+      "expect": {
+        "kind": "count",
+        "count": 12,
+        "firstRefs": ["3:14", "3:75", "3:91"]
+      }
+    },
+    {
+      "query": "How many verses mention silver?",
+      "expect": {
+        "kind": "count",
+        "count": 9,
+        "firstRefs": ["3:14", "9:34", "12:20"]
+      }
+    },
+    {
+      "query": "Which verses mention patience?",
+      "expect": {
+        "kind": "verses",
+        "mustIncludeRef": "2:45"
+      }
+    },
+    {
+      "query": "Which verses mention orphans?",
+      "expect": {
+        "kind": "verses",
+        "mustIncludeRef": "2:83"
+      }
+    },
+    {
+      "query": "Which verses mention usury?",
+      "expect": {
+        "kind": "verses",
+        "mustIncludeRef": "2:275"
+      }
+    },
+    {
+      "query": "Which verses mention justice?",
+      "expect": {
+        "kind": "verses",
+        "mustIncludeRef": "2:259"
+      }
+    },
+    {
+      "query": "Which verses mention moses?",
+      "expect": {
+        "kind": "verses",
+        "mustIncludeRef": "2:51"
+      }
+    },
+    {
+      "query": "Which verses mention mary?",
+      "expect": {
+        "kind": "verses",
+        "mustIncludeRef": "2:87"
+      }
+    },
+    {
+      "query": "Which verses mention fasting?",
+      "expect": {
+        "kind": "verses",
+        "mustIncludeRef": "2:63"
+      }
+    },
+    {
+      "query": "Which verses mention gratitude?",
+      "expect": {
+        "kind": "verses",
+        "mustIncludeRef": "2:52"
+      }
+    },
+    {
+      "query": "Is music halal?",
+      "expect": {
+        "kind": "rulingRedirect"
+      }
+    },
+    {
+      "query": "Is smoking haram?",
+      "expect": {
+        "kind": "rulingRedirect"
+      }
+    },
+    {
+      "query": "Is it permissible to eat at non-halal restaurants?",
+      "expect": {
+        "kind": "rulingRedirect"
+      }
+    },
+    {
+      "query": "Should I take out a mortgage?",
+      "expect": {
+        "kind": "rulingRedirect"
+      }
+    },
+    {
+      "query": "Can I combine prayers while traveling?",
+      "expect": {
+        "kind": "rulingRedirect"
+      }
+    },
+    {
+      "query": "Is cryptocurrency trading allowed?",
+      "expect": {
+        "kind": "rulingRedirect"
+      }
+    },
+    {
+      "query": "Is it ok to celebrate birthdays?",
+      "expect": {
+        "kind": "rulingRedirect"
+      }
+    },
+    {
+      "query": "May I break my fast if I am sick?",
+      "expect": {
+        "kind": "rulingRedirect"
+      }
+    },
+    {
+      "query": "Is wearing gold forbidden for men?",
+      "expect": {
+        "kind": "rulingRedirect"
+      }
+    },
+    {
+      "query": "Should I give zakat to my brother?",
+      "expect": {
+        "kind": "rulingRedirect"
+      }
+    },
+    {
+      "query": "Is it wrong to listen to podcasts during Ramadan?",
+      "expect": {
+        "kind": "rulingRedirect"
+      }
+    },
+    {
+      "query": "Is tattooing sinful?",
+      "expect": {
+        "kind": "rulingRedirect"
+      }
+    },
+    {
+      "query": "Am I allowed to pray with shoes on?",
+      "expect": {
+        "kind": "rulingRedirect"
+      }
+    },
+    {
+      "query": "Must I fast while pregnant?",
+      "expect": {
+        "kind": "rulingRedirect"
+      }
+    },
+    {
+      "query": "Is forex trading lawful?",
+      "expect": {
+        "kind": "rulingRedirect"
+      }
+    },
+    {
+      "query": "patience",
+      "expect": {
+        "kind": "verses"
+      }
+    },
+    {
+      "query": "what does the Quran say about patience",
+      "expect": {
+        "kind": "verses"
+      }
+    },
+    {
+      "query": "verses about the poor",
+      "expect": {
+        "kind": "verses"
+      }
+    },
+    {
+      "query": "mercy",
+      "expect": {
+        "kind": "verses"
+      }
+    },
+    {
+      "query": "creation of the heavens",
+      "expect": {
+        "kind": "verses"
+      }
+    },
+    {
+      "query": "stories of Moses",
+      "expect": {
+        "kind": "verses"
+      }
+    },
+    {
+      "query": "gratitude to parents",
+      "expect": {
+        "kind": "verses"
+      }
+    },
+    {
+      "query": "light upon light",
+      "expect": {
+        "kind": "verses"
+      }
+    },
+    {
+      "query": "xylophone quantum blockchain",
+      "expect": {
+        "kind": "empty"
+      }
+    },
+    {
+      "query": "zzzzz",
+      "expect": {
+        "kind": "empty"
+      }
+    },
+    {
+      "query": "jabberwocky vorpal",
+      "expect": {
+        "kind": "empty"
+      }
+    },
+    {
+      "query": "   ",
+      "expect": {
+        "kind": "empty"
+      }
+    },
+    {
+      "query": "qqq www eee",
+      "expect": {
+        "kind": "empty"
+      }
+    }
+  ]
+}
