@@ -20,14 +20,15 @@ Epics in build order. Top unblocked item is always the current task.
 - [x] Manual city fallback data+logic (bundled offline 135-city dataset, diacritic-folding ranked search; picker UI lands with settings epic)
 - [x] Fixture matrix tests: 8 cities × 8 dates × 12 methods × 2 madhabs + high-lat rule matrix, to-the-minute (1,680 fixtures)
 - [x] BLOCKERS.md task: human spot-check fixtures vs published timetables
-- [ ] Today screen UI: next prayer countdown, today's times
+- [x] Today screen UI: next prayer countdown, today's times, city header, empty state with picker
 
 ## 3. Adhan notifications
 
-- [ ] Rolling scheduler (≥7 days, ≤64 iOS notifications) as pure tested math
-- [ ] Per-prayer on/off + sound choice; adhan clips <30s caf/wav
-- [ ] Reschedule on foreground, background task, after fire
-- [ ] In-app caveats: silent mode, Focus modes
+- [x] Rolling scheduler (≥7 days, cap 60 of 64 iOS notifications) as pure tested math + minimal diffing
+- [x] Per-prayer on/off + sound plumbing ('default'/'silent'; custom adhan clip files still to source — see below)
+- [x] Reschedule on foreground, background task (expo-background-task), after fire, on settings change
+- [x] In-app caveats: silent mode, Focus modes (More screen)
+- [ ] Adhan sound clips: research legally-redistributable adhan recordings, convert to <30s caf, pin like other content
 
 ## 4. Quran reader
 

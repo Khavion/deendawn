@@ -31,8 +31,22 @@ Done:
 - Manual-city fallback: bundled 135-city offline dataset (curated geographic facts, cross-checked against verified fixture-city coords in tests) + ranked diacritic-folding search. 39 tests green repo-wide.
 - Remaining in epic: Today screen UI (needs user-settings store on expo-sqlite user db + tab scaffold replacement) — top task for next session.
 
-## Next session: start here
+## Session 2026-07-12 (cont. 2) — app shell, Today screen, notifications
 
-1. `src/lib/userDb.ts` — expo-sqlite user-data db (settings, bookmarks, tasbih history tables), thin repository with pure logic testable in node.
-2. Replace template tab screens with DeenDawn tabs (Today / Quran / Qibla / More); Today screen: next-prayer countdown + day times from engine, empty state when no location set (manual city picker sheet using searchCities).
-3. Then epic 3 (notification scheduler math as pure tested functions).
+Zohaib directives this session (persisted to memory + CLAUDE.md): plain-English communication only; research autonomously; keep building without pausing until the app is testable by him.
+
+Done:
+
+- User-data KV store on expo-sqlite (`src/lib/kvStore.ts`) with injectable memory impl for tests; settings store (location/method/madhab/high-lat) with defensive parsing + React context.
+- Replaced template with DeenDawn shell: Today / Quran / Qibla / More tabs, green theme, app identity (name DeenDawn, slug deendawn, bundle id com.khavion.deendawn — initial selection, change is gated).
+- Today screen: next-prayer countdown card, six daily times with next highlighted, city header, welcome empty state -> offline city picker (modal, ranked search). Component-tested (RTL v14 async API).
+- More screen: location/method/madhab/high-lat pickers + per-prayer adhan notification toggles with permission request; silent-mode/Focus caveat text.
+- Notifications epic: pure rolling scheduler (8 days, cap 60/64, deterministic ids, minimal diff) + expo-notifications service (idempotent rescheduleAll, foreground handler, time-sensitive alerts) + reschedule triggers (mount, settings change, foreground, notification fire, 12h background task). 26 notification tests incl. mocked-OS service tests.
+- iOS native build green via prebuild + xcodebuild (first full compile of the app). ios/ stays gitignored (regenerated on demand).
+- 75 tests green repo-wide; all gates green.
+
+## Next: start here
+
+1. Quran reader epic: surah list + ayah view from bundled quran.db via expo-sqlite (read-only), Uthmani font (fetch Amiri Quran / Scheherazade New via pinned source), translation toggle + DEV badge, bookmarks/last-read in kv store, FTS search screen, share-as-text with citation.
+2. Then qibla (bearing math already available via adhan Qibla()).
+3. Simulator smoke run + screenshots for Zohaib once Quran reader lands.
