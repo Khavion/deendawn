@@ -66,7 +66,15 @@ Done: Maestro installed; e2e/smoke.yaml green twice on iPhone 17 sim (Today -> M
 - E1 in flight: react-i18next + intl-pluralrules wired; en/ur/ar locale files (UR/AR @draft, Gate 8); all screens + tabs + notification content through t(); jsx-no-literals lint gate ON; language picker with bilingual RTL-restart flow; NotoNastaliqUrdu pinned + ThemedText Urdu family/leading swap; i18n jest suite (key parity, AR 6 plural forms, draft flags).
 - E1 ACCEPTED 2026-07-13: EN/UR/AR verified on simulator with screenshots (docs/screens/locale-*.png); RTL layout confirmed (tab order, rows, highlighted state); Urdu in Nastaliq with compensated leading; Arabic localized dates; language switch round-trip EN->UR->AR->EN green via Maestro. Root-caused two real bugs on-device: React Compiler drops side-effectful useMemo (init moved to module scope, comment left) and i18next v26 sync-init needs initAsync:false.
 
-## Next: E2 qibla compass (specs in docs/PHASE_2_DIRECTIVE.md)
+## Session 2026-07-13 — E2 qibla compass
+
+- Independent great-circle bearing implementation, verified to 0.01° against the adhan reference for 10 cities on all hemispheres; angle helpers (shortest delta, circular low-pass) unit-tested incl. 359→0 wraparound.
+- useHeading hook: expo-location watchHeadingAsync, true-north preference with magnetic fallback, low-pass alpha 0.25, ~15Hz throttle, permission lifecycle + re-request.
+- Screen: lapis needle + rotating rose on quiet ring; aligned state (success color + soft fill), ±3° haptic tick edge-triggered + one Success per session; magnetic-north and figure-8 calibration chips (ochre); privacy-honest permission state; city empty state; all copy i18n in en/ur/ar (@draft).
+- 20 qibla tests incl. mocked heading-stream component tests (turn guidance right→aligned→left, haptic once-per-session, cleanup).
+- expo-location plugin + when-in-use copy stating on-device-only use.
+
+## Next: E3 adhan sound options (specs in docs/PHASE_2_DIRECTIVE.md)
 
 ## Next: start here
 

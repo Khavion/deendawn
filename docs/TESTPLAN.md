@@ -12,7 +12,8 @@
 
 Checks that cannot run in the simulator; verify on a physical iPhone before external TestFlight:
 
-- [ ] Qibla compass against a known bearing (real magnetometer + declination).
+- [ ] Qibla compass against a known bearing (real magnetometer + declination): needle within ±3° of a reference compass app; calibration chip appears when waving near metal; figure-8 clears it; true-north vs magnetic chip behavior with Location Services off.
+- [ ] Qibla haptics on device: selection tick entering the ±3° window, single success buzz per session (simulator never fires haptics).
 - [ ] Adhan notification fires with sound on a locked device; silent-switch and Focus behavior.
 - [ ] Notification rescheduling after device reboot.
 - [ ] Background audio continues under screen lock; lock-screen controls work.

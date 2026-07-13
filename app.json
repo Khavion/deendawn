@@ -46,7 +46,13 @@
       "expo-sqlite",
       "expo-localization",
       "expo-background-task",
-      "expo-notifications"
+      "expo-notifications",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "DeenDawn uses your location only on this device to point the qibla compass and compute prayer times. It is never transmitted anywhere."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

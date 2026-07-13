@@ -1,5 +1,7 @@
 {
-  "meta": { "nativeName": "English" },
+  "meta": {
+    "nativeName": "English"
+  },
   "common": {
     "close": "Close",
     "cancel": "Not now",
@@ -49,7 +51,15 @@
   },
   "qibla": {
     "title": "Qibla",
-    "comingSoon": "The qibla compass is coming in an upcoming update."
+    "chooseCityFirst": "Choose your city to find the qibla direction.",
+    "aligned": "Facing the qibla",
+    "turnRight": "Qibla is {{degrees}}° to your right",
+    "turnLeft": "Qibla is {{degrees}}° to your left",
+    "bearingLabel": "{{degrees}}° from north",
+    "magneticCaveat": "Using magnetic north — your device could not provide true north",
+    "calibrate": "Compass needs calibration — move your phone in a figure-8 motion",
+    "permissionNeeded": "The compass needs location permission to work. Your location never leaves your phone.",
+    "grantPermission": "Enable compass"
   },
   "more": {
     "title": "Settings",

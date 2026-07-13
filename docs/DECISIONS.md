@@ -14,6 +14,14 @@ Word-by-word Quran data: QUL/hablullah WBW is CC BY-NC-ND — unusable (tip jar 
 - Urdu rendering: NotoNastaliqUrdu v4.000 pinned from the official notofonts release; ThemedText swaps family and multiplies line-height ×1.55 when language is ur (Nastaliq's deep descenders clip at Latin leading).
 - Notification content localizes at schedule time via i18n.t — reschedule-on-language-change comes free because the language picker lives in Settings whose changes already trigger rescheduleAll.
 
+## 2026-07-13 — E2 qibla implementation choices
+
+- Bearing math implemented independently (great-circle initial bearing) and unit-tested to 0.01° against the adhan reference (10 cities, all hemispheres) — avoids circular testing while satisfying the known-good requirement.
+- Heading via expo-location watchHeadingAsync (no expo-sensors needed): trueHeading when >=0 else magnetic + honesty chip; circular exponential low-pass (alpha 0.25) + ~15Hz UI throttle; calibration chip at accuracy <=1 (expo scale 0–3).
+- No needle springs at all (floor discipline + Reduce Motion trivially honored); rotation is direct transform at throttled rate.
+- Night-warm stays reader-scoped by design (it is a reading mode, not an app theme); qibla ships light+dark via tokens.
+- Location permission copy states on-device-only use explicitly; the screen has a dedicated denied state with re-request.
+
 ## 2026-07-12 — Phase 2 directive adopted
 
 Zohaib pasted the research assistant's PHASE_2_DIRECTIVE (archived at docs/PHASE_2_DIRECTIVE.md) and explicitly confirmed the CLAUDE.md amendments — including Rule 1.5 (generated answers layer) and Human Gates 7–9 — via a direct yes in-session. Epic order: E1 i18n → E2 qibla → E3 adhan sounds → E4 hijri/Ramadan → E5 tasbih → E6 zakat → E7 navigation feel → E8 Ask Tier A → E9 Ask Tier B (ships OFF, gate 7) → E10 philosophers library → E11 remaining v1 backlog.
