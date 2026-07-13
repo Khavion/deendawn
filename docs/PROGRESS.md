@@ -136,7 +136,11 @@ Done: Maestro installed; e2e/smoke.yaml green twice on iPhone 17 sim (Today -> M
 
 - Full expo-audio player: Listen bar on the surah screen (play/pause, progress clock + track, buffering state), background-audio mode + lock-screen metadata, per-reciter/surah resume positions (skip-first-10s/last-5s policy, cleared on finish, saved every 5s + on pause/unmount). Source rule: EXPO_PUBLIC_AUDIO_BASE_URL → R2 in production; unset release build hides the feature entirely; dev builds stream a synthesized tone from `npm run dev:audio` (localhost:8083, HTTP-range server) with a persistent "not recitation" badge. 21 unit/component tests + e2e/audio.yaml green against the live stream. UIBackgroundModes audio added; real recordings remain BLOCKERS 2 / gate 5.
 
-## Next: E11 continues — tip jar (RevenueCat sandbox), offline E2E suite, store prep; then E9 native session
+## Session 2026-07-13 (cont. 13) — E11: Tip jar
+
+- Tips screen (/tips via More): strictly support-development framing, options load cheapest-first, purchase → persisted thank-you, cancelled → back to options, restore, and — key part — an honest "Tips are not set up in this build yet" state because the RevenueCat key doesn't exist (BLOCKERS 1, plain-English signup steps added). Rule 3 enforced by a copy-audit test across en/ur/ar (charity/zakat/sadaqah framing fails the build; footnote must disclaim donation framing). react-native-purchases installed (pods repo-update needed); 11 new tests; e2e/tips.yaml green (scrollUntilVisible needs centerElement — logged in DECISIONS).
+
+## Next: E11 continues — offline E2E suite, store prep; then E9 native session
 
 ## Next: start here
 

@@ -44,7 +44,9 @@ Written in plain English. **Nothing on this list is urgent right now** — the a
 
 Those keys get saved into one small private file on your computer (techies call it a ".env file" — it's just a text file of passwords that never leaves your machine and never gets shared).
 
-**When it's needed:** Apple keys — when we're ready to put a test version on your phone. Storage keys — when we build the audio-listening feature. Donations key — when we build the tip jar.
+**When it's needed:** Apple keys — when we're ready to put a test version on your phone. Storage keys — when we upload real recitation audio (the listening feature itself is already built and tested against a stand-in sound). Donations key — the tip jar screen is now built too; without the key it simply shows "Tips are not set up in this build yet," which is honest and fine for testing.
+
+**Update 2026-07-13 — the tip jar is ready for its key whenever you want it live.** What you'd do (10 minutes, free): 1) go to revenuecat.com and click "Start for free", sign up with your email; 2) it will ask you to create a "project" — name it DeenDawn; 3) inside the project, add an "App Store" app; it will ask for the bundle ID — paste exactly: com.khavion.deendawn; 4) it shows you a "Public API key" that starts with "appl_" — copy that and paste it to me. That's all. (The actual tip products also need your Apple Developer account later — I'll walk you through that as part of the App Store setup, so it's fine to wait and do both together.)
 
 **What you'll do:** When each moment comes, I'll give you exact click-by-click instructions ("go to this website, log in, click this button, copy the code it shows you, paste it to me"). Signing up for anything that could cost money is always your call — I'll tell you the price first (Cloudflare and RevenueCat both have free tiers that should cover us; Apple's developer account is the $99/year one you may already have).
 

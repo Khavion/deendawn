@@ -108,7 +108,8 @@
     "tasbih": "Tasbih counter",
     "zakat": "Zakat calculator",
     "library": "Thinkers & books",
-    "about": "About & attributions"
+    "about": "About & attributions",
+    "tips": "Support the app"
   },
   "methods": {
     "MuslimWorldLeague": "Muslim World League",
@@ -237,5 +238,15 @@
     "streamed": "Streamed — nothing stored on your phone",
     "devBadge": "DEV audio — placeholder tone, not recitation",
     "lockScreenArtist": "DeenDawn"
+  },
+  "tips": {
+    "title": "Support",
+    "heading": "Support DeenDawn",
+    "body": "DeenDawn is free forever — no ads, no accounts, no tracking. If it serves you well, an optional tip helps cover development and hosting.",
+    "unavailable": "Tips are not set up in this build yet. Nothing in the app depends on them — everything stays free.",
+    "restore": "Restore previous tip",
+    "thanksTitle": "JazakAllahu khayran!",
+    "thanksBody": "Your support keeps DeenDawn free for everyone. May it be a blessing for you.",
+    "footnote": "A tip is an optional purchase that supports app development. It is not a donation to any charitable cause."
   }
 }

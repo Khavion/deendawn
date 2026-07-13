@@ -1,0 +1,27 @@
+appId: com.khavion.deendawn
+---
+# Tip jar: without a RevenueCat key the screen must show the honest
+# "not set up" state — no dead buttons, no fake products.
+- launchApp:
+    stopApp: true
+- extendedWaitUntil:
+    visible:
+      id: 'prayer-row-fajr'
+    timeout: 20000
+- tapOn: 'More, tab.*'
+- extendedWaitUntil:
+    visible:
+      id: 'setting-method'
+    timeout: 10000
+- scrollUntilVisible:
+    element:
+      id: 'setting-tips'
+    direction: DOWN
+    centerElement: true
+- tapOn:
+    id: 'setting-tips'
+- extendedWaitUntil:
+    visible:
+      id: 'tips-unavailable'
+    timeout: 10000
+- takeScreenshot: docs/screens/tips-unavailable

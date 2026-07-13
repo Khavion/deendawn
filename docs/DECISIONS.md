@@ -118,3 +118,10 @@ Constitution requires "one clearly-redistributable translation from Tanzil's col
 - Source selection: `EXPO_PUBLIC_AUDIO_BASE_URL` (build-time) → production R2 (the only allowed audio domain, rule 2); unset in release → the Listen bar renders nothing (no dead UI); unset in dev → localhost tone server. Bucket layout `{base}/{reciterId}/{NNN}.mp3` (dev uses .m4a because macOS afconvert encodes AAC, not MP3).
 - Resume positions are keyed per reciter+surah (`audio.resume.v1.*`) so a later reciter change never resumes into the wrong recording; resume skips the first 10s and last 5s (restart beats mid-word jumps); position cleared on finish.
 - Lock-screen controls via `setActiveForLockScreen` with surah transliteration as title; background playback via UIBackgroundModes audio + `shouldPlayInBackground`. Real-device verification is on TESTPLAN's device pass.
+
+## 2026-07-13 — Tip jar behind a backend interface (E11 / v1 feature 10)
+
+- `TipsBackend` interface isolates RevenueCat: the screen, purchase/restore/thank-you flows, and all 11 tests run without the API key (BLOCKERS item 1). `getTipsBackend()` returns null without `EXPO_PUBLIC_REVENUECAT_IOS_KEY` → honest "not set up in this build" state; no dead buttons, no fake products. react-native-purchases is lazy-required so importing the service never touches native code.
+- Rule 3 is enforced by a copy-audit test (`tipsCopyAudit.test.ts`): tips + more.tips strings in all three locales fail the build if they contain charity/zakat/sadaqah framing (EN words + UR/AR script patterns); the footnote is REQUIRED to disclaim donation framing ("not a donation to any charitable cause") in every locale.
+- Thank-you strings use devotional courtesy phrases (JazakAllahu khayran) — flagged in SCHOLAR_REVIEW like all religious-adjacent copy.
+- Maestro note for future flows: rows reached by scrollUntilVisible need `centerElement: true` — otherwise the found row can sit behind the tab bar and the tap lands on a tab.

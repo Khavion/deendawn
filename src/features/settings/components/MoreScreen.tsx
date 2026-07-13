@@ -214,6 +214,12 @@ export function MoreScreen() {
       onPress: () => router.push('/about'),
     },
     {
+      id: 'tips',
+      title: t('more.tips'),
+      value: t('tips.heading'),
+      onPress: () => router.push('/tips'),
+    },
+    {
       id: 'library',
       title: t('more.library'),
       value: t('library.reviewPending').split('—')[0].trim(),
