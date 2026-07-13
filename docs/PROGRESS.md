@@ -56,8 +56,13 @@ Done:
 - Screens: surah list (114, Arabic names in Amiri, search bar switching to FTS results with ayah deep-links, continue-reading chip), surah reader (RTL Uthmani text, translation toggle persisted + DEV badge, bookmarks, share with citation, last-read tracking via viewability).
 - 17 quran tests; repo-wide suite green.
 
+## Session 2026-07-12 (cont. 4) — simulator smoke run
+
+Done: Maestro installed; e2e/smoke.yaml green twice on iPhone 17 sim (Today -> More -> Quran -> surah, id-based assertions — Maestro text matching vs RN accessibility labels is unreliable, use testIDs). Screenshots in docs/screens/. Background-refresh registration now availability-checked (no dev toast). Visual QA passed: Amiri Uthmani ligatures, RTL, countdown card, toggles.
+
 ## Next: start here
 
-1. Qibla epic: great-circle bearing (adhan Qibla()) + magnetometer heading (expo-sensors) + declination correction (expo-location true heading), calibration UX. Bearing unit tests vs known city bearings.
-2. Simulator smoke run + screenshots into docs/screens/ for Zohaib (Today, Quran list, surah view, More).
-3. Then tasbih/hijri/zakat cluster (pure logic + small screens), then audio (needs R2 dev set — still blocked), tips, onboarding polish.
+1. Qibla epic: great-circle bearing (adhan Qibla()) + magnetometer heading (expo-sensors) + declination correction, calibration UX. Bearing unit tests vs known city bearings. Needs npx expo install expo-sensors expo-location, then prebuild + pod install + xcodebuild.
+2. Tasbih/hijri/zakat cluster (pure logic + screens).
+3. Audio (needs R2 dev set — blocked), tips (needs RevenueCat key — blocked), onboarding/about/attribution screens, offline E2E suite.
+4. To put the app on Zohaib's phone: TestFlight internal needs the Apple keys (BLOCKERS #1) — prepare click-by-click walkthrough when he is ready.
