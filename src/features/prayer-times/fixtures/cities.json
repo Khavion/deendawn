@@ -1,0 +1,32 @@
+{
+  "comment": "Reference cities for the fixture matrix (CLAUDE.md testing policy). Coordinates are city centers; timeZone is the IANA zone used for local-time fixture strings.",
+  "cities": [
+    { "id": "houston", "latitude": 29.7604, "longitude": -95.3698, "timeZone": "America/Chicago" },
+    { "id": "nyc", "latitude": 40.7128, "longitude": -74.006, "timeZone": "America/New_York" },
+    { "id": "london", "latitude": 51.5074, "longitude": -0.1278, "timeZone": "Europe/London" },
+    { "id": "toronto", "latitude": 43.6532, "longitude": -79.3832, "timeZone": "America/Toronto" },
+    { "id": "karachi", "latitude": 24.8607, "longitude": 67.0011, "timeZone": "Asia/Karachi" },
+    { "id": "jeddah", "latitude": 21.4858, "longitude": 39.1925, "timeZone": "Asia/Riyadh" },
+    {
+      "id": "anchorage",
+      "latitude": 61.2181,
+      "longitude": -149.9003,
+      "timeZone": "America/Anchorage"
+    },
+    { "id": "stockholm", "latitude": 59.3293, "longitude": 18.0686, "timeZone": "Europe/Stockholm" }
+  ],
+  "dates": [
+    {
+      "id": "2026-02-18",
+      "note": "Ramadan 1447 window (calculated approximation, test label only)"
+    },
+    { "id": "2026-03-08", "note": "US DST spring-forward" },
+    { "id": "2026-03-20", "note": "March equinox" },
+    { "id": "2026-03-29", "note": "EU DST spring-forward" },
+    { "id": "2026-06-21", "note": "June solstice" },
+    { "id": "2026-10-25", "note": "EU DST fall-back" },
+    { "id": "2026-11-01", "note": "US DST fall-back" },
+    { "id": "2026-12-21", "note": "December solstice" }
+  ],
+  "highLatCities": ["anchorage", "stockholm", "london"]
+}

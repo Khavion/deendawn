@@ -13,13 +13,13 @@ Epics in build order. Top unblocked item is always the current task.
 
 ## 2. Prayer times (CURRENT)
 
-- [ ] Install `adhan`; engine wrapper in `src/features/prayer-times/`
-- [ ] All calculation methods selectable; ISNA default for US locale, MWL otherwise
-- [ ] Asr madhab toggle (Shafi/Hanafi)
-- [ ] High-latitude rule auto via `recommended()` + manual override
+- [x] Install `adhan`; engine wrapper in `src/features/prayer-times/`
+- [x] All calculation methods selectable; ISNA default for US locale, MWL otherwise
+- [x] Asr madhab toggle (Shafi/Hanafi)
+- [x] High-latitude rule auto via `recommended()` + manual override
 - [ ] Manual city fallback (bundled offline city db, no network)
-- [ ] Fixture matrix tests: 8 cities × key dates × methods × madhabs × high-lat rules, to-the-minute
-- [ ] BLOCKERS.md task: human spot-check fixtures vs published timetables
+- [x] Fixture matrix tests: 8 cities × 8 dates × 12 methods × 2 madhabs + high-lat rule matrix, to-the-minute (1,680 fixtures)
+- [x] BLOCKERS.md task: human spot-check fixtures vs published timetables
 - [ ] Today screen UI: next prayer countdown, today's times
 
 ## 3. Adhan notifications
