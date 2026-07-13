@@ -208,6 +208,12 @@ export function MoreScreen() {
       onPress: () => router.push('/tasbih'),
     },
     {
+      id: 'zakat',
+      title: t('more.zakat'),
+      value: t('zakat.disclaimer').split('.')[0] + '.',
+      onPress: () => router.push('/zakat'),
+    },
+    {
       id: 'calendar',
       title: t('more.calendar'),
       value: t('calendar.disclaimer').split('—')[0].trim(),

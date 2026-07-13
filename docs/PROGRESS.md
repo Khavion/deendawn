@@ -91,7 +91,13 @@ Done: Maestro installed; e2e/smoke.yaml green twice on iPhone 17 sim (Today -> M
 
 - Pure state module (tap/reset/target/label/history, 366-day rolling daily totals, defensive parsing) + screen with the spec haptic grammar (tick per count, Medium at 33-detents, Success on round completion, each paired with a ring-color flash), 33/99 targets, user-entered label only. 10 tests. Reached via More (tab layout revisited at E8 when Ask needs a slot).
 
-## Next: E6 zakat calculator (specs in docs/PHASE_2_DIRECTIVE.md)
+## Session 2026-07-13 (cont. 4) — E6 zakat
+
+- computeZakat pure module: assets − liabilities floored at 0, nisab = lower of available metal thresholds (85g gold / 595g silver — SCHOLAR-REVIEW flagged with the 2.5% rate), needPrices/belowNisab/due states, cent rounding, NaN/negative clamping. 6 math tests.
+- Form screen: grouped inputs, live lapis result card, privacy note (user-entered prices only), ochre disclaimer; Arabic-Indic digits + both decimal separators parsed (escapes only — the guard hook blocked digit literals in code twice, correctly). 4 component tests incl. AR-locale long-value render.
+- Route /zakat via More.
+
+## Next: E7 navigation feel pass (specs in docs/PHASE_2_DIRECTIVE.md)
 
 ## Next: start here
 

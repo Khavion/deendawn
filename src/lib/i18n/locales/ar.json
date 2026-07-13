@@ -109,7 +109,8 @@
     "suhoorReminder": "تذكير السحور (رمضان)",
     "suhoorReminder_off": "مغلق",
     "suhoorReminder_minutes": "قبل الفجر بـ {{count}} دقيقة",
-    "tasbih": "عداد التسبيح"
+    "tasbih": "عداد التسبيح",
+    "zakat": "حاسبة الزكاة"
   },
   "methods": {
     "MuslimWorldLeague": "رابطة العالم الإسلامي",
@@ -164,5 +165,27 @@
     "tapArea": "{{count}} من {{target}}. اضغط للعد.",
     "reset": "إعادة",
     "labelPlaceholder": "أضف تسمية خاصة بك (اختياري)"
+  },
+  "zakat": {
+    "title": "حاسبة الزكاة",
+    "assets": "ما تملك",
+    "liabilitiesSection": "ما عليك",
+    "prices": "أسعار اليوم",
+    "pricesNote": "أدخل الأسعار بنفسك — التطبيق لا يجلب الأسعار من الإنترنت أبدًا (خصوصية). النصاب {{gold}} غ ذهبًا أو {{silver}} غ فضة، أيهما أقل قيمة.",
+    "fields": {
+      "cash": "النقد وأرصدة البنوك",
+      "goldGrams": "الذهب (غرام)",
+      "silverGrams": "الفضة (غرام)",
+      "businessAssets": "بضائع وأصول تجارية",
+      "receivables": "ديون لك عند الآخرين",
+      "liabilities": "ديون وفواتير مستحقة عليك",
+      "goldPricePerGram": "سعر غرام الذهب",
+      "silverPricePerGram": "سعر غرام الفضة"
+    },
+    "due": "الزكاة المستحقة (2.5%)",
+    "belowNisab": "ثروتك الزكوية دون النصاب — لا زكاة مستحقة.",
+    "needPrices": "أدخل سعر معدن واحد على الأقل لحساب النصاب.",
+    "nisabLine": "حد النصاب: {{amount}}",
+    "disclaimer": "هذه أداة حساب فقط وليست فتوى. الأحوال تختلف — يُرجى التأكد من عالم موثوق."
   }
 }

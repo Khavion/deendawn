@@ -91,6 +91,7 @@ export default function RootLayout() {
               />
               <Stack.Screen name="calendar" options={{ headerBackButtonDisplayMode: 'minimal' }} />
               <Stack.Screen name="tasbih" options={{ headerBackButtonDisplayMode: 'minimal' }} />
+              <Stack.Screen name="zakat" options={{ headerBackButtonDisplayMode: 'minimal' }} />
             </Stack>
             <FullAdhanPlayer />
             <StatusBar style="auto" />

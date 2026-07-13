@@ -104,7 +104,8 @@
     "suhoorReminder": "Suhoor reminder (Ramadan)",
     "suhoorReminder_off": "Off",
     "suhoorReminder_minutes": "{{count}} minutes before Fajr",
-    "tasbih": "Tasbih counter"
+    "tasbih": "Tasbih counter",
+    "zakat": "Zakat calculator"
   },
   "methods": {
     "MuslimWorldLeague": "Muslim World League",
@@ -159,5 +160,27 @@
     "tapArea": "Counter at {{count}} of {{target}}. Tap to count.",
     "reset": "Reset",
     "labelPlaceholder": "Add your own label (optional)"
+  },
+  "zakat": {
+    "title": "Zakat calculator",
+    "assets": "What you own",
+    "liabilitiesSection": "What you owe",
+    "prices": "Today's metal prices",
+    "pricesNote": "Enter current prices yourself — the app never fetches prices online (privacy). Nisab uses {{gold}}g of gold or {{silver}}g of silver, whichever is lower in value.",
+    "fields": {
+      "cash": "Cash & bank balances",
+      "goldGrams": "Gold (grams)",
+      "silverGrams": "Silver (grams)",
+      "businessAssets": "Business inventory & assets",
+      "receivables": "Money owed to you",
+      "liabilities": "Debts & bills due",
+      "goldPricePerGram": "Gold price per gram",
+      "silverPricePerGram": "Silver price per gram"
+    },
+    "due": "Zakat due (2.5%)",
+    "belowNisab": "Your zakatable wealth is below the nisab threshold — no zakat is due.",
+    "needPrices": "Enter at least one metal price to work out the nisab threshold.",
+    "nisabLine": "Nisab threshold: {{amount}}",
+    "disclaimer": "This is a calculation aid, not a religious ruling. Situations differ — please confirm with a knowledgeable scholar."
   }
 }
