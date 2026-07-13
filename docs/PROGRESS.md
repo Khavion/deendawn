@@ -140,7 +140,11 @@ Done: Maestro installed; e2e/smoke.yaml green twice on iPhone 17 sim (Today -> M
 
 - Tips screen (/tips via More): strictly support-development framing, options load cheapest-first, purchase → persisted thank-you, cancelled → back to options, restore, and — key part — an honest "Tips are not set up in this build yet" state because the RevenueCat key doesn't exist (BLOCKERS 1, plain-English signup steps added). Rule 3 enforced by a copy-audit test across en/ur/ar (charity/zakat/sadaqah framing fails the build; footnote must disclaim donation framing). react-native-purchases installed (pods repo-update needed); 11 new tests; e2e/tips.yaml green (scrollUntilVisible needs centerElement — logged in DECISIONS).
 
-## Next: E11 continues — offline E2E suite, store prep; then E9 native session
+## Session 2026-07-13 (cont. 14) — E11: Offline E2E suite (release build)
+
+- First Release-configuration build (BUILD SUCCEEDED, bundled JS) — also our first pre-TestFlight release verification. e2e/offline.yaml runs with Metro AND the dev audio server killed: onboarding from a wiped container, prayer times, Quran text, Ask exact counts, qibla, tasbih, zakat, hijri calendar, five offline cold starts, and the audio bar is asserted ABSENT in release (no configured source → no dead UI). Sim can't toggle airplane mode, so "no servers of any kind" is the documented proxy; true airplane-mode device pass added to TESTPLAN. Also: BLOCKERS item 2 updated with recitation-licensing research (Alafasy explicitly not free; EveryAyah NC-only vs our tip jar → recommend written-permission route; research prompt ready for Zohaib).
+
+## Next: E11 store prep (fastlane/metadata drafts, READY FOR HUMAN SUBMIT checklist); then E9 native session
 
 ## Next: start here
 

@@ -7,6 +7,7 @@
 - Golden: quran.db hashes vs content.lock, ayah counts, first/last ayah byte-equality.
 - Component: RTL layout, translation toggle, bookmark flows.
 - E2E (Maestro, iOS Simulator): onboarding, view times, change method, open surah, play audio (dev set), tasbih, zakat, tip sheet (sandbox), airplane-mode offline suite.
+- Offline suite (e2e/offline.yaml): runs against a RELEASE build with Metro and the dev audio server stopped — the simulator cannot toggle airplane mode, so "no servers of any kind" is the automated proxy; the flow covers onboarding → prayer times → Quran text → Ask counts → qibla → tasbih → zakat → calendar plus five offline cold starts, and asserts the audio bar is absent in release builds without a configured source.
 
 ## Device pass (human)
 
@@ -20,3 +21,4 @@ Checks that cannot run in the simulator; verify on a physical iPhone before exte
 - [ ] IAP sandbox purchase + restore on device.
 - [ ] Cold start < 2s on iPhone 12-class hardware.
 - [ ] Navigation frame profile on oldest supported hardware: open al-Baqara from the surah list, switch all tabs, language-switch restart — no visible hitching (E7).
+- [ ] True airplane-mode pass on device: enable airplane mode, run through prayer times, Quran, Ask, qibla, tasbih, zakat, calendar (mirrors e2e/offline.yaml).

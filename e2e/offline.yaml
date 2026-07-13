@@ -1,0 +1,144 @@
+appId: com.khavion.deendawn
+---
+# Offline-first proof (constitution rule 2). Run against a RELEASE build with
+# Metro and the dev audio server stopped: every worship feature must work
+# with no server of any kind. Starts from a wiped container, so this also
+# proves onboarding works offline. Pushed screens hide the tab bar and the
+# header back chevron is not reachable by selector, so the flow relaunches
+# between sections — each relaunch re-proves offline cold start.
+# (True airplane-mode pass on a physical device is in docs/TESTPLAN.md.)
+- launchApp:
+    stopApp: true
+    clearState: true
+# Onboarding, fully offline
+- extendedWaitUntil:
+    visible:
+      id: 'ob-begin'
+    timeout: 30000
+- tapOn:
+    id: 'ob-begin'
+- tapOn:
+    id: 'ob-city'
+- extendedWaitUntil:
+    visible:
+      id: 'city-search'
+    timeout: 10000
+- tapOn:
+    id: 'city-search'
+- inputText: 'Houston'
+- tapOn:
+    id: 'city-houston-us'
+- extendedWaitUntil:
+    visible:
+      id: 'ob-skip'
+    timeout: 10000
+- tapOn:
+    id: 'ob-skip'
+# Prayer times from the on-device engine
+- extendedWaitUntil:
+    visible:
+      id: 'prayer-row-fajr'
+    timeout: 20000
+- takeScreenshot: docs/screens/offline-today
+# Quran text from the bundled database; no audio bar in release (no source)
+- tapOn: 'Quran, tab.*'
+- extendedWaitUntil:
+    visible:
+      id: 'quran-search'
+    timeout: 10000
+- tapOn:
+    id: 'surah-1'
+- extendedWaitUntil:
+    visible:
+      id: 'ayah-1-1'
+    timeout: 10000
+- assertNotVisible:
+    id: 'surah-audio-bar'
+- takeScreenshot: docs/screens/offline-surah
+# Relaunch: Ask (Tier A FTS is fully local) and qibla
+- launchApp:
+    stopApp: true
+- extendedWaitUntil:
+    visible:
+      id: 'prayer-row-fajr'
+    timeout: 20000
+- tapOn: 'Ask, tab.*'
+- extendedWaitUntil:
+    visible:
+      id: 'ask-input'
+    timeout: 10000
+- tapOn:
+    id: 'ask-input'
+- inputText: 'How many verses mention patience?'
+- pressKey: enter
+- extendedWaitUntil:
+    visible:
+      id: 'ask-count'
+    timeout: 10000
+- takeScreenshot: docs/screens/offline-ask
+# Qibla renders its screen (no live sensors on sim — but no crash, no network)
+- tapOn: 'Qibla, tab.*'
+- extendedWaitUntil:
+    visible:
+      id: 'compass'
+    timeout: 10000
+# Relaunch: tasbih
+- launchApp:
+    stopApp: true
+- extendedWaitUntil:
+    visible:
+      id: 'prayer-row-fajr'
+    timeout: 20000
+- tapOn: 'More, tab.*'
+- scrollUntilVisible:
+    element:
+      id: 'setting-tasbih'
+    direction: DOWN
+    centerElement: true
+- tapOn:
+    id: 'setting-tasbih'
+- extendedWaitUntil:
+    visible:
+      id: 'tasbih-tap'
+    timeout: 10000
+- tapOn:
+    id: 'tasbih-tap'
+# Relaunch: zakat
+- launchApp:
+    stopApp: true
+- extendedWaitUntil:
+    visible:
+      id: 'prayer-row-fajr'
+    timeout: 20000
+- tapOn: 'More, tab.*'
+- scrollUntilVisible:
+    element:
+      id: 'setting-zakat'
+    direction: DOWN
+    centerElement: true
+- tapOn:
+    id: 'setting-zakat'
+- extendedWaitUntil:
+    visible:
+      id: 'zakat-goldGrams'
+    timeout: 10000
+# Relaunch: hijri calendar
+- launchApp:
+    stopApp: true
+- extendedWaitUntil:
+    visible:
+      id: 'prayer-row-fajr'
+    timeout: 20000
+- tapOn: 'More, tab.*'
+- scrollUntilVisible:
+    element:
+      id: 'setting-calendar'
+    direction: DOWN
+    centerElement: true
+- tapOn:
+    id: 'setting-calendar'
+- extendedWaitUntil:
+    visible:
+      id: 'calendar-grid'
+    timeout: 10000
+- takeScreenshot: docs/screens/offline-calendar

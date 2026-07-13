@@ -58,9 +58,14 @@ Those keys get saved into one small private file on your computer (techies call 
 
 **What this is:** For the "listen to the Quran" feature, the app streams audio recordings of a reciter. To build and test that feature, we only need 2–3 chapters' worth of audio from one reciter, placed in the online storage from item 1. The full library of reciters comes later, and which recordings we ship in the final app is your decision (item 4 below).
 
-**When it's needed:** When I start building the listening feature (a few work sessions from now).
+**When it's needed:** The listening feature is now BUILT and tested (it plays a clearly-labeled stand-in sound for now). Real recordings are needed before outside testers should hear actual recitation.
 
-**What you'll do:** Probably nothing hard. Before then, I will research which recitation recordings are free to use legally, recommend one, and either give you simple upload steps or find the easiest possible path. You'll just say yes or no to the choice.
+**What I found (researched 2026-07-13):** A reciter's recording is like a musician's performance — the Quran itself belongs to no one, but each recording legally belongs to whoever made it. The most popular reciter online (Mishary Alafasy) explicitly does NOT allow free use — his official app's terms say so. The biggest free collection site (everyayah.com) is generally described as "free for NON-commercial use" — and because our app has a tip jar, a lawyer could argue we're not purely non-commercial. I don't ship anything into your app on a "probably fine."
+
+**My recommendation (yes/no for you):** the safest path is written permission — either from a rights-holder of classic recordings, or from a living reciter who'd love to have his recitation in a free, no-ads app. Many would say yes to a polite email. When you're ready, I'll draft that email for you to send.
+
+**Optional homework for your research assistant** — paste this into Claude chat's Research feature and send me back what it finds:
+"Find Quran recitation audio recordings (full Quran, mp3, by a qualified reciter) that are explicitly licensed for free redistribution inside a free mobile app that also has an optional tip jar (i.e., commercial-adjacent use). I need: the reciter's name, where the files are hosted, the exact license text or permission statement and its URL, and any attribution requirements. Explicit written licenses only — not 'everyone uses it' assumptions. Check sources like archive.org collections, quranicaudio.com, everyayah.com, kingfahdcomplex releases, and any reciter who has publicly waived rights in writing."
 
 ---
 
