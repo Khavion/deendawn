@@ -229,5 +229,13 @@
     "enableReminders": "Turn on reminders",
     "skip": "Not now",
     "done": "Open DeenDawn"
+  },
+  "audio": {
+    "listen": "Listen",
+    "play": "Play",
+    "pause": "Pause",
+    "streamed": "Streamed — nothing stored on your phone",
+    "devBadge": "DEV audio — placeholder tone, not recitation",
+    "lockScreenArtist": "DeenDawn"
   }
 }

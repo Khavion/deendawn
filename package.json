@@ -16,7 +16,8 @@
     "content:fetch": "node content-pipeline/fetch.mjs",
     "content:verify": "node content-pipeline/verify.mjs",
     "content:build": "node content-pipeline/build.mjs",
-    "content:pin": "node content-pipeline/pin.mjs"
+    "content:pin": "node content-pipeline/pin.mjs",
+    "dev:audio": "node scripts/dev-audio-server.mjs"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",

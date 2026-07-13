@@ -1,0 +1,35 @@
+appId: com.khavion.deendawn
+---
+# Streaming player against the dev tone server (scripts/dev-audio-server.mjs
+# must be running on :8083). Verifies play, progress, pause, and the honest
+# placeholder badge.
+- launchApp:
+    stopApp: true
+- extendedWaitUntil:
+    visible:
+      id: 'prayer-row-fajr'
+    timeout: 20000
+- tapOn: 'Quran, tab.*'
+- extendedWaitUntil:
+    visible:
+      id: 'quran-search'
+    timeout: 10000
+- tapOn:
+    id: 'surah-2'
+- extendedWaitUntil:
+    visible:
+      id: 'surah-audio-bar'
+    timeout: 10000
+- assertVisible:
+    id: 'audio-dev-badge'
+- tapOn:
+    id: 'surah-audio-toggle'
+# Let it stream a few seconds, then the progress readout should show a clock.
+- extendedWaitUntil:
+    visible:
+      text: '0:0.*/.*1:00.*'
+    timeout: 15000
+- takeScreenshot: docs/screens/audio-playing
+- tapOn:
+    id: 'surah-audio-toggle'
+- takeScreenshot: docs/screens/audio-paused

@@ -22,6 +22,7 @@ import {
 } from '../readerState';
 import { AyahRow, buildShareText, getSurah, listAyahs } from '../repo';
 import { ThemedText } from '@/components/themed-text';
+import { SurahAudioBar } from '@/src/features/audio/components/SurahAudioBar';
 import { useSettings } from '@/src/features/settings/SettingsContext';
 import { fonts, quranType, radius, spacing } from '@/src/lib/theme/tokens';
 import { useTokens } from '@/src/lib/theme/useTokens';
@@ -97,6 +98,13 @@ export function SurahScreen() {
           ),
         }}
       />
+      <View style={styles.audioWrap}>
+        <SurahAudioBar
+          surah={surah.number}
+          title={surah.name_transliteration}
+          nightWarm={nightWarm}
+        />
+      </View>
       <FlatList
         data={ayahs}
         keyExtractor={(a) => String(a.id)}
@@ -181,6 +189,7 @@ export function SurahScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
+  audioWrap: { paddingHorizontal: spacing.xl, paddingTop: spacing.s },
   list: { paddingHorizontal: spacing.xl, paddingBottom: spacing.xxl, paddingTop: spacing.s },
   devBadge: {
     borderRadius: radius.control,

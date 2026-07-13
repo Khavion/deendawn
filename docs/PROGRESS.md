@@ -132,7 +132,11 @@ Done: Maestro installed; e2e/smoke.yaml green twice on iPhone 17 sim (Today -> M
 
 - Three-step onboarding (welcome → city → reminders): `onboarded.v1` kv flag, Today route redirects until set, city picked via the existing CityPickerModal (persists settings), reminders step calls ensurePermission(true) + rescheduleAll, skip path honored. i18n ×3, 3 RTL tests, Maestro e2e/onboarding.yaml drives the whole flow with clearState and asserts onboarding does NOT reappear on relaunch. Screenshots in docs/screens/onboarding-*.
 
-## Next: E11 continues — recitation audio vs placeholder (BLOCKERS B), tip jar (RevenueCat sandbox), offline E2E suite, store prep; then E9 native session
+## Session 2026-07-13 (cont. 12) — E11: Recitation streaming player
+
+- Full expo-audio player: Listen bar on the surah screen (play/pause, progress clock + track, buffering state), background-audio mode + lock-screen metadata, per-reciter/surah resume positions (skip-first-10s/last-5s policy, cleared on finish, saved every 5s + on pause/unmount). Source rule: EXPO_PUBLIC_AUDIO_BASE_URL → R2 in production; unset release build hides the feature entirely; dev builds stream a synthesized tone from `npm run dev:audio` (localhost:8083, HTTP-range server) with a persistent "not recitation" badge. 21 unit/component tests + e2e/audio.yaml green against the live stream. UIBackgroundModes audio added; real recordings remain BLOCKERS 2 / gate 5.
+
+## Next: E11 continues — tip jar (RevenueCat sandbox), offline E2E suite, store prep; then E9 native session
 
 ## Next: start here
 

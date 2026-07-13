@@ -111,3 +111,10 @@ Constitution requires "one clearly-redistributable translation from Tanzil's col
 - Night-warm reading mode: opt-in switch in More, amber palette applied to the Quran reader only.
 - Arabic ayah body raised to 28pt at 2.0 line-height (tashkeel clearance per brief). `maxFontSizeMultiplier` capped at 1.4 app-wide.
 - Deferred from the brief (tracked in TODO/DESIGN): FlashList perf pass, manuscript-art CC0 editorial moments (scholar gate), haptics (tasbih epic), Dynamic Type + RTL audits.
+
+## 2026-07-13 — Recitation audio: player built now, recordings later (E11 / v1 feature 5)
+
+- The streaming player (expo-audio 1.1.1) is fully built and tested against a dev tone server (`npm run dev:audio`, localhost:8083, HTTP range support) because licensed recordings don't exist yet (BLOCKERS item 2 / gate 5). The dev source serves a synthesized tone that is NEVER presented as recitation — the player shows a persistent "DEV audio — placeholder tone, not recitation" badge on every dev build (rule 1 discipline, same pattern as the DEV translation watermark).
+- Source selection: `EXPO_PUBLIC_AUDIO_BASE_URL` (build-time) → production R2 (the only allowed audio domain, rule 2); unset in release → the Listen bar renders nothing (no dead UI); unset in dev → localhost tone server. Bucket layout `{base}/{reciterId}/{NNN}.mp3` (dev uses .m4a because macOS afconvert encodes AAC, not MP3).
+- Resume positions are keyed per reciter+surah (`audio.resume.v1.*`) so a later reciter change never resumes into the wrong recording; resume skips the first 10s and last 5s (restart beats mid-word jumps); position cleared on finish.
+- Lock-screen controls via `setActiveForLockScreen` with surah transliteration as title; background playback via UIBackgroundModes audio + `shouldPlayInBackground`. Real-device verification is on TESTPLAN's device pass.

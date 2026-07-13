@@ -26,6 +26,8 @@ const MAPPING = {
   checkmark: 'check',
   xmark: 'close',
   magnifyingglass: 'search',
+  'play.fill': 'play-arrow',
+  'pause.fill': 'pause',
 } as IconMapping;
 
 /**

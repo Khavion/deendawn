@@ -12,7 +12,8 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.khavion.deendawn",
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+        "UIBackgroundModes": ["audio"]
       }
     },
     "android": {
