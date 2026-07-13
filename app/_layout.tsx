@@ -85,7 +85,11 @@ export default function RootLayout() {
           <ThemeProvider value={navTheme}>
             <Stack>
               <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              <Stack.Screen name="surah/[id]" options={{ headerBackTitle: 'Quran' }} />
+              <Stack.Screen
+                name="surah/[id]"
+                options={{ headerBackButtonDisplayMode: 'minimal' }}
+              />
+              <Stack.Screen name="calendar" options={{ headerBackButtonDisplayMode: 'minimal' }} />
             </Stack>
             <FullAdhanPlayer />
             <StatusBar style="auto" />

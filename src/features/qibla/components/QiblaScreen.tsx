@@ -145,7 +145,7 @@ export function QiblaScreen() {
           {/* Compass rose: N marker rotates opposite the device heading. */}
           <View style={[styles.rose, { transform: [{ rotate: `${roseRotation}deg` }] }]}>
             <ThemedText type="caption" style={[styles.north, { color: t.textSecondary }]}>
-              N
+              {tr('qibla.northMarker')}
             </ThemedText>
           </View>
           {/* Needle points toward the qibla relative to the device. */}

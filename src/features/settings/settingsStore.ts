@@ -19,6 +19,10 @@ export interface AppSettings {
   method: MethodKey | 'auto';
   madhab: MadhabKey;
   highLatRule: HighLatRuleKey;
+  /** Umm al-Qura ±1 day adjustment for local moonsighting. */
+  hijriOffset: -1 | 0 | 1;
+  /** Minutes before Fajr for the Ramadan suhoor reminder; null = off. */
+  suhoorReminderMinutes: number | null;
 }
 
 export const DEFAULT_SETTINGS: AppSettings = {
@@ -26,6 +30,8 @@ export const DEFAULT_SETTINGS: AppSettings = {
   method: 'auto',
   madhab: 'shafi',
   highLatRule: 'auto',
+  hijriOffset: 0,
+  suhoorReminderMinutes: null,
 };
 
 const KEY = 'settings.v1';
@@ -58,6 +64,18 @@ export function parseSettings(raw: string | null): AppSettings {
   if (o.madhab === 'shafi' || o.madhab === 'hanafi') out.madhab = o.madhab;
   if ((HIGH_LAT_RULE_KEYS as readonly string[]).includes(o.highLatRule as string)) {
     out.highLatRule = o.highLatRule as HighLatRuleKey;
+  }
+  if (o.hijriOffset === -1 || o.hijriOffset === 0 || o.hijriOffset === 1) {
+    out.hijriOffset = o.hijriOffset;
+  }
+  if (
+    o.suhoorReminderMinutes === null ||
+    (typeof o.suhoorReminderMinutes === 'number' &&
+      Number.isInteger(o.suhoorReminderMinutes) &&
+      o.suhoorReminderMinutes >= 5 &&
+      o.suhoorReminderMinutes <= 120)
+  ) {
+    out.suhoorReminderMinutes = o.suhoorReminderMinutes as number | null;
   }
   return out;
 }

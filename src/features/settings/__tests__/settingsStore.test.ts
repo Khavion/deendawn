@@ -29,12 +29,16 @@ describe('parseSettings', () => {
       method: 'Karachi',
       madhab: 'hanafi',
       highLatRule: 'middleofthenight',
+      hijriOffset: 1,
+      suhoorReminderMinutes: 30,
     });
     expect(loadSettings(store)).toEqual({
       location: { type: 'manual', cityId: 'houston-us' },
       method: 'Karachi',
       madhab: 'hanafi',
       highLatRule: 'middleofthenight',
+      hijriOffset: 1,
+      suhoorReminderMinutes: 30,
     });
   });
 
@@ -45,6 +49,8 @@ describe('parseSettings', () => {
         method: 'MadeUpMethod',
         madhab: 'other',
         highLatRule: 'nope',
+        hijriOffset: 5,
+        suhoorReminderMinutes: 900,
         extraField: true,
       })
     );

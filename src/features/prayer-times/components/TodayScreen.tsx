@@ -4,6 +4,7 @@ import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { CityPickerModal } from './CityPickerModal';
+import { isRamadan, toHijri } from '../../hijri/hijri';
 import { computeDayTimes, isValidTime, nextPrayer } from '../engine';
 import { formatTimeInZone } from '../format';
 import { PRAYER_NAMES } from '../types';
@@ -113,8 +114,37 @@ export function TodayScreen() {
               month: 'long',
               day: 'numeric',
             })}
+            {' · '}
+            {(() => {
+              const h = toHijri(now, settings.hijriOffset);
+              return `${h.day} ${tr(h.monthKey)} ${h.year}`;
+            })()}
           </ThemedText>
         </View>
+
+        {times && isRamadan(now, settings.hijriOffset) && (
+          <View
+            style={[styles.ramadanCard, { backgroundColor: t.ochreSoft }]}
+            testID="ramadan-card"
+          >
+            <View style={styles.ramadanRow}>
+              <ThemedText type="defaultSemiBold" style={{ color: t.ochre }}>
+                {tr('today.suhoorEnds')}
+              </ThemedText>
+              <ThemedText type="defaultSemiBold" style={{ color: t.ochre }}>
+                {isValidTime(times.fajr) ? formatTimeInZone(times.fajr) : '—'}
+              </ThemedText>
+            </View>
+            <View style={styles.ramadanRow}>
+              <ThemedText type="defaultSemiBold" style={{ color: t.ochre }}>
+                {tr('today.iftar')}
+              </ThemedText>
+              <ThemedText type="defaultSemiBold" style={{ color: t.ochre }}>
+                {isValidTime(times.maghrib) ? formatTimeInZone(times.maghrib) : '—'}
+              </ThemedText>
+            </View>
+          </View>
+        )}
 
         {next && (
           <View style={[styles.nextCard, { backgroundColor: t.accent }]}>
@@ -195,6 +225,13 @@ const styles = StyleSheet.create({
   },
   header: { gap: spacing.xs, marginBottom: spacing.l },
   cityRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.s - 2 },
+  ramadanCard: {
+    borderRadius: radius.card,
+    padding: spacing.l,
+    gap: spacing.s,
+    marginBottom: spacing.m,
+  },
+  ramadanRow: { flexDirection: 'row', justifyContent: 'space-between' },
   nextCard: {
     borderRadius: radius.card,
     padding: spacing.xl,

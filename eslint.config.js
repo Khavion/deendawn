@@ -20,7 +20,7 @@ module.exports = defineConfig([
         'error',
         {
           noStrings: true,
-          allowedStrings: ['★', '☆', '—', '·', ':', '✓', '(', ')', '.', ',', '?'],
+          allowedStrings: ['★', '☆', '—', '·', ':', '✓', '(', ')', '.', ',', '?', '‹', '›'],
           ignoreProps: true,
           noAttributeStrings: false,
         },

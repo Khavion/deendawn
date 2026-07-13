@@ -107,6 +107,43 @@ describe('planNotifications', () => {
   });
 });
 
+describe('suhoor reminder (Ramadan mode)', () => {
+  // 1 Ramadan 1447 = 2026-02-18 (verified in hijri tests).
+  const IN_RAMADAN = new Date(2026, 1, 20, 3, 0, 0);
+  const OUT_OF_RAMADAN = new Date(2026, 6, 13, 3, 0, 0);
+
+  test('adds a pre-fajr reminder 30 min before fajr on Ramadan days only', () => {
+    const plan = basePlan({ now: IN_RAMADAN, suhoorReminderMinutes: 30 });
+    const suhoors = plan.filter((p) => p.kind === 'suhoor');
+    expect(suhoors.length).toBeGreaterThanOrEqual(7);
+    for (const s of suhoors) {
+      expect(s.id).toMatch(/^suhoor-\d{4}-\d{2}-\d{2}$/);
+      const fajr = plan.find(
+        (p) => p.kind === 'adhan' && p.prayer === 'fajr' && p.id.endsWith(s.id.slice(7))
+      );
+      expect(fajr).toBeDefined();
+      expect(fajr!.fireDate.getTime() - s.fireDate.getTime()).toBe(30 * 60_000);
+    }
+  });
+
+  test('no reminders outside Ramadan or when disabled', () => {
+    expect(
+      basePlan({ now: OUT_OF_RAMADAN, suhoorReminderMinutes: 30 }).filter(
+        (p) => p.kind === 'suhoor'
+      )
+    ).toHaveLength(0);
+    expect(basePlan({ now: IN_RAMADAN }).filter((p) => p.kind === 'suhoor')).toHaveLength(0);
+    expect(
+      basePlan({ now: IN_RAMADAN, suhoorReminderMinutes: null }).filter((p) => p.kind === 'suhoor')
+    ).toHaveLength(0);
+  });
+
+  test('total plan stays within the cap with reminders on', () => {
+    const plan = basePlan({ now: IN_RAMADAN, suhoorReminderMinutes: 30, days: 30 });
+    expect(plan.length).toBeLessThanOrEqual(NOTIFICATION_CAP);
+  });
+});
+
 describe('diffPlans', () => {
   test('unchanged pending entries are kept, stale ones cancelled, new ones scheduled', () => {
     const plan = basePlan();

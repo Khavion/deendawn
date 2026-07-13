@@ -32,6 +32,15 @@ export async function ensurePermission(request: boolean): Promise<boolean> {
 
 function toContent(p: PlannedNotification): Notifications.NotificationContentInput {
   const prayerName = i18n.t(`prayers.${p.prayer}`);
+  if (p.kind === 'suhoor') {
+    return {
+      title: i18n.t('notifications.suhoorTitle'),
+      body: i18n.t('notifications.suhoorBody'),
+      sound: true,
+      interruptionLevel: 'timeSensitive',
+      data: { prayer: p.prayer, plannedId: p.id, fullAdhan: false },
+    };
+  }
   // 'fullAdhan' plays the bundled clip at fire time; the app plays the full
   // recording only when opened from the notification (iOS limitation — the
   // picker says exactly that).
@@ -73,6 +82,8 @@ export async function rescheduleAll(
       settings: resolvePrayerConfig(settings),
       prefs,
       now,
+      suhoorReminderMinutes: settings.suhoorReminderMinutes,
+      hijriOffset: settings.hijriOffset,
     });
 
     const pending = await Notifications.getAllScheduledNotificationsAsync();
@@ -86,7 +97,7 @@ export async function rescheduleAll(
           fireDate: fireMs ? new Date(fireMs) : new Date(0),
         };
       })
-      .filter((n) => n.id.match(/^(fajr|dhuhr|asr|maghrib|isha)-\d{4}-\d{2}-\d{2}$/));
+      .filter((n) => n.id.match(/^(fajr|dhuhr|asr|maghrib|isha|suhoor)-\d{4}-\d{2}-\d{2}$/));
 
     const actions = diffPlans(pendingPlanned, plan);
 
@@ -120,7 +131,7 @@ export async function cancelAllAdhans(): Promise<void> {
   const pending = await Notifications.getAllScheduledNotificationsAsync();
   for (const n of pending) {
     const id = (n.content.data?.plannedId as string) ?? n.identifier;
-    if (id.match(/^(fajr|dhuhr|asr|maghrib|isha)-\d{4}-\d{2}-\d{2}$/)) {
+    if (id.match(/^(fajr|dhuhr|asr|maghrib|isha|suhoor)-\d{4}-\d{2}-\d{2}$/)) {
       await Notifications.cancelScheduledNotificationAsync(n.identifier);
     }
   }

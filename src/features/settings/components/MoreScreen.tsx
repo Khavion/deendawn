@@ -1,3 +1,4 @@
+import { useRouter } from 'expo-router';
 import * as Updates from 'expo-updates';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -109,10 +110,11 @@ function PickerModal<T extends string>({
 export function MoreScreen() {
   const insets = useSafeAreaInsets();
   const { t } = useTranslation();
+  const router = useRouter();
   const { settings, update, store } = useSettings();
-  const [open, setOpen] = useState<null | 'city' | 'method' | 'madhab' | 'highlat' | 'language'>(
-    null
-  );
+  const [open, setOpen] = useState<
+    null | 'city' | 'method' | 'madhab' | 'highlat' | 'language' | 'hijri' | 'suhoor'
+  >(null);
   const [prefs, setPrefs] = useState(() => loadNotificationPrefs(store));
   const [nightWarm, setNightWarm] = useState(() => loadNightWarm(store));
   const [soundPickerFor, setSoundPickerFor] = useState<AdhanPrayer | null>(null);
@@ -198,6 +200,29 @@ export function MoreScreen() {
       title: t('more.language'),
       value: nativeName(currentLanguage),
       onPress: () => setOpen('language'),
+    },
+    {
+      id: 'calendar',
+      title: t('more.calendar'),
+      value: t('calendar.disclaimer').split('—')[0].trim(),
+      onPress: () => router.push('/calendar'),
+    },
+    {
+      id: 'hijri',
+      title: t('more.hijriOffset'),
+      value: t(
+        `more.hijriOffset_${settings.hijriOffset === -1 ? 'minus1' : settings.hijriOffset === 1 ? 'plus1' : '0'}`
+      ),
+      onPress: () => setOpen('hijri'),
+    },
+    {
+      id: 'suhoor',
+      title: t('more.suhoorReminder'),
+      value:
+        settings.suhoorReminderMinutes === null
+          ? t('more.suhoorReminder_off')
+          : t('more.suhoorReminder_minutes', { count: settings.suhoorReminderMinutes }),
+      onPress: () => setOpen('suhoor'),
     },
   ];
 
@@ -297,6 +322,40 @@ export function MoreScreen() {
         options={HIGH_LAT_RULES.map((k) => ({ key: k, label: t(`more.highLat_${k}`) }))}
         selected={settings.highLatRule}
         onSelect={(highLatRule) => update({ highLatRule })}
+        onClose={() => setOpen(null)}
+      />
+      <PickerModal
+        visible={open === 'hijri'}
+        title={t('more.hijriOffset')}
+        closeLabel={t('common.close')}
+        hint={t('calendar.disclaimer')}
+        options={[
+          { key: '-1', label: t('more.hijriOffset_minus1') },
+          { key: '0', label: t('more.hijriOffset_0') },
+          { key: '1', label: t('more.hijriOffset_plus1') },
+        ]}
+        selected={String(settings.hijriOffset) as '-1' | '0' | '1'}
+        onSelect={(k) => update({ hijriOffset: Number(k) as -1 | 0 | 1 })}
+        onClose={() => setOpen(null)}
+      />
+      <PickerModal
+        visible={open === 'suhoor'}
+        title={t('more.suhoorReminder')}
+        closeLabel={t('common.close')}
+        options={[
+          { key: 'off', label: t('more.suhoorReminder_off') },
+          ...[20, 30, 45, 60].map((n) => ({
+            key: String(n),
+            label: t('more.suhoorReminder_minutes', { count: n }),
+          })),
+        ]}
+        selected={
+          settings.suhoorReminderMinutes === null ? 'off' : String(settings.suhoorReminderMinutes)
+        }
+        onSelect={(k) => {
+          update({ suhoorReminderMinutes: k === 'off' ? null : Number(k) });
+          void rescheduleAll(new Date(), store);
+        }}
         onClose={() => setOpen(null)}
       />
       <PickerModal

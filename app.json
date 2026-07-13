@@ -58,7 +58,8 @@
           "locationWhenInUsePermission": "DeenDawn uses your location only on this device to point the qibla compass and compute prayer times. It is never transmitted anywhere."
         }
       ],
-      "expo-audio"
+      "expo-audio",
+      "expo-asset"
     ],
     "experiments": {
       "typedRoutes": true,

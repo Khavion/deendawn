@@ -1,3 +1,4 @@
+import { isRamadan } from '../hijri/hijri';
 import { computeDayTimes, isValidTime } from '../prayer-times/engine';
 import { GeoCoordinates, PrayerSettings } from '../prayer-times/types';
 
@@ -18,11 +19,13 @@ export const DEFAULT_NOTIFICATION_PREFS: NotificationPrefs = {
 };
 
 export interface PlannedNotification {
-  /** Deterministic id (`fajr-2026-07-13`) so plans can be diffed across runs. */
+  /** Deterministic id (`fajr-2026-07-13`, `suhoor-2026-02-19`). */
   id: string;
   prayer: AdhanPrayer;
   fireDate: Date;
   sound: SoundKey;
+  /** Ramadan pre-Fajr reminder vs regular adhan. */
+  kind: 'adhan' | 'suhoor';
 }
 
 /**
@@ -49,6 +52,9 @@ export function planNotifications(opts: {
   now: Date;
   days?: number;
   cap?: number;
+  /** Ramadan suhoor reminder: minutes before Fajr, null/undefined = off. */
+  suhoorReminderMinutes?: number | null;
+  hijriOffset?: -1 | 0 | 1;
 }): PlannedNotification[] {
   const { coords, settings, prefs, now } = opts;
   const days = opts.days ?? MIN_DAYS_COVERED + 1;
@@ -67,7 +73,21 @@ export function planNotifications(opts: {
         prayer,
         fireDate: t,
         sound: prefs.sound[prayer],
+        kind: 'adhan',
       });
+    }
+    const suhoorMin = opts.suhoorReminderMinutes;
+    if (suhoorMin && isValidTime(times.fajr) && isRamadan(day, opts.hijriOffset ?? 0)) {
+      const fireDate = new Date(times.fajr.getTime() - suhoorMin * 60_000);
+      if (fireDate.getTime() > now.getTime()) {
+        planned.push({
+          id: `suhoor-${dateKey(day)}`,
+          prayer: 'fajr',
+          fireDate,
+          sound: 'default',
+          kind: 'suhoor',
+        });
+      }
     }
   }
   planned.sort((a, b) => a.fireDate.getTime() - b.fireDate.getTime());
