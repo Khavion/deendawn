@@ -67,3 +67,16 @@ export function useTheme(): ThemeContextValue {
   if (!ctx) throw new Error('useTheme must be used within <AppThemeProvider>');
   return ctx;
 }
+
+/**
+ * Just the resolved mode, with a graceful fallback to the system appearance
+ * when no provider is present (mirrors useTokens). Use this in components that
+ * only need the mode for styling — it never throws, so screen tests don't have
+ * to wrap in AppThemeProvider.
+ */
+export function useThemeMode(): ThemeMode {
+  const ctx = useContext(ThemeContext);
+  const system = useColorScheme() ?? 'light';
+  if (ctx) return ctx.mode;
+  return system === 'dark' ? 'dark' : 'light';
+}

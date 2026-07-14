@@ -246,6 +246,83 @@ export const duration = { fast: 200, normal: 250, slow: 300 } as const;
 /** Cap Dynamic Type scaling so layouts degrade gracefully, not brokenly. */
 export const MAX_FONT_SCALE = 1.4;
 
+// --- Rich design tokens (docs/RICH_DESIGN_SPEC.md) ------------------------
+// Warmer/richer evolution: soft depth, dawn-sky ambient gradients, a gold
+// frame on the one featured card per screen, illuminated gold section rules.
+// Values extracted from the approved design. nightWarm maps to the dark set.
+
+export type ElevationStep = 'e1' | 'e2' | 'e3';
+export type DayPeriod = 'fajr' | 'day' | 'asr' | 'maghrib' | 'isha';
+
+interface Shadow {
+  shadowColor: string;
+  shadowOffset: { width: number; height: number };
+  shadowOpacity: number;
+  shadowRadius: number;
+  elevation: number;
+}
+
+/** Collapse the 3 themes to the two depth families the design defines. */
+export function richMode(mode: ThemeMode): 'light' | 'dark' {
+  return mode === 'light' ? 'light' : 'dark';
+}
+
+/**
+ * 3-step elevation. RN allows one shadow per View, so each step is a single
+ * tuned shadow approximating the design's two-layer depth. E3 (the featured
+ * card) casts a faint GREEN-tinted shadow (#1C372C) per the spec.
+ */
+export const elevation: Record<'light' | 'dark', Record<ElevationStep, Shadow>> = {
+  light: {
+    e1: { shadowColor: '#20242A', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.05, shadowRadius: 3, elevation: 1 },
+    e2: { shadowColor: '#20242A', shadowOffset: { width: 0, height: 6 }, shadowOpacity: 0.1, shadowRadius: 14, elevation: 4 },
+    e3: { shadowColor: '#1C372C', shadowOffset: { width: 0, height: 12 }, shadowOpacity: 0.2, shadowRadius: 22, elevation: 9 },
+  },
+  dark: {
+    e1: { shadowColor: '#000000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.3, shadowRadius: 3, elevation: 2 },
+    e2: { shadowColor: '#000000', shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.4, shadowRadius: 22, elevation: 6 },
+    e3: { shadowColor: '#000000', shadowOffset: { width: 0, height: 16 }, shadowOpacity: 0.5, shadowRadius: 28, elevation: 12 },
+  },
+};
+
+/** Ambient "dawn-sky" gradient stops per prayer period (top of screen → canvas). */
+export const ambientGradient: Record<'light' | 'dark', Record<DayPeriod, string[]>> = {
+  light: {
+    fajr: ['#F0D8BE', '#F3E5D4', '#F6F0E7', '#F7F6F2'],
+    day: ['#F4EBE0', '#F7F6F2'],
+    asr: ['#F4E7D7', '#F7F6F2'],
+    maghrib: ['#F3E6D6', '#F7F6F2'],
+    isha: ['#F4E7D7', '#F7F6F2'],
+  },
+  dark: {
+    fajr: ['#232A38', '#15181D'],
+    day: ['#1E242F', '#15181D'],
+    asr: ['#1F2530', '#15181D'],
+    maghrib: ['#222836', '#15181D'],
+    isha: ['#222836', '#191E27', '#15181D'],
+  },
+};
+
+/** The one featured card's gradient fill + the text color that reads on it. */
+export const featuredGradient: Record<'light' | 'dark', string[]> = {
+  light: ['#2C5646', '#23402F'],
+  dark: ['#78AB93', '#66997F'],
+};
+export const textOnFeatured: Record<'light' | 'dark', string> = {
+  light: '#F7F6F2',
+  dark: '#15181D',
+};
+export const dimOnFeatured: Record<'light' | 'dark', string> = {
+  light: 'rgba(247,246,242,0.75)',
+  dark: 'rgba(21,24,29,0.66)',
+};
+
+/** Illuminated gold hairline rule (transparent → gold → transparent). */
+export const goldRuleGradient: Record<'light' | 'dark', string[]> = {
+  light: ['rgba(138,100,48,0)', 'rgba(138,100,48,0.45)', 'rgba(138,100,48,0)'],
+  dark: ['rgba(198,155,95,0)', 'rgba(198,155,95,0.5)', 'rgba(198,155,95,0)'],
+};
+
 /**
  * Tajweed rule colors (light/dark). Hues follow a common printed-mushaf scheme;
  * the rule→color MAPPING is flagged SCHOLAR-REVIEW (see src/features/quran/
