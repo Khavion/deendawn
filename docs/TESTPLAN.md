@@ -22,4 +22,5 @@ Checks that cannot run in the simulator; verify on a physical iPhone before exte
 - [ ] IAP sandbox purchase + restore on device.
 - [ ] Cold start < 2s on iPhone 12-class hardware.
 - [ ] Navigation frame profile on oldest supported hardware: open al-Baqara from the surah list, switch all tabs, language-switch restart — no visible hitching (E7).
+- [ ] Prayer-countdown widget (docs/WIDGET.md): add to Home Screen, confirm next prayer + live countdown, verify timeline flips at a prayer boundary and across midnight without opening the app.
 - [ ] True airplane-mode pass on device: enable airplane mode, run through prayer times, Quran, Ask, qibla, tasbih, zakat, calendar (mirrors e2e/offline.yaml).
