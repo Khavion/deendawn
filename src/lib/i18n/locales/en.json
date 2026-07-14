@@ -247,7 +247,8 @@
     "privacyBody": "DeenDawn keeps everything on your phone. No account, no ads, no analytics, no tracking. Your location is used only on this device for prayer times and the qibla, and is never transmitted. The only network use is streaming recitation audio you request.",
     "sources": "Texts, translations & fonts",
     "devOnly": "Development placeholder — final selection pending review",
-    "madeWith": "Free forever. Built with care for the ummah."
+    "madeWith": "Free forever. Built with care for the ummah.",
+    "publisher": "A Khavion Apps product"
   },
   "onboarding": {
     "welcomeTitle": "As-salamu alaykum",

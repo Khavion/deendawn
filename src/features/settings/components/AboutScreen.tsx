@@ -32,9 +32,12 @@ export function AboutScreen() {
     <View style={[styles.container, { backgroundColor: t.bgCanvas }]}>
       <Stack.Screen options={{ title: tr('about.title') }} />
       <ScrollView contentContainerStyle={styles.scroll}>
-        <ThemedText type="title">DeenDawn</ThemedText>
+        <ThemedText type="title">Deen Dawn</ThemedText>
         <ThemedText type="caption" style={{ color: t.textSecondary }}>
           {tr('about.version', { version })}
+        </ThemedText>
+        <ThemedText type="caption" style={{ color: t.textSecondary }}>
+          {tr('about.publisher')}
         </ThemedText>
 
         <View style={[styles.card, { backgroundColor: t.accentSoft }]}>
