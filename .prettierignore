@@ -9,3 +9,6 @@ node_modules/
 dist/
 ios/
 android/
+
+# Bundled data artifact — keep minified
+assets/tajweed.json
