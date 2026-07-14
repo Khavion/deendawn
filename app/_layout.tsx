@@ -21,9 +21,9 @@ import React, { Suspense, useMemo } from 'react';
 import { enableFreeze, enableScreens } from 'react-native-screens';
 import 'react-native-reanimated';
 
-import { fonts, palette } from '@/src/lib/theme/tokens';
+import { AppThemeProvider, useTheme } from '@/src/lib/theme/ThemeProvider';
+import { fonts, palette, ThemeMode } from '@/src/lib/theme/tokens';
 
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import { FullAdhanPlayer } from '@/src/features/notifications/FullAdhanPlayer';
 import { registerBackgroundRefresh } from '@/src/features/notifications/backgroundRefresh';
 import { installForegroundHandler } from '@/src/features/notifications/service';
@@ -51,33 +51,58 @@ function NotificationScheduler() {
   return null;
 }
 
+/** Navigation chrome derived from the resolved theme mode (never pure black). */
+function buildNavTheme(mode: ThemeMode) {
+  const dark = mode !== 'light';
+  const base = dark ? DarkTheme : DefaultTheme;
+  const t = palette[mode];
+  return {
+    ...base,
+    colors: {
+      ...base.colors,
+      primary: t.accent,
+      background: t.bgCanvas,
+      card: t.bgCanvas,
+      text: t.textPrimary,
+      border: t.border,
+      notification: t.accent,
+    },
+    fonts: {
+      ...base.fonts,
+      regular: { ...base.fonts.regular, fontFamily: fonts.sans },
+      medium: { ...base.fonts.medium, fontFamily: fonts.sansMedium },
+      bold: { ...base.fonts.bold, fontFamily: fonts.sansSemiBold },
+      heavy: { ...base.fonts.heavy, fontFamily: fonts.sansSemiBold },
+    },
+  };
+}
+
+/** Navigation subtree — reads the app theme so headers follow manual overrides. */
+function ThemedNavigation() {
+  const { mode } = useTheme();
+  const navTheme = useMemo(() => buildNavTheme(mode), [mode]);
+  return (
+    <ThemeProvider value={navTheme}>
+      <Stack>
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="surah/[id]" options={{ headerBackButtonDisplayMode: 'minimal' }} />
+        <Stack.Screen name="calendar" options={{ headerBackButtonDisplayMode: 'minimal' }} />
+        <Stack.Screen name="tasbih" options={{ headerBackButtonDisplayMode: 'minimal' }} />
+        <Stack.Screen name="zakat" options={{ headerBackButtonDisplayMode: 'minimal' }} />
+        <Stack.Screen name="library" options={{ headerBackButtonDisplayMode: 'minimal' }} />
+        <Stack.Screen name="about" options={{ headerBackButtonDisplayMode: 'minimal' }} />
+        <Stack.Screen name="tips" options={{ headerBackButtonDisplayMode: 'minimal' }} />
+        <Stack.Screen name="onboarding" options={{ headerShown: false, gestureEnabled: false }} />
+        <Stack.Screen name="thinker/[key]" options={{ headerBackButtonDisplayMode: 'minimal' }} />
+        <Stack.Screen name="work/[id]" options={{ headerBackButtonDisplayMode: 'minimal' }} />
+      </Stack>
+      <FullAdhanPlayer />
+      <StatusBar style={mode === 'light' ? 'dark' : 'light'} />
+    </ThemeProvider>
+  );
+}
+
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  // Navigation chrome derives from the token palettes (never pure black).
-  const navTheme = useMemo(() => {
-    const dark = colorScheme === 'dark';
-    const base = dark ? DarkTheme : DefaultTheme;
-    const t = palette[dark ? 'dark' : 'light'];
-    return {
-      ...base,
-      colors: {
-        ...base.colors,
-        primary: t.accent,
-        background: t.bgCanvas,
-        card: t.bgCanvas,
-        text: t.textPrimary,
-        border: t.border,
-        notification: t.accent,
-      },
-      fonts: {
-        ...base.fonts,
-        regular: { ...base.fonts.regular, fontFamily: fonts.sans },
-        medium: { ...base.fonts.medium, fontFamily: fonts.sansMedium },
-        bold: { ...base.fonts.bold, fontFamily: fonts.sansSemiBold },
-        heavy: { ...base.fonts.heavy, fontFamily: fonts.sansSemiBold },
-      },
-    };
-  }, [colorScheme]);
   const [fontsLoaded] = useFonts({
     // Arabic faces stay pinned content-pipeline artifacts (SIL OFL 1.1).
     AmiriQuran: require('@/assets/fonts/AmiriQuran.ttf'),
@@ -99,41 +124,18 @@ export default function RootLayout() {
 
   return (
     <SettingsProvider>
-      <NotificationScheduler />
-      <Suspense fallback={null}>
-        <SQLiteProvider
-          databaseName="quran.db"
-          assetSource={{ assetId: require('@/assets/db/quran.db') }}
-          useSuspense
-        >
-          <ThemeProvider value={navTheme}>
-            <Stack>
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              <Stack.Screen
-                name="surah/[id]"
-                options={{ headerBackButtonDisplayMode: 'minimal' }}
-              />
-              <Stack.Screen name="calendar" options={{ headerBackButtonDisplayMode: 'minimal' }} />
-              <Stack.Screen name="tasbih" options={{ headerBackButtonDisplayMode: 'minimal' }} />
-              <Stack.Screen name="zakat" options={{ headerBackButtonDisplayMode: 'minimal' }} />
-              <Stack.Screen name="library" options={{ headerBackButtonDisplayMode: 'minimal' }} />
-              <Stack.Screen name="about" options={{ headerBackButtonDisplayMode: 'minimal' }} />
-              <Stack.Screen name="tips" options={{ headerBackButtonDisplayMode: 'minimal' }} />
-              <Stack.Screen
-                name="onboarding"
-                options={{ headerShown: false, gestureEnabled: false }}
-              />
-              <Stack.Screen
-                name="thinker/[key]"
-                options={{ headerBackButtonDisplayMode: 'minimal' }}
-              />
-              <Stack.Screen name="work/[id]" options={{ headerBackButtonDisplayMode: 'minimal' }} />
-            </Stack>
-            <FullAdhanPlayer />
-            <StatusBar style="auto" />
-          </ThemeProvider>
-        </SQLiteProvider>
-      </Suspense>
+      <AppThemeProvider>
+        <NotificationScheduler />
+        <Suspense fallback={null}>
+          <SQLiteProvider
+            databaseName="quran.db"
+            assetSource={{ assetId: require('@/assets/db/quran.db') }}
+            useSuspense
+          >
+            <ThemedNavigation />
+          </SQLiteProvider>
+        </Suspense>
+      </AppThemeProvider>
     </SettingsProvider>
   );
 }
