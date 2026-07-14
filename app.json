@@ -13,7 +13,9 @@
       "bundleIdentifier": "com.khavion.deendawn",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false,
-        "UIBackgroundModes": ["audio"]
+        "UIBackgroundModes": [
+          "audio"
+        ]
       }
     },
     "android": {
@@ -24,7 +26,8 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.khavion.deendawn"
     },
     "web": {
       "output": "static",
@@ -50,7 +53,9 @@
       [
         "expo-notifications",
         {
-          "sounds": ["./assets/sounds/adhan-clip-placeholder.wav"]
+          "sounds": [
+            "./assets/sounds/adhan_clip_placeholder.wav"
+          ]
         }
       ],
       [

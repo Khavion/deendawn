@@ -126,9 +126,9 @@ describe('rescheduleAll', () => {
     }[][];
     const fajr = calls.find(([r]) => r.identifier.startsWith('fajr-'))![0];
     const dhuhr = calls.find(([r]) => r.identifier.startsWith('dhuhr-'))![0];
-    expect(fajr.content.sound).toBe('adhan-clip-placeholder.wav');
+    expect(fajr.content.sound).toBe('adhan_clip_placeholder.wav');
     expect(fajr.content.data?.fullAdhan).toBe(false);
-    expect(dhuhr.content.sound).toBe('adhan-clip-placeholder.wav');
+    expect(dhuhr.content.sound).toBe('adhan_clip_placeholder.wav');
     expect(dhuhr.content.data?.fullAdhan).toBe(true);
   });
 

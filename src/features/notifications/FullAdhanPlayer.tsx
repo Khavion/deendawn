@@ -43,7 +43,7 @@ export function FullAdhanPlayer() {
       void (async () => {
         await setAudioModeAsync({ playsInSilentMode: true });
         player.current?.remove();
-        player.current = createAudioPlayer(require('@/assets/sounds/adhan-full-placeholder.wav'));
+        player.current = createAudioPlayer(require('@/assets/sounds/adhan_full_placeholder.wav'));
         player.current.play();
         setPlaying(prayer);
       })();

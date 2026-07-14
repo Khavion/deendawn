@@ -48,7 +48,7 @@ function toContent(p: PlannedNotification): Notifications.NotificationContentInp
     p.sound === 'silent'
       ? undefined
       : p.sound === 'clip' || p.sound === 'fullAdhan'
-        ? 'adhan-clip-placeholder.wav'
+        ? 'adhan_clip_placeholder.wav'
         : true;
   return {
     title: prayerName,

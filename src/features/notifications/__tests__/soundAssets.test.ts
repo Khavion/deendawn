@@ -30,8 +30,8 @@ describe('notification sound assets', () => {
   const wavs = readdirSync(SOUNDS_DIR).filter((f) => f.endsWith('.wav'));
 
   test('the bundled adhan clip exists', () => {
-    expect(wavs).toContain('adhan-clip-placeholder.wav');
-    expect(wavs).toContain('adhan-full-placeholder.wav');
+    expect(wavs).toContain('adhan_clip_placeholder.wav');
+    expect(wavs).toContain('adhan_full_placeholder.wav');
   });
 
   test.each(wavs.filter((f) => f.includes('clip')))(
