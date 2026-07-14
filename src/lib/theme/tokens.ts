@@ -158,6 +158,12 @@ export const fonts = {
  * Latin type scale (DERIVED — see file header). Each variant is a ready style.
  * Eyebrow tracking follows the brief's 0.14-0.16em → absolute letterSpacing at
  * its size (~1.9 at 12pt). Newsreader italic carries the single accent word.
+ *
+ * `subtitle` / `reading` / `bodyStrong` / `link` carry the legacy ThemedText
+ * faces (serif subheading, editorial serif reading, semibold emphasis, tinted
+ * link) into the single AppText primitive — metrics are the same values those
+ * styles already used, not new ones. `reading` keeps Newsreader for long-form
+ * translations and editorial passages (the brief lists Newsreader for reading).
  */
 export const latinType = {
   display: {
@@ -178,8 +184,32 @@ export const latinType = {
     lineHeight: 28,
     letterSpacing: -0.2,
   },
+  subtitle: {
+    fontFamily: fonts.serifMedium,
+    fontSize: fontSize.h2,
+    lineHeight: 28,
+    letterSpacing: -0.2,
+  },
+  reading: {
+    fontFamily: fonts.serif,
+    fontSize: fontSize.body,
+    lineHeight: 26,
+    letterSpacing: 0,
+  },
   body: {
     fontFamily: fonts.sans,
+    fontSize: fontSize.body,
+    lineHeight: 24,
+    letterSpacing: 0,
+  },
+  bodyStrong: {
+    fontFamily: fonts.sansSemiBold,
+    fontSize: fontSize.body,
+    lineHeight: 24,
+    letterSpacing: 0,
+  },
+  link: {
+    fontFamily: fonts.sansMedium,
     fontSize: fontSize.body,
     lineHeight: 24,
     letterSpacing: 0,

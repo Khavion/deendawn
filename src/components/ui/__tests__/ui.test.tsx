@@ -2,31 +2,61 @@ import { fireEvent, render } from '@testing-library/react-native';
 import React from 'react';
 
 import { AppText, Button, Card, Divider, Screen } from '..';
+import { fonts, palette } from '@/src/lib/theme/tokens';
 
 jest.mock('react-native-safe-area-context', () => ({
   SafeAreaView: ({ children }: { children: React.ReactNode }) => children,
 }));
 
+const VARIANTS = [
+  'display',
+  'displayAccent',
+  'title',
+  'subtitle',
+  'reading',
+  'body',
+  'bodyStrong',
+  'link',
+  'eyebrow',
+  'caption',
+] as const;
+
 describe('AppText', () => {
   it('renders every variant in one tree', async () => {
     const { getByText } = await render(
       <>
-        <AppText variant="display">display</AppText>
-        <AppText variant="displayAccent">displayAccent</AppText>
-        <AppText variant="title">title</AppText>
-        <AppText variant="body">body</AppText>
-        <AppText variant="eyebrow">eyebrow</AppText>
-        <AppText variant="caption">caption</AppText>
+        {VARIANTS.map((v) => (
+          <AppText key={v} variant={v}>
+            {v}
+          </AppText>
+        ))}
       </>
     );
-    for (const label of ['display', 'displayAccent', 'title', 'body', 'eyebrow', 'caption']) {
-      expect(getByText(label)).toBeTruthy();
+    for (const v of VARIANTS) {
+      expect(getByText(v)).toBeTruthy();
     }
   });
 
   it('applies an explicit color override', async () => {
     const { getByText } = await render(<AppText color="#123456">Tinted</AppText>);
     expect(JSON.stringify(getByText('Tinted').props.style)).toContain('#123456');
+  });
+
+  it('carries the legacy faces: reading is serif, bodyStrong is semibold sans', async () => {
+    const { getByText } = await render(
+      <>
+        <AppText variant="reading">reads</AppText>
+        <AppText variant="bodyStrong">strong</AppText>
+      </>
+    );
+    expect(JSON.stringify(getByText('reads').props.style)).toContain(fonts.serif);
+    expect(JSON.stringify(getByText('strong').props.style)).toContain(fonts.sansSemiBold);
+  });
+
+  it('link defaults to the primary/accent color', async () => {
+    // No ThemeProvider in this tree → useTokens resolves the light palette.
+    const { getByText } = await render(<AppText variant="link">tap</AppText>);
+    expect(JSON.stringify(getByText('tap').props.style)).toContain(palette.light.accent);
   });
 });
 

@@ -4,7 +4,17 @@ import { Text, type TextProps } from 'react-native';
 import { fonts, latinType, MAX_FONT_SCALE, URDU_LINE_HEIGHT_FACTOR } from '@/src/lib/theme/tokens';
 import { useTokens } from '@/src/lib/theme/useTokens';
 
-export type AppTextVariant = 'display' | 'displayAccent' | 'title' | 'body' | 'eyebrow' | 'caption';
+export type AppTextVariant =
+  | 'display'
+  | 'displayAccent'
+  | 'title'
+  | 'subtitle'
+  | 'reading'
+  | 'body'
+  | 'bodyStrong'
+  | 'link'
+  | 'eyebrow'
+  | 'caption';
 
 export type AppTextProps = TextProps & {
   variant?: AppTextVariant;
@@ -15,7 +25,8 @@ export type AppTextProps = TextProps & {
 /**
  * The app's Latin text primitive (Khavion type system). Variants map to the
  * `latinType` scale in tokens; color comes from the theme unless overridden.
- * `displayAccent` is the green italic serif accent word for headlines.
+ * `displayAccent` is the green italic serif accent word for headlines; `link`
+ * defaults to the primary/accent color.
  *
  * Arabic precedence: when the UI language is Urdu, the Nastaliq face and its
  * opened leading take over (Quranic/Arabic content renders via its own Amiri
@@ -27,7 +38,7 @@ export function AppText({ variant = 'body', color, style, ...rest }: AppTextProp
   const spec = latinType[variant];
 
   const defaultColor =
-    variant === 'displayAccent'
+    variant === 'displayAccent' || variant === 'link'
       ? t.accent
       : variant === 'eyebrow'
         ? t.textSecondary
