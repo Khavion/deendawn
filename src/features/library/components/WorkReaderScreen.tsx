@@ -1,8 +1,9 @@
+import { FlashList } from '@shopify/flash-list';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { SQLiteDatabase } from 'expo-sqlite';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { openLibraryDb } from '../libraryDb';
 import { getWork, listSections, SectionRow, WorkRow } from '../repo';
@@ -40,12 +41,10 @@ export function WorkReaderScreen() {
   return (
     <View style={[styles.container, { backgroundColor: t.bgCanvas }]}>
       <Stack.Screen options={{ title: work?.title ?? '' }} />
-      <FlatList
+      <FlashList
         data={sections}
         keyExtractor={(s) => String(s.id)}
-        initialNumToRender={6}
         initialScrollIndex={initialIndex > 0 ? initialIndex : undefined}
-        onScrollToIndexFailed={() => {}}
         contentContainerStyle={styles.list}
         ListHeaderComponent={
           work ? (

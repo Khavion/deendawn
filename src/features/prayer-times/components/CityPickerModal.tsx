@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FlatList, Modal, Pressable, StyleSheet, TextInput, View } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
+import { Modal, Pressable, StyleSheet, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/themed-text';
@@ -44,7 +45,7 @@ export function CityPickerModal({
           autoCorrect={false}
           style={[styles.input, { color: Colors[scheme].text, borderColor: Colors[scheme].icon }]}
         />
-        <FlatList
+        <FlashList
           data={results}
           keyExtractor={(c) => c.id}
           keyboardShouldPersistTaps="handled"

@@ -1,16 +1,9 @@
+import { FlashList } from '@shopify/flash-list';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  FlatList,
-  InteractionManager,
-  Pressable,
-  Share,
-  StyleSheet,
-  View,
-  ViewToken,
-} from 'react-native';
+import { InteractionManager, Pressable, Share, StyleSheet, View, ViewToken } from 'react-native';
 
 import {
   isBookmarked,
@@ -105,12 +98,10 @@ export function SurahScreen() {
           nightWarm={nightWarm}
         />
       </View>
-      <FlatList
+      <FlashList
         data={ayahs}
         keyExtractor={(a) => String(a.id)}
-        initialNumToRender={10}
         initialScrollIndex={initialIndex > 0 ? initialIndex : undefined}
-        onScrollToIndexFailed={() => {}}
         onViewableItemsChanged={onViewableItemsChanged}
         viewabilityConfig={{ itemVisiblePercentThreshold: 60 }}
         contentContainerStyle={styles.list}

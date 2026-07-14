@@ -158,7 +158,12 @@ Done: Maestro installed; e2e/smoke.yaml green twice on iPhone 17 sim (Today -> M
 
 - Ask gains a Quran/Books source toggle: Books searches the philosopher library's FTS sections with the same Tier A discipline (deterministic only, ruling queries still get the fixed scholar redirect, no synonym expansion on translated literary text). Results show work title + match-centered snippet and deep-link into the work reader at the exact section. askLibrary + snippet windowing unit-tested against the real committed library.db; Maestro ask flow extended and green; i18n ×3. 339 tests green.
 
-## Next: E9 remainder is model-blocked (BLOCKERS A). Unblocked queue: AskScreen Tier B dormant wiring, FlashList pass, Dynamic Type + RTL audits.
+## Session 2026-07-13 (cont. 18) — FlashList scroll pass + Maestro hang fix
+
+- All 5 lists moved FlatList->FlashList v2 (JS-only, no native rebuild); verified live on a freshly-rebooted sim (onboarding/smoke/ask/libcheck all green, 339 unit tests green).
+- Diagnosed the recurring Maestro "2-hour hang": stale XCUITest accessibility service after ~16.5h sim uptime (viewHierarchy -> HTTP 500 kAXErrorInvalidUIElement -> failure-screenshot call hangs the JVM). App itself was always healthy. Fix = reboot sim; process fix = all Maestro runs now foreground-bounded with a watchdog (never unbounded until-loops). Details in DECISIONS.
+
+## Next: E9 remainder is model-blocked (BLOCKERS A). Unblocked queue: Dynamic Type (large-text) audit, RTL audit in Arabic on the new screens, AskScreen Tier B dormant wiring.
 
 ## Next: start here
 

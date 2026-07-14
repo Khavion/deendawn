@@ -2,7 +2,8 @@ import { useRouter } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FlatList, Pressable, StyleSheet, TextInput, View } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
+import { Pressable, StyleSheet, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { loadLastRead } from '../readerState';
@@ -46,7 +47,7 @@ export function SurahListScreen() {
       />
 
       {searching ? (
-        <FlatList
+        <FlashList
           data={results}
           keyExtractor={(a) => String(a.id)}
           keyboardShouldPersistTaps="handled"
@@ -68,10 +69,9 @@ export function SurahListScreen() {
           )}
         />
       ) : (
-        <FlatList
+        <FlashList
           data={surahs}
           keyExtractor={(s) => String(s.number)}
-          initialNumToRender={20}
           ListHeaderComponent={
             lastRead ? (
               <Pressable

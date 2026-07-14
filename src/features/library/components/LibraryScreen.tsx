@@ -2,7 +2,8 @@ import { Stack, useRouter } from 'expo-router';
 import { SQLiteDatabase } from 'expo-sqlite';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FlatList, Pressable, StyleSheet, TextInput, View } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
+import { Pressable, StyleSheet, TextInput, View } from 'react-native';
 
 import { openLibraryDb } from '../libraryDb';
 import { searchSections } from '../repo';
@@ -46,7 +47,7 @@ export function LibraryScreen() {
         style={[styles.input, { color: t.textPrimary, borderColor: t.border }]}
       />
       {searching ? (
-        <FlatList
+        <FlashList
           data={results}
           keyExtractor={(s) => String(s.id)}
           keyboardShouldPersistTaps="handled"
@@ -72,7 +73,7 @@ export function LibraryScreen() {
           )}
         />
       ) : (
-        <FlatList
+        <FlashList
           data={THINKERS}
           keyExtractor={(th) => th.key}
           ListHeaderComponent={
