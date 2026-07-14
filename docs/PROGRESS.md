@@ -192,3 +192,18 @@ Done: Maestro installed; e2e/smoke.yaml green twice on iPhone 17 sim (Today -> M
 2. Tasbih/hijri/zakat cluster (pure logic + screens).
 3. Audio (needs R2 dev set — blocked), tips (needs RevenueCat key — blocked), onboarding/about/attribution screens, offline E2E suite.
 4. To put the app on Zohaib's phone: TestFlight internal needs the Apple keys (BLOCKERS #1) — prepare click-by-click walkthrough when he is ready.
+
+## Session 2026-07-14 (cont.) — ThemedText → AppText migration
+
+Plan:
+
+1. Map the 7 ThemedText types to AppText variants; add the 4 carry-over faces (bodyStrong/reading/subtitle/link) to latinType so the swap is non-regressive.
+2. Scripted swap across all 19 feature screens; hand-fix dynamic `type={…}` props + the one lightColor/darkColor badge.
+3. Retire ThemedText: migrate the dead collapsible, delete themed-text.tsx, update docs.
+
+Done:
+
+- 3 commits: (1) `feat(ui): add subtitle/reading/bodyStrong/link variants`, (2) `refactor(ui): migrate all 19 feature screens ThemedText -> AppText`, (3) `refactor(ui): retire ThemedText`. AppText is now the single Latin text primitive; components/themed-text.tsx deleted.
+- `serifBody → reading` preserved the Newsreader serif for translations/long-form; verified live on iOS (Al-Fatiha translation in serif, Arabic Amiri pixel-identical; Today next-prayer row correctly bold via dynamic bodyStrong).
+- Gates green: tsc clean, expo lint 0 errors, 392 tests (46 suites). DECISIONS.md logged.
+- Next: resume the operating loop from TODO.md (device-pass items + owner-gated: Apple keys, reciter audio, scholar sign-offs).
