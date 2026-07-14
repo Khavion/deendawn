@@ -25,6 +25,15 @@
   },
   "today": {
     "greeting": "As-salamu alaykum",
+    "nextPrayer": "Next prayer",
+    "timesSection": "Today's times",
+    "periods": {
+      "dawn": "Dawn",
+      "day": "Day",
+      "afternoon": "Afternoon",
+      "dusk": "Dusk",
+      "night": "Night"
+    },
     "emptyBody": "Choose your city to see today's prayer times. Everything stays on your phone — nothing is sent anywhere.",
     "chooseCity": "Choose your city",
     "tomorrow": "{{prayer}} (tomorrow)",

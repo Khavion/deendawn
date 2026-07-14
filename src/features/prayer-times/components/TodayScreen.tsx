@@ -7,13 +7,27 @@ import { CityPickerModal } from './CityPickerModal';
 import { isRamadan, toHijri } from '../../hijri/hijri';
 import { computeDayTimes, isValidTime, nextPrayer } from '../engine';
 import { formatTimeInZone } from '../format';
+import { currentPeriod, periodPrayer, periodWord } from '../period';
 import { PRAYER_NAMES } from '../types';
-import { AppText } from '@/src/components/ui';
+import { AppText, GoldFrameCard, Gradient, PeriodEyebrow, SectionRule } from '@/src/components/ui';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { useSettings } from '@/src/features/settings/SettingsContext';
 import { resolveLocation, resolvePrayerConfig } from '@/src/features/settings/settingsStore';
-import { fonts, fontSize, radius, spacing } from '@/src/lib/theme/tokens';
+import {
+  ambientGradient,
+  dimOnFeatured,
+  elevation,
+  featuredGradient,
+  fonts,
+  fontSize,
+  radius,
+  richMode,
+  spacing,
+  textOnFeatured,
+} from '@/src/lib/theme/tokens';
+import { useThemeMode } from '@/src/lib/theme/ThemeProvider';
 import { useTokens } from '@/src/lib/theme/useTokens';
+import { useDeviceTier } from '@/src/lib/theme/useDeviceTier';
 
 function useNow(intervalMs: number): Date {
   const [now, setNow] = useState(() => new Date());
@@ -36,6 +50,9 @@ function countdownParts(ms: number) {
 export function TodayScreen() {
   const insets = useSafeAreaInsets();
   const t = useTokens();
+  const mode = useThemeMode();
+  const rm = richMode(mode);
+  const { flat } = useDeviceTier();
   const { t: tr, i18n } = useTranslation();
   const { settings, update } = useSettings();
   const [pickerOpen, setPickerOpen] = useState(false);
@@ -51,6 +68,7 @@ export function TodayScreen() {
     [location?.latitude, location?.longitude, config, now.toDateString()]
   );
   const next = location ? nextPrayer(location, now, config) : null;
+  const period = times ? currentPeriod(now, times) : 'day';
 
   if (!location) {
     return (
@@ -90,14 +108,21 @@ export function TodayScreen() {
     );
   }
 
+  const eyebrowLabel = `${tr(`prayers.${periodPrayer(period)}`)} · ${tr(`today.periods.${periodWord(period)}`)}`;
+
   return (
-    <View
-      style={[
-        styles.container,
-        { backgroundColor: t.bgCanvas, paddingTop: insets.top + spacing.m },
-      ]}
-    >
-      <ScrollView contentContainerStyle={styles.scroll}>
+    <View style={[styles.container, { backgroundColor: t.bgCanvas }]}>
+      {/* Ambient dawn-sky gradient — reverent, behind the header + featured card only. */}
+      <Gradient
+        pointerEvents="none"
+        colors={ambientGradient[rm][period]}
+        flat={flat}
+        flatColor={t.bgCanvas}
+        style={[styles.ambient, { height: insets.top + 340 }]}
+      />
+      <ScrollView contentContainerStyle={[styles.scroll, { paddingTop: insets.top + spacing.m }]}>
+        <PeriodEyebrow label={eyebrowLabel} style={styles.periodEyebrow} />
+
         <View style={styles.header}>
           <Pressable
             accessibilityRole="button"
@@ -123,10 +148,7 @@ export function TodayScreen() {
         </View>
 
         {times && isRamadan(now, settings.hijriOffset) && (
-          <View
-            style={[styles.ramadanCard, { backgroundColor: t.ochreSoft }]}
-            testID="ramadan-card"
-          >
+          <View style={[styles.ramadanCard, { backgroundColor: t.ochreSoft }]} testID="ramadan-card">
             <View style={styles.ramadanRow}>
               <AppText variant="bodyStrong" style={{ color: t.ochre }}>
                 {tr('today.suhoorEnds')}
@@ -147,16 +169,19 @@ export function TodayScreen() {
         )}
 
         {next && (
-          <View style={[styles.nextCard, { backgroundColor: t.accent }]}>
-            <AppText variant="bodyStrong" style={{ color: t.textOnAccent, opacity: 0.85 }}>
+          <GoldFrameCard gradientColors={featuredGradient[rm]} style={styles.nextCard}>
+            <AppText variant="eyebrow" style={[styles.nextEyebrow, { color: dimOnFeatured[rm] }]}>
+              {tr('today.nextPrayer')}
+            </AppText>
+            <AppText variant="title" style={{ color: textOnFeatured[rm] }}>
               {next.isTomorrow
                 ? tr('today.tomorrow', { prayer: tr(`prayers.${next.prayer}`) })
                 : tr(`prayers.${next.prayer}`)}
             </AppText>
-            <AppText style={[styles.nextTime, { color: t.textOnAccent }]}>
+            <AppText style={[styles.nextTime, { color: textOnFeatured[rm] }]}>
               {formatTimeInZone(next.time)}
             </AppText>
-            <AppText style={{ color: t.textOnAccent, opacity: 0.85 }}>
+            <AppText variant="body" style={{ color: dimOnFeatured[rm] }}>
               {(() => {
                 const p = countdownParts(next.time.getTime() - now.getTime());
                 const time =
@@ -166,10 +191,18 @@ export function TodayScreen() {
                 return tr('today.countdown', { time });
               })()}
             </AppText>
-          </View>
+          </GoldFrameCard>
         )}
 
-        <View style={styles.list}>
+        <SectionRule label={tr('today.timesSection')} style={styles.sectionRule} />
+
+        <View
+          style={[
+            styles.listCard,
+            { backgroundColor: t.bgSurface, borderColor: t.border },
+            flat ? undefined : elevation[rm].e2,
+          ]}
+        >
           {times &&
             PRAYER_NAMES.map((p) => {
               const time = times[p];
@@ -178,7 +211,14 @@ export function TodayScreen() {
                 <View
                   key={p}
                   testID={`prayer-row-${p}`}
-                  style={[styles.row, isNext && { backgroundColor: t.accentSoft }]}
+                  style={[
+                    styles.row,
+                    isNext && {
+                      backgroundColor: t.accentSoft,
+                      borderLeftColor: t.ochre,
+                      borderLeftWidth: 3,
+                    },
+                  ]}
                 >
                   <AppText
                     variant={isNext ? 'bodyStrong' : 'body'}
@@ -211,6 +251,7 @@ export function TodayScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
+  ambient: { position: 'absolute', top: 0, left: 0, right: 0 },
   scroll: { paddingHorizontal: spacing.xl, paddingBottom: spacing.xxl },
   empty: { alignItems: 'center', justifyContent: 'center', padding: spacing.xxl, gap: spacing.m },
   emptyTitle: { textAlign: 'center' },
@@ -223,6 +264,7 @@ const styles = StyleSheet.create({
     minHeight: 48,
     justifyContent: 'center',
   },
+  periodEyebrow: { marginBottom: spacing.s },
   header: { gap: spacing.xs, marginBottom: spacing.l },
   cityRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.s - 2 },
   ramadanCard: {
@@ -233,23 +275,29 @@ const styles = StyleSheet.create({
   },
   ramadanRow: { flexDirection: 'row', justifyContent: 'space-between' },
   nextCard: {
-    borderRadius: radius.card,
     padding: spacing.xl,
     alignItems: 'center',
     gap: spacing.xs,
     marginBottom: spacing.l,
   },
+  nextEyebrow: { marginBottom: spacing.xs },
   nextTime: {
     fontFamily: fonts.serifSemiBold,
     fontSize: fontSize.display,
     lineHeight: 44,
   },
-  list: { gap: spacing.xs },
+  sectionRule: { marginBottom: spacing.s },
+  listCard: {
+    borderRadius: radius.card,
+    borderWidth: StyleSheet.hairlineWidth,
+    overflow: 'hidden',
+    paddingVertical: spacing.xs,
+  },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     paddingVertical: spacing.l - 2,
     paddingHorizontal: spacing.l,
-    borderRadius: radius.control,
   },
 });
