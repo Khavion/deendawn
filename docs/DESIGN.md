@@ -73,4 +73,4 @@ renders through its own Amiri components, never AppText.
 ## Still to apply (tracked in TODO)
 
 - Manuscript-art editorial moments (onboarding, empty states) — CC0 only, aniconism-safe, scholar sign-off (Gate #5).
-- Screen-reader (VoiceOver/TalkBack) pass.
+- Screen-reader: code-level pass DONE (Arabic `accessibilityLanguage`, icon-only labels, decorative-icon hiding, selected states, live tasbih value; asserted in unit tests). On-device VoiceOver/TalkBack speech verification remains a device-pass item (docs/TESTPLAN.md).

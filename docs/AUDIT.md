@@ -124,8 +124,11 @@ materialization deferred past nav transition; freezeOnBlur tabs.
 Tokens-first (one `tokens.ts`, WCAG contrast enforced by test across
 light/dark/night-warm). Dynamic Type capped at 1.4× (audited, no clipping). RTL
 fully mirrored (audited in Arabic). EN/UR/AR typed keys, key-parity + AR
-6-plural tests; UR/AR machine-drafted, `@draft`, human-review-gated. **Not yet
-done:** a screen-reader (VoiceOver/TalkBack) pass.
+6-plural tests; UR/AR machine-drafted, `@draft`, human-review-gated.
+Screen-reader: code-level pass DONE (Arabic tagged `accessibilityLanguage`,
+icon-only controls labeled, decorative icons hidden, selected states + a live
+tasbih counter value; unit-asserted). On-device VoiceOver/TalkBack speech
+verification remains a device-pass item.
 
 ---
 

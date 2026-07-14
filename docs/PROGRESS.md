@@ -207,3 +207,17 @@ Done:
 - `serifBody → reading` preserved the Newsreader serif for translations/long-form; verified live on iOS (Al-Fatiha translation in serif, Arabic Amiri pixel-identical; Today next-prayer row correctly bold via dynamic bodyStrong).
 - Gates green: tsc clean, expo lint 0 errors, 392 tests (46 suites). DECISIONS.md logged.
 - Next: resume the operating loop from TODO.md (device-pass items + owner-gated: Apple keys, reciter audio, scholar sign-offs).
+
+## Session 2026-07-14 (cont.) — screen-reader accessibility pass
+
+Plan:
+
+1. Tag Arabic text with accessibilityLanguage so VoiceOver reads it as Arabic.
+2. Give icon-only controls accessible names; hide decorative icons.
+3. Announce selected states + a live tasbih counter value.
+
+Done:
+
+- 3 commits (a11y): Arabic language tagging (ayah + surah name, db-guarded); accessible names (IconSymbol hidden globally, bookmark + calendar-arrow labels, en/ur/ar keys); selected states (settings pickers, tasbih targets) + live tasbih counter value (name/value split).
+- Closes the last accessibility item (audit v2 §9); on-device VoiceOver/TalkBack speech verification added to TESTPLAN device pass. Gates green: tsc, expo lint 0 errors, 393 tests. DECISIONS/DESIGN/AUDIT/TESTPLAN updated.
+- Next: resume operating loop — remaining autonomous polish (e.g. verse-row grouping, FlashList long-surah perf measurement) or owner-gated items.
