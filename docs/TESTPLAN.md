@@ -6,6 +6,7 @@
 - Unit: prayer fixture matrix, scheduler math, qibla bearings, zakat math, hijri conversion.
 - Golden: quran.db hashes vs content.lock, ayah counts, first/last ayah byte-equality.
 - Component: RTL layout, translation toggle, bookmark flows.
+- Accessibility audits (2026-07-13, on-device, no defects): Dynamic Type at accessibility-extra-large (Today/Ask/Tips/Zakat — 1.4x cap holds) and RTL/Arabic mirroring of the newer screens (Ask source toggle, surah audio bar). Method + Maestro RTL selector gotchas in DECISIONS.
 - E2E (Maestro, iOS Simulator): onboarding, view times, change method, open surah, play audio (dev set), tasbih, zakat, tip sheet (sandbox), airplane-mode offline suite.
 - Offline suite (e2e/offline.yaml): runs against a RELEASE build with Metro and the dev audio server stopped — the simulator cannot toggle airplane mode, so "no servers of any kind" is the automated proxy; the flow covers onboarding → prayer times → Quran text → Ask counts → qibla → tasbih → zakat → calendar plus five offline cold starts, and asserts the audio bar is absent in release builds without a configured source.
 

@@ -163,7 +163,12 @@ Done: Maestro installed; e2e/smoke.yaml green twice on iPhone 17 sim (Today -> M
 - All 5 lists moved FlatList->FlashList v2 (JS-only, no native rebuild); verified live on a freshly-rebooted sim (onboarding/smoke/ask/libcheck all green, 339 unit tests green).
 - Diagnosed the recurring Maestro "2-hour hang": stale XCUITest accessibility service after ~16.5h sim uptime (viewHierarchy -> HTTP 500 kAXErrorInvalidUIElement -> failure-screenshot call hangs the JVM). App itself was always healthy. Fix = reboot sim; process fix = all Maestro runs now foreground-bounded with a watchdog (never unbounded until-loops). Details in DECISIONS.
 
-## Next: E9 remainder is model-blocked (BLOCKERS A). Unblocked queue: Dynamic Type (large-text) audit, RTL audit in Arabic on the new screens, AskScreen Tier B dormant wiring.
+## Session 2026-07-13 (cont. 19) — Accessibility audits (Dynamic Type + RTL)
+
+- Both audits passed with NO code changes. Dynamic Type at accessibility-extra-large: Today/Ask-toggle/Tips/Zakat all reflow cleanly (1.4x cap + flex). RTL/Arabic: the new Ask source toggle and surah audio bar mirror correctly (play button flips right, dev badge right-aligned, English translation stays LTR), plus Today/More/bilingual-restart-dialog. Switched back to English after. Maestro RTL selector gotchas recorded in DECISIONS.
+- Also: diagnosed + fixed the recurring Maestro "hang" (stale XCUITest a11y service after ~16.5h sim uptime -> viewHierarchy 500 kAXError -> screenshot call wedges the JVM); every Maestro run is now foreground-bounded with a 120-240s watchdog.
+
+## Next: E9 remainder is model-blocked (BLOCKERS A). Unblocked queue: AskScreen Tier B dormant wiring (gate-7 invisible), then app is feature-complete pending human gates.
 
 ## Next: start here
 
