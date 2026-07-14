@@ -51,6 +51,8 @@
     "translation": "Translation",
     "devBadge": "DEV translation (Pickthall, 1930) — final translation pending review",
     "share": "Share",
+    "bookmarkAdd": "Add bookmark",
+    "bookmarkRemove": "Remove bookmark",
     "notFound": "Surah not found.",
     "tajweed": {
       "pendingReview": "Tajweed colors — draft, pending scholarly review",
@@ -170,7 +172,9 @@
   "calendar": {
     "title": "Islamic calendar",
     "disclaimer": "Calculated (Umm al-Qura) — may differ from local moonsighting. You can adjust by ±1 day in Settings.",
-    "today": "Today"
+    "today": "Today",
+    "prevMonth": "Previous month",
+    "nextMonth": "Next month"
   },
   "tasbih": {
     "title": "Tasbih",

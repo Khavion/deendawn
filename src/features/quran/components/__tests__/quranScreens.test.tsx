@@ -99,11 +99,14 @@ describe('SurahScreen', () => {
     expect(arabic.props.accessibilityLanguage).toBe('ar');
   });
 
-  test('bookmark toggle persists to the store', async () => {
+  test('bookmark toggle persists and updates its accessible label', async () => {
     const store = createMemoryKVStore();
     const view = await render(wrap(<SurahScreen />, store));
+    // Icon-only star: its meaning must come from an accessible label, not the glyph.
+    expect(view.getByTestId('bookmark-1').props.accessibilityLabel).toBe('Add bookmark');
     await fireEvent.press(view.getByTestId('bookmark-1'));
     expect(JSON.parse(store.get('quran.bookmarks.v1')!)).toEqual([{ surah: 1, ayah: 1 }]);
+    expect(view.getByTestId('bookmark-1').props.accessibilityLabel).toBe('Remove bookmark');
     await fireEvent.press(view.getByTestId('bookmark-1'));
     expect(JSON.parse(store.get('quran.bookmarks.v1')!)).toEqual([]);
   });

@@ -88,6 +88,7 @@ export function CalendarScreen({ initialDate }: { initialDate?: Date }) {
         <View style={styles.header}>
           <Pressable
             accessibilityRole="button"
+            accessibilityLabel={tr('calendar.prevMonth')}
             testID="prev-month"
             onPress={() => move(-1)}
             hitSlop={12}
@@ -106,6 +107,7 @@ export function CalendarScreen({ initialDate }: { initialDate?: Date }) {
           </View>
           <Pressable
             accessibilityRole="button"
+            accessibilityLabel={tr('calendar.nextMonth')}
             testID="next-month"
             onPress={() => move(1)}
             hitSlop={12}

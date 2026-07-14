@@ -201,6 +201,9 @@ export function SurahScreen() {
                 <View style={styles.actions}>
                   <Pressable
                     accessibilityRole="button"
+                    accessibilityLabel={
+                      bookmarked ? tr('quran.bookmarkRemove') : tr('quran.bookmarkAdd')
+                    }
                     testID={`bookmark-${item.ayah}`}
                     hitSlop={12}
                     onPress={() => {

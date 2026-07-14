@@ -47,5 +47,17 @@ export function IconSymbol({
   style?: StyleProp<TextStyle>;
   weight?: SymbolWeight;
 }) {
-  return <MaterialIcons color={color} size={size} name={MAPPING[name]} style={style} />;
+  // Icons in this app are always decorative — meaning is carried by adjacent
+  // text or a labeled parent control — so hide the glyph from screen readers
+  // (otherwise VoiceOver/TalkBack announce the raw icon).
+  return (
+    <MaterialIcons
+      color={color}
+      size={size}
+      name={MAPPING[name]}
+      style={style}
+      accessibilityElementsHidden
+      importantForAccessibility="no"
+    />
+  );
 }

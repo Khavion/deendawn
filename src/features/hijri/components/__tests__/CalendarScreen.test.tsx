@@ -38,6 +38,9 @@ describe('CalendarScreen', () => {
 
   test('navigates months and spans hijri months in the header', async () => {
     const view = await renderCalendar();
+    // Month arrows are ‹ › glyphs — screen readers need explicit labels.
+    expect(view.getByTestId('prev-month').props.accessibilityLabel).toBe('Previous month');
+    expect(view.getByTestId('next-month').props.accessibilityLabel).toBe('Next month');
     await fireEvent.press(view.getByTestId('next-month'));
     expect(view.getByText(/March 2026/)).toBeOnTheScreen();
     // March 2026 spans Ramadan -> Shawwal 1447 (Eid al-Fitr expected).
