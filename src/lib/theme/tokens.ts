@@ -1,121 +1,202 @@
 /**
- * DeenDawn design tokens — the single source of visual truth (docs/DESIGN.md).
- * Components never hardcode a hex, radius, or duration: they read tokens.
+ * DeenDawn / "Deen Dawn" design tokens — the single source of visual truth
+ * (docs/DESIGN.md). Components never hardcode a hex, radius, or duration.
  * Contrast ratios are enforced by __tests__/contrast.test.ts.
+ *
+ * Palette derived from the Khavion brand (forest-green primary + bronze/gold
+ * accent, warm ivory / cool near-black grounds). This supersedes the earlier
+ * lapis/ochre palette. NOTE: the reference site HTML was not available in-repo,
+ * so colors/radii/fonts come from the brief's explicit values and the Latin
+ * type scale is DERIVED from the app's existing scale + the brief's variants.
+ *
+ * Token-name mapping (legacy key → brand role), kept so existing screens work
+ * without churn: `accent` = the dominant PRIMARY (forest green / sage);
+ * `ochre` = the brand ACCENT (bronze / gold). `primary`/`onPrimary`/
+ * `primarySoft` are added as clear aliases for the new UI primitives.
  */
 
 export type ThemeMode = 'light' | 'dark' | 'nightWarm';
 
 export interface ColorTokens {
-  /** App background (warm ivory / warm near-black). */
+  /** App background (warm ivory / cool near-black). */
   bgCanvas: string;
   /** Cards and sheets sitting on the canvas. */
   bgSurface: string;
-  /** Higher tonal elevation (dark mode depth without shadows). */
+  /** Higher tonal elevation (depth without shadows). */
   bgElevated: string;
   textPrimary: string;
   textSecondary: string;
-  /** Text/icons placed on top of the accent color. */
+  /** Text/icons placed on top of the primary color. */
   textOnAccent: string;
-  /** Lapis — interactive elements, links, selection. */
+  /** PRIMARY brand color (forest green / sage) — buttons, active states. */
   accent: string;
-  /** Quiet accent-tinted fill for highlighted rows/chips. */
+  /** Quiet primary-tinted fill for highlighted rows/chips. */
   accentSoft: string;
   /** Text color that reads on accentSoft. */
   textOnAccentSoft: string;
-  /** Gold ochre — sparse highlights only (bookmarks, badges). */
+  /** Brand ACCENT (bronze / gold) — sparse highlights (bookmarks, badges). */
   ochre: string;
-  /** Ochre-tinted quiet fill (DEV badge background). */
+  /** Accent-tinted quiet fill (badge background). */
   ochreSoft: string;
   /** Confirmations only. */
   success: string;
   border: string;
   icon: string;
+  // --- brand-semantic aliases (same values; clearer for new primitives) ---
+  /** = accent. The dominant brand color. */
+  primary: string;
+  /** = textOnAccent. */
+  onPrimary: string;
+  /** = accentSoft. */
+  primarySoft: string;
 }
 
 export const palette: Record<ThemeMode, ColorTokens> = {
   light: {
-    bgCanvas: '#FBF7EF',
+    bgCanvas: '#F7F6F2',
     bgSurface: '#FFFFFF',
-    bgElevated: '#F2ECDF',
-    textPrimary: '#1C1A17',
-    textSecondary: '#57514A',
-    textOnAccent: '#FFFFFF',
-    accent: '#1F3A5F',
-    accentSoft: '#E4EAF2',
-    textOnAccentSoft: '#1F3A5F',
-    ochre: '#7A5417',
-    ochreSoft: '#F3E8D3',
-    success: '#3E6B4F',
-    border: 'rgba(28, 26, 23, 0.14)',
-    icon: '#6B6459',
+    bgElevated: '#F0EEE7',
+    textPrimary: '#20242A',
+    textSecondary: '#6B675C',
+    textOnAccent: '#F7F6F2',
+    accent: '#274D3D',
+    accentSoft: '#B9CDC2',
+    textOnAccentSoft: '#20242A',
+    ochre: '#8A6430',
+    ochreSoft: '#F4ECDE',
+    success: '#2E6A48',
+    border: '#DCD9D0',
+    icon: '#8B8677',
+    primary: '#274D3D',
+    onPrimary: '#F7F6F2',
+    primarySoft: '#B9CDC2',
   },
   dark: {
-    bgCanvas: '#121212',
-    bgSurface: '#1E1C1A',
-    bgElevated: '#262320',
-    textPrimary: '#E8E4DC',
-    textSecondary: '#B3ADA3',
-    textOnAccent: '#0E1620',
-    accent: '#7FA8D8',
-    accentSoft: '#1D2B3C',
-    textOnAccentSoft: '#A9C4E4',
-    ochre: '#D9AE6A',
-    ochreSoft: '#2C2417',
-    success: '#7FB093',
-    border: 'rgba(232, 228, 220, 0.16)',
-    icon: '#948D81',
+    bgCanvas: '#15181D',
+    bgSurface: '#1B1F25',
+    bgElevated: '#232830',
+    textPrimary: '#F4F3EE',
+    textSecondary: '#9AA1AA',
+    textOnAccent: '#15181D',
+    accent: '#6FA28B',
+    accentSoft: '#24352E',
+    textOnAccentSoft: '#F4F3EE',
+    ochre: '#C69B5F',
+    ochreSoft: '#2A2519',
+    success: '#7FB98F',
+    border: '#343A43',
+    icon: '#8E96A0',
+    primary: '#6FA28B',
+    onPrimary: '#15181D',
+    primarySoft: '#24352E',
   },
+  // Night-warm reading mode: rebuilt on the dark base with the gold family
+  // (docs/DESIGN.md), warm-shifted for low-light Quran reading.
   nightWarm: {
-    bgCanvas: '#1A1410',
-    bgSurface: '#231B14',
-    bgElevated: '#2B2118',
-    textPrimary: '#E8D8C0',
-    textSecondary: '#B29B7C',
-    textOnAccent: '#1A1410',
-    accent: '#D9AE6A',
-    accentSoft: '#2C2417',
-    textOnAccentSoft: '#D9AE6A',
-    ochre: '#D9AE6A',
-    ochreSoft: '#2C2417',
+    bgCanvas: '#16130D',
+    bgSurface: '#1E1A12',
+    bgElevated: '#251F16',
+    textPrimary: '#ECE3D2',
+    textSecondary: '#AEA286',
+    textOnAccent: '#16130D',
+    accent: '#C69B5F',
+    accentSoft: '#2A2417',
+    textOnAccentSoft: '#ECE3D2',
+    ochre: '#C69B5F',
+    ochreSoft: '#2A2417',
     success: '#9DB58F',
-    border: 'rgba(232, 216, 192, 0.16)',
+    border: '#322A1E',
     icon: '#9C8B72',
+    primary: '#C69B5F',
+    onPrimary: '#16130D',
+    primarySoft: '#2A2417',
   },
 };
 
 /** Spacing scale — the only allowed gaps/paddings. */
 export const spacing = { xs: 4, s: 8, m: 12, l: 16, xl: 24, xxl: 32, xxxl: 48 } as const;
 
-/** Radius family — cards 12, controls 8. Nothing else. */
-export const radius = { card: 12, control: 8 } as const;
+/** Radius family — 8 default, 6 small (Khavion brief). Nothing else. */
+export const radius = { card: 8, control: 6 } as const;
 
-/** Type scale (pt). */
+/** Numeric type scale (pt) — kept for existing consumers. */
 export const fontSize = {
-  display: 34,
-  title: 28,
-  h1: 24,
-  h2: 20,
-  body: 17,
+  display: 32,
+  title: 22,
+  h1: 22,
+  h2: 18,
+  body: 16,
   callout: 15,
   caption: 13,
   micro: 11,
 } as const;
 
 /**
- * Font families. Serif (Literata) for reading content, sans (Source Sans 3)
- * for UI, Amiri Quran for Quranic Arabic. All pinned SIL-OFL artifacts.
+ * Font families.
+ * - Latin display serif: Newsreader (headlines, accent italic word, reading).
+ * - Latin body/UI sans: Public Sans.
+ * - Arabic: Amiri Quran (Quranic) + Noto Nastaliq (Urdu) — UNCHANGED and always
+ *   takes precedence for Quranic/Arabic content.
  */
 export const fonts = {
-  serif: 'Literata-Regular',
-  serifMedium: 'Literata-Medium',
-  serifSemiBold: 'Literata-SemiBold',
-  sans: 'SourceSans3-Regular',
-  sansMedium: 'SourceSans3-Medium',
-  sansSemiBold: 'SourceSans3-Semibold',
+  serif: 'Newsreader_400Regular',
+  serifMedium: 'Newsreader_500Medium',
+  serifSemiBold: 'Newsreader_600SemiBold',
+  serifBold: 'Newsreader_700Bold',
+  serifItalic: 'Newsreader_400Regular_Italic',
+  serifLight: 'Newsreader_300Light',
+  sans: 'PublicSans_400Regular',
+  sansMedium: 'PublicSans_500Medium',
+  sansSemiBold: 'PublicSans_600SemiBold',
+  sansBold: 'PublicSans_700Bold',
   quran: 'AmiriQuran',
   /** Urdu content face — Nastaliq needs ~1.9-2.1 line-height (docs/DESIGN.md). */
   nastaliq: 'NotoNastaliqUrdu',
+} as const;
+
+/**
+ * Latin type scale (DERIVED — see file header). Each variant is a ready style.
+ * Eyebrow tracking follows the brief's 0.14-0.16em → absolute letterSpacing at
+ * its size (~1.9 at 12pt). Newsreader italic carries the single accent word.
+ */
+export const latinType = {
+  display: {
+    fontFamily: fonts.serifSemiBold,
+    fontSize: fontSize.display,
+    lineHeight: 38,
+    letterSpacing: -0.5,
+  },
+  displayAccent: {
+    fontFamily: fonts.serifItalic,
+    fontSize: fontSize.display,
+    lineHeight: 38,
+    letterSpacing: -0.5,
+  },
+  title: {
+    fontFamily: fonts.serifSemiBold,
+    fontSize: fontSize.title,
+    lineHeight: 28,
+    letterSpacing: -0.2,
+  },
+  body: {
+    fontFamily: fonts.sans,
+    fontSize: fontSize.body,
+    lineHeight: 24,
+    letterSpacing: 0,
+  },
+  eyebrow: {
+    fontFamily: fonts.sansSemiBold,
+    fontSize: 12,
+    lineHeight: 16,
+    letterSpacing: 1.9,
+    textTransform: 'uppercase' as const,
+  },
+  caption: {
+    fontFamily: fonts.sans,
+    fontSize: fontSize.caption,
+    lineHeight: 18,
+    letterSpacing: 0.1,
+  },
 } as const;
 
 /** Multiplier applied to Latin line-heights when rendering Urdu Nastaliq. */

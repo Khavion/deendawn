@@ -1,4 +1,18 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import {
+  Newsreader_300Light,
+  Newsreader_400Regular,
+  Newsreader_400Regular_Italic,
+  Newsreader_500Medium,
+  Newsreader_600SemiBold,
+  Newsreader_700Bold,
+} from '@expo-google-fonts/newsreader';
+import {
+  PublicSans_400Regular,
+  PublicSans_500Medium,
+  PublicSans_600SemiBold,
+  PublicSans_700Bold,
+} from '@expo-google-fonts/public-sans';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import { SQLiteProvider } from 'expo-sqlite';
@@ -65,15 +79,20 @@ export default function RootLayout() {
     };
   }, [colorScheme]);
   const [fontsLoaded] = useFonts({
-    // All extracted from pinned releases by the content pipeline (SIL OFL 1.1).
+    // Arabic faces stay pinned content-pipeline artifacts (SIL OFL 1.1).
     AmiriQuran: require('@/assets/fonts/AmiriQuran.ttf'),
-    'Literata-Regular': require('@/assets/fonts/Literata-Regular.ttf'),
-    'Literata-Medium': require('@/assets/fonts/Literata-Medium.ttf'),
-    'Literata-SemiBold': require('@/assets/fonts/Literata-SemiBold.ttf'),
-    'SourceSans3-Regular': require('@/assets/fonts/SourceSans3-Regular.ttf'),
-    'SourceSans3-Medium': require('@/assets/fonts/SourceSans3-Medium.ttf'),
-    'SourceSans3-Semibold': require('@/assets/fonts/SourceSans3-Semibold.ttf'),
     NotoNastaliqUrdu: require('@/assets/fonts/NotoNastaliqUrdu-Regular.ttf'),
+    // Latin brand faces (Khavion): Newsreader display serif + Public Sans UI.
+    Newsreader_300Light,
+    Newsreader_400Regular,
+    Newsreader_400Regular_Italic,
+    Newsreader_500Medium,
+    Newsreader_600SemiBold,
+    Newsreader_700Bold,
+    PublicSans_400Regular,
+    PublicSans_500Medium,
+    PublicSans_600SemiBold,
+    PublicSans_700Bold,
   });
 
   if (!fontsLoaded) return null;
