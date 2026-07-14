@@ -68,7 +68,8 @@ export function TasbihScreen() {
 
       <Pressable
         accessibilityRole="button"
-        accessibilityLabel={tr('tasbih.tapArea', { count: state.count, target: state.target })}
+        accessibilityLabel={tr('tasbih.tapArea')}
+        accessibilityValue={{ now: state.count, min: 0, max: state.target }}
         testID="tasbih-tap"
         onPress={onTap}
         style={styles.tapArea}
@@ -93,6 +94,7 @@ export function TasbihScreen() {
           <Pressable
             key={target}
             accessibilityRole="button"
+            accessibilityState={{ selected: state.target === target }}
             testID={`target-${target}`}
             onPress={() => setState(setTarget(store, target))}
             style={[

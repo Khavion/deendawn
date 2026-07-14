@@ -93,6 +93,7 @@ function PickerModal<T extends string>({
             <Pressable
               key={o.key}
               accessibilityRole="button"
+              accessibilityState={{ selected: o.key === selected }}
               testID={`option-${o.key}`}
               onPress={() => {
                 onSelect(o.key);

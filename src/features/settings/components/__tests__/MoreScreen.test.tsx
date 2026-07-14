@@ -40,6 +40,9 @@ describe('MoreScreen', () => {
   test('changing madhab persists and updates the row', async () => {
     const { store, view } = await renderMore();
     await fireEvent.press(view.getByTestId('setting-madhab'));
+    // The current choice is announced as selected to screen readers.
+    expect(view.getByTestId('option-shafi').props.accessibilityState).toEqual({ selected: true });
+    expect(view.getByTestId('option-hanafi').props.accessibilityState).toEqual({ selected: false });
     await fireEvent.press(view.getByTestId('option-hanafi'));
     expect(JSON.parse(store.get('settings.v1')!)).toMatchObject({ madhab: 'hanafi' });
     expect(view.getByText(/Hanafi \(later Asr\)/)).toBeOnTheScreen();

@@ -179,7 +179,7 @@
   "tasbih": {
     "title": "Tasbih",
     "tapAnywhere": "Tap anywhere in the circle to count",
-    "tapArea": "Counter at {{count}} of {{target}}. Tap to count.",
+    "tapArea": "Tasbih counter. Tap to count.",
     "reset": "Reset",
     "labelPlaceholder": "Add your own label (optional)"
   },

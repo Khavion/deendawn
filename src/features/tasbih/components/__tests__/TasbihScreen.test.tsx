@@ -66,6 +66,26 @@ describe('TasbihScreen', () => {
     expect(JSON.parse(store.get('tasbih.v1')!)).toMatchObject({ label: 'Morning dhikr' });
   });
 
+  test('announces the selected target and a live, bounded counter value', async () => {
+    const { view } = await renderTasbih();
+    // Default target 33 is selected; 99 is not — screen readers hear the choice.
+    expect(view.getByTestId('target-33').props.accessibilityState).toEqual({ selected: true });
+    expect(view.getByTestId('target-99').props.accessibilityState).toEqual({ selected: false });
+    // The counter exposes a live value (announced on change), not baked into its name.
+    expect(view.getByTestId('tasbih-tap').props.accessibilityValue).toEqual({
+      now: 0,
+      min: 0,
+      max: 33,
+    });
+    await fireEvent.press(view.getByTestId('tasbih-tap'));
+    expect(view.getByTestId('tasbih-tap').props.accessibilityValue.now).toBe(1);
+    // Selecting 99 moves the selection and the counter's upper bound.
+    await fireEvent.press(view.getByTestId('target-99'));
+    expect(view.getByTestId('target-99').props.accessibilityState).toEqual({ selected: true });
+    expect(view.getByTestId('target-33').props.accessibilityState).toEqual({ selected: false });
+    expect(view.getByTestId('tasbih-tap').props.accessibilityValue.max).toBe(99);
+  });
+
   test('daily history shows after taps', async () => {
     const { view } = await renderTasbih();
     await fireEvent.press(view.getByTestId('tasbih-tap'));
