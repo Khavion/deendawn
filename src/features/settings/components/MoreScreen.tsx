@@ -23,6 +23,13 @@ import {
 import { ADHAN_PRAYERS, AdhanPrayer, SoundKey } from '../../notifications/scheduler';
 import { ensurePermission, rescheduleAll } from '../../notifications/service';
 import { loadNightWarm, saveNightWarm } from '../../quran/readerState';
+import { TierBCard } from '../../ask/tierb/components/TierBCard';
+import {
+  formatBytes,
+  initialControllerState,
+  selectArtifacts,
+  totalBytes,
+} from '../../ask/tierb/tierbController';
 import { useSettings } from '../SettingsContext';
 import { resolveLocation } from '../settingsStore';
 import { CityPickerModal } from '../../prayer-times/components/CityPickerModal';
@@ -316,6 +323,19 @@ export function MoreScreen() {
             }}
           />
         </View>
+        {/* Tier B (on-device AI answers). GATE 7: TierBCard self-gates on
+            TIER_B_ENABLED and renders nothing until Zohaib + scholar sign-off.
+            Wired here so enabling is a one-line flag flip. Model files are
+            PENDING-UPLOAD (BLOCKERS A) → honest "not published yet" block; the
+            real download/delete handlers land with the upload. */}
+        <View style={styles.tierbWrap}>
+          <TierBCard
+            state={initialControllerState(selectArtifacts('rich'), true)}
+            sizeLabel={formatBytes(totalBytes(selectArtifacts('rich')))}
+            onDownload={() => {}}
+            onDelete={() => {}}
+          />
+        </View>
         <ThemedText style={styles.privacyNote}>{t('more.privacyNote')}</ThemedText>
       </ScrollView>
 
@@ -434,6 +454,7 @@ const styles = StyleSheet.create({
     borderBottomColor: 'rgba(128,128,128,0.25)',
   },
   privacyNote: { marginTop: 24, opacity: 0.6, textAlign: 'center' },
+  tierbWrap: { marginTop: 24 },
   modalContainer: { flex: 1, paddingHorizontal: 20 },
   modalHeader: {
     flexDirection: 'row',

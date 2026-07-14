@@ -168,7 +168,11 @@ Done: Maestro installed; e2e/smoke.yaml green twice on iPhone 17 sim (Today -> M
 - Both audits passed with NO code changes. Dynamic Type at accessibility-extra-large: Today/Ask-toggle/Tips/Zakat all reflow cleanly (1.4x cap + flex). RTL/Arabic: the new Ask source toggle and surah audio bar mirror correctly (play button flips right, dev badge right-aligned, English translation stays LTR), plus Today/More/bilingual-restart-dialog. Switched back to English after. Maestro RTL selector gotchas recorded in DECISIONS.
 - Also: diagnosed + fixed the recurring Maestro "hang" (stale XCUITest a11y service after ~16.5h sim uptime -> viewHierarchy 500 kAXError -> screenshot call wedges the JVM); every Maestro run is now foreground-bounded with a 120-240s watchdog.
 
-## Next: E9 remainder is model-blocked (BLOCKERS A). Unblocked queue: AskScreen Tier B dormant wiring (gate-7 invisible), then app is feature-complete pending human gates.
+## Session 2026-07-13 (cont. 20) — Tier B dormant wiring (gate-7 invisible)
+
+- Pure `tierbController` (selectArtifacts by device tier, formatBytes, aggregateDownloadState, initialControllerState) wires the tested pieces (deviceTier + downloadManager + model.lock) into the {state, sizeLabel} the TierBCard needs — no native imports. TierBCard now rendered at the bottom of More, self-gated on TIER_B_ENABLED so it shows nothing today; when models land + gate flips it correctly reads `blocked: pendingUpload` until then. 14 controller tests (incl. an explicit "ships inert / never idle while PENDING-UPLOAD" guard); 349 tests green; smoke over the modified More green.
+
+## Next: E9 is now fully wired but model-blocked (BLOCKERS A: upload Qwen3 + MiniLM + generate ayah-embeddings). The app is feature-complete for TestFlight pending human gates (Apple keys #1, recordings #2, UR/AR review #8, scholar queue #5/7/9).
 
 ## Next: start here
 
