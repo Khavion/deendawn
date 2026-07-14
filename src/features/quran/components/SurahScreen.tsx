@@ -169,7 +169,10 @@ export function SurahScreen() {
               style={[styles.ayahBlock, { borderBottomColor: t.border }]}
               testID={`ayah-${item.surah}-${item.ayah}`}
             >
-              <AppText style={[styles.arabic, { color: t.textPrimary }]}>
+              <AppText
+                accessibilityLanguage="ar"
+                style={[styles.arabic, { color: t.textPrimary }]}
+              >
                 {tajweedOn
                   ? getAyahRuns(item.surah, item.ayah, item.text_uthmani).map((run, i) =>
                       run.colorKey ? (

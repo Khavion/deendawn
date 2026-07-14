@@ -104,7 +104,9 @@ export function SurahListScreen() {
                   {item.name_english} · {t('quran.verses', { count: item.ayah_count })}
                 </AppText>
               </View>
-              <AppText style={styles.arabicName}>{item.name_arabic}</AppText>
+              <AppText accessibilityLanguage="ar" style={styles.arabicName}>
+                {item.name_arabic}
+              </AppText>
             </Pressable>
           )}
         />

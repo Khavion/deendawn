@@ -52,6 +52,13 @@ describe('SurahListScreen', () => {
     const view = await render(wrap(<SurahListScreen />));
     expect(view.getByText('Al-Faatiha')).toBeOnTheScreen();
     expect(view.getByText(/The Opening · 7 verses/)).toBeOnTheScreen();
+    // The Arabic surah name is tagged for VoiceOver Arabic pronunciation.
+    const arName = (
+      raw.prepare('SELECT name_arabic FROM surahs WHERE number=1').get() as {
+        name_arabic: string;
+      }
+    ).name_arabic;
+    expect(view.getByText(arName).props.accessibilityLanguage).toBe('ar');
     await fireEvent.press(view.getByTestId('surah-2'));
     expect(mockRouterPush).toHaveBeenCalledWith('/surah/2');
   });
@@ -86,7 +93,10 @@ describe('SurahScreen', () => {
         text_uthmani: string;
       }
     ).text_uthmani;
-    expect(view.getByText(dbText)).toBeOnTheScreen();
+    const arabic = view.getByText(dbText);
+    expect(arabic).toBeOnTheScreen();
+    // Arabic must be tagged so VoiceOver pronounces it as Arabic, not English.
+    expect(arabic.props.accessibilityLanguage).toBe('ar');
   });
 
   test('bookmark toggle persists to the store', async () => {
