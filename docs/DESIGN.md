@@ -57,14 +57,20 @@ shifted (`#16130D` canvas, `#ECE3D2` text) with the gold family (`#C69B5F`).
 
 ## Primitives
 
-`src/components/ui/`: **Screen** (safe-area + canvas), **AppText**
-(display/displayAccent/title/body/eyebrow/caption; Nastaliq precedence),
-**Button** (primary filled / secondary outline), **Card** (surface + hairline,
-radius 8), **Divider**. A dev-only `app/theme-preview.tsx` renders every token +
-component across all three themes.
+`src/components/ui/`: **Screen** (safe-area + canvas), **AppText**, **Button**
+(primary filled / secondary outline), **Card** (surface + hairline, radius 8),
+**Divider**. A dev-only `app/theme-preview.tsx` renders every token + component
+across all three themes.
+
+`AppText` is the single Latin text primitive — it replaced the template's
+`ThemedText`, which has been removed. Ten variants: `display` / `displayAccent`
+(green italic accent word) / `title` / `subtitle` (serif headings), `reading`
+(editorial Newsreader serif for translations + long-form), `body` / `bodyStrong`
+/ `link` / `caption` (Public Sans), `eyebrow` (tracked uppercase label). Urdu
+Nastaliq takes precedence when the UI language is `ur`; Quranic/Arabic content
+renders through its own Amiri components, never AppText.
 
 ## Still to apply (tracked in TODO)
 
-- Migrate existing screens' text from `ThemedText` to `AppText` (they already inherit the new palette + fonts via tokens; this is cosmetic cleanup).
 - Manuscript-art editorial moments (onboarding, empty states) — CC0 only, aniconism-safe, scholar sign-off (Gate #5).
 - Screen-reader (VoiceOver/TalkBack) pass.

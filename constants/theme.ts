@@ -1,7 +1,7 @@
 /**
- * Legacy color map consumed by the template components (tab bar, ThemedText,
- * ThemedView). Values mirror src/lib/theme/tokens.ts — the tokens file is the
- * source of truth (contrast tests cover the tokens).
+ * Legacy color map consumed by the template components (tab bar, ThemedView).
+ * Values mirror src/lib/theme/tokens.ts — the tokens file is the source of
+ * truth (contrast tests cover the tokens).
  */
 import { Platform } from 'react-native';
 
