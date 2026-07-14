@@ -15,26 +15,26 @@ across 39 files. iOS builds and runs on iPhone 17 simulator (iOS 26.5).
 
 Eleven feature areas, all implemented:
 
-| Area | What it does |
-|---|---|
-| Prayer times | All `adhan-js` methods, Asr madhab toggle, high-latitude rule auto/override, manual city (offline 135-city dataset) or on-device location. |
-| Adhan notifications | Per-prayer on/off + sound, rolling 8-day scheduler under the iOS 64-notification cap, reschedules on foreground/background/fire. |
-| Qibla | Great-circle bearing to the Kaaba + magnetometer heading with true-north correction and calibration UX. |
-| Quran | 114 surahs, Uthmani script (Amiri Quran font), Pickthall DEV translation, bookmarks, last-read, full-text search, share-with-citation, streamed audio, night-warm reading mode. |
-| Ask | Deterministic search-answers over the Quran text + a bundled philosophy library; optional (gated-off) on-device LLM paraphrase layer. See §5. |
-| Tasbih | Counter with haptics, 33/99 targets, 7-day history, user-entered labels only. |
-| Hijri calendar | Umm al-Qura conversion, dual-date grid, key-date markers, ±1 day offset, "calculated" disclaimer. |
-| Suhoor/Iftar | Fajr/Maghrib surfaced during Ramadan + optional pre-Fajr reminder. |
-| Zakat | 2.5% calculator, min-of-metals nisab from user-entered prices (no live price API), disclaimer. |
-| Tips | Optional developer tip via RevenueCat, strictly "support development" framing (never charity/zakat). |
-| Onboarding/Settings | First-run welcome→city→reminders, method/madhab/high-lat pickers, language, About/attribution, privacy screen. |
+| Area                | What it does                                                                                                                                                                    |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Prayer times        | All `adhan-js` methods, Asr madhab toggle, high-latitude rule auto/override, manual city (offline 135-city dataset) or on-device location.                                      |
+| Adhan notifications | Per-prayer on/off + sound, rolling 8-day scheduler under the iOS 64-notification cap, reschedules on foreground/background/fire.                                                |
+| Qibla               | Great-circle bearing to the Kaaba + magnetometer heading with true-north correction and calibration UX.                                                                         |
+| Quran               | 114 surahs, Uthmani script (Amiri Quran font), Pickthall DEV translation, bookmarks, last-read, full-text search, share-with-citation, streamed audio, night-warm reading mode. |
+| Ask                 | Deterministic search-answers over the Quran text + a bundled philosophy library; optional (gated-off) on-device LLM paraphrase layer. See §5.                                   |
+| Tasbih              | Counter with haptics, 33/99 targets, 7-day history, user-entered labels only.                                                                                                   |
+| Hijri calendar      | Umm al-Qura conversion, dual-date grid, key-date markers, ±1 day offset, "calculated" disclaimer.                                                                               |
+| Suhoor/Iftar        | Fajr/Maghrib surfaced during Ramadan + optional pre-Fajr reminder.                                                                                                              |
+| Zakat               | 2.5% calculator, min-of-metals nisab from user-entered prices (no live price API), disclaimer.                                                                                  |
+| Tips                | Optional developer tip via RevenueCat, strictly "support development" framing (never charity/zakat).                                                                            |
+| Onboarding/Settings | First-run welcome→city→reminders, method/madhab/high-lat pickers, language, About/attribution, privacy screen.                                                                  |
 
 ---
 
 ## 2. Stack & architecture
 
 - **Expo SDK 54**, React Native **0.81.5**, React **19.1**, TypeScript **5.9** strict, `expo-router` (typed routes), **React Compiler** enabled, New Architecture (Fabric).
-- **Data**: `expo-sqlite` (bundled read-only `quran.db` 5.3 MB + `library.db` 1.0 MB; user data in a separate `user.db`). A second SQLite stack (`@op-engineering/op-sqlite` + `sqlite-vec`) backs the optional AI vector store in its own `vectors.db`.
+- **Data**: `expo-sqlite` for everything (bundled read-only `quran.db` 5.3 MB + `library.db` 1.0 MB; user data in `user.db`; the optional AI vector store in its own `vectors.db` via expo-sqlite's bundled `sqlite-vec` extension). _(Updated 2026-07-14, acting on this audit's Rec #1: the previous `@op-engineering/op-sqlite` second stack was removed once expo-sqlite's bundled sqlite-vec was confirmed — see §9.)_
 - **Prayer engine**: `adhan` 4.4.4 (MIT), wrapped; an independent bearing implementation for qibla verified to 0.01° against the reference.
 - **Notifications**: `expo-notifications`. **Audio**: `expo-audio` (streaming, background, lock-screen). **Sensors**: `expo-sensors`/`expo-location`.
 - **AI (optional, off)**: `llama.rn` (Qwen3 GGUF), `all-MiniLM-L6-v2` embeddings, `sqlite-vec`.
@@ -78,7 +78,7 @@ and first/last-ayah byte-equality.
 Two tiers with hard, tested constraints (constitution Rule 1.5):
 
 - **Tier A (universal, on by default)**: deterministic retrieval only — full-text-search matches, exact counts, verse lists with deep-links. **No generation.** Count answers are phrased as verifiable corpus facts ("60 verses match 'patience' in the bundled translation [1][2]…"), never theological claims. Counting/"which verses" queries are always Tier A. Ruling-seeking queries (halal/haram/should-I patterns, incl. Arabic) get a fixed redirect-to-scholars response, never an opinion. Cross-source: the same discipline searches the philosophy library ("Books").
-- **Tier B (optional, capability-gated, SHIPS OFF behind a flag)**: a small local LLM that may only paraphrase the passages retrieved for the current query, with citations. **No cloud API, ever.** Post-processor rejects answers whose citations are empty or reference content outside the retrieved set; a style blocklist strips filler; empty retrieval → fixed refusal; model file is SHA-256-pinned in `model.lock` and downloaded from R2 only. Native stack (op-sqlite + sqlite-vec + llama.rn) compiles and the management UI/controller are wired, but the whole thing renders nothing until a human + scholar sign-off flips `TIER_B_ENABLED`. Currently inert: model hashes are `PENDING-UPLOAD`.
+- **Tier B (optional, capability-gated, SHIPS OFF behind a flag)**: a small local LLM that may only paraphrase the passages retrieved for the current query, with citations. **No cloud API, ever.** Post-processor rejects answers whose citations are empty or reference content outside the retrieved set; a style blocklist strips filler; empty retrieval → fixed refusal; model file is SHA-256-pinned in `model.lock` and downloaded from R2 only. Native stack (expo-sqlite's bundled sqlite-vec + llama.rn) compiles and the management UI/controller are wired, but the whole thing renders nothing until a human + scholar sign-off flips `TIER_B_ENABLED`. Currently inert: model hashes are `PENDING-UPLOAD`.
 
 ---
 
@@ -97,13 +97,13 @@ Two tiers with hard, tested constraints (constitution Rule 1.5):
 
 Targets from the constitution and current status:
 
-| Budget | Target | Status |
-|---|---|---|
-| Cold start | < 2 s (iPhone 12-class) | Device pass pending (simulator only so far). |
-| App binary | < 100 MB (audio streamed, never bundled) | Assets total 9.5 MB (dbs 6.3 MB, fonts 2.6 MB); binary TBD on device. |
-| `quran.db` | < 25 MB | 5.3 MB. |
-| Scroll | 60 fps in surah view | FlashList v2 migration done across all 5 lists; on-device fps profile pending. |
-| Notification scheduling | < 500 ms | Pure scheduler; device timing pending. |
+| Budget                  | Target                                   | Status                                                                         |
+| ----------------------- | ---------------------------------------- | ------------------------------------------------------------------------------ |
+| Cold start              | < 2 s (iPhone 12-class)                  | Device pass pending (simulator only so far).                                   |
+| App binary              | < 100 MB (audio streamed, never bundled) | Assets total 9.5 MB (dbs 6.3 MB, fonts 2.6 MB); binary TBD on device.          |
+| `quran.db`              | < 25 MB                                  | 5.3 MB.                                                                        |
+| Scroll                  | 60 fps in surah view                     | FlashList v2 migration done across all 5 lists; on-device fps profile pending. |
+| Notification scheduling | < 500 ms                                 | Pure scheduler; device timing pending.                                         |
 
 Deliberate perf choices: reader row materialization deferred past the nav
 transition (`InteractionManager`); `freezeOnBlur` tabs; `enableScreens`.
@@ -119,10 +119,10 @@ transition (`InteractionManager`); `freezeOnBlur` tabs; `enableScreens`.
 
 ---
 
-## 9. Native build specifics (worth a reviewer's eye)
+## 9. Native build specifics (RESOLVED 2026-07-14 via Rec #1)
 
-- Adding op-sqlite broke SDK 54's **precompiled** React core at link time (op-sqlite references React internals the prebuilt framework doesn't export). Fix: **build RN from source** (`plugins/withRNFromSource.js`). This then hit the known **fmt 11 / Apple Clang 21 consteval** breakage; fix: compile the fmt pod as C++17 after `react_native_post_install` (`plugins/withFmtConstevalFix.js`). Both plugins are documented as removable at SDK 56 / fmt 12. Trade-off accepted: clean iOS builds went from ~2 min (prebuilt) to ~15-25 min (from source).
-- Dual-SQLite (expo-sqlite + op-sqlite) coexist by keeping the vector DB in a separate file and the AI feature off; this is a known risk area worth independent validation once Tier B is exercised on-device.
+- **History:** adding `op-sqlite` broke SDK 54's precompiled React core at link time (it references React internals the prebuilt framework doesn't export), which forced building RN from source, which in turn hit the fmt 11 / Apple Clang 21 consteval breakage — patched with two config plugins. Clean builds ballooned from ~2 min to ~15-25 min.
+- **Resolution:** this audit's research pass found expo-sqlite (SDK 54) ships its own bundled `sqlite-vec` + FTS5. The vector store was ported to `expo-sqlite`, `op-sqlite` was removed, and **both build plugins were deleted** — precompiled RN is restored and a clean iOS build is now **~2.4 min** (verified: llama.rn links cleanly against the prebuilt core; smoke E2E green). One caveat deferred: the `withSQLiteVecExtension` flag (which bundles the native `vec` framework) has an xcframework search-path wrinkle, so it stays OFF until the on-device Tier B session — harmless because the vector store is gated + only validatable on a physical device anyway.
 
 ---
 
@@ -168,35 +168,43 @@ Onboarding (00, 00b); light mode: Today (01), Quran list (02), Surah reader
 Where an outside pass would help most. Grouped by area.
 
 **Prayer times & astronomy**
+
 - Best-practice handling for extreme latitudes (Anchorage/Stockholm/polar) beyond `adhan`'s high-lat rules — which methods do the most-trusted apps use, and are there reference timetables to validate against?
 - Is there a defensible, offline way to detect and warn about DST/timezone database staleness on-device?
 
 **Quran rendering & reading experience**
+
 - On-device tajweed color-coding and word-by-word translation: data sources with clear licensing, and rendering approaches that keep 60fps with the Uthmani script.
 - Mushaf-style fixed-page layout (matching a printed Madani mushaf) vs. reflowing text — feasibility and licensing of page-accurate glyph data.
 - Better Uthmani fonts than Amiri Quran for ligature/tashkeel fidelity that remain OFL and subsettable.
 
 **On-device AI (Tier B)**
+
 - Best small instruct models for faithful, citation-grounded paraphrase of short passages on an iPhone (A14+): Qwen3-1.7B vs alternatives, quantization (Q4 vs Q5/Q6) quality/latency/RAM trade-offs, and expected tokens/sec via `llama.rn` on device.
 - Embedding model + retrieval strategy for a ~6k-verse corpus: is `all-MiniLM-L6-v2` the right pick, or is a multilingual/Arabic-aware embedder worth the size? Hybrid FTS+vector weighting that maximizes citation precision.
 - Techniques to make an on-device LLM refuse cleanly on ruling-seeking or out-of-corpus queries with high reliability.
 
 **Audio**
+
 - Concrete, license-cleared full-Quran recitation sets suitable for a free app that also has a tip jar (i.e. commercial-adjacent) — reciter, host, exact license/permission URL, attribution terms. Same for <30s adhan clips.
 - Gapless/word-highlighted playback synced to ayah timings — data sources (e.g. verse-by-verse timing files) and their licensing.
 
 **Platform features that fit a privacy-first app**
+
 - Prayer-countdown Home Screen widget + Live Activity / Dynamic Island, and an Apple Watch complication — implementation cost in Expo/RN and what's genuinely possible without ejecting.
 - OTA update strategy (expo-updates) that never ships religious content out-of-band of the checksum pipeline.
 
 **Product insight without tracking**
+
 - How do privacy-first apps learn what to improve with zero telemetry? (opt-in local-only feedback, TestFlight, review mining, community channels) — patterns that respect "Data Not Collected."
 
 **Store & growth (within Apple rules)**
+
 - Guideline 4.3(b) differentiation framing for a crowded category; ASO for a no-ads/no-tracking Islamic app; screenshot/store-copy best practices.
 - Monetization headroom beyond a tip jar that stays inside Apple 3.2.1 for a non-charity entity.
 
 **Engineering hardening**
+
 - Supply-chain hardening for the R2 model/audio downloads (signing beyond SHA-256, pinning, integrity on-device).
 - The op-sqlite + expo-sqlite dual-stack and the from-source RN + fmt patches — are there cleaner or more future-proof approaches, and what breaks at SDK 55/56?
 - On-device performance-regression testing for RN (cold start, scroll fps) that can run in CI or a device farm.

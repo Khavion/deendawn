@@ -3,13 +3,21 @@ import type { VectorHit } from './hybrid';
 /**
  * Verse-embedding store for Tier B hybrid retrieval (directive E9).
  *
- * Lives in vectors.db via op-sqlite + sqlite-vec — a SEPARATE database file
- * and SQLite stack from the expo-sqlite quran.db (constitution stack rule;
- * the dual-SQLite build risk is handled by building RN from source, see
- * plugins/withRNFromSource.js). The memory implementation backs tests and
- * keeps every consumer runnable without native code.
+ * Lives in vectors.db via expo-sqlite's bundled `sqlite-vec` extension — the
+ * SAME SQLite stack as the Quran/library DBs, in its own database file. (SDK
+ * 54's expo-sqlite ships the vec.xcframework and loads it through
+ * `bundledExtensions['sqlite-vec']`, so op-sqlite is no longer needed and the
+ * from-source-RN + fmt build patches were removed.) The memory implementation
+ * backs tests and keeps every consumer runnable without native code.
+ *
+ * NOTE: the native `sqlite-vec` framework is bundled only when the
+ * `withSQLiteVecExtension` config-plugin flag is enabled in app.json. It is
+ * currently OFF (Tier B is gated + model-blocked + only validatable on a
+ * physical device), so `createExpoSqliteVectorStore()` throws until the flag is
+ * turned on in the dedicated on-device Tier B session. Nothing calls it before
+ * then; the memory store powers all tests.
  */
-export const EMBEDDING_DIM = 384; // all-MiniLM-L6-v2
+export const EMBEDDING_DIM = 384; // multilingual-e5-small / all-MiniLM-L6-v2 (both 384-dim)
 
 export interface VectorStore {
   count(): number;
@@ -68,46 +76,58 @@ export function createMemoryVectorStore(): VectorStore {
 
 export const VECTORS_DB_NAME = 'vectors.db';
 
+/** Embeddings are stored little-endian float32; sqlite-vec reads a raw blob. */
+function embeddingBlob(embedding: number[]): Uint8Array {
+  return new Uint8Array(new Float32Array(embedding).buffer);
+}
+
 /**
- * Real store on sqlite-vec. Lazy-requires op-sqlite so importing this module
- * never touches native code; rowid IS the ayah id.
+ * Real store on expo-sqlite's bundled sqlite-vec. Lazy-requires expo-sqlite so
+ * importing this module never touches native code; rowid IS the ayah id.
+ * Async because loading the extension is async (`loadExtensionAsync`).
  */
-export function createOpSqliteVectorStore(): VectorStore {
-  const { open } =
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    require('@op-engineering/op-sqlite') as typeof import('@op-engineering/op-sqlite');
-  const db = open({ name: VECTORS_DB_NAME });
-  db.executeSync(
+export async function createExpoSqliteVectorStore(): Promise<VectorStore> {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const SQLite = require('expo-sqlite') as typeof import('expo-sqlite');
+  const db = SQLite.openDatabaseSync(VECTORS_DB_NAME);
+  const ext = SQLite.bundledExtensions['sqlite-vec'];
+  if (!ext) {
+    throw new Error(
+      'sqlite-vec extension is not bundled — enable withSQLiteVecExtension in app.json'
+    );
+  }
+  await db.loadExtensionAsync(ext.libPath, ext.entryPoint);
+  db.execSync(
     `CREATE VIRTUAL TABLE IF NOT EXISTS vec_verses USING vec0(embedding float[${EMBEDDING_DIM}])`
   );
   return {
     count() {
-      const res = db.executeSync('SELECT COUNT(*) AS n FROM vec_verses');
-      return Number(res.rows[0]?.n ?? 0);
+      const row = db.getFirstSync<{ n: number }>('SELECT COUNT(*) AS n FROM vec_verses');
+      return Number(row?.n ?? 0);
     },
     upsert(items) {
       for (const { ayahId, embedding } of items) {
         assertDim(embedding, 'embedding');
-        db.executeSync('INSERT OR REPLACE INTO vec_verses(rowid, embedding) VALUES (?, ?)', [
+        db.runSync('INSERT OR REPLACE INTO vec_verses(rowid, embedding) VALUES (?, ?)', [
           ayahId,
-          new Float32Array(embedding).buffer,
+          embeddingBlob(embedding),
         ]);
       }
     },
     searchNearest(query, k) {
       assertDim(query, 'query');
       if (k <= 0) return [];
-      const res = db.executeSync(
+      const rows = db.getAllSync<{ ayahId: number; distance: number }>(
         'SELECT rowid AS ayahId, distance FROM vec_verses WHERE embedding MATCH ? ORDER BY distance LIMIT ?',
-        [new Float32Array(query).buffer, k]
+        [embeddingBlob(query), k]
       );
-      return res.rows.map((r) => ({
-        ayahId: Number((r as { ayahId: number }).ayahId),
-        score: distanceToScore(Number((r as { distance: number }).distance)),
+      return rows.map((r) => ({
+        ayahId: Number(r.ayahId),
+        score: distanceToScore(Number(r.distance)),
       }));
     },
     close() {
-      db.close();
+      db.closeSync();
     },
   };
 }
