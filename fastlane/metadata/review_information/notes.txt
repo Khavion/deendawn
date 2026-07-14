@@ -4,7 +4,13 @@ WHAT IT IS: a privacy-first Islamic worship companion: prayer times, adhan notif
 
 NO ACCOUNT NEEDED: there is no login, no registration, and no server-side user data. To test: open the app, choose any city manually on the first screen (location permission is optional), and every feature is immediately available.
 
-DIFFERENTIATION (guideline 4.3): unlike most apps in this category, DeenDawn collects NO data (App Privacy: Data Not Collected), shows no ads, and works fully offline — prayer times, Quran text, qibla, and all tools function in airplane mode. The "Ask" feature computes exact, deterministic answers from the bundled Quran database on-device (no cloud AI); questions seeking religious rulings are redirected to qualified scholars rather than answered.
+DIFFERENTIATION (guideline 4.3(b)): DeenDawn is not a re-skin of an existing prayer app. It offers a meaningfully different, privacy-first experience that the common apps in this category do not:
+- App Privacy label is "Data Not Collected": no accounts, no analytics SDK, no advertising SDK, no third-party trackers of any kind.
+- Fully functional offline: prayer times, the complete Quran text, translation, search, qibla, tasbih, hijri calendar, and the zakat calculator all work in airplane mode (bundled on-device databases, no server dependency).
+- No advertising anywhere, and no paywall on any worship feature.
+- The "Ask" feature answers by deterministic full-text search over the bundled Quran and classical-text databases on-device — exact counts and verse references, phrased as verifiable facts, with no cloud AI and no generated theological content. Ruling-seeking questions are redirected to qualified scholars, never answered by the app.
+- Religious text is verified byte-for-byte against pinned public sources with SHA-256 checksums; the app never generates or alters scripture.
+Happy to clarify any of the above in the Resolution Center.
 
 IN-APP PURCHASES (guideline 3.2.1): the only purchase surface is an optional developer tip ("Support DeenDawn"). It is framed strictly as supporting app development — never as charity, zakat, or sadaqah collection — and no functionality is gated behind it.
 
