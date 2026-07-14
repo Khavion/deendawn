@@ -14,7 +14,7 @@ import {
   TASBIH_TARGETS,
 } from '../tasbihState';
 import { useSettings } from '../../settings/SettingsContext';
-import { ThemedText } from '@/components/themed-text';
+import { AppText } from '@/src/components/ui';
 import { fonts, radius, spacing } from '@/src/lib/theme/tokens';
 import { useTokens } from '@/src/lib/theme/useTokens';
 
@@ -74,18 +74,18 @@ export function TasbihScreen() {
         style={styles.tapArea}
       >
         <View style={[styles.ring, { borderColor: ringColor }]}>
-          <ThemedText style={[styles.count, { color: t.textPrimary }]} testID="tasbih-count">
+          <AppText style={[styles.count, { color: t.textPrimary }]} testID="tasbih-count">
             {displayCount}
-          </ThemedText>
-          <ThemedText type="caption" style={{ color: t.textSecondary }}>
+          </AppText>
+          <AppText variant="caption" style={{ color: t.textSecondary }}>
             {displayCount}
             {' / '}
             {state.target}
-          </ThemedText>
+          </AppText>
         </View>
-        <ThemedText type="caption" style={[styles.hint, { color: t.textSecondary }]}>
+        <AppText variant="caption" style={[styles.hint, { color: t.textSecondary }]}>
           {tr('tasbih.tapAnywhere')}
-        </ThemedText>
+        </AppText>
       </Pressable>
 
       <View style={styles.controls}>
@@ -101,12 +101,12 @@ export function TasbihScreen() {
               state.target === target && { backgroundColor: t.accentSoft, borderColor: t.accent },
             ]}
           >
-            <ThemedText
-              type={state.target === target ? 'defaultSemiBold' : 'default'}
+            <AppText
+              variant={state.target === target ? 'bodyStrong' : 'body'}
               style={state.target === target ? { color: t.textOnAccentSoft } : undefined}
             >
               {target}
-            </ThemedText>
+            </AppText>
           </Pressable>
         ))}
         <Pressable
@@ -115,19 +115,19 @@ export function TasbihScreen() {
           onPress={() => setState(resetCount(store))}
           style={[styles.chip, { borderColor: t.border }]}
         >
-          <ThemedText style={{ color: t.textSecondary }}>{tr('tasbih.reset')}</ThemedText>
+          <AppText style={{ color: t.textSecondary }}>{tr('tasbih.reset')}</AppText>
         </Pressable>
       </View>
 
       <View style={styles.history}>
         {history.map((day) => (
           <View key={day.date} style={styles.historyRow}>
-            <ThemedText type="caption" style={{ color: t.textSecondary }}>
+            <AppText variant="caption" style={{ color: t.textSecondary }}>
               {day.date.slice(5)}
-            </ThemedText>
-            <ThemedText type="caption" style={{ color: day.count > 0 ? t.ochre : t.icon }}>
+            </AppText>
+            <AppText variant="caption" style={{ color: day.count > 0 ? t.ochre : t.icon }}>
               {day.count}
-            </ThemedText>
+            </AppText>
           </View>
         ))}
       </View>

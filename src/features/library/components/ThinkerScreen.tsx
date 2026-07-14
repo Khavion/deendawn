@@ -7,7 +7,7 @@ import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { openLibraryDb } from '../libraryDb';
 import { WorkRow, worksByAuthor } from '../repo';
 import { THINKERS } from '../thinkers';
-import { ThemedText } from '@/components/themed-text';
+import { AppText } from '@/src/components/ui';
 import { radius, spacing } from '@/src/lib/theme/tokens';
 import { useTokens } from '@/src/lib/theme/useTokens';
 
@@ -34,7 +34,7 @@ export function ThinkerScreen() {
   if (!thinker) {
     return (
       <View style={[styles.center, { backgroundColor: t.bgCanvas }]}>
-        <ThemedText>{tr('library.notFound')}</ThemedText>
+        <AppText>{tr('library.notFound')}</AppText>
       </View>
     );
   }
@@ -43,46 +43,46 @@ export function ThinkerScreen() {
     <View style={[styles.container, { backgroundColor: t.bgCanvas }]}>
       <Stack.Screen options={{ title: thinker.name }} />
       <ScrollView contentContainerStyle={styles.scroll}>
-        <ThemedText type="title">{thinker.name}</ThemedText>
-        <ThemedText type="caption" style={{ color: t.textSecondary }}>
+        <AppText variant="title">{thinker.name}</AppText>
+        <AppText variant="caption" style={{ color: t.textSecondary }}>
           {thinker.era}
-        </ThemedText>
-        <ThemedText type="caption" style={{ color: t.textSecondary }}>
+        </AppText>
+        <AppText variant="caption" style={{ color: t.textSecondary }}>
           {thinker.school}
-        </ThemedText>
+        </AppText>
 
         <View style={[styles.reviewNote, { backgroundColor: t.ochreSoft }]}>
-          <ThemedText type="caption" style={{ color: t.ochre, textAlign: 'center' }}>
+          <AppText variant="caption" style={{ color: t.ochre, textAlign: 'center' }}>
             {tr('library.reviewPending')}
-          </ThemedText>
+          </AppText>
         </View>
 
-        <ThemedText type="subtitle" style={styles.section}>
+        <AppText variant="subtitle" style={styles.section}>
           {tr('library.keyIdeas')}
-        </ThemedText>
+        </AppText>
         {thinker.keyIdeas.map((idea) => (
           <View key={idea} style={styles.ideaRow}>
             <View style={[styles.dot, { backgroundColor: t.ochre }]} />
-            <ThemedText type="serifBody" style={styles.ideaText}>
+            <AppText variant="reading" style={styles.ideaText}>
               {idea}
-            </ThemedText>
+            </AppText>
           </View>
         ))}
 
-        <ThemedText type="subtitle" style={styles.section}>
+        <AppText variant="subtitle" style={styles.section}>
           {tr('library.majorWorks')}
-        </ThemedText>
+        </AppText>
         {thinker.majorWorks.map((w) => (
-          <ThemedText key={w} type="serifBody" style={{ color: t.textSecondary }}>
+          <AppText key={w} variant="reading" style={{ color: t.textSecondary }}>
             {w}
-          </ThemedText>
+          </AppText>
         ))}
 
         {works.length > 0 && (
           <>
-            <ThemedText type="subtitle" style={styles.section}>
+            <AppText variant="subtitle" style={styles.section}>
               {tr('library.readInApp')}
-            </ThemedText>
+            </AppText>
             {works.map((w) => (
               <Pressable
                 key={w.id}
@@ -91,12 +91,12 @@ export function ThinkerScreen() {
                 onPress={() => router.push(`/work/${w.id}`)}
                 style={[styles.workCard, { backgroundColor: t.accentSoft }]}
               >
-                <ThemedText type="defaultSemiBold" style={{ color: t.textOnAccentSoft }}>
+                <AppText variant="bodyStrong" style={{ color: t.textOnAccentSoft }}>
                   {w.title}
-                </ThemedText>
-                <ThemedText type="caption" style={{ color: t.textOnAccentSoft }}>
+                </AppText>
+                <AppText variant="caption" style={{ color: t.textOnAccentSoft }}>
                   {tr('library.translatedBy', { translator: w.translator, year: w.year })}
-                </ThemedText>
+                </AppText>
               </Pressable>
             ))}
           </>

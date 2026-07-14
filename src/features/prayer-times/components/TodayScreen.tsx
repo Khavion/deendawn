@@ -8,7 +8,7 @@ import { isRamadan, toHijri } from '../../hijri/hijri';
 import { computeDayTimes, isValidTime, nextPrayer } from '../engine';
 import { formatTimeInZone } from '../format';
 import { PRAYER_NAMES } from '../types';
-import { ThemedText } from '@/components/themed-text';
+import { AppText } from '@/src/components/ui';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { useSettings } from '@/src/features/settings/SettingsContext';
 import { resolveLocation, resolvePrayerConfig } from '@/src/features/settings/settingsStore';
@@ -62,21 +62,21 @@ export function TodayScreen() {
         ]}
       >
         <IconSymbol name="location.fill" size={44} color={t.accent} />
-        <ThemedText type="title" style={styles.emptyTitle}>
+        <AppText variant="title" style={styles.emptyTitle}>
           {tr('today.greeting')}
-        </ThemedText>
-        <ThemedText type="serifBody" style={[styles.emptyBody, { color: t.textSecondary }]}>
+        </AppText>
+        <AppText variant="reading" style={[styles.emptyBody, { color: t.textSecondary }]}>
           {tr('today.emptyBody')}
-        </ThemedText>
+        </AppText>
         <Pressable
           accessibilityRole="button"
           testID="choose-city"
           onPress={() => setPickerOpen(true)}
           style={[styles.primaryButton, { backgroundColor: t.accent }]}
         >
-          <ThemedText type="defaultSemiBold" style={{ color: t.textOnAccent }}>
+          <AppText variant="bodyStrong" style={{ color: t.textOnAccent }}>
             {tr('today.chooseCity')}
-          </ThemedText>
+          </AppText>
         </Pressable>
         <CityPickerModal
           visible={pickerOpen}
@@ -106,9 +106,9 @@ export function TodayScreen() {
             style={styles.cityRow}
           >
             <IconSymbol name="location.fill" size={14} color={t.accent} />
-            <ThemedText type="defaultSemiBold">{location.label}</ThemedText>
+            <AppText variant="bodyStrong">{location.label}</AppText>
           </Pressable>
-          <ThemedText type="caption" style={{ color: t.textSecondary }}>
+          <AppText variant="caption" style={{ color: t.textSecondary }}>
             {now.toLocaleDateString(i18n.language, {
               weekday: 'long',
               month: 'long',
@@ -119,7 +119,7 @@ export function TodayScreen() {
               const h = toHijri(now, settings.hijriOffset);
               return `${h.day} ${tr(h.monthKey)} ${h.year}`;
             })()}
-          </ThemedText>
+          </AppText>
         </View>
 
         {times && isRamadan(now, settings.hijriOffset) && (
@@ -128,35 +128,35 @@ export function TodayScreen() {
             testID="ramadan-card"
           >
             <View style={styles.ramadanRow}>
-              <ThemedText type="defaultSemiBold" style={{ color: t.ochre }}>
+              <AppText variant="bodyStrong" style={{ color: t.ochre }}>
                 {tr('today.suhoorEnds')}
-              </ThemedText>
-              <ThemedText type="defaultSemiBold" style={{ color: t.ochre }}>
+              </AppText>
+              <AppText variant="bodyStrong" style={{ color: t.ochre }}>
                 {isValidTime(times.fajr) ? formatTimeInZone(times.fajr) : '—'}
-              </ThemedText>
+              </AppText>
             </View>
             <View style={styles.ramadanRow}>
-              <ThemedText type="defaultSemiBold" style={{ color: t.ochre }}>
+              <AppText variant="bodyStrong" style={{ color: t.ochre }}>
                 {tr('today.iftar')}
-              </ThemedText>
-              <ThemedText type="defaultSemiBold" style={{ color: t.ochre }}>
+              </AppText>
+              <AppText variant="bodyStrong" style={{ color: t.ochre }}>
                 {isValidTime(times.maghrib) ? formatTimeInZone(times.maghrib) : '—'}
-              </ThemedText>
+              </AppText>
             </View>
           </View>
         )}
 
         {next && (
           <View style={[styles.nextCard, { backgroundColor: t.accent }]}>
-            <ThemedText type="defaultSemiBold" style={{ color: t.textOnAccent, opacity: 0.85 }}>
+            <AppText variant="bodyStrong" style={{ color: t.textOnAccent, opacity: 0.85 }}>
               {next.isTomorrow
                 ? tr('today.tomorrow', { prayer: tr(`prayers.${next.prayer}`) })
                 : tr(`prayers.${next.prayer}`)}
-            </ThemedText>
-            <ThemedText style={[styles.nextTime, { color: t.textOnAccent }]}>
+            </AppText>
+            <AppText style={[styles.nextTime, { color: t.textOnAccent }]}>
               {formatTimeInZone(next.time)}
-            </ThemedText>
-            <ThemedText style={{ color: t.textOnAccent, opacity: 0.85 }}>
+            </AppText>
+            <AppText style={{ color: t.textOnAccent, opacity: 0.85 }}>
               {(() => {
                 const p = countdownParts(next.time.getTime() - now.getTime());
                 const time =
@@ -165,7 +165,7 @@ export function TodayScreen() {
                     : tr('today.minutesSeconds', { minutes: p.minutes, seconds: p.seconds });
                 return tr('today.countdown', { time });
               })()}
-            </ThemedText>
+            </AppText>
           </View>
         )}
 
@@ -180,18 +180,18 @@ export function TodayScreen() {
                   testID={`prayer-row-${p}`}
                   style={[styles.row, isNext && { backgroundColor: t.accentSoft }]}
                 >
-                  <ThemedText
-                    type={isNext ? 'defaultSemiBold' : 'default'}
+                  <AppText
+                    variant={isNext ? 'bodyStrong' : 'body'}
                     style={isNext ? { color: t.textOnAccentSoft } : undefined}
                   >
                     {tr(`prayers.${p}`)}
-                  </ThemedText>
-                  <ThemedText
-                    type={isNext ? 'defaultSemiBold' : 'default'}
+                  </AppText>
+                  <AppText
+                    variant={isNext ? 'bodyStrong' : 'body'}
                     style={isNext ? { color: t.textOnAccentSoft } : { color: t.textSecondary }}
                   >
                     {isValidTime(time) ? formatTimeInZone(time) : '—'}
-                  </ThemedText>
+                  </AppText>
                 </View>
               );
             })}

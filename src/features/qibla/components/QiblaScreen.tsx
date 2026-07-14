@@ -9,7 +9,7 @@ import { useHeading } from '../useHeading';
 import { CityPickerModal } from '../../prayer-times/components/CityPickerModal';
 import { useSettings } from '../../settings/SettingsContext';
 import { resolveLocation } from '../../settings/settingsStore';
-import { ThemedText } from '@/components/themed-text';
+import { AppText } from '@/src/components/ui';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { fonts, fontSize, radius, spacing } from '@/src/lib/theme/tokens';
 import { useTokens } from '@/src/lib/theme/useTokens';
@@ -58,21 +58,21 @@ export function QiblaScreen() {
         ]}
       >
         <IconSymbol name="safari.fill" size={44} color={t.accent} />
-        <ThemedText type="title" style={styles.centerText}>
+        <AppText variant="title" style={styles.centerText}>
           {tr('qibla.title')}
-        </ThemedText>
-        <ThemedText type="serifBody" style={[styles.centerText, { color: t.textSecondary }]}>
+        </AppText>
+        <AppText variant="reading" style={[styles.centerText, { color: t.textSecondary }]}>
           {tr('qibla.chooseCityFirst')}
-        </ThemedText>
+        </AppText>
         <Pressable
           accessibilityRole="button"
           testID="qibla-choose-city"
           onPress={() => setPickerOpen(true)}
           style={[styles.primaryButton, { backgroundColor: t.accent }]}
         >
-          <ThemedText type="defaultSemiBold" style={{ color: t.textOnAccent }}>
+          <AppText variant="bodyStrong" style={{ color: t.textOnAccent }}>
             {tr('today.chooseCity')}
-          </ThemedText>
+          </AppText>
         </Pressable>
         <CityPickerModal
           visible={pickerOpen}
@@ -96,18 +96,18 @@ export function QiblaScreen() {
         ]}
       >
         <IconSymbol name="safari.fill" size={44} color={t.accent} />
-        <ThemedText type="serifBody" style={[styles.centerText, { color: t.textSecondary }]}>
+        <AppText variant="reading" style={[styles.centerText, { color: t.textSecondary }]}>
           {tr('qibla.permissionNeeded')}
-        </ThemedText>
+        </AppText>
         <Pressable
           accessibilityRole="button"
           testID="qibla-grant"
           onPress={requestPermission}
           style={[styles.primaryButton, { backgroundColor: t.accent }]}
         >
-          <ThemedText type="defaultSemiBold" style={{ color: t.textOnAccent }}>
+          <AppText variant="bodyStrong" style={{ color: t.textOnAccent }}>
             {tr('qibla.grantPermission')}
-          </ThemedText>
+          </AppText>
         </Pressable>
       </View>
     );
@@ -130,9 +130,9 @@ export function QiblaScreen() {
         { backgroundColor: t.bgCanvas, paddingTop: insets.top + spacing.m },
       ]}
     >
-      <ThemedText type="title" style={styles.header}>
+      <AppText variant="title" style={styles.header}>
         {tr('qibla.title')}
-      </ThemedText>
+      </AppText>
 
       <View style={styles.compassArea} accessible accessibilityLabel={statusText} testID="compass">
         <View
@@ -144,9 +144,9 @@ export function QiblaScreen() {
         >
           {/* Compass rose: N marker rotates opposite the device heading. */}
           <View style={[styles.rose, { transform: [{ rotate: `${roseRotation}deg` }] }]}>
-            <ThemedText type="caption" style={[styles.north, { color: t.textSecondary }]}>
+            <AppText variant="caption" style={[styles.north, { color: t.textSecondary }]}>
               {tr('qibla.northMarker')}
-            </ThemedText>
+            </AppText>
           </View>
           {/* Needle points toward the qibla relative to the device. */}
           <View
@@ -160,33 +160,33 @@ export function QiblaScreen() {
           </View>
         </View>
 
-        <ThemedText
-          type="defaultSemiBold"
+        <AppText
+          variant="bodyStrong"
           testID="qibla-status"
           style={[styles.status, rel?.aligned && { color: t.success }]}
         >
           {statusText ?? '—'}
-        </ThemedText>
+        </AppText>
         {bearing !== null && (
-          <ThemedText type="caption" style={{ color: t.textSecondary }}>
+          <AppText variant="caption" style={{ color: t.textSecondary }}>
             {tr('qibla.bearingLabel', { degrees: Math.round(bearing) })} · {location.label}
-          </ThemedText>
+          </AppText>
         )}
       </View>
 
       <View style={styles.chips}>
         {heading !== null && !trueNorth && (
           <View style={[styles.chip, { backgroundColor: t.ochreSoft }]} testID="magnetic-caveat">
-            <ThemedText type="caption" style={{ color: t.ochre }}>
+            <AppText variant="caption" style={{ color: t.ochre }}>
               {tr('qibla.magneticCaveat')}
-            </ThemedText>
+            </AppText>
           </View>
         )}
         {heading !== null && accuracy <= 1 && (
           <View style={[styles.chip, { backgroundColor: t.ochreSoft }]} testID="calibration-chip">
-            <ThemedText type="caption" style={{ color: t.ochre }}>
+            <AppText variant="caption" style={{ color: t.ochre }}>
               {tr('qibla.calibrate')}
-            </ThemedText>
+            </AppText>
           </View>
         )}
       </View>

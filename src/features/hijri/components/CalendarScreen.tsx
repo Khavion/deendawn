@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 import { keyDatesFor, toHijri } from '../hijri';
-import { ThemedText } from '@/components/themed-text';
+import { AppText } from '@/src/components/ui';
 import { useSettings } from '@/src/features/settings/SettingsContext';
 import { radius, spacing } from '@/src/lib/theme/tokens';
 import { useTokens } from '@/src/lib/theme/useTokens';
@@ -92,17 +92,17 @@ export function CalendarScreen({ initialDate }: { initialDate?: Date }) {
             onPress={() => move(-1)}
             hitSlop={12}
           >
-            <ThemedText type="title" style={{ color: t.accent }}>
+            <AppText variant="title" style={{ color: t.accent }}>
               ‹
-            </ThemedText>
+            </AppText>
           </Pressable>
           <View style={styles.headerTitles}>
-            <ThemedText type="subtitle" style={styles.centerText}>
+            <AppText variant="subtitle" style={styles.centerText}>
               {gregorianTitle}
-            </ThemedText>
-            <ThemedText type="caption" style={[styles.centerText, { color: t.textSecondary }]}>
+            </AppText>
+            <AppText variant="caption" style={[styles.centerText, { color: t.textSecondary }]}>
               {hijriTitle}
-            </ThemedText>
+            </AppText>
           </View>
           <Pressable
             accessibilityRole="button"
@@ -110,16 +110,16 @@ export function CalendarScreen({ initialDate }: { initialDate?: Date }) {
             onPress={() => move(1)}
             hitSlop={12}
           >
-            <ThemedText type="title" style={{ color: t.accent }}>
+            <AppText variant="title" style={{ color: t.accent }}>
               ›
-            </ThemedText>
+            </AppText>
           </Pressable>
         </View>
 
-        <ThemedText type="caption" style={[styles.todayLine, { color: t.textSecondary }]}>
+        <AppText variant="caption" style={[styles.todayLine, { color: t.textSecondary }]}>
           {tr('calendar.today')}: {todayHijri.day} {tr(`hijriMonths.${todayHijri.month}`)}{' '}
           {todayHijri.year}
-        </ThemedText>
+        </AppText>
 
         <View style={styles.grid} testID="calendar-grid">
           {cells.map((cell, i) => (
@@ -133,15 +133,15 @@ export function CalendarScreen({ initialDate }: { initialDate?: Date }) {
             >
               {cell && (
                 <>
-                  <ThemedText
-                    type={cell.isToday ? 'defaultSemiBold' : 'default'}
+                  <AppText
+                    variant={cell.isToday ? 'bodyStrong' : 'body'}
                     style={cell.isToday ? { color: t.textOnAccentSoft } : undefined}
                   >
                     {cell.gregorianDay}
-                  </ThemedText>
-                  <ThemedText type="caption" style={{ color: t.textSecondary }}>
+                  </AppText>
+                  <AppText variant="caption" style={{ color: t.textSecondary }}>
                     {cell.hijriDay}
-                  </ThemedText>
+                  </AppText>
                   {cell.isKeyDate && (
                     <View
                       style={[styles.dot, { backgroundColor: t.ochre }]}
@@ -159,18 +159,18 @@ export function CalendarScreen({ initialDate }: { initialDate?: Date }) {
             {legend.map((key) => (
               <View key={key} style={styles.legendRow}>
                 <View style={[styles.dot, { backgroundColor: t.ochre }]} />
-                <ThemedText type="caption" style={{ color: t.textSecondary }}>
+                <AppText variant="caption" style={{ color: t.textSecondary }}>
                   {tr(key)}
-                </ThemedText>
+                </AppText>
               </View>
             ))}
           </View>
         )}
 
         <View style={[styles.disclaimer, { backgroundColor: t.bgElevated }]}>
-          <ThemedText type="caption" style={{ color: t.textSecondary, textAlign: 'center' }}>
+          <AppText variant="caption" style={{ color: t.textSecondary, textAlign: 'center' }}>
             {tr('calendar.disclaimer')}
-          </ThemedText>
+          </AppText>
         </View>
       </ScrollView>
     </View>

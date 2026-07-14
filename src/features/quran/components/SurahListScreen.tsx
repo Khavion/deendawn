@@ -8,15 +8,17 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { loadLastRead } from '../readerState';
 import { AyahRow, listSurahs, searchAyahs } from '../repo';
-import { ThemedText } from '@/components/themed-text';
+import { AppText } from '@/src/components/ui';
 import { ThemedView } from '@/components/themed-view';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useSettings } from '@/src/features/settings/SettingsContext';
+import { useTokens } from '@/src/lib/theme/useTokens';
 
 export function SurahListScreen() {
   const insets = useSafeAreaInsets();
   const scheme = useColorScheme() ?? 'light';
+  const tk = useTokens();
   const router = useRouter();
   const db = useSQLiteContext();
   const { store } = useSettings();
@@ -33,9 +35,9 @@ export function SurahListScreen() {
 
   return (
     <ThemedView style={[styles.container, { paddingTop: insets.top + 12 }]}>
-      <ThemedText type="title" style={styles.title}>
+      <AppText variant="title" style={styles.title}>
         {t('quran.title')}
-      </ThemedText>
+      </AppText>
       <TextInput
         testID="quran-search"
         value={query}
@@ -51,7 +53,7 @@ export function SurahListScreen() {
           data={results}
           keyExtractor={(a) => String(a.id)}
           keyboardShouldPersistTaps="handled"
-          ListEmptyComponent={<ThemedText style={styles.hint}>{t('quran.noMatches')}</ThemedText>}
+          ListEmptyComponent={<AppText style={styles.hint}>{t('quran.noMatches')}</AppText>}
           renderItem={({ item }) => (
             <Pressable
               accessibilityRole="button"
@@ -59,12 +61,12 @@ export function SurahListScreen() {
               onPress={() => router.push(`/surah/${item.surah}?ayah=${item.ayah}`)}
               style={styles.resultRow}
             >
-              <ThemedText type="defaultSemiBold">
+              <AppText variant="bodyStrong">
                 {item.surah}:{item.ayah}
-              </ThemedText>
-              <ThemedText numberOfLines={2} style={styles.resultText}>
+              </AppText>
+              <AppText numberOfLines={2} style={styles.resultText}>
                 {item.text_translation}
-              </ThemedText>
+              </AppText>
             </Pressable>
           )}
         />
@@ -80,9 +82,9 @@ export function SurahListScreen() {
                 onPress={() => router.push(`/surah/${lastRead.surah}?ayah=${lastRead.ayah}`)}
                 style={[styles.continueChip, { backgroundColor: Colors[scheme].tint }]}
               >
-                <ThemedText lightColor="#fff" darkColor="#10201A" type="defaultSemiBold">
+                <AppText variant="bodyStrong" color={tk.textOnAccent}>
                   {t('quran.continueReading', { surah: lastRead.surah, ayah: lastRead.ayah })}
-                </ThemedText>
+                </AppText>
               </Pressable>
             ) : null
           }
@@ -94,15 +96,15 @@ export function SurahListScreen() {
               style={styles.row}
             >
               <View style={[styles.numberBadge, { borderColor: Colors[scheme].tint }]}>
-                <ThemedText style={{ color: Colors[scheme].tint }}>{item.number}</ThemedText>
+                <AppText style={{ color: Colors[scheme].tint }}>{item.number}</AppText>
               </View>
               <View style={styles.names}>
-                <ThemedText type="defaultSemiBold">{item.name_transliteration}</ThemedText>
-                <ThemedText style={styles.sub}>
+                <AppText variant="bodyStrong">{item.name_transliteration}</AppText>
+                <AppText style={styles.sub}>
                   {item.name_english} · {t('quran.verses', { count: item.ayah_count })}
-                </ThemedText>
+                </AppText>
               </View>
-              <ThemedText style={styles.arabicName}>{item.name_arabic}</ThemedText>
+              <AppText style={styles.arabicName}>{item.name_arabic}</AppText>
             </Pressable>
           )}
         />

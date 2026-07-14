@@ -4,7 +4,7 @@ import { FlashList } from '@shopify/flash-list';
 import { Modal, Pressable, StyleSheet, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { ThemedText } from '@/components/themed-text';
+import { AppText } from '@/src/components/ui';
 import { ThemedView } from '@/components/themed-view';
 import { Colors } from '@/constants/theme';
 import { City } from '@/src/features/settings/cities';
@@ -30,9 +30,9 @@ export function CityPickerModal({
     <Modal visible={visible} animationType="slide" onRequestClose={onClose}>
       <ThemedView style={[styles.container, { paddingTop: insets.top + 12 }]}>
         <View style={styles.header}>
-          <ThemedText type="subtitle">{t('cityPicker.title')}</ThemedText>
+          <AppText variant="subtitle">{t('cityPicker.title')}</AppText>
           <Pressable accessibilityRole="button" testID="close-picker" onPress={onClose}>
-            <ThemedText type="link">{t('common.close')}</ThemedText>
+            <AppText variant="link">{t('common.close')}</AppText>
           </Pressable>
         </View>
         <TextInput
@@ -50,9 +50,9 @@ export function CityPickerModal({
           keyExtractor={(c) => c.id}
           keyboardShouldPersistTaps="handled"
           ListEmptyComponent={
-            <ThemedText style={styles.hint}>
+            <AppText style={styles.hint}>
               {query.trim() ? t('cityPicker.noMatch') : t('cityPicker.hint')}
-            </ThemedText>
+            </AppText>
           }
           renderItem={({ item }) => (
             <Pressable
@@ -61,8 +61,8 @@ export function CityPickerModal({
               onPress={() => onSelect(item)}
               style={styles.row}
             >
-              <ThemedText>{item.name}</ThemedText>
-              <ThemedText style={styles.country}>{item.country}</ThemedText>
+              <AppText>{item.name}</AppText>
+              <AppText style={styles.country}>{item.country}</AppText>
             </Pressable>
           )}
         />

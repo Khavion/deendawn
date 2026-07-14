@@ -6,7 +6,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AdhanPrayer } from './scheduler';
-import { ThemedText } from '@/components/themed-text';
+import { AppText } from '@/src/components/ui';
 import { radius, spacing } from '@/src/lib/theme/tokens';
 import { useTokens } from '@/src/lib/theme/useTokens';
 
@@ -61,13 +61,13 @@ export function FullAdhanPlayer() {
       style={[styles.banner, { backgroundColor: t.accent, top: insets.top + spacing.s }]}
       testID="full-adhan-banner"
     >
-      <ThemedText type="defaultSemiBold" style={{ color: t.textOnAccent }}>
+      <AppText variant="bodyStrong" style={{ color: t.textOnAccent }}>
         {tr('notifications.playingFullAdhan', { prayer: tr(`prayers.${playing}`) })}
-      </ThemedText>
+      </AppText>
       <Pressable accessibilityRole="button" testID="stop-adhan" onPress={stop} hitSlop={12}>
-        <ThemedText type="defaultSemiBold" style={{ color: t.textOnAccent }}>
+        <AppText variant="bodyStrong" style={{ color: t.textOnAccent }}>
           {tr('common.stop')}
-        </ThemedText>
+        </AppText>
       </Pressable>
     </View>
   );

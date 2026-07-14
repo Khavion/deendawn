@@ -4,7 +4,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
-import { ThemedText } from '@/components/themed-text';
+import { AppText } from '@/src/components/ui';
 import { radius, spacing } from '@/src/lib/theme/tokens';
 import { useTokens } from '@/src/lib/theme/useTokens';
 import attribution from '@/assets/attribution.json';
@@ -32,43 +32,43 @@ export function AboutScreen() {
     <View style={[styles.container, { backgroundColor: t.bgCanvas }]}>
       <Stack.Screen options={{ title: tr('about.title') }} />
       <ScrollView contentContainerStyle={styles.scroll}>
-        <ThemedText type="title">Deen Dawn</ThemedText>
-        <ThemedText type="caption" style={{ color: t.textSecondary }}>
+        <AppText variant="title">Deen Dawn</AppText>
+        <AppText variant="caption" style={{ color: t.textSecondary }}>
           {tr('about.version', { version })}
-        </ThemedText>
-        <ThemedText type="caption" style={{ color: t.textSecondary }}>
+        </AppText>
+        <AppText variant="caption" style={{ color: t.textSecondary }}>
           {tr('about.publisher')}
-        </ThemedText>
+        </AppText>
 
         <View style={[styles.card, { backgroundColor: t.accentSoft }]}>
-          <ThemedText type="defaultSemiBold" style={{ color: t.textOnAccentSoft }}>
+          <AppText variant="bodyStrong" style={{ color: t.textOnAccentSoft }}>
             {tr('about.privacyTitle')}
-          </ThemedText>
-          <ThemedText type="serifBody" style={{ color: t.textOnAccentSoft }}>
+          </AppText>
+          <AppText variant="reading" style={{ color: t.textOnAccentSoft }}>
             {tr('about.privacyBody')}
-          </ThemedText>
+          </AppText>
         </View>
 
-        <ThemedText type="subtitle" style={styles.section}>
+        <AppText variant="subtitle" style={styles.section}>
           {tr('about.sources')}
-        </ThemedText>
+        </AppText>
         {artifacts.map((a) => (
           <View key={a.id} style={[styles.sourceRow, { borderBottomColor: t.border }]}>
-            <ThemedText type="serifBody">{a.attribution}</ThemedText>
-            <ThemedText type="caption" style={{ color: t.textSecondary }}>
+            <AppText variant="reading">{a.attribution}</AppText>
+            <AppText variant="caption" style={{ color: t.textSecondary }}>
               {a.license}
-            </ThemedText>
+            </AppText>
             {a.devOnly && (
-              <ThemedText type="caption" style={{ color: t.ochre }}>
+              <AppText variant="caption" style={{ color: t.ochre }}>
                 {tr('about.devOnly')}
-              </ThemedText>
+              </AppText>
             )}
           </View>
         ))}
 
-        <ThemedText type="caption" style={[styles.footer, { color: t.textSecondary }]}>
+        <AppText variant="caption" style={[styles.footer, { color: t.textSecondary }]}>
           {tr('about.madeWith')}
-        </ThemedText>
+        </AppText>
       </ScrollView>
     </View>
   );

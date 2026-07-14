@@ -9,7 +9,7 @@ import { ask, AskResponse, extractTerms } from '../router';
 import { askLibrary, LibraryAskResponse, sectionSnippet } from '../libraryAsk';
 import { openLibraryDb } from '../../library/libraryDb';
 import { AyahRow, QuranDb } from '../../quran/repo';
-import { ThemedText } from '@/components/themed-text';
+import { AppText } from '@/src/components/ui';
 import { fonts, fontSize, radius, spacing } from '@/src/lib/theme/tokens';
 import { useTokens } from '@/src/lib/theme/useTokens';
 
@@ -61,9 +61,9 @@ export function AskScreen() {
           onPress={() => openRef(row)}
           style={[styles.chip, { backgroundColor: t.accentSoft }]}
         >
-          <ThemedText type="defaultSemiBold" style={{ color: t.textOnAccentSoft }}>
+          <AppText variant="bodyStrong" style={{ color: t.textOnAccentSoft }}>
             {row.surah}:{row.ayah}
-          </ThemedText>
+          </AppText>
         </Pressable>
       ))}
     </View>
@@ -79,12 +79,12 @@ export function AskScreen() {
           onPress={() => openRef(row)}
           style={[styles.verseRow, { borderBottomColor: t.border }]}
         >
-          <ThemedText type="defaultSemiBold" style={{ color: t.accent }}>
+          <AppText variant="bodyStrong" style={{ color: t.accent }}>
             {row.surah}:{row.ayah}
-          </ThemedText>
-          <ThemedText type="serifBody" numberOfLines={2} style={{ color: t.textSecondary }}>
+          </AppText>
+          <AppText variant="reading" numberOfLines={2} style={{ color: t.textSecondary }}>
             {row.text_translation}
-          </ThemedText>
+          </AppText>
         </Pressable>
       ))}
     </View>
@@ -97,9 +97,9 @@ export function AskScreen() {
         { backgroundColor: t.bgCanvas, paddingTop: insets.top + spacing.m },
       ]}
     >
-      <ThemedText type="title" style={styles.title}>
+      <AppText variant="title" style={styles.title}>
         {tr('ask.title')}
-      </ThemedText>
+      </AppText>
       <TextInput
         testID="ask-input"
         value={input}
@@ -127,21 +127,21 @@ export function AskScreen() {
                 : { borderColor: t.border, borderWidth: 1 },
             ]}
           >
-            <ThemedText
-              type="defaultSemiBold"
+            <AppText
+              variant="bodyStrong"
               style={{ color: source === s ? t.textOnAccent : t.textSecondary }}
             >
               {tr(s === 'quran' ? 'ask.sourceQuran' : 'ask.sourceLibrary')}
-            </ThemedText>
+            </AppText>
           </Pressable>
         ))}
       </View>
 
       <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
         {response === null && libResponse === null && (
-          <ThemedText type="serifBody" style={[styles.hint, { color: t.textSecondary }]}>
+          <AppText variant="reading" style={[styles.hint, { color: t.textSecondary }]}>
             {tr(source === 'library' ? 'ask.hintLibrary' : 'ask.hint')}
-          </ThemedText>
+          </AppText>
         )}
 
         {libResponse?.kind === 'sections' && (
@@ -154,12 +154,12 @@ export function AskScreen() {
                 onPress={() => router.push(`/work/${ref.work_id}?section=${ref.section_index}`)}
                 style={[styles.verseRow, { borderBottomColor: t.border }]}
               >
-                <ThemedText type="defaultSemiBold" style={{ color: t.accent }}>
+                <AppText variant="bodyStrong" style={{ color: t.accent }}>
                   {ref.title}
-                </ThemedText>
-                <ThemedText type="serifBody" numberOfLines={3} style={{ color: t.textSecondary }}>
+                </AppText>
+                <AppText variant="reading" numberOfLines={3} style={{ color: t.textSecondary }}>
                   {sectionSnippet(ref.body, extractTerms(input))}
-                </ThemedText>
+                </AppText>
               </Pressable>
             ))}
           </View>
@@ -170,23 +170,23 @@ export function AskScreen() {
             testID="ask-redirect-library"
             style={[styles.redirectCard, { backgroundColor: t.ochreSoft }]}
           >
-            <ThemedText type="serifBody" style={{ color: t.ochre }}>
+            <AppText variant="reading" style={{ color: t.ochre }}>
               {tr('ask.redirect')}
-            </ThemedText>
+            </AppText>
           </View>
         )}
 
         {libResponse?.kind === 'empty' && (
-          <ThemedText testID="ask-empty-library" style={[styles.hint, { color: t.textSecondary }]}>
+          <AppText testID="ask-empty-library" style={[styles.hint, { color: t.textSecondary }]}>
             {tr('ask.empty')}
-          </ThemedText>
+          </AppText>
         )}
 
         {response?.kind === 'count' && (
           <View testID="ask-count">
-            <ThemedText style={[styles.countAnswer, { color: t.textPrimary }]}>
+            <AppText style={[styles.countAnswer, { color: t.textPrimary }]}>
               {tr('ask.countAnswer', { count: response.count, term: response.term })}
-            </ThemedText>
+            </AppText>
             {refChips(response.refs)}
           </View>
         )}
@@ -196,18 +196,18 @@ export function AskScreen() {
         {response?.kind === 'rulingRedirect' && (
           <View testID="ask-redirect">
             <View style={[styles.redirectCard, { backgroundColor: t.ochreSoft }]}>
-              <ThemedText type="serifBody" style={{ color: t.ochre }}>
+              <AppText variant="reading" style={{ color: t.ochre }}>
                 {tr('ask.redirect')}
-              </ThemedText>
+              </AppText>
             </View>
             {response.refs.length > 0 && verseRows(response.refs)}
           </View>
         )}
 
         {response?.kind === 'empty' && (
-          <ThemedText testID="ask-empty" style={[styles.hint, { color: t.textSecondary }]}>
+          <AppText testID="ask-empty" style={[styles.hint, { color: t.textSecondary }]}>
             {tr('ask.empty')}
-          </ThemedText>
+          </AppText>
         )}
       </ScrollView>
     </View>

@@ -9,7 +9,7 @@ import { ensurePermission, rescheduleAll } from '../../notifications/service';
 import { CityPickerModal } from '../../prayer-times/components/CityPickerModal';
 import { useSettings } from '../../settings/SettingsContext';
 import { resolveLocation } from '../../settings/settingsStore';
-import { ThemedText } from '@/components/themed-text';
+import { AppText } from '@/src/components/ui';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { radius, spacing } from '@/src/lib/theme/tokens';
 import { useTokens } from '@/src/lib/theme/useTokens';
@@ -57,12 +57,12 @@ export function OnboardingScreen() {
         subtle ? { borderColor: t.border, borderWidth: 1 } : { backgroundColor: t.accent },
       ]}
     >
-      <ThemedText
-        type="defaultSemiBold"
+      <AppText
+        variant="bodyStrong"
         style={{ color: subtle ? t.textSecondary : t.textOnAccent }}
       >
         {label}
-      </ThemedText>
+      </AppText>
     </Pressable>
   );
 
@@ -80,12 +80,12 @@ export function OnboardingScreen() {
       {step === 'welcome' && (
         <View style={styles.step} testID="step-welcome">
           <IconSymbol name="sun.max.fill" size={56} color={t.ochre} />
-          <ThemedText type="title" style={styles.center}>
+          <AppText variant="title" style={styles.center}>
             {tr('onboarding.welcomeTitle')}
-          </ThemedText>
-          <ThemedText type="serifBody" style={[styles.center, { color: t.textSecondary }]}>
+          </AppText>
+          <AppText variant="reading" style={[styles.center, { color: t.textSecondary }]}>
             {tr('onboarding.welcomeBody')}
-          </ThemedText>
+          </AppText>
           <Button
             label={tr('onboarding.begin')}
             onPress={() => setStep('city')}
@@ -97,12 +97,12 @@ export function OnboardingScreen() {
       {step === 'city' && (
         <View style={styles.step} testID="step-city">
           <IconSymbol name="location.fill" size={56} color={t.accent} />
-          <ThemedText type="title" style={styles.center}>
+          <AppText variant="title" style={styles.center}>
             {tr('onboarding.cityTitle')}
-          </ThemedText>
-          <ThemedText type="serifBody" style={[styles.center, { color: t.textSecondary }]}>
+          </AppText>
+          <AppText variant="reading" style={[styles.center, { color: t.textSecondary }]}>
             {tr('onboarding.cityBody')}
-          </ThemedText>
+          </AppText>
           <Button
             label={location ? location.label : tr('onboarding.chooseCity')}
             onPress={() => setPickerOpen(true)}
@@ -131,12 +131,12 @@ export function OnboardingScreen() {
       {step === 'notifications' && (
         <View style={styles.step} testID="step-notifications">
           <IconSymbol name="sun.max.fill" size={56} color={t.accent} />
-          <ThemedText type="title" style={styles.center}>
+          <AppText variant="title" style={styles.center}>
             {tr('onboarding.notifTitle')}
-          </ThemedText>
-          <ThemedText type="serifBody" style={[styles.center, { color: t.textSecondary }]}>
+          </AppText>
+          <AppText variant="reading" style={[styles.center, { color: t.textSecondary }]}>
             {tr('onboarding.notifBody')}
-          </ThemedText>
+          </AppText>
           <Button
             label={tr('onboarding.enableReminders')}
             onPress={() => void enableReminders()}

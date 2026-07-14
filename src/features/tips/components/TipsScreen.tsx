@@ -5,7 +5,7 @@ import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native';
 
 import type { TipOption, TipsBackend } from '../tipsService';
 import { getTipsBackend, hasTipped, markTipped } from '../tipsService';
-import { ThemedText } from '@/components/themed-text';
+import { AppText } from '@/src/components/ui';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { useSettings } from '@/src/features/settings/SettingsContext';
 import { radius, spacing } from '@/src/lib/theme/tokens';
@@ -80,20 +80,20 @@ export function TipsScreen({ backend = getTipsBackend() }: { backend?: TipsBacke
       <Stack.Screen options={{ title: tr('tips.title') }} />
       <View style={styles.body}>
         <IconSymbol name="sun.max.fill" size={44} color={t.ochre} />
-        <ThemedText type="title" style={styles.center}>
+        <AppText variant="title" style={styles.center}>
           {tr('tips.heading')}
-        </ThemedText>
-        <ThemedText type="serifBody" style={[styles.center, { color: t.textSecondary }]}>
+        </AppText>
+        <AppText variant="reading" style={[styles.center, { color: t.textSecondary }]}>
           {tr('tips.body')}
-        </ThemedText>
+        </AppText>
 
         {phase === 'loading' && <ActivityIndicator color={t.accent} testID="tips-loading" />}
 
         {phase === 'unavailable' && (
           <View style={[styles.card, { backgroundColor: t.bgSurface, borderColor: t.border }]}>
-            <ThemedText style={{ color: t.textSecondary }} testID="tips-unavailable">
+            <AppText style={{ color: t.textSecondary }} testID="tips-unavailable">
               {tr('tips.unavailable')}
-            </ThemedText>
+            </AppText>
           </View>
         )}
 
@@ -108,9 +108,9 @@ export function TipsScreen({ backend = getTipsBackend() }: { backend?: TipsBacke
                 onPress={() => void tip(o.id)}
                 style={[styles.tipButton, { backgroundColor: t.accent }]}
               >
-                <ThemedText type="defaultSemiBold" style={{ color: t.textOnAccent }}>
+                <AppText variant="bodyStrong" style={{ color: t.textOnAccent }}>
                   {o.priceLabel}
-                </ThemedText>
+                </AppText>
               </Pressable>
             ))}
           </View>
@@ -118,12 +118,12 @@ export function TipsScreen({ backend = getTipsBackend() }: { backend?: TipsBacke
 
         {phase === 'thanks' && (
           <View style={[styles.card, { backgroundColor: t.accentSoft }]} testID="tips-thanks">
-            <ThemedText type="defaultSemiBold" style={{ color: t.textOnAccentSoft }}>
+            <AppText variant="bodyStrong" style={{ color: t.textOnAccentSoft }}>
               {tr('tips.thanksTitle')}
-            </ThemedText>
-            <ThemedText type="serifBody" style={{ color: t.textOnAccentSoft }}>
+            </AppText>
+            <AppText variant="reading" style={{ color: t.textOnAccentSoft }}>
               {tr('tips.thanksBody')}
-            </ThemedText>
+            </AppText>
           </View>
         )}
 
@@ -134,13 +134,13 @@ export function TipsScreen({ backend = getTipsBackend() }: { backend?: TipsBacke
             onPress={() => void restore()}
             hitSlop={8}
           >
-            <ThemedText type="link">{tr('tips.restore')}</ThemedText>
+            <AppText variant="link">{tr('tips.restore')}</AppText>
           </Pressable>
         )}
 
-        <ThemedText type="caption" style={[styles.center, { color: t.textSecondary }]}>
+        <AppText variant="caption" style={[styles.center, { color: t.textSecondary }]}>
           {tr('tips.footnote')}
-        </ThemedText>
+        </AppText>
       </View>
     </View>
   );

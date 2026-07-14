@@ -8,7 +8,7 @@ import { Pressable, StyleSheet, TextInput, View } from 'react-native';
 import { openLibraryDb } from '../libraryDb';
 import { searchSections } from '../repo';
 import { THINKERS } from '../thinkers';
-import { ThemedText } from '@/components/themed-text';
+import { AppText } from '@/src/components/ui';
 import { radius, spacing } from '@/src/lib/theme/tokens';
 import { useTokens } from '@/src/lib/theme/useTokens';
 
@@ -52,9 +52,9 @@ export function LibraryScreen() {
           keyExtractor={(s) => String(s.id)}
           keyboardShouldPersistTaps="handled"
           ListEmptyComponent={
-            <ThemedText style={[styles.hint, { color: t.textSecondary }]}>
+            <AppText style={[styles.hint, { color: t.textSecondary }]}>
               {tr('library.noMatches')}
-            </ThemedText>
+            </AppText>
           }
           renderItem={({ item }) => (
             <Pressable
@@ -63,12 +63,12 @@ export function LibraryScreen() {
               onPress={() => router.push(`/work/${item.work_id}?section=${item.section_index}`)}
               style={[styles.row, { borderBottomColor: t.border }]}
             >
-              <ThemedText type="defaultSemiBold" style={{ color: t.accent }}>
+              <AppText variant="bodyStrong" style={{ color: t.accent }}>
                 {item.title} · {item.section_index}
-              </ThemedText>
-              <ThemedText type="serifBody" numberOfLines={2} style={{ color: t.textSecondary }}>
+              </AppText>
+              <AppText variant="reading" numberOfLines={2} style={{ color: t.textSecondary }}>
                 {item.body}
-              </ThemedText>
+              </AppText>
             </Pressable>
           )}
         />
@@ -78,9 +78,9 @@ export function LibraryScreen() {
           keyExtractor={(th) => th.key}
           ListHeaderComponent={
             <View style={[styles.reviewNote, { backgroundColor: t.ochreSoft }]}>
-              <ThemedText type="caption" style={{ color: t.ochre, textAlign: 'center' }}>
+              <AppText variant="caption" style={{ color: t.ochre, textAlign: 'center' }}>
                 {tr('library.reviewPending')}
-              </ThemedText>
+              </AppText>
             </View>
           }
           renderItem={({ item }) => (
@@ -90,10 +90,10 @@ export function LibraryScreen() {
               onPress={() => router.push(`/thinker/${item.key}`)}
               style={[styles.row, { borderBottomColor: t.border }]}
             >
-              <ThemedText type="defaultSemiBold">{item.name}</ThemedText>
-              <ThemedText type="caption" style={{ color: t.textSecondary }}>
+              <AppText variant="bodyStrong">{item.name}</AppText>
+              <AppText variant="caption" style={{ color: t.textSecondary }}>
                 {item.era} · {item.school}
-              </ThemedText>
+              </AppText>
             </Pressable>
           )}
         />

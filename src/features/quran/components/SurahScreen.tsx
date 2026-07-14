@@ -26,7 +26,7 @@ import {
 import { AyahRow, buildShareText, getSurah, listAyahs } from '../repo';
 import { getAyahRuns, TAJWEED_LEGEND } from '../tajweed';
 import { TAJWEED_ENABLED } from '../tajweedFlag';
-import { ThemedText } from '@/components/themed-text';
+import { AppText } from '@/src/components/ui';
 import { SurahAudioBar } from '@/src/features/audio/components/SurahAudioBar';
 import { useSettings } from '@/src/features/settings/SettingsContext';
 import { fonts, quranType, radius, spacing, tajweedColors } from '@/src/lib/theme/tokens';
@@ -82,7 +82,7 @@ export function SurahScreen() {
   if (!surah) {
     return (
       <View style={[styles.center, { backgroundColor: t.bgCanvas }]}>
-        <ThemedText style={{ color: t.textPrimary }}>{tr('quran.notFound')}</ThemedText>
+        <AppText style={{ color: t.textPrimary }}>{tr('quran.notFound')}</AppText>
       </View>
     );
   }
@@ -99,9 +99,9 @@ export function SurahScreen() {
               onPress={onToggleTranslation}
               hitSlop={8}
             >
-              <ThemedText type="link">
+              <AppText variant="link">
                 {showTranslation ? tr('quran.arabicOnly') : tr('quran.translation')}
-              </ThemedText>
+              </AppText>
             </Pressable>
           ),
         }}
@@ -127,9 +127,9 @@ export function SurahScreen() {
                 style={[styles.devBadge, { backgroundColor: t.ochreSoft }]}
                 testID="dev-translation-badge"
               >
-                <ThemedText type="caption" style={{ color: t.ochre, textAlign: 'center' }}>
+                <AppText variant="caption" style={{ color: t.ochre, textAlign: 'center' }}>
                   {tr('quran.devBadge')}
-                </ThemedText>
+                </AppText>
               </View>
             ) : null}
             {tajweedOn ? (
@@ -140,21 +140,21 @@ export function SurahScreen() {
                 ]}
                 testID="tajweed-legend"
               >
-                <ThemedText type="caption" style={{ color: t.ochre }}>
+                <AppText variant="caption" style={{ color: t.ochre }}>
                   {tr('quran.tajweed.pendingReview')}
-                </ThemedText>
-                <ThemedText type="caption" style={{ color: t.textSecondary }}>
+                </AppText>
+                <AppText variant="caption" style={{ color: t.textSecondary }}>
                   {tr('quran.tajweed.attribution')}
-                </ThemedText>
+                </AppText>
                 <View style={styles.legendRow}>
                   {TAJWEED_LEGEND.map((entry) => (
                     <View key={entry.colorKey} style={styles.legendItem}>
                       <View
                         style={[styles.legendDot, { backgroundColor: tajPalette[entry.colorKey] }]}
                       />
-                      <ThemedText type="caption" style={{ color: t.textSecondary }}>
+                      <AppText variant="caption" style={{ color: t.textSecondary }}>
                         {tr(entry.labelKey)}
-                      </ThemedText>
+                      </AppText>
                     </View>
                   ))}
                 </View>
@@ -169,7 +169,7 @@ export function SurahScreen() {
               style={[styles.ayahBlock, { borderBottomColor: t.border }]}
               testID={`ayah-${item.surah}-${item.ayah}`}
             >
-              <ThemedText style={[styles.arabic, { color: t.textPrimary }]}>
+              <AppText style={[styles.arabic, { color: t.textPrimary }]}>
                 {tajweedOn
                   ? getAyahRuns(item.surah, item.ayah, item.text_uthmani).map((run, i) =>
                       run.colorKey ? (
@@ -181,20 +181,20 @@ export function SurahScreen() {
                       )
                     )
                   : item.text_uthmani}
-              </ThemedText>
+              </AppText>
               {showTranslation && (
-                <ThemedText
-                  type="serifBody"
+                <AppText
+                  variant="reading"
                   style={[styles.translation, { color: t.textSecondary }]}
                   testID={`translation-${item.ayah}`}
                 >
                   {item.text_translation}
-                </ThemedText>
+                </AppText>
               )}
               <View style={styles.ayahFooter}>
-                <ThemedText type="caption" style={{ color: t.accent }}>
+                <AppText variant="caption" style={{ color: t.accent }}>
                   {item.surah}:{item.ayah}
-                </ThemedText>
+                </AppText>
                 <View style={styles.actions}>
                   <Pressable
                     accessibilityRole="button"
@@ -205,7 +205,7 @@ export function SurahScreen() {
                       setBookmarkVersion((v) => v + 1);
                     }}
                   >
-                    <ThemedText style={{ color: t.ochre }}>{bookmarked ? '★' : '☆'}</ThemedText>
+                    <AppText style={{ color: t.ochre }}>{bookmarked ? '★' : '☆'}</AppText>
                   </Pressable>
                   <Pressable
                     accessibilityRole="button"
@@ -219,7 +219,7 @@ export function SurahScreen() {
                       })
                     }
                   >
-                    <ThemedText style={{ color: t.accent }}>{tr('quran.share')}</ThemedText>
+                    <AppText style={{ color: t.accent }}>{tr('quran.share')}</AppText>
                   </Pressable>
                 </View>
               </View>

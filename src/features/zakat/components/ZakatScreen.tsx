@@ -17,7 +17,7 @@ import {
   NISAB_SILVER_GRAMS,
   ZakatInputs,
 } from '../zakat';
-import { ThemedText } from '@/components/themed-text';
+import { AppText } from '@/src/components/ui';
 import { fonts, fontSize, radius, spacing } from '@/src/lib/theme/tokens';
 import { useTokens } from '@/src/lib/theme/useTokens';
 
@@ -65,9 +65,9 @@ export function ZakatScreen() {
 
   const field = (key: FieldKey) => (
     <View style={styles.fieldRow} key={key}>
-      <ThemedText style={[styles.fieldLabel, { color: t.textSecondary }]}>
+      <AppText style={[styles.fieldLabel, { color: t.textSecondary }]}>
         {tr(`zakat.fields.${key}`)}
-      </ThemedText>
+      </AppText>
       <TextInput
         testID={`zakat-${key}`}
         value={raw[key]}
@@ -91,50 +91,50 @@ export function ZakatScreen() {
         <View style={[styles.resultCard, { backgroundColor: t.accent }]} testID="zakat-result">
           {result.status === 'due' ? (
             <>
-              <ThemedText type="defaultSemiBold" style={{ color: t.textOnAccent, opacity: 0.85 }}>
+              <AppText variant="bodyStrong" style={{ color: t.textOnAccent, opacity: 0.85 }}>
                 {tr('zakat.due')}
-              </ThemedText>
-              <ThemedText style={[styles.resultAmount, { color: t.textOnAccent }]}>
+              </AppText>
+              <AppText style={[styles.resultAmount, { color: t.textOnAccent }]}>
                 {fmt(result.zakatDue)}
-              </ThemedText>
+              </AppText>
             </>
           ) : (
-            <ThemedText
-              type="defaultSemiBold"
+            <AppText
+              variant="bodyStrong"
               style={{ color: t.textOnAccent, textAlign: 'center' }}
             >
               {tr(result.status === 'needPrices' ? 'zakat.needPrices' : 'zakat.belowNisab')}
-            </ThemedText>
+            </AppText>
           )}
           {result.nisabThreshold !== null && (
-            <ThemedText type="caption" style={{ color: t.textOnAccent, opacity: 0.85 }}>
+            <AppText variant="caption" style={{ color: t.textOnAccent, opacity: 0.85 }}>
               {tr('zakat.nisabLine', { amount: fmt(result.nisabThreshold) })}
-            </ThemedText>
+            </AppText>
           )}
         </View>
 
-        <ThemedText type="subtitle" style={styles.section}>
+        <AppText variant="subtitle" style={styles.section}>
           {tr('zakat.assets')}
-        </ThemedText>
+        </AppText>
         {ASSET_FIELDS.map(field)}
 
-        <ThemedText type="subtitle" style={styles.section}>
+        <AppText variant="subtitle" style={styles.section}>
           {tr('zakat.liabilitiesSection')}
-        </ThemedText>
+        </AppText>
         {field('liabilities')}
 
-        <ThemedText type="subtitle" style={styles.section}>
+        <AppText variant="subtitle" style={styles.section}>
           {tr('zakat.prices')}
-        </ThemedText>
-        <ThemedText type="caption" style={[styles.note, { color: t.textSecondary }]}>
+        </AppText>
+        <AppText variant="caption" style={[styles.note, { color: t.textSecondary }]}>
           {tr('zakat.pricesNote', { gold: NISAB_GOLD_GRAMS, silver: NISAB_SILVER_GRAMS })}
-        </ThemedText>
+        </AppText>
         {PRICE_FIELDS.map(field)}
 
         <View style={[styles.disclaimer, { backgroundColor: t.ochreSoft }]}>
-          <ThemedText type="caption" style={{ color: t.ochre, textAlign: 'center' }}>
+          <AppText variant="caption" style={{ color: t.ochre, textAlign: 'center' }}>
             {tr('zakat.disclaimer')}
-          </ThemedText>
+          </AppText>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>

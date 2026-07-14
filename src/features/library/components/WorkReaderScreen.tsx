@@ -7,7 +7,7 @@ import { StyleSheet, View } from 'react-native';
 
 import { openLibraryDb } from '../libraryDb';
 import { getWork, listSections, SectionRow, WorkRow } from '../repo';
-import { ThemedText } from '@/components/themed-text';
+import { AppText } from '@/src/components/ui';
 import { spacing } from '@/src/lib/theme/tokens';
 import { useTokens } from '@/src/lib/theme/useTokens';
 
@@ -48,18 +48,18 @@ export function WorkReaderScreen() {
         contentContainerStyle={styles.list}
         ListHeaderComponent={
           work ? (
-            <ThemedText type="caption" style={[styles.attribution, { color: t.textSecondary }]}>
+            <AppText variant="caption" style={[styles.attribution, { color: t.textSecondary }]}>
               {tr('library.translatedBy', { translator: work.translator, year: work.year })} ·{' '}
               {tr('library.publicDomain')}
-            </ThemedText>
+            </AppText>
           ) : null
         }
         renderItem={({ item }) => (
           <View style={styles.sectionBlock} testID={`section-${item.section_index}`}>
-            <ThemedText type="caption" style={{ color: t.accent }}>
+            <AppText variant="caption" style={{ color: t.accent }}>
               {item.section_index}
-            </ThemedText>
-            <ThemedText type="serifBody">{item.body}</ThemedText>
+            </AppText>
+            <AppText variant="reading">{item.body}</AppText>
           </View>
         )}
       />

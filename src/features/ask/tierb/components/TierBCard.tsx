@@ -4,7 +4,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 
 import type { DownloadState } from '../downloadManager';
 import { TIER_B_ENABLED } from '../flags';
-import { ThemedText } from '@/components/themed-text';
+import { AppText } from '@/src/components/ui';
 import { radius, spacing } from '@/src/lib/theme/tokens';
 import { useTokens } from '@/src/lib/theme/useTokens';
 
@@ -36,27 +36,27 @@ export function TierBCardInner({ state, sizeLabel, onDownload, onDelete }: TierB
       style={[styles.card, { backgroundColor: t.bgSurface, borderColor: t.border }]}
       testID="tierb-card"
     >
-      <ThemedText type="defaultSemiBold">{tr('ask.tierb.title')}</ThemedText>
-      <ThemedText type="caption" style={{ color: t.textSecondary }}>
+      <AppText variant="bodyStrong">{tr('ask.tierb.title')}</AppText>
+      <AppText variant="caption" style={{ color: t.textSecondary }}>
         {tr('ask.tierb.body')}
-      </ThemedText>
+      </AppText>
 
       {state.phase === 'blocked' && state.reason === 'ineligibleDevice' && (
-        <ThemedText type="caption" style={{ color: t.textSecondary }} testID="tierb-ineligible">
+        <AppText variant="caption" style={{ color: t.textSecondary }} testID="tierb-ineligible">
           {tr('ask.tierb.ineligible')}
-        </ThemedText>
+        </AppText>
       )}
 
       {state.phase === 'blocked' && state.reason === 'pendingUpload' && (
-        <ThemedText type="caption" style={{ color: t.textSecondary }} testID="tierb-pending">
+        <AppText variant="caption" style={{ color: t.textSecondary }} testID="tierb-pending">
           {tr('ask.tierb.pendingUpload')}
-        </ThemedText>
+        </AppText>
       )}
 
       {state.phase === 'blocked' && state.reason === 'cellular' && (
-        <ThemedText type="caption" style={{ color: t.ochre }} testID="tierb-wifi">
+        <AppText variant="caption" style={{ color: t.ochre }} testID="tierb-wifi">
           {tr('ask.tierb.wifiOnly')}
-        </ThemedText>
+        </AppText>
       )}
 
       {state.phase === 'idle' && (
@@ -66,9 +66,9 @@ export function TierBCardInner({ state, sizeLabel, onDownload, onDelete }: TierB
           onPress={onDownload}
           style={[styles.button, { backgroundColor: t.accent }]}
         >
-          <ThemedText type="defaultSemiBold" style={{ color: t.textOnAccent }}>
+          <AppText variant="bodyStrong" style={{ color: t.textOnAccent }}>
             {tr('ask.tierb.download', { size: sizeLabel })}
-          </ThemedText>
+          </AppText>
         </Pressable>
       )}
 
@@ -89,36 +89,36 @@ export function TierBCardInner({ state, sizeLabel, onDownload, onDelete }: TierB
               ]}
             />
           </View>
-          <ThemedText type="caption" style={{ color: t.textSecondary }}>
+          <AppText variant="caption" style={{ color: t.textSecondary }}>
             {tr('ask.tierb.downloading')}
-          </ThemedText>
+          </AppText>
         </View>
       )}
 
       {state.phase === 'verifying' && (
-        <ThemedText type="caption" style={{ color: t.textSecondary }} testID="tierb-verifying">
+        <AppText variant="caption" style={{ color: t.textSecondary }} testID="tierb-verifying">
           {tr('ask.tierb.verifying')}
-        </ThemedText>
+        </AppText>
       )}
 
       {state.phase === 'failed' && (
-        <ThemedText type="caption" style={{ color: t.ochre }} testID="tierb-failed">
+        <AppText variant="caption" style={{ color: t.ochre }} testID="tierb-failed">
           {state.reason === 'hashMismatch' ? tr('ask.tierb.hashMismatch') : tr('ask.tierb.failed')}
-        </ThemedText>
+        </AppText>
       )}
 
       {state.phase === 'ready' && (
         <View style={styles.readyRow} testID="tierb-ready">
-          <ThemedText type="caption" style={{ color: t.success }}>
+          <AppText variant="caption" style={{ color: t.success }}>
             {tr('ask.tierb.ready')}
-          </ThemedText>
+          </AppText>
           <Pressable
             accessibilityRole="button"
             testID="tierb-delete"
             onPress={onDelete}
             hitSlop={8}
           >
-            <ThemedText type="link">{tr('ask.tierb.delete')}</ThemedText>
+            <AppText variant="link">{tr('ask.tierb.delete')}</AppText>
           </Pressable>
         </View>
       )}

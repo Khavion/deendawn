@@ -35,7 +35,7 @@ import { useSettings } from '../SettingsContext';
 import { resolveLocation } from '../settingsStore';
 import { CityPickerModal } from '../../prayer-times/components/CityPickerModal';
 import { HighLatRuleKey, MadhabKey, METHOD_KEYS, MethodKey } from '../../prayer-times/types';
-import { ThemedText } from '@/components/themed-text';
+import { AppText } from '@/src/components/ui';
 import { ThemedView } from '@/components/themed-view';
 import i18n, {
   applyRtlForNextStart,
@@ -82,12 +82,12 @@ function PickerModal<T extends string>({
     <Modal visible={visible} animationType="slide" onRequestClose={onClose}>
       <ThemedView style={[styles.modalContainer, { paddingTop: insets.top + 12 }]}>
         <View style={styles.modalHeader}>
-          <ThemedText type="subtitle">{title}</ThemedText>
+          <AppText variant="subtitle">{title}</AppText>
           <Pressable accessibilityRole="button" testID="close-option-picker" onPress={onClose}>
-            <ThemedText type="link">{closeLabel}</ThemedText>
+            <AppText variant="link">{closeLabel}</AppText>
           </Pressable>
         </View>
-        {hint ? <ThemedText style={styles.sectionHint}>{hint}</ThemedText> : null}
+        {hint ? <AppText style={styles.sectionHint}>{hint}</AppText> : null}
         <ScrollView>
           {options.map((o) => (
             <Pressable
@@ -100,13 +100,13 @@ function PickerModal<T extends string>({
               }}
               style={styles.optionRow}
             >
-              <ThemedText
-                type={o.key === selected ? 'defaultSemiBold' : 'default'}
+              <AppText
+                variant={o.key === selected ? 'bodyStrong' : 'body'}
                 style={o.key === selected ? { color: Colors[scheme].tint } : undefined}
               >
                 {o.label}
                 {o.key === selected ? '  ✓' : ''}
-              </ThemedText>
+              </AppText>
             </Pressable>
           ))}
         </ScrollView>
@@ -268,10 +268,10 @@ export function MoreScreen() {
   return (
     <ThemedView style={[styles.container, { paddingTop: insets.top + 12 }]}>
       <ScrollView contentContainerStyle={styles.scroll}>
-        <ThemedText type="title" style={styles.title}>
+        <AppText variant="title" style={styles.title}>
           {t('more.title')}
-        </ThemedText>
-        <ThemedText style={styles.sectionHint}>{t('more.hint')}</ThemedText>
+        </AppText>
+        <AppText style={styles.sectionHint}>{t('more.hint')}</AppText>
         {rows.map((row) => (
           <Pressable
             key={row.id}
@@ -280,14 +280,14 @@ export function MoreScreen() {
             onPress={row.onPress}
             style={styles.settingRow}
           >
-            <ThemedText type="defaultSemiBold">{row.title}</ThemedText>
-            <ThemedText style={styles.settingValue}>{row.value}</ThemedText>
+            <AppText variant="bodyStrong">{row.title}</AppText>
+            <AppText style={styles.settingValue}>{row.value}</AppText>
           </Pressable>
         ))}
-        <ThemedText type="title" style={[styles.title, styles.sectionTitle]}>
+        <AppText variant="title" style={[styles.title, styles.sectionTitle]}>
           {t('more.notifications')}
-        </ThemedText>
-        <ThemedText style={styles.sectionHint}>{t('more.notificationsHint')}</ThemedText>
+        </AppText>
+        <AppText style={styles.sectionHint}>{t('more.notificationsHint')}</AppText>
         {ADHAN_PRAYERS.map((prayer) => (
           <View key={prayer} style={styles.settingRowInline}>
             <Pressable
@@ -296,10 +296,10 @@ export function MoreScreen() {
               style={styles.rowText}
               onPress={() => setSoundPickerFor(prayer)}
             >
-              <ThemedText type="defaultSemiBold">{t(`prayers.${prayer}`)}</ThemedText>
-              <ThemedText style={styles.settingValue}>
+              <AppText variant="bodyStrong">{t(`prayers.${prayer}`)}</AppText>
+              <AppText style={styles.settingValue}>
                 {t(`more.sound_${prefs.sound[prayer]}`)}
-              </ThemedText>
+              </AppText>
             </Pressable>
             <Switch
               testID={`notif-${prayer}`}
@@ -308,13 +308,13 @@ export function MoreScreen() {
             />
           </View>
         ))}
-        <ThemedText type="title" style={[styles.title, styles.sectionTitle]}>
+        <AppText variant="title" style={[styles.title, styles.sectionTitle]}>
           {t('more.reading')}
-        </ThemedText>
+        </AppText>
         <View style={styles.settingRowInline}>
           <View style={styles.rowText}>
-            <ThemedText type="defaultSemiBold">{t('more.nightWarm')}</ThemedText>
-            <ThemedText style={styles.settingValue}>{t('more.nightWarmDesc')}</ThemedText>
+            <AppText variant="bodyStrong">{t('more.nightWarm')}</AppText>
+            <AppText style={styles.settingValue}>{t('more.nightWarmDesc')}</AppText>
           </View>
           <Switch
             testID="night-warm"
@@ -328,8 +328,8 @@ export function MoreScreen() {
         {TAJWEED_ENABLED && (
           <View style={styles.settingRowInline}>
             <View style={styles.rowText}>
-              <ThemedText type="defaultSemiBold">{t('more.tajweed')}</ThemedText>
-              <ThemedText style={styles.settingValue}>{t('more.tajweedDesc')}</ThemedText>
+              <AppText variant="bodyStrong">{t('more.tajweed')}</AppText>
+              <AppText style={styles.settingValue}>{t('more.tajweedDesc')}</AppText>
             </View>
             <Switch
               testID="tajweed-toggle"
@@ -354,7 +354,7 @@ export function MoreScreen() {
             onDelete={() => {}}
           />
         </View>
-        <ThemedText style={styles.privacyNote}>{t('more.privacyNote')}</ThemedText>
+        <AppText style={styles.privacyNote}>{t('more.privacyNote')}</AppText>
       </ScrollView>
 
       <CityPickerModal

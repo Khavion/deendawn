@@ -8,7 +8,7 @@ import { getAudioSource } from '../config';
 import { formatClock, progressFraction, resumeSeekTarget } from '../playerLogic';
 import { clearResumePosition, getResumePosition, saveResumePosition } from '../resumeStore';
 import { surahAudioUrl } from '../urls';
-import { ThemedText } from '@/components/themed-text';
+import { AppText } from '@/src/components/ui';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { useSettings } from '@/src/features/settings/SettingsContext';
 import { radius, spacing } from '@/src/lib/theme/tokens';
@@ -138,14 +138,14 @@ function AudioBarInner({
           )}
         </Pressable>
         <View style={styles.meta}>
-          <ThemedText type="defaultSemiBold" numberOfLines={1}>
+          <AppText variant="bodyStrong" numberOfLines={1}>
             {tr('audio.listen')}
-          </ThemedText>
-          <ThemedText type="caption" style={{ color: t.textSecondary }} testID="surah-audio-time">
+          </AppText>
+          <AppText variant="caption" style={{ color: t.textSecondary }} testID="surah-audio-time">
             {started || status.currentTime > 0
               ? `${formatClock(status.currentTime)} / ${formatClock(status.duration)}`
               : tr('audio.streamed')}
-          </ThemedText>
+          </AppText>
         </View>
       </View>
       <View style={[styles.track, { backgroundColor: t.border }]}>
@@ -160,9 +160,9 @@ function AudioBarInner({
         />
       </View>
       {source.placeholder && (
-        <ThemedText type="caption" style={{ color: t.ochre }} testID="audio-dev-badge">
+        <AppText variant="caption" style={{ color: t.ochre }} testID="audio-dev-badge">
           {tr('audio.devBadge')}
-        </ThemedText>
+        </AppText>
       )}
     </View>
   );
