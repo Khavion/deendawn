@@ -134,3 +134,37 @@ export const duration = { fast: 200, normal: 250, slow: 300 } as const;
 
 /** Cap Dynamic Type scaling so layouts degrade gracefully, not brokenly. */
 export const MAX_FONT_SCALE = 1.4;
+
+/**
+ * Tajweed rule colors (light/dark). Hues follow a common printed-mushaf scheme;
+ * the rule→color MAPPING is flagged SCHOLAR-REVIEW (see src/features/quran/
+ * tajweed.ts). Chosen for legibility on both grounds against the ivory/dark
+ * Quran canvas. `silent` deliberately reads as muted grey (not pronounced).
+ */
+export type TajweedColorMap = Record<
+  'maddLong' | 'maddNatural' | 'ghunnah' | 'ikhfa' | 'iqlab' | 'qalqalah' | 'idghaam' | 'silent',
+  string
+>;
+
+export const tajweedColors: Record<'light' | 'dark', TajweedColorMap> = {
+  light: {
+    maddLong: '#C0392B',
+    maddNatural: '#B9770E',
+    ghunnah: '#2E7D32',
+    ikhfa: '#0E7C86',
+    iqlab: '#7B3FB0',
+    qalqalah: '#2456C0',
+    idghaam: '#6B7280',
+    silent: '#A7A29A',
+  },
+  dark: {
+    maddLong: '#F08A7E',
+    maddNatural: '#E0A96D',
+    ghunnah: '#8CCB92',
+    ikhfa: '#6FC6D0',
+    iqlab: '#C4A6EC',
+    qalqalah: '#8FB2E8',
+    idghaam: '#A6ADB8',
+    silent: '#7C766C',
+  },
+};

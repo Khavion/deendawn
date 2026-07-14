@@ -22,7 +22,8 @@ import {
 } from '../../notifications/prefsStore';
 import { ADHAN_PRAYERS, AdhanPrayer, SoundKey } from '../../notifications/scheduler';
 import { ensurePermission, rescheduleAll } from '../../notifications/service';
-import { loadNightWarm, saveNightWarm } from '../../quran/readerState';
+import { loadNightWarm, loadTajweed, saveNightWarm, saveTajweed } from '../../quran/readerState';
+import { TAJWEED_ENABLED } from '../../quran/tajweedFlag';
 import { TierBCard } from '../../ask/tierb/components/TierBCard';
 import {
   formatBytes,
@@ -124,6 +125,7 @@ export function MoreScreen() {
   >(null);
   const [prefs, setPrefs] = useState(() => loadNotificationPrefs(store));
   const [nightWarm, setNightWarm] = useState(() => loadNightWarm(store));
+  const [tajweed, setTajweed] = useState(() => loadTajweed(store));
   const [soundPickerFor, setSoundPickerFor] = useState<AdhanPrayer | null>(null);
   const location = resolveLocation(settings);
   const currentLanguage = (loadLanguage(store) ?? i18n.language) as LanguageCode;
@@ -323,6 +325,22 @@ export function MoreScreen() {
             }}
           />
         </View>
+        {TAJWEED_ENABLED && (
+          <View style={styles.settingRowInline}>
+            <View style={styles.rowText}>
+              <ThemedText type="defaultSemiBold">{t('more.tajweed')}</ThemedText>
+              <ThemedText style={styles.settingValue}>{t('more.tajweedDesc')}</ThemedText>
+            </View>
+            <Switch
+              testID="tajweed-toggle"
+              value={tajweed}
+              onValueChange={(v) => {
+                setTajweed(v);
+                saveTajweed(store, v);
+              }}
+            />
+          </View>
+        )}
         {/* Tier B (on-device AI answers). GATE 7: TierBCard self-gates on
             TIER_B_ENABLED and renders nothing until Zohaib + scholar sign-off.
             Wired here so enabling is a one-line flag flip. Model files are

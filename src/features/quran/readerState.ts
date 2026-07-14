@@ -9,6 +9,7 @@ const BOOKMARKS_KEY = 'quran.bookmarks.v1';
 const LAST_READ_KEY = 'quran.lastRead.v1';
 const SHOW_TRANSLATION_KEY = 'quran.showTranslation.v1';
 const NIGHT_WARM_KEY = 'quran.nightWarm.v1';
+const TAJWEED_KEY = 'quran.tajweed.v1';
 
 const isRef = (o: unknown): o is AyahRef =>
   typeof o === 'object' &&
@@ -69,4 +70,13 @@ export function loadNightWarm(store: KVStore): boolean {
 
 export function saveNightWarm(store: KVStore, on: boolean): void {
   store.set(NIGHT_WARM_KEY, String(on));
+}
+
+/** Tajweed color-coding, off by default (gated — see tajweedFlag.ts). */
+export function loadTajweed(store: KVStore): boolean {
+  return store.get(TAJWEED_KEY) === 'true';
+}
+
+export function saveTajweed(store: KVStore, on: boolean): void {
+  store.set(TAJWEED_KEY, String(on));
 }

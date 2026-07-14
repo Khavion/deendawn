@@ -76,9 +76,7 @@ describe('verifyManifest', () => {
     for (const path of ['../secrets/x.gguf', 'https://evil.com/x.gguf']) {
       const m = JSON.stringify({
         version: 1,
-        artifacts: [
-          { id: 'x', filename: 'x.gguf', sha256: 'a'.repeat(64), bytes: 10, path },
-        ],
+        artifacts: [{ id: 'x', filename: 'x.gguf', sha256: 'a'.repeat(64), bytes: 10, path }],
       });
       const { publicKeyB64, signatureB64 } = sign(m);
       expect(verifyManifest(m, signatureB64, publicKeyB64)).toBeNull();

@@ -25,6 +25,13 @@ jest.mock('react-native-safe-area-context', () => ({
   useSafeAreaInsets: () => ({ top: 0, bottom: 0, left: 0, right: 0 }),
 }));
 jest.mock('expo-sqlite', () => ({ useSQLiteContext: () => mockDb }));
+jest.mock('expo-audio', () => ({
+  useAudioPlayer: () => ({}),
+  useAudioPlayerStatus: () => ({ currentTime: 0, duration: 0, playing: false }),
+  setAudioModeAsync: jest.fn(),
+}));
+// No audio source configured in tests → the Listen bar renders nothing.
+jest.mock('@/src/features/audio/config', () => ({ getAudioSource: () => null }));
 jest.mock('expo-router', () => ({
   useRouter: () => ({ push: mockRouterPush }),
   useLocalSearchParams: () => mockSearchParams,

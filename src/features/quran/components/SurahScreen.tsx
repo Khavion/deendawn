@@ -3,21 +3,33 @@ import { Stack, useLocalSearchParams } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { InteractionManager, Pressable, Share, StyleSheet, View, ViewToken } from 'react-native';
+import {
+  InteractionManager,
+  Pressable,
+  Share,
+  StyleSheet,
+  Text,
+  useColorScheme,
+  View,
+  ViewToken,
+} from 'react-native';
 
 import {
   isBookmarked,
   loadNightWarm,
   loadShowTranslation,
+  loadTajweed,
   saveLastRead,
   saveShowTranslation,
   toggleBookmark,
 } from '../readerState';
 import { AyahRow, buildShareText, getSurah, listAyahs } from '../repo';
+import { getAyahRuns, TAJWEED_LEGEND } from '../tajweed';
+import { TAJWEED_ENABLED } from '../tajweedFlag';
 import { ThemedText } from '@/components/themed-text';
 import { SurahAudioBar } from '@/src/features/audio/components/SurahAudioBar';
 import { useSettings } from '@/src/features/settings/SettingsContext';
-import { fonts, quranType, radius, spacing } from '@/src/lib/theme/tokens';
+import { fonts, quranType, radius, spacing, tajweedColors } from '@/src/lib/theme/tokens';
 import { useTokens } from '@/src/lib/theme/useTokens';
 
 export function SurahScreen() {
@@ -28,6 +40,9 @@ export function SurahScreen() {
   const surahNumber = Number(params.id);
   const nightWarm = loadNightWarm(store);
   const t = useTokens(nightWarm ? 'nightWarm' : undefined);
+  const scheme = useColorScheme();
+  const tajweedOn = TAJWEED_ENABLED && loadTajweed(store);
+  const tajPalette = nightWarm || scheme === 'dark' ? tajweedColors.dark : tajweedColors.light;
 
   const surah = useMemo(() => getSurah(db, surahNumber), [db, surahNumber]);
   // E7: keep the push animation clean — heavy row materialization waits for
@@ -106,16 +121,46 @@ export function SurahScreen() {
         viewabilityConfig={{ itemVisiblePercentThreshold: 60 }}
         contentContainerStyle={styles.list}
         ListHeaderComponent={
-          showTranslation && __DEV__ ? (
-            <View
-              style={[styles.devBadge, { backgroundColor: t.ochreSoft }]}
-              testID="dev-translation-badge"
-            >
-              <ThemedText type="caption" style={{ color: t.ochre, textAlign: 'center' }}>
-                {tr('quran.devBadge')}
-              </ThemedText>
-            </View>
-          ) : null
+          <>
+            {showTranslation && __DEV__ ? (
+              <View
+                style={[styles.devBadge, { backgroundColor: t.ochreSoft }]}
+                testID="dev-translation-badge"
+              >
+                <ThemedText type="caption" style={{ color: t.ochre, textAlign: 'center' }}>
+                  {tr('quran.devBadge')}
+                </ThemedText>
+              </View>
+            ) : null}
+            {tajweedOn ? (
+              <View
+                style={[
+                  styles.tajweedLegend,
+                  { backgroundColor: t.bgSurface, borderColor: t.border },
+                ]}
+                testID="tajweed-legend"
+              >
+                <ThemedText type="caption" style={{ color: t.ochre }}>
+                  {tr('quran.tajweed.pendingReview')}
+                </ThemedText>
+                <ThemedText type="caption" style={{ color: t.textSecondary }}>
+                  {tr('quran.tajweed.attribution')}
+                </ThemedText>
+                <View style={styles.legendRow}>
+                  {TAJWEED_LEGEND.map((entry) => (
+                    <View key={entry.colorKey} style={styles.legendItem}>
+                      <View
+                        style={[styles.legendDot, { backgroundColor: tajPalette[entry.colorKey] }]}
+                      />
+                      <ThemedText type="caption" style={{ color: t.textSecondary }}>
+                        {tr(entry.labelKey)}
+                      </ThemedText>
+                    </View>
+                  ))}
+                </View>
+              </View>
+            ) : null}
+          </>
         }
         renderItem={({ item }) => {
           const bookmarked = isBookmarked(store, { surah: item.surah, ayah: item.ayah });
@@ -125,7 +170,17 @@ export function SurahScreen() {
               testID={`ayah-${item.surah}-${item.ayah}`}
             >
               <ThemedText style={[styles.arabic, { color: t.textPrimary }]}>
-                {item.text_uthmani}
+                {tajweedOn
+                  ? getAyahRuns(item.surah, item.ayah, item.text_uthmani).map((run, i) =>
+                      run.colorKey ? (
+                        <Text key={i} style={{ color: tajPalette[run.colorKey] }}>
+                          {run.text}
+                        </Text>
+                      ) : (
+                        run.text
+                      )
+                    )
+                  : item.text_uthmani}
               </ThemedText>
               {showTranslation && (
                 <ThemedText
@@ -171,7 +226,7 @@ export function SurahScreen() {
             </View>
           );
         }}
-        extraData={`${showTranslation}-${bookmarkVersion}-${nightWarm}`}
+        extraData={`${showTranslation}-${bookmarkVersion}-${nightWarm}-${tajweedOn}`}
       />
     </View>
   );
@@ -187,6 +242,16 @@ const styles = StyleSheet.create({
     padding: spacing.s,
     marginBottom: spacing.s,
   },
+  tajweedLegend: {
+    borderRadius: radius.control,
+    borderWidth: StyleSheet.hairlineWidth,
+    padding: spacing.m,
+    marginBottom: spacing.s,
+    gap: spacing.s,
+  },
+  legendRow: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.m },
+  legendItem: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
+  legendDot: { width: 12, height: 12, borderRadius: 6 },
   ayahBlock: {
     paddingVertical: spacing.l,
     gap: spacing.m,

@@ -76,6 +76,6 @@ I'll verify the files, put them on the app's storage, and switch the listening
 feature on — it's already fully built and just waiting for cleared audio.
 
 **Note on framing (kept honest):** the email mentions the optional tip button on
-purpose. If a reciter only permits *strictly non-commercial* use, the tip jar
+purpose. If a reciter only permits _strictly non-commercial_ use, the tip jar
 could be argued to make the app commercial-adjacent — so it's better they know
 up front and say yes with full information than for it to become an issue later.

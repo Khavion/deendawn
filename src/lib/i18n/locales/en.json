@@ -51,7 +51,19 @@
     "translation": "Translation",
     "devBadge": "DEV translation (Pickthall, 1930) — final translation pending review",
     "share": "Share",
-    "notFound": "Surah not found."
+    "notFound": "Surah not found.",
+    "tajweed": {
+      "pendingReview": "Tajweed colors — draft, pending scholarly review",
+      "maddLong": "Long madd",
+      "maddNatural": "Natural madd",
+      "ghunnah": "Ghunnah",
+      "qalqalah": "Qalqalah",
+      "ikhfa": "Ikhfa",
+      "iqlab": "Iqlab",
+      "idghaam": "Idghaam",
+      "silent": "Silent",
+      "attribution": "Tajweed data: cpfair/quran-tajweed (CC BY 4.0)"
+    }
   },
   "qibla": {
     "title": "Qibla",
@@ -109,7 +121,9 @@
     "zakat": "Zakat calculator",
     "library": "Thinkers & books",
     "about": "About & attributions",
-    "tips": "Support the app"
+    "tips": "Support the app",
+    "tajweed": "Tajweed colors",
+    "tajweedDesc": "Color the Quran by pronunciation rules (draft — pending review)"
   },
   "methods": {
     "MuslimWorldLeague": "Muslim World League",
