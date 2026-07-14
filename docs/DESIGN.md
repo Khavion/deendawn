@@ -1,39 +1,70 @@
-# DESIGN — DeenDawn "Warm Editorial" system
+# DESIGN — Deen Dawn (Khavion brand system)
 
-Source: research brief provided by Zohaib on 2026-07-12. This file is the working
-summary; the operative rules live in `src/lib/theme/tokens.ts` (every component
-derives from tokens — never hardcode a hex, radius, or duration inline).
+Working summary; the operative rules live in `src/lib/theme/tokens.ts` (every
+component derives from tokens — never hardcode a hex, radius, or duration
+inline). Contrast is enforced by `src/lib/theme/__tests__/contrast.test.ts`.
+
+> **Supersession (2026-07-14):** this Khavion brand palette replaces the earlier
+> "warm-editorial" lapis/ochre + Literata/Source Sans system. Brand source: the
+> Khavion site (reference HTML was not available in-repo, so colors/radii/fonts
+> come from the brief's explicit values; the Latin type scale is derived).
 
 ## Direction
 
-Warm editorial: serif reading face + humanist UI sans + unmodified Amiri Quran
-for Arabic; manuscript-derived palette (lapis, gold ochre, ivory) tokenized for
-light / dark / night-warm; disciplined restraint. Anti-goals ("AI slop"):
-Inter-everywhere, purple/indigo gradients, uniform radii, shadows on
-everything, centered-everything, bounce easing, cards-within-cards.
+Calm, editorial, trustworthy: a **forest-green** primary with a **bronze/gold**
+accent on warm-ivory (light) and cool near-black (dark) grounds. Newsreader
+display serif (with a single italic accent word in headlines) over Public Sans
+for UI and reading. Amiri Quran / Noto Nastaliq for Arabic/Urdu — unchanged, and
+always takes precedence for Quranic/Arabic content. Disciplined restraint; no
+heavy shadows, one radius family, tokens-first.
 
-## Decisions taken (Zohaib can veto on sight; see docs/DECISIONS.md)
+## Palette (light / dark)
 
-- Reading serif: **Literata** (bookish, built for long-form screen reading — fits scripture more than the newsy Newsreader). SIL OFL, pinned artifact.
-- UI sans: **Source Sans 3** (quiet humanist, pairs well under a serif). SIL OFL, pinned artifact.
-- Arabic: **Amiri Quran** stays default (both-fonts user setting deferred).
-- Night-warm reading mode: **opt-in toggle**, reader surfaces only.
-- Accent balance: lapis = primary accent/interactive; ochre = sparse highlights (bookmarks, badges); vermilion ≈ unused for now; green = success only.
-- Manuscript imagery (Met/Smithsonian CC0): deferred to a dedicated pass with aniconism-safe scope (geometry/illumination only) + scholar sign-off (Gate #5).
+| Role | Light | Dark |
+|---|---|---|
+| bg (canvas) | `#F7F6F2` | `#15181D` |
+| surface | `#FFFFFF` | `#1B1F25` |
+| text | `#20242A` | `#F4F3EE` |
+| muted (secondary) | `#6B675C` | `#9AA1AA` |
+| faint (icon) | `#8B8677` | `#8E96A0` |
+| line (border) | `#DCD9D0` | `#343A43` |
+| **primary** (`accent` token, forest/sage) | `#274D3D` | `#6FA28B` |
+| primarySoft (`accentSoft`) | `#B9CDC2` | `#24352E` |
+| onPrimary (`textOnAccent`) | `#F7F6F2` | `#15181D` |
+| **accent** (`ochre` token, bronze/gold) | `#8A6430` | `#C69B5F` |
 
-## Token rules
+Token-name mapping (kept so existing screens work): `accent` = the dominant
+PRIMARY (forest/sage); `ochre` = the brand ACCENT (bronze/gold). `primary` /
+`onPrimary` / `primarySoft` are added as clearer aliases for new primitives.
 
-- Palettes: light (ivory canvas), dark (#121212 warm-tinted elevations, desaturated accents, off-white text — never pure white on pure black), night-warm (amber-shifted reader).
-- Contrast: enforced by `src/lib/theme/__tests__/contrast.test.ts` — 7:1 body, 4.5:1 secondary/interactive text, 3:1 large accents. A palette change that breaks ratios fails CI.
-- Spacing: 4/8/12/16/24/32/48/64 only. Radius: 12 (cards) / 8 (controls) only.
-- Type scale (pt): 34/28/24/20/17/15/13/11. Arabic ayah body ≥28pt at ~2.0 line-height (tashkeel clearance).
-- Motion: 200–300 ms, ease-in-out; transform/opacity only; honor Reduce Motion.
-- Haptics: only where one sentence explains what it confirms (tasbih detents 33/99, adhan moment, tip success).
+**Night-warm** (third theme, reading mode): rebuilt on the dark base, warm-
+shifted (`#16130D` canvas, `#ECE3D2` text) with the gold family (`#C69B5F`).
+
+## Type & metrics
+
+- Latin display serif: **Newsreader** (300–700 + italic for the accent word).
+- Latin UI/body sans: **Public Sans** (400–700).
+- Arabic: **Amiri Quran** (Quranic) + **Noto Nastaliq** (Urdu, ~1.55× leading) — unchanged.
+- Latin type scale (`latinType` in tokens): display 32, title 22, body 16, caption 13, eyebrow 12 (uppercase, letterSpacing ~1.9 = the brief's 0.14–0.16em at 12pt). Arabic ayah body ≥28pt at ~2.0 line-height (tashkeel clearance).
+- Radii: **8 (cards) / 6 (controls)** only. Spacing: 4/8/12/16/24/32/48.
+- Borders: `StyleSheet.hairlineWidth` in the line token. No shadows beyond subtle surface elevation.
+- Motion: 200–300 ms, ease-in-out, transform/opacity only; honor Reduce Motion.
+
+## Theming
+
+- `AppThemeProvider` (`src/lib/theme/ThemeProvider.tsx`) resolves the persisted preference (`system` | `light` | `dark` | `nightWarm`) + system appearance into the active palette; `useTheme()` exposes `{mode, pref, setPref, tokens}`; `useTokens()` follows it (an explicit override still wins for the reader). Nav chrome + status bar derive from the resolved mode.
+- Web→native adaptations: hover → pressed state (opacity 0.85); tap targets ≥48pt; WCAG AA in all three themes (contrast test).
+
+## Primitives
+
+`src/components/ui/`: **Screen** (safe-area + canvas), **AppText**
+(display/displayAccent/title/body/eyebrow/caption; Nastaliq precedence),
+**Button** (primary filled / secondary outline), **Card** (surface + hairline,
+radius 8), **Divider**. A dev-only `app/theme-preview.tsx` renders every token +
+component across all three themes.
 
 ## Still to apply (tracked in TODO)
 
-- FlashList for long surah lists (perf pass).
-- Dynamic Type audit (`maxFontSizeMultiplier` set; test at large sizes).
-- RTL primitives audit (`paddingStart`/`marginEnd`).
-- Manuscript-art editorial moments (onboarding, empty states) — CC0 only, license log per file.
-- Adhan audio at −16 LUFS when audio epic lands.
+- Migrate existing screens' text from `ThemedText` to `AppText` (they already inherit the new palette + fonts via tokens; this is cosmetic cleanup).
+- Manuscript-art editorial moments (onboarding, empty states) — CC0 only, aniconism-safe, scholar sign-off (Gate #5).
+- Screen-reader (VoiceOver/TalkBack) pass.
