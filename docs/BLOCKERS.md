@@ -10,25 +10,35 @@ I keep building everything that doesn't need you.
 
 ## WHAT NEEDS YOU
 
-### 1. Get DeenDawn onto your iPhone — the Apple setup (the single thing that unlocks your first real test)
+### 1. Publish DeenDawn so people can download it — the developer-account setup
 
-**Why this is #1:** Everything else in the app is built and tested (397 automated tests pass,
-including a test that proves the whole app works with no internet). The one thing I cannot do
-for you is prove to Apple that the app is *yours* — that needs your Apple account and a couple
-of keys. Once you hand me those, I can build DeenDawn and push it straight to TestFlight
-(Apple's official "try a test app on your phone" system), and it shows up on your iPhone. No
-public release, no App Review — just you testing your own app. That step is allowed without any
-further sign-off from you.
+**Goal:** get DeenDawn onto the App Store (and Google Play) so anyone can download it, free, and
+see for themselves that it collects zero data. Everything on my side is ready: the app is built
+and tested (**423 automated tests pass**, including one proving it works with no internet), the
+store text, privacy answers ("Data Not Collected"), and the two required web pages are all drafted,
+and the build+upload is one command. The only things I *can't* do for you are: create the developer
+accounts, and click the final "publish" button. Here's the honest, current plan.
 
-**What it costs:** Apple's Developer Program is **$99/year** (you've already agreed to this).
-The other two things below are **free**.
+**Which store is fastest? (I researched this.)** Surprisingly, **Apple is the faster path to a
+public download**, even though it costs more:
+- **Apple App Store — ~1 to 3 days.** Pay the $99/year, I build + upload, you fill the listing
+  (I've prepped it) and click Submit; Apple reviews in about 1–2 days. No hoops.
+- **Google Play — ~2 to 4 weeks for a brand-new personal account.** Google now makes *new personal*
+  accounts run a **closed test with 12 people for 14 straight days** before they'll allow a public
+  release. There's a shortcut: registering as an **"organization"** account (your publisher name
+  is already "Khavion Apps") **skips the 12-tester wait** — it just needs a free "D-U-N-S number"
+  (a business ID) that can take a few days to get.
 
-**When it's needed:** Whenever you want to hold DeenDawn on your own phone. Say the word and do
-the three steps below — it's about 20–30 minutes total, most of it waiting for Apple to approve
-the enrollment.
+**My recommendation (yes/no for you):** **Do Apple first** (fastest to "people can download it"),
+and if you also want Android, start Google Play in parallel — I'd lean toward the **organization**
+route to skip the 12-tester delay. You can also just do Apple for now and add Android later; the
+app is 100% ready for both.
 
-**My recommendation: YES — do this when you're ready to test on your phone.** Here's the
-click-by-click. Do the steps in order and paste me what each one gives you.
+**What it costs:** Apple **$99/year**; Google Play **$25 one-time** (optional / only if you want
+Android too). Everything else below is free.
+
+Here's the Apple click-by-click (Google Play steps are in item 1b below). Do them in order and
+paste me what each gives you.
 
 ---
 
@@ -74,24 +84,58 @@ I put them in the private keys file (they're covered by our "secrets never enter
 and from that moment I can build DeenDawn and put it on your phone via TestFlight.
 
 **After you've done A–C:** just tell me "keys are in." I'll (1) link the project to your Expo
-account, (2) build the app on Expo's cloud machines, and (3) upload it to TestFlight. You then
-install Apple's free **TestFlight** app from the App Store, and DeenDawn appears inside it ready
-to open. (If anything in Apple's screens looks different from the steps above — Apple tweaks its
-wording occasionally — send me a screenshot and I'll adjust the instructions.)
+account, (2) build DeenDawn on Expo's cloud machines, (3) create the App Store listing and fill in
+everything I've already prepared (name, description, keywords, screenshots, the "Data Not Collected"
+privacy answers, and the two web-page links from item 2), and (4) upload the build. Then **you** do
+the two things only you can: paste in your two web-page links, and click **"Submit for Review"** in
+App Store Connect (making it public is always your call). Apple reviews it in ~1–2 days and it goes
+live for anyone to download. (If Apple's screens look different from the steps above — they tweak
+wording — send me a screenshot and I'll adjust.)
+
+*(Want it on your own phone first, before the public? The same keys let me push a build to
+TestFlight for you instantly — no review needed. Just say so.)*
 
 ---
 
-### 2. Two simple web pages: a Support page and a Privacy Policy page
+### 1b. (Optional) Google Play — only if you want DeenDawn on Android too
 
-**What this is:** Apple's store listing requires two public web links — one "support" page and one
-"privacy policy" page. They can be extremely simple (even a free one-page site). The app already
-has a privacy screen built in; I'll write the text for both pages so you only have to publish them.
+Android is 100% ready as well. If you want it:
+1. Go to **play.google.com/console**, sign up, pay the **$25 one-time** fee.
+2. **Choose your account type — this matters for speed:**
+   - **Organization** (recommended): skips Google's 12-tester waiting period. Needs a free
+     "D-U-N-S number" (a business ID for "Khavion Apps") — I'll give you the link to request one;
+     it can take a few days.
+   - **Personal** (cheaper/simpler but slower): Google makes you run a 14-day test with **12 people**
+     before you can go public. If you pick this, recruit 12 friends/family with Android phones early
+     and I'll set up the test build so the clock starts.
+3. When you're set up, I'll walk you through creating one "service account key" (a permission file,
+   like Apple's) so I can upload builds, and I'll fill the whole Play listing (text, screenshots,
+   and the "no data collected" Data Safety form — all already drafted, see `docs/store/PLAY_LISTING.md`).
+4. You click publish when you're ready.
 
-**When it's needed:** Only when we go for a **public** release — **not** needed for testing on your
-own phone. Listed here so it's not a surprise.
+**My recommendation: OPTIONAL — do Apple first; add Android when you want to, ideally via the
+organization route to skip the tester wait.**
 
-**My recommendation: YES, later — I'll draft both pages; you click publish when we're near public
-launch.** (Publishing anything public is always your call.)
+---
+
+### 2. Two simple web pages: a Support page and a Privacy Policy page — I've already written them
+
+**What this is:** Both stores require two public web links — a "support" page and a "privacy policy"
+page. **I've already written both**, styled in the app's colors, ready to publish:
+- `docs/legal/privacy-policy.html`
+- `docs/legal/support.html`
+
+Both currently have one placeholder — **your contact email** (search for `REPLACE_WITH_YOUR_EMAIL`).
+Tell me the email and I'll drop it in.
+
+**What you'd do (10 minutes, free):** host these two files somewhere with a public link. Easiest
+free options: **GitHub Pages** (free, I can set it up in the repo), or a free host like **Netlify
+Drop** (drag the two files onto netlify.com/drop). Either gives you two URLs I paste into both
+store listings. (Publishing anything public is your call — so you do the final "make it live" step,
+or tell me to set up GitHub Pages and I'll prepare it.)
+
+**My recommendation: YES — say the word and I'll wire up free GitHub Pages hosting so the two links
+exist; you just approve making the repo/pages public.**
 
 ### 3. RevenueCat key — only if you want the "tip jar" live (free, 10 minutes)
 
