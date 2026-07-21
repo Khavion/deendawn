@@ -28,6 +28,7 @@
     "greeting": "السلام علیکم",
     "nextPrayer": "اگلی نماز",
     "timesSection": "آج کے اوقات",
+    "verseOfDay": "آج کی آیت",
     "periods": {
       "dawn": "سحر",
       "day": "دن",

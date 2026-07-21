@@ -11,6 +11,7 @@ import { normalizeArabicQuery } from '../normalize';
 import {
   buildShareText,
   getAyah,
+  getAyahByOrdinal,
   getSurah,
   listAyahs,
   listSurahs,
@@ -47,6 +48,13 @@ const { db, close } = openTestDb();
 afterAll(close);
 
 describe('quran repo over the shipped database', () => {
+  test('getAyahByOrdinal walks mushaf order — first, last, and a middle verse', () => {
+    expect(getAyahByOrdinal(db, 0)).toMatchObject({ surah: 1, ayah: 1 });
+    expect(getAyahByOrdinal(db, 6235)).toMatchObject({ surah: 114, ayah: 6 });
+    // Al-Faatiha has 7 ayat, so ordinal 7 is the first ayah of Al-Baqara.
+    expect(getAyahByOrdinal(db, 7)).toMatchObject({ surah: 2, ayah: 1 });
+  });
+
   test('lists all 114 surahs in order with metadata', () => {
     const surahs = listSurahs(db);
     expect(surahs).toHaveLength(114);

@@ -54,6 +54,16 @@ export function getAyah(db: QuranDb, surah: number, ayah: number): AyahRow | nul
 }
 
 /**
+ * Fetch the ayah at a 0-based ordinal in mushaf order (surah, then ayah).
+ * Used by the verse-of-the-day, which picks the ordinal deterministically.
+ */
+export function getAyahByOrdinal(db: QuranDb, ordinal: number): AyahRow | null {
+  return db.getFirstSync<AyahRow>('SELECT * FROM ayahs ORDER BY surah, ayah LIMIT 1 OFFSET ?', [
+    Math.max(0, Math.floor(ordinal)),
+  ]);
+}
+
+/**
  * Fetch the ayah rows for a list of (surah, ayah) refs, preserving the given
  * order and dropping any ref not found. Used by the bookmarks browser to
  * render saved verses with their text.

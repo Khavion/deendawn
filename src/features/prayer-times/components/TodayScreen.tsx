@@ -4,6 +4,7 @@ import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { CityPickerModal } from './CityPickerModal';
+import { VerseOfDayCard } from '../../quran/components/VerseOfDayCard';
 import { isRamadan, toHijri } from '../../hijri/hijri';
 import { computeDayTimes, isValidTime, nextPrayer } from '../engine';
 import { formatTimeInZone } from '../format';
@@ -236,6 +237,8 @@ export function TodayScreen() {
               );
             })}
         </View>
+
+        <VerseOfDayCard date={now} />
       </ScrollView>
       <CityPickerModal
         visible={pickerOpen}
