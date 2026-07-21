@@ -321,3 +321,17 @@ Done:
 - Entry point: a "★ Bookmarks" link in the Quran-tab header (its natural home). New i18n keys `quran.bookmarksTitle`/`bookmarksEmpty` (en + ur/ar gate-8 drafts, covered by the blanket TRANSLATION_REVIEW status).
 - 4 new tests against the real shipped quran.db (empty, list+citation, deep-link, remove). Gates green: tsc, expo lint 0 errors, **404/404** (49 suites).
 - **Verified live on BOTH emulators:** iOS full flow (empty → star a verse in reader → browse with citation/Arabic/translation → row deep-links back to the reader → remove); Android (header link + empty state + navigation). Cross-platform parity confirmed.
+
+## Session 2026-07-21 (cont.) — Net-new feature: adjustable reading font size
+
+Second net-new feature. Quran/translation sizing was hardcoded (no accessibility control) — a genuine gap.
+
+Done:
+
+- **readerState**: `READING_SCALES` (0.85, 1, 1.15, 1.3, 1.5), `loadReadingScale`/`saveReadingScale` (validated to the allowed set, defaults 1.0), `stepReadingScale` (clamped stepping through the set).
+- **SurahScreen**: applies the scale to BOTH the Uthmani Arabic (28/56 base) and the translation (16/26 base) — fontSize + lineHeight only; the text bytes are never touched (reverence intact). Scale threaded into FlashList `extraData`.
+- **More → Reading**: a "Reading size" row with an A−/A+ stepper (small/large "A" glyphs) + a live "%" readout, buttons disabled at the ends, accessible labels.
+- i18n `more.readingSize`/`Desc`/`Smaller`/`Larger` (en + ur/ar gate-8 drafts).
+- 9 tests: scale math (default, validate, clamp), the More stepper (100%→115%, persists 1.15), and a reader assertion that the Arabic (36.4) + translation (20.8) actually scale at 1.3x.
+- Gates green: tsc, expo lint 0 errors, **409/409** (50 suites).
+- **Verified live on BOTH emulators**: iOS and Android — stepped 100%→130% in More, opened a surah, confirmed the Arabic + translation enlarge (translation wraps to two lines). Cross-platform parity.

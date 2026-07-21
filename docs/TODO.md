@@ -32,7 +32,8 @@ Epics in build order. Top unblocked item is always the current task.
 ## NET-NEW FEATURES (mandate item (d))
 
 - [x] Bookmarks browser — DONE 2026-07-21. Dedicated screen to see/revisit saved verses (was write-only); deep-links into the reader; remove; empty state. repo.getAyahsByRefs; ★ Bookmarks link in Quran header; en+ur/ar(draft) keys; 4 tests; verified iOS+Android.
-- [ ] Candidate backlog: reading preferences (adjustable Quran/translation font size — genuinely absent, needs a new readerState pref); Quran audio full reciter catalog (gated on recordings); prayer-time notification richness; verse-of-the-day (deterministic, no curation).
+- [x] Reading font size — DONE 2026-07-21. Adjustable Quran+translation text scale (0.85–1.5); More → Reading A−/A+ stepper with % readout; readerState scale prefs; reader applies it to Arabic+translation (reverence intact); en+ur/ar(draft) keys; 9 tests; verified iOS+Android.
+- [ ] Candidate backlog: Quran audio full reciter catalog (gated on recordings); prayer-time notification richness; verse-of-the-day (deterministic, no curation); reading-size control also surfaced in the reader header (currently only in Settings).
 
 ## STORE / TESTFLIGHT (mandate item (a))
 
