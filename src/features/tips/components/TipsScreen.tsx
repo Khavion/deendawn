@@ -1,11 +1,11 @@
 import { Stack } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 
 import type { TipOption, TipsBackend } from '../tipsService';
 import { getTipsBackend, hasTipped, markTipped } from '../tipsService';
-import { AppText } from '@/src/components/ui';
+import { AppText, Skeleton } from '@/src/components/ui';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { useSettings } from '@/src/features/settings/SettingsContext';
 import { radius, spacing } from '@/src/lib/theme/tokens';
@@ -87,7 +87,13 @@ export function TipsScreen({ backend = getTipsBackend() }: { backend?: TipsBacke
           {tr('tips.body')}
         </AppText>
 
-        {phase === 'loading' && <ActivityIndicator color={t.accent} testID="tips-loading" />}
+        {phase === 'loading' && (
+          <View style={styles.options} testID="tips-loading">
+            {[0, 1, 2].map((i) => (
+              <Skeleton key={i} width={88} height={48} radius={radius.card} />
+            ))}
+          </View>
+        )}
 
         {phase === 'unavailable' && (
           <View style={[styles.card, { backgroundColor: t.bgSurface, borderColor: t.border }]}>

@@ -7,3 +7,4 @@ export { GoldFrameCard, type GoldFrameCardProps } from './GoldFrameCard';
 export { PeriodEyebrow } from './PeriodEyebrow';
 export { Screen, type ScreenProps } from './Screen';
 export { SectionRule } from './SectionRule';
+export { Skeleton, type SkeletonProps } from './Skeleton';
