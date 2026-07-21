@@ -309,3 +309,15 @@ Done (4 commits):
 - Gates green: tsc clean, expo lint 0 errors, full suite **400/400** (48 suites). Reader relaunch + tab bar verified live on iOS.
 
 **Rich design (Direction 1c) steps 2–5 are now all complete.** Remaining design backlog: manuscript-art editorial moments (scholar gate), Dynamic-Type/RTL device audits, and adopting `usePressScale`/`Skeleton` more widely as screens are touched.
+
+## Session 2026-07-21 (cont.) — Net-new feature: Bookmarks browser
+
+With the Rich design roadmap complete, started net-new features. Picked the Bookmarks browser — bookmarks were write-only (star an ayah in the reader, but no way to see saved stars), a visible dead-end reusing the existing storage/routing/test infra.
+
+Done:
+
+- **BookmarksScreen** (`src/features/quran/components/BookmarksScreen.tsx`): newest-first list of saved verses — surah-name citation + Uthmani Arabic (undecorated, reverence) + translation snippet; tap → deep-link into the reader at that ayah; star to remove; honest empty state. Route `app/bookmarks.tsx` + Stack registration.
+- **repo.getAyahsByRefs()**: order-preserving batch fetch of ayah rows for a list of refs (drops any not found). Reuses `loadBookmarks`/`toggleBookmark` — no new persistence.
+- Entry point: a "★ Bookmarks" link in the Quran-tab header (its natural home). New i18n keys `quran.bookmarksTitle`/`bookmarksEmpty` (en + ur/ar gate-8 drafts, covered by the blanket TRANSLATION_REVIEW status).
+- 4 new tests against the real shipped quran.db (empty, list+citation, deep-link, remove). Gates green: tsc, expo lint 0 errors, **404/404** (49 suites).
+- **Verified live on BOTH emulators:** iOS full flow (empty → star a verse in reader → browse with citation/Arabic/translation → row deep-links back to the reader → remove); Android (header link + empty state + navigation). Cross-platform parity confirmed.

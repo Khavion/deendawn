@@ -29,6 +29,11 @@ Epics in build order. Top unblocked item is always the current task.
 - [ ] Add missing spec primitives when a native rebuild is available: Surface/elevation wrapper, GirihTexture (needs react-native-svg) — currently deferred (pure-JS approach).
 - [x] On-device iOS Simulator + Android emulator visual pass over the step-3 screens — DONE 2026-07-21. All featured cards / gold rules / elevated groups / gold-left disclaimers / ambient gradients render correctly on both platforms; iOS⇄Android parity confirmed; reverence held; no layout breaks or jank found.
 
+## NET-NEW FEATURES (mandate item (d))
+
+- [x] Bookmarks browser — DONE 2026-07-21. Dedicated screen to see/revisit saved verses (was write-only); deep-links into the reader; remove; empty state. repo.getAyahsByRefs; ★ Bookmarks link in Quran header; en+ur/ar(draft) keys; 4 tests; verified iOS+Android.
+- [ ] Candidate backlog: reading preferences (adjustable Quran/translation font size — genuinely absent, needs a new readerState pref); Quran audio full reciter catalog (gated on recordings); prayer-time notification richness; verse-of-the-day (deterministic, no curation).
+
 ## STORE / TESTFLIGHT (mandate item (a))
 
 - [x] EAS pipeline — DONE 2026-07-21. `eas.json` at repo root: `development` (dev-client + `ios.simulator:true`, no-credentials sim build), `preview` (internal), `production` (store, `autoIncrement`). `appVersionSource: remote`. `submit.production.ios` prepared with `ascAppId` placeholder; API key via `EXPO_ASC_*` env (documented in `.env.example`, aliased to constitution `ASC_*`, plus headless `EXPO_TOKEN`). BLOCKERS.md rewritten into ranked "WHAT NEEDS YOU" with full Apple/ASC-key click-by-click as #1. DECISIONS.md logged.
