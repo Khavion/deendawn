@@ -221,3 +221,20 @@ Done:
 - 3 commits (a11y): Arabic language tagging (ayah + surah name, db-guarded); accessible names (IconSymbol hidden globally, bookmark + calendar-arrow labels, en/ur/ar keys); selected states (settings pickers, tasbih targets) + live tasbih counter value (name/value split).
 - Closes the last accessibility item (audit v2 §9); on-device VoiceOver/TalkBack speech verification added to TESTPLAN device pass. Gates green: tsc, expo lint 0 errors, 393 tests. DECISIONS/DESIGN/AUDIT/TESTPLAN updated.
 - Next: resume operating loop — remaining autonomous polish (e.g. verse-row grouping, FlashList long-surah perf measurement) or owner-gated items.
+
+## Session 2026-07-21 — Perpetual mandate begins · Cycle 1: TestFlight near-one-click
+
+Plan (near-term mandate item (a) — make the TestFlight path near-one-click + rank the Apple keys #1 for the owner):
+
+1. Add `eas.json` (development / preview / production build profiles + a headless, still-GATED `submit.production.ios` referencing the ASC API key via env), per current SDK 54 EAS docs.
+2. Round out `app.json` for submission (ios.buildNumber, android.versionCode baseline); leave gated/locked brand + bundle config untouched.
+3. Rewrite `docs/BLOCKERS.md` with the mandated ranked "WHAT NEEDS YOU" header — Apple Developer account + App Store Connect API key as #1, written as a full plain-English click-by-click; demote weeks-away AI-model upload below testing-unlock items; refresh the stale 324 test count.
+4. Log EAS/versioning decisions in DECISIONS.md; keep gates green (tsc, lint, affected jest, checksum); print the GATE line and roll straight into Cycle 2 (Rich design).
+
+Done:
+
+- `eas.json` created (repo had none): `development` (dev-client + `ios.simulator:true` → no-Apple-credentials simulator build), `preview` (internal), `production` (store + `autoIncrement`); `appVersionSource: remote` (EAS owns build numbers — correct since `/ios` `/android` are gitignored/prebuilt). `submit.production.ios` prepared with an honest `ascAppId` placeholder; the API key stays out of the repo (EAS reads `EXPO_ASC_*` env). Chose remote versioning over adding buildNumber/versionCode to app.json (they'd be ignored under remote) — so app.json's gated brand config was left untouched.
+- `.env.example` extended: `EXPO_TOKEN` (headless builds) + `EXPO_ASC_*` aliases mapped to the constitution's `ASC_*` names, so a headless store upload needs no renaming.
+- `docs/BLOCKERS.md` rewritten into the mandated **ranked "WHAT NEEDS YOU"** shape: item #1 is the full plain-English, click-by-click Apple setup (free Expo token → $99 Developer enrollment → App Store Connect API key: Users and Access ▸ Integrations ▸ + ▸ App Manager ▸ download .p8 once ▸ copy Key ID + Issuer ID). Weeks-away AI-model upload demoted to #8. Clarified that TestFlight **internal** upload is allowed autonomously (only external/App-Review is gated), so the moment keys land the path is one command on my side. Test count refreshed 324 → 397.
+- DECISIONS.md + TODO.md logged. Gates green: tsc clean (baseline), expo lint 0 errors, eas.json/app.json parse-valid, 397 tests green (no source changed — config/docs only).
+- GATE: Apple Developer account + App Store Connect API key — see BLOCKERS.md #1. Rolling straight into Cycle 2 (Rich design step 3: rich chrome on Quran list / Tasbih / Calendar / Zakat / Settings).

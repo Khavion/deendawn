@@ -1,108 +1,219 @@
 # Things waiting on Zohaib
 
-## NEW from Phase 2 (2026-07-12) — none of these stop my work
-
-### A. Upload the AI model files to your Cloudflare storage (needed before the "Ask" AI answers can be tested end-to-end)
-
-**What this is:** The optional on-phone AI needs three files hosted on your own storage (never from third-party sites, for supply-chain safety): the main model (Qwen3-1.7B, Apache-licensed), a smaller fallback model (Qwen3-0.6B), and a "meaning-matcher" model (all-MiniLM-L6-v2). I'll also generate a fourth file (pre-computed verse embeddings) myself.
-**What you'll do:** When I reach that epic (several weeks of work away), I'll give you exact download links and click-by-click upload steps. Nothing needed now — and item 1 on this list (.env with storage keys) may let me do the upload for you.
-
-### B. License-cleared adhan recordings
-
-**What this is:** For the call-to-prayer sound options, we need recordings we legally may ship: short clips (under 30 seconds) plus full-length recordings, with the reciter's (muezzin's) permission documented per recording.
-**What you'll do:** If you know a muezzin or own recordings with clear rights, send them over. Otherwise I'll research legally-clear sources and bring you a recommendation. I'm building the whole feature against a silent placeholder meanwhile, so nothing is blocked.
-
-### C. Name a human reviewer for Urdu and Arabic text
-
-**What this is:** I'm drafting the app's Urdu and Arabic interface text myself, but the rules we agreed say a human who reads those languages must approve every line before real users see it (English needs no review).
-**What you'll do:** Tell me who will review — a friend, family member, or community member is fine. They'll get a simple checklist document (docs/TRANSLATION_REVIEW.md).
-
-### D. Scholar sign-off queue (grows as I build)
-
-**What this is:** A running list of things that need a knowledgeable reviewer's blessing before shipping: the wording glossary, calendar labels (Eid, Ramadan etc.), the zakat disclaimer, the philosopher pages, and — most importantly — turning ON the AI answers feature for users.
-**What you'll do:** Eventually connect me with a scholar or knowledgeable reviewer; I keep the queue organized in docs/SCHOLAR_REVIEW.md.
-
-### E. AI model choice — speak up only if you object
-
-The plan uses Qwen3 (Apache 2.0 license — free, no strings attached). You already approved the overall directive; flag it only if you want a different model.
+This is the one file you need to read. The top section — **WHAT NEEDS YOU** — is ranked:
+the first items unlock testing DeenDawn on your phone; the later ones are nice-to-haves and
+far-off decisions. Every item is plain English, says when it's needed, and ends with a
+**yes/no recommendation** you can approve in one word. Nothing here is stopping my work —
+I keep building everything that doesn't need you.
 
 ---
 
-Written in plain English. **Nothing on this list is urgent right now** — the app is being built just fine without these. Each item says what it is, when it's needed, and exactly what to do (I'll also walk you through each one step-by-step when the time comes).
+## WHAT NEEDS YOU
+
+### 1. Get DeenDawn onto your iPhone — the Apple setup (the single thing that unlocks your first real test)
+
+**Why this is #1:** Everything else in the app is built and tested (397 automated tests pass,
+including a test that proves the whole app works with no internet). The one thing I cannot do
+for you is prove to Apple that the app is *yours* — that needs your Apple account and a couple
+of keys. Once you hand me those, I can build DeenDawn and push it straight to TestFlight
+(Apple's official "try a test app on your phone" system), and it shows up on your iPhone. No
+public release, no App Review — just you testing your own app. That step is allowed without any
+further sign-off from you.
+
+**What it costs:** Apple's Developer Program is **$99/year** (you've already agreed to this).
+The other two things below are **free**.
+
+**When it's needed:** Whenever you want to hold DeenDawn on your own phone. Say the word and do
+the three steps below — it's about 20–30 minutes total, most of it waiting for Apple to approve
+the enrollment.
+
+**My recommendation: YES — do this when you're ready to test on your phone.** Here's the
+click-by-click. Do the steps in order and paste me what each one gives you.
 
 ---
 
-## 1. Account keys for Apple, file storage, and donations
+#### Step A — Make a free Expo account (2 minutes) — this lets me build the app for you
 
-**Status: not needed yet — nothing to do right now.**
+1. Go to **expo.dev** and click **Sign up** (top right). Use your email; it's free.
+2. After signing in, click your avatar (top right) → **Account settings**.
+3. In the left menu click **Access tokens** → **Create token**. Name it "DeenDawn" and click Create.
+4. It shows you a long secret string **once** — copy it and **paste it to me**. (I'll store it in
+   the private keys file on the computer; it never gets shared or committed anywhere.)
 
-**What this is:** Later on, the app will need to connect to three paid-or-registered services, and each gives you a kind of password (a "key") that proves the app is yours:
-
-- **Apple** — to put the app on iPhones through the App Store (needs your Apple Developer account).
-- **Cloudflare R2** — an online file-storage service where the Quran recitation audio will live, so the app can stream it (like how Netflix streams video instead of storing every movie on your phone).
-- **RevenueCat** — a free service that handles the optional "tip jar" donations through Apple.
-
-Those keys get saved into one small private file on your computer (techies call it a ".env file" — it's just a text file of passwords that never leaves your machine and never gets shared).
-
-**When it's needed:** Apple keys — when we're ready to put a test version on your phone. Storage keys — when we upload real recitation audio (the listening feature itself is already built and tested against a stand-in sound). Donations key — the tip jar screen is now built too; without the key it simply shows "Tips are not set up in this build yet," which is honest and fine for testing.
-
-**Update 2026-07-13 — the tip jar is ready for its key whenever you want it live.** What you'd do (10 minutes, free): 1) go to revenuecat.com and click "Start for free", sign up with your email; 2) it will ask you to create a "project" — name it DeenDawn; 3) inside the project, add an "App Store" app; it will ask for the bundle ID — paste exactly: com.khavion.deendawn; 4) it shows you a "Public API key" that starts with "appl_" — copy that and paste it to me. That's all. (The actual tip products also need your Apple Developer account later — I'll walk you through that as part of the App Store setup, so it's fine to wait and do both together.)
-
-**What you'll do:** When each moment comes, I'll give you exact click-by-click instructions ("go to this website, log in, click this button, copy the code it shows you, paste it to me"). Signing up for anything that could cost money is always your call — I'll tell you the price first (Cloudflare and RevenueCat both have free tiers that should cover us; Apple's developer account is the $99/year one you may already have).
+*What this is for: it lets me run the build machines for you without you having to log in each time.*
 
 ---
 
-## 2. Sample Quran recitation recordings
+#### Step B — Join the Apple Developer Program ($99/year, ~10 min + Apple's approval wait)
 
-**Status: not needed yet — nothing to do right now.**
-
-**What this is:** For the "listen to the Quran" feature, the app streams audio recordings of a reciter. To build and test that feature, we only need 2–3 chapters' worth of audio from one reciter, placed in the online storage from item 1. The full library of reciters comes later, and which recordings we ship in the final app is your decision (item 4 below).
-
-**When it's needed:** The listening feature is now BUILT and tested (it plays a clearly-labeled stand-in sound for now). Real recordings are needed before outside testers should hear actual recitation.
-
-**What I found (researched 2026-07-13):** A reciter's recording is like a musician's performance — the Quran itself belongs to no one, but each recording legally belongs to whoever made it. The most popular reciter online (Mishary Alafasy) explicitly does NOT allow free use — his official app's terms say so. The biggest free collection site (everyayah.com) is generally described as "free for NON-commercial use" — and because our app has a tip jar, a lawyer could argue we're not purely non-commercial. I don't ship anything into your app on a "probably fine."
-
-**My recommendation (yes/no for you):** the safest path is written permission — either from a rights-holder of classic recordings, or from a living reciter who'd love to have his recitation in a free, no-ads app. Many would say yes to a polite email. When you're ready, I'll draft that email for you to send.
-
-**Optional homework for your research assistant** — paste this into Claude chat's Research feature and send me back what it finds:
-"Find Quran recitation audio recordings (full Quran, mp3, by a qualified reciter) that are explicitly licensed for free redistribution inside a free mobile app that also has an optional tip jar (i.e., commercial-adjacent use). I need: the reciter's name, where the files are hosted, the exact license text or permission statement and its URL, and any attribution requirements. Explicit written licenses only — not 'everyone uses it' assumptions. Check sources like archive.org collections, quranicaudio.com, everyayah.com, kingfahdcomplex releases, and any reciter who has publicly waived rights in writing."
+1. Go to **developer.apple.com/programs/enroll** and sign in with your normal Apple ID (the one
+   on your iPhone).
+2. Follow Apple's steps — it asks for your name, address, and the $99 payment. Choose the
+   **Individual** account type unless you have a registered company.
+3. Apple usually approves within a few hours (sometimes up to a day). You'll get an email.
+   **Nothing more to do here until that email arrives.**
 
 ---
 
-## 3. Five-minute check of the prayer times
+#### Step C — Create the "API key" that lets me upload builds (5 minutes, after Step B is approved)
 
-**Status: not needed until we're close to giving the app to outside testers.**
+1. Go to **appstoreconnect.apple.com** and sign in.
+2. Click **Users and Access** (top menu).
+3. Click the **Integrations** tab, then the **App Store Connect API** section on the left.
+4. Click the **＋ (plus)** button next to "Active."
+5. Give the key a name like "DeenDawn EAS." For **Access / Role**, pick **App Manager**
+   (that's enough to upload test builds). Click **Generate**.
+6. On the new key's row, click **Download** — this downloads a small file ending in **.p8**.
+   ⚠️ **Apple only lets you download this file once.** Save it somewhere safe and send it to me.
+7. On that same page, note down two short codes and paste them to me too:
+   - the **Key ID** (shown on the key's row), and
+   - the **Issuer ID** (shown near the top of the page, above the list of keys).
 
-**What this is:** I built the part of the app that calculates daily prayer times and tested it against 1,680 automatically-generated reference values. Company policy for this project (the rules file you set up) says a human should also eyeball a few of the results against a trusted public source — like your local mosque's timetable or a site like IslamicFinder — just to be sure the math matches the real world.
+**So Step C gives me three things:** the **.p8 file**, the **Key ID**, and the **Issuer ID**.
+I put them in the private keys file (they're covered by our "secrets never enter the code" rule)
+and from that moment I can build DeenDawn and put it on your phone via TestFlight.
 
-**When it's needed:** Before the app goes to outside testers.
-
-**What you'll do:** When the time comes I'll hand you a tiny table like "App says Fajr in Houston on July 20 is 5:18 AM — does your mosque's website agree within a minute or two?" You check 2–3 rows and tell me. Five minutes, tops.
+**After you've done A–C:** just tell me "keys are in." I'll (1) link the project to your Expo
+account, (2) build the app on Expo's cloud machines, and (3) upload it to TestFlight. You then
+install Apple's free **TestFlight** app from the App Store, and DeenDawn appears inside it ready
+to open. (If anything in Apple's screens looks different from the steps above — Apple tweaks its
+wording occasionally — send me a screenshot and I'll adjust the instructions.)
 
 ---
 
-## 4. Final religious-content decisions (further away)
+### 2. Two simple web pages: a Support page and a Privacy Policy page
 
-**Status: far off — listed so it's not a surprise.**
+**What this is:** Apple's store listing requires two public web links — one "support" page and one
+"privacy policy" page. They can be extremely simple (even a free one-page site). The app already
+has a privacy screen built in; I'll write the text for both pages so you only have to publish them.
 
-Before the app ships to the public, a few choices are yours (ideally with a scholar's input): which English translation of the Quran ships in the final app (I'm building with a public-domain 1930 translation clearly labeled as temporary), which reciter's audio ships, and sign-off on any sentence in the app that states a religious position. I'll prepare researched recommendations for each so every decision is a yes/no for you.
+**When it's needed:** Only when we go for a **public** release — **not** needed for testing on your
+own phone. Listed here so it's not a surprise.
+
+**My recommendation: YES, later — I'll draft both pages; you click publish when we're near public
+launch.** (Publishing anything public is always your call.)
+
+### 3. RevenueCat key — only if you want the "tip jar" live (free, 10 minutes)
+
+**What this is:** The optional "Support DeenDawn's development" tip jar is fully built. Without a
+key it simply shows "Tips aren't set up in this build yet," which is honest and fine for testing.
+To make it live you need one free key.
+
+**Steps (free):** 1) go to **revenuecat.com**, click "Start for free," sign up; 2) create a
+**project** named DeenDawn; 3) add an **App Store** app; when it asks for the bundle ID, paste
+exactly **com.khavion.deendawn**; 4) it shows a **Public API key** starting with **appl_** — copy
+it and paste it to me. (The actual tip products also need your Apple Developer account from item 1,
+so it's fine to do both together.)
+
+**When it's needed:** Any time you want the tip jar working. Not required for testing.
+
+**My recommendation: OPTIONAL — skip for your first phone test; do it before public launch.**
+
+### 4. A five-minute prayer-times spot check
+
+**What this is:** I built and tested the prayer-time math against 1,680 reference values. Our
+project rules also ask a human to eyeball a few results against a trusted source (your mosque's
+timetable or a site like IslamicFinder), just to be safe. I'll hand you a tiny table like "App
+says Fajr in Houston on July 20 is 5:18 AM — does your mosque agree within a minute?" You check
+2–3 rows.
+
+**When it's needed:** Before the app goes to *outside* testers — not for your own testing.
+
+**My recommendation: YES, later — I'll bring you the table when we're close to outside testers.**
+
+### 5. Quran recitation recordings (the "listen" feature)
+
+**What this is:** The listening feature is built and tested against a clearly-labeled stand-in
+sound. Real recordings are needed before outside testers should hear actual recitation. Each
+recording legally belongs to whoever made it (the Quran text itself belongs to no one).
+
+**What I found (researched):** The most popular reciter online (Mishary Alafasy) explicitly does
+**not** allow free use. The biggest free site (everyayah.com) is "free for non-commercial use" —
+and because our app has a tip jar, that's legally risky. I won't ship anything on a "probably fine."
+
+**My recommendation: the safest path is written permission** — from a rights-holder of classic
+recordings, or a living reciter who'd like his recitation in a free, no-ads app. When you're
+ready, I'll draft the email for you to send.
+
+*Optional homework — paste this into Claude chat's Research feature and send me the results:*
+> "Find Quran recitation audio recordings (full Quran, mp3, by a qualified reciter) explicitly
+> licensed for free redistribution inside a free mobile app that also has an optional tip jar
+> (commercial-adjacent use). I need: the reciter's name, where the files are hosted, the exact
+> license text or permission statement and its URL, and any attribution requirements. Explicit
+> written licenses only. Check archive.org, quranicaudio.com, everyayah.com, King Fahd Complex
+> releases, and any reciter who has publicly waived rights in writing."
+
+### 6. Name a human reviewer for the Urdu and Arabic text (before public release)
+
+**What this is:** I draft the app's Urdu and Arabic interface text myself, but our agreed rules say
+a human who reads those languages must approve every line before real users see it. English needs
+no review and ships freely.
+
+**When it's needed:** Before a **public** release in those languages — not for your English testing.
+
+**My recommendation: YES, later — just tell me who'll review** (a friend, family, or community
+member is fine); they get a simple checklist in `docs/TRANSLATION_REVIEW.md`.
+
+### 7. Scholar sign-off queue (grows as I build; needed before public release)
+
+**What this is:** A running list of things that want a knowledgeable reviewer's blessing before
+shipping publicly: the wording glossary, calendar labels (Eid, Ramadan), the zakat disclaimer, the
+philosopher pages, and — most importantly — turning **on** the optional on-device AI answers. I keep
+this organized in `docs/SCHOLAR_REVIEW.md`.
+
+**My recommendation: YES, eventually — connect me with a scholar when convenient.** Nothing here
+blocks your own testing.
+
+### 8. Upload the AI-answer model files (weeks away — nothing to do now)
+
+**What this is:** The optional on-phone AI ("Ask") needs three model files hosted on your own
+Cloudflare storage (never third-party sites, for safety): the main model (Qwen3-1.7B), a smaller
+fallback (Qwen3-0.6B), and a "meaning-matcher" (all-MiniLM-L6-v2). I generate a fourth file myself.
+The feature ships **off** and stays provably inert until these land and a scholar signs off.
+
+**When it's needed:** Only when I reach that epic (several weeks out). I'll give you exact download
+links and upload steps then.
+
+**My recommendation: NOTHING NOW.** The model choice (Qwen3, free Apache-2.0 license) is already
+approved — flag it only if you object.
 
 ---
 
-## READY FOR HUMAN SUBMIT — the path from here to the App Store (written 2026-07-13)
+## READY FOR HUMAN SUBMIT — the path from here to the App Store
 
-The app itself is feature-complete for a first test version, with 324 automated tests green and an offline test that proves everything works without internet. Store text (description, keywords, reviewer notes, privacy answers) is drafted in `fastlane/metadata/`. Here is the honest, ordered checklist of what remains — split by who does it.
+The app is **feature-complete for a first test version**: **397 automated tests green** (47 suites),
+including an offline test that proves everything works without internet. Store text (description,
+keywords, reviewer notes, privacy answers = "Data Not Collected") is drafted in `fastlane/metadata/`.
+The build pipeline is now configured too: **`eas.json` exists** with build + submit profiles, so
+the moment your keys (item 1) land I can build and upload with essentially one command.
 
-**You (whenever you're ready — I'll walk you through each click):**
+**You (whenever you're ready — walkthroughs above):**
+1. **Apple setup (item 1)** — the single item that unlocks your first real test on your phone.
+2. Support + Privacy web pages (item 2) — only for a public release; I draft them.
+3. RevenueCat key (item 3) — optional; the app is fine without it.
+4. The 5-minute prayer spot check (item 4) — before outside testers.
+5. Recitation recordings decision (item 5) — until then the listen feature hides itself.
 
-1. Apple Developer account keys → lets me upload a test build to TestFlight so the app appears on YOUR phone. This is the single item that unlocks your first real test.
-2. A support web page and a privacy policy web page (Apple requires both URLs for the store listing — a simple free page is enough; making anything public is your call, and I'll draft the pages).
-3. RevenueCat key (10-minute free signup, steps in item 1 above) — only if you want the tip jar live in v1; the app is fine without it.
-4. The 5-minute prayer-times spot check (item 3 above).
-5. Recitation recordings decision (item 2 above) — until then the app ships with the listen feature hidden (it hides itself automatically when no audio source is configured).
+**Reviewers (before PUBLIC release, not for your own TestFlight testing):**
+6. Urdu/Arabic review (item 6) — English-only shipping is fine meanwhile.
+7. Scholar sign-off queue (item 7) — includes the final Quran translation choice; the current
+   1930 public-domain translation is clearly watermarked as temporary.
 
-**Reviewers (before PUBLIC release, not needed for your own TestFlight testing):** 6. Urdu/Arabic text review (item C) — English-only shipping is fine meanwhile. 7. Scholar sign-off queue (item D) — includes the final Quran translation choice; the current 1930 public-domain translation is clearly watermarked as temporary.
+**Me (no waiting on anyone):**
+8. `eas.json` build + submit pipeline is **done**. The moment item 1 lands I run `eas init`
+   (links the project) → `eas build -p ios --profile production` → `eas submit` to TestFlight
+   **internal** (allowed without a gate). Getting it onto *outside* testers or the public store is
+   a separate step I'll bring to you.
+9. Final store screenshots at Apple's required sizes (captured from the big-screen simulator).
+10. The in-app privacy screen already exists; I'll mirror it to the public page from item 2.
 
-**Me (no waiting on anyone):** 8. EAS preview/production build + TestFlight upload the moment item 1 lands. 9. Final store screenshots at Apple's required sizes (I'll capture them from the big-screen simulator). 10. In-app privacy policy screen already exists; I'll mirror it to the public page from item 2.
+**Bottom line: item 1 (the Apple setup) is the only thing between you and testing DeenDawn on your
+own iPhone.** Everything on my side is ready for it.
 
-Bottom line: **item 1 (Apple keys) is the only thing between you and testing DeenDawn on your own iPhone.** Say the word and I'll give you the click-by-click.
+---
+
+## Note on the AI model choice
+
+The plan uses **Qwen3** (Apache-2.0 license — free, no strings). You already approved the overall
+direction; speak up only if you want a different model. The on-device AI ships **off** behind a flag
+and only turns on after your + a scholar's sign-off (item 7).
