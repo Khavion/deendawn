@@ -35,8 +35,7 @@ import { useSettings } from '../SettingsContext';
 import { resolveLocation } from '../settingsStore';
 import { CityPickerModal } from '../../prayer-times/components/CityPickerModal';
 import { HighLatRuleKey, MadhabKey, METHOD_KEYS, MethodKey } from '../../prayer-times/types';
-import { AppText } from '@/src/components/ui';
-import { ThemedView } from '@/components/themed-view';
+import { AppText, GoldFrameCard, SectionRule } from '@/src/components/ui';
 import i18n, {
   applyRtlForNextStart,
   LanguageCode,
@@ -46,8 +45,10 @@ import i18n, {
   needsRtlRestart,
   saveLanguage,
 } from '@/src/lib/i18n';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { elevation, radius, richMode, spacing } from '@/src/lib/theme/tokens';
+import { useThemeMode } from '@/src/lib/theme/ThemeProvider';
+import { useTokens } from '@/src/lib/theme/useTokens';
+import { useDeviceTier } from '@/src/lib/theme/useDeviceTier';
 
 const MADHABS: MadhabKey[] = ['shafi', 'hanafi'];
 const HIGH_LAT_RULES: HighLatRuleKey[] = [
@@ -77,10 +78,15 @@ function PickerModal<T extends string>({
   hint?: string;
 }) {
   const insets = useSafeAreaInsets();
-  const scheme = useColorScheme() ?? 'light';
+  const tk = useTokens();
   return (
     <Modal visible={visible} animationType="slide" onRequestClose={onClose}>
-      <ThemedView style={[styles.modalContainer, { paddingTop: insets.top + 12 }]}>
+      <View
+        style={[
+          styles.modalContainer,
+          { backgroundColor: tk.bgCanvas, paddingTop: insets.top + 12 },
+        ]}
+      >
         <View style={styles.modalHeader}>
           <AppText variant="subtitle">{title}</AppText>
           <Pressable accessibilityRole="button" testID="close-option-picker" onPress={onClose}>
@@ -103,7 +109,7 @@ function PickerModal<T extends string>({
             >
               <AppText
                 variant={o.key === selected ? 'bodyStrong' : 'body'}
-                style={o.key === selected ? { color: Colors[scheme].tint } : undefined}
+                style={o.key === selected ? { color: tk.accent } : undefined}
               >
                 {o.label}
                 {o.key === selected ? '  ✓' : ''}
@@ -111,15 +117,24 @@ function PickerModal<T extends string>({
             </Pressable>
           ))}
         </ScrollView>
-      </ThemedView>
+      </View>
     </Modal>
   );
 }
 
 export function MoreScreen() {
   const insets = useSafeAreaInsets();
+  const tk = useTokens();
+  const mode = useThemeMode();
+  const rm = richMode(mode);
+  const { flat } = useDeviceTier();
   const { t } = useTranslation();
   const router = useRouter();
+  const groupCard = [
+    styles.groupCard,
+    { backgroundColor: tk.bgSurface, borderColor: tk.border },
+    flat ? undefined : elevation[rm].e2,
+  ];
   const { settings, update, store } = useSettings();
   const [open, setOpen] = useState<
     null | 'city' | 'method' | 'madhab' | 'highlat' | 'language' | 'hijri' | 'suhoor'
@@ -267,81 +282,94 @@ export function MoreScreen() {
   ];
 
   return (
-    <ThemedView style={[styles.container, { paddingTop: insets.top + 12 }]}>
+    <View style={[styles.container, { backgroundColor: tk.bgCanvas, paddingTop: insets.top + 12 }]}>
       <ScrollView contentContainerStyle={styles.scroll}>
         <AppText variant="title" style={styles.title}>
           {t('more.title')}
         </AppText>
-        <AppText style={styles.sectionHint}>{t('more.hint')}</AppText>
-        {rows.map((row) => (
-          <Pressable
-            key={row.id}
-            accessibilityRole="button"
-            testID={`setting-${row.id}`}
-            onPress={row.onPress}
-            style={styles.settingRow}
-          >
-            <AppText variant="bodyStrong">{row.title}</AppText>
-            <AppText style={styles.settingValue}>{row.value}</AppText>
-          </Pressable>
-        ))}
-        <AppText variant="title" style={[styles.title, styles.sectionTitle]}>
-          {t('more.notifications')}
-        </AppText>
-        <AppText style={styles.sectionHint}>{t('more.notificationsHint')}</AppText>
-        {ADHAN_PRAYERS.map((prayer) => (
-          <View key={prayer} style={styles.settingRowInline}>
+        <AppText style={[styles.sectionHint, { color: tk.textSecondary }]}>{t('more.hint')}</AppText>
+        <View style={groupCard}>
+          {rows.map((row) => (
             <Pressable
+              key={row.id}
               accessibilityRole="button"
-              testID={`sound-${prayer}`}
-              style={styles.rowText}
-              onPress={() => setSoundPickerFor(prayer)}
+              testID={`setting-${row.id}`}
+              onPress={row.onPress}
+              style={[styles.settingRow, { borderBottomColor: tk.border }]}
             >
-              <AppText variant="bodyStrong">{t(`prayers.${prayer}`)}</AppText>
-              <AppText style={styles.settingValue}>
-                {t(`more.sound_${prefs.sound[prayer]}`)}
+              <AppText variant="bodyStrong">{row.title}</AppText>
+              <AppText style={[styles.settingValue, { color: tk.textSecondary }]}>
+                {row.value}
               </AppText>
             </Pressable>
-            <Switch
-              testID={`notif-${prayer}`}
-              value={prefs.enabled[prayer]}
-              onValueChange={(v) => void togglePrayer(prayer, v)}
-            />
-          </View>
-        ))}
-        <AppText variant="title" style={[styles.title, styles.sectionTitle]}>
-          {t('more.reading')}
-        </AppText>
-        <View style={styles.settingRowInline}>
-          <View style={styles.rowText}>
-            <AppText variant="bodyStrong">{t('more.nightWarm')}</AppText>
-            <AppText style={styles.settingValue}>{t('more.nightWarmDesc')}</AppText>
-          </View>
-          <Switch
-            testID="night-warm"
-            value={nightWarm}
-            onValueChange={(v) => {
-              setNightWarm(v);
-              saveNightWarm(store, v);
-            }}
-          />
+          ))}
         </View>
-        {TAJWEED_ENABLED && (
-          <View style={styles.settingRowInline}>
+        <SectionRule label={t('more.notifications')} style={styles.sectionRule} />
+        <AppText style={[styles.sectionHint, { color: tk.textSecondary }]}>
+          {t('more.notificationsHint')}
+        </AppText>
+        <View style={groupCard}>
+          {ADHAN_PRAYERS.map((prayer) => (
+            <View
+              key={prayer}
+              style={[styles.settingRowInline, { borderBottomColor: tk.border }]}
+            >
+              <Pressable
+                accessibilityRole="button"
+                testID={`sound-${prayer}`}
+                style={styles.rowText}
+                onPress={() => setSoundPickerFor(prayer)}
+              >
+                <AppText variant="bodyStrong">{t(`prayers.${prayer}`)}</AppText>
+                <AppText style={[styles.settingValue, { color: tk.textSecondary }]}>
+                  {t(`more.sound_${prefs.sound[prayer]}`)}
+                </AppText>
+              </Pressable>
+              <Switch
+                testID={`notif-${prayer}`}
+                value={prefs.enabled[prayer]}
+                onValueChange={(v) => void togglePrayer(prayer, v)}
+              />
+            </View>
+          ))}
+        </View>
+        <SectionRule label={t('more.reading')} style={styles.sectionRule} />
+        <View style={groupCard}>
+          <View style={[styles.settingRowInline, { borderBottomColor: tk.border }]}>
             <View style={styles.rowText}>
-              <AppText variant="bodyStrong">{t('more.tajweed')}</AppText>
-              <AppText style={styles.settingValue}>{t('more.tajweedDesc')}</AppText>
+              <AppText variant="bodyStrong">{t('more.nightWarm')}</AppText>
+              <AppText style={[styles.settingValue, { color: tk.textSecondary }]}>
+                {t('more.nightWarmDesc')}
+              </AppText>
             </View>
             <Switch
-              testID="tajweed-toggle"
-              value={tajweed}
+              testID="night-warm"
+              value={nightWarm}
               onValueChange={(v) => {
-                setTajweed(v);
-                saveTajweed(store, v);
+                setNightWarm(v);
+                saveNightWarm(store, v);
               }}
             />
           </View>
-        )}
+          {TAJWEED_ENABLED && (
+            <View style={[styles.settingRowInline, { borderBottomColor: tk.border }]}>
+              <View style={styles.rowText}>
+                <AppText variant="bodyStrong">{t('more.tajweed')}</AppText>
+                <AppText style={[styles.settingValue, { color: tk.textSecondary }]}>
+                  {t('more.tajweedDesc')}
+                </AppText>
+              </View>
+              <Switch
+                testID="tajweed-toggle"
+                value={tajweed}
+                onValueChange={(v) => {
+                  setTajweed(v);
+                  saveTajweed(store, v);
+                }}
+              />
+            </View>
+          )}
+        </View>
         {/* Tier B (on-device AI answers). GATE 7: TierBCard self-gates on
             TIER_B_ENABLED and renders nothing until Zohaib + scholar sign-off.
             Wired here so enabling is a one-line flag flip. Model files are
@@ -355,7 +383,11 @@ export function MoreScreen() {
             onDelete={() => {}}
           />
         </View>
-        <AppText style={styles.privacyNote}>{t('more.privacyNote')}</AppText>
+        <GoldFrameCard style={styles.privacyCard}>
+          <AppText style={[styles.privacyNote, { color: tk.textSecondary }]}>
+            {t('more.privacyNote')}
+          </AppText>
+        </GoldFrameCard>
       </ScrollView>
 
       <CityPickerModal
@@ -446,35 +478,40 @@ export function MoreScreen() {
         onSelect={selectLanguage}
         onClose={() => setOpen(null)}
       />
-    </ThemedView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  scroll: { paddingHorizontal: 20, paddingBottom: 32 },
-  title: { marginBottom: 8 },
-  sectionHint: { opacity: 0.7, marginBottom: 16 },
+  scroll: { paddingHorizontal: spacing.l, paddingBottom: spacing.xxl },
+  title: { marginBottom: spacing.s },
+  sectionHint: { marginBottom: spacing.m },
+  sectionRule: { marginTop: spacing.xl, marginBottom: spacing.s },
+  groupCard: {
+    borderRadius: radius.card,
+    borderWidth: StyleSheet.hairlineWidth,
+    overflow: 'hidden',
+    paddingHorizontal: spacing.l,
+  },
   settingRow: {
-    paddingVertical: 14,
+    paddingVertical: spacing.m,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: 'rgba(128,128,128,0.25)',
     gap: 2,
   },
-  settingValue: { opacity: 0.6 },
-  sectionTitle: { marginTop: 28, fontSize: 24, lineHeight: 30 },
-  rowText: { flex: 1, paddingRight: 12, gap: 2 },
+  settingValue: {},
+  rowText: { flex: 1, paddingRight: spacing.m, gap: 2 },
   settingRowInline: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 10,
+    paddingVertical: spacing.s,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: 'rgba(128,128,128,0.25)',
   },
-  privacyNote: { marginTop: 24, opacity: 0.6, textAlign: 'center' },
-  tierbWrap: { marginTop: 24 },
-  modalContainer: { flex: 1, paddingHorizontal: 20 },
+  privacyCard: { marginTop: spacing.xl, padding: spacing.l },
+  privacyNote: { textAlign: 'center' },
+  tierbWrap: { marginTop: spacing.xl },
+  modalContainer: { flex: 1, paddingHorizontal: spacing.l },
   modalHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
