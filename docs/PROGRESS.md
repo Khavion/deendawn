@@ -335,3 +335,20 @@ Done:
 - 9 tests: scale math (default, validate, clamp), the More stepper (100%→115%, persists 1.15), and a reader assertion that the Arabic (36.4) + translation (20.8) actually scale at 1.3x.
 - Gates green: tsc, expo lint 0 errors, **409/409** (50 suites).
 - **Verified live on BOTH emulators**: iOS and Android — stepped 100%→130% in More, opened a surah, confirmed the Arabic + translation enlarge (translation wraps to two lines). Cross-platform parity.
+
+## Session 2026-07-21 (cont.) — Net-new feature: Verse of the Day + deep-link scroll fix
+
+Third net-new feature, plus a reliability fix found while testing it.
+
+Done — Verse of the Day:
+
+- `verseOfDay.ts`: pure `verseOfDayOrdinal(date)` — the daily verse is picked PURELY by the calendar day (never curated; hand-choosing scripture would break Rule 1), advancing one per day over all 6236 ayat (~17-year cycle). Unit-tested (range, determinism, daily-advance, wrap).
+- `repo.getAyahByOrdinal()`: fetch the ayah at a 0-based mushaf ordinal.
+- `VerseOfDayCard`: elevated card (NOT the featured gold frame — Today already has one), Arabic undecorated (reverence), translation + surah-name citation, tap deep-links into the reader. Memoized by ordinal so the 1-second Today re-render doesn't re-query. Placed below Today's prayer times.
+- i18n `today.verseOfDay` (en + ur/ar drafts). 7 tests. Verified live on iOS + Android — identical verse (An-Nahl 16:47) both platforms.
+
+Done — deep-link scroll fix (found via verse-of-day testing; also fixes bookmarks + search):
+
+- Deep-linking to an ayah opened the reader at the TOP because rows load after the transition (E7) → initial index computed as 0. Fix: when a target ayah is in params, load rows synchronously at mount; scroll to the exact ayah via a FlashList ref + `scrollToIndex` in `onLoad` (measures variable-height rows; `initialScrollIndex` only estimates and overshot ~30 ayat). Ordinary opens keep the deferred load + smooth push.
+- Verified live on iOS: verse-of-day (An-Nahl 16:47) now opens with 16:47 at the top. 2 tests prove the synchronous deep-link load.
+- Gates green: tsc, expo lint 0 errors, **418/418** (53 suites).

@@ -33,7 +33,9 @@ Epics in build order. Top unblocked item is always the current task.
 
 - [x] Bookmarks browser — DONE 2026-07-21. Dedicated screen to see/revisit saved verses (was write-only); deep-links into the reader; remove; empty state. repo.getAyahsByRefs; ★ Bookmarks link in Quran header; en+ur/ar(draft) keys; 4 tests; verified iOS+Android.
 - [x] Reading font size — DONE 2026-07-21. Adjustable Quran+translation text scale (0.85–1.5); More → Reading A−/A+ stepper with % readout; readerState scale prefs; reader applies it to Arabic+translation (reverence intact); en+ur/ar(draft) keys; 9 tests; verified iOS+Android.
-- [ ] Candidate backlog: Quran audio full reciter catalog (gated on recordings); prayer-time notification richness; verse-of-the-day (deterministic, no curation); reading-size control also surfaced in the reader header (currently only in Settings).
+- [x] Verse of the Day — DONE 2026-07-21. Deterministic date-based daily ayah on Today (no curation); elevated card, Arabic undecorated; deep-links to reader; en+ur/ar(draft) key; 7 tests; verified iOS+Android.
+- [x] Deep-link scroll-to-ayah fix — DONE 2026-07-21. Reader now scrolls to the exact ayah for verse-of-day/bookmarks/search deep-links (sync row load + scrollToIndex on load); was opening at the top. 2 tests; verified live.
+- [ ] Candidate backlog: Quran audio full reciter catalog (gated on recordings); prayer-time notification richness; reading-size control also surfaced in the reader header (currently only in Settings); last-read "continue" could also deep-link-scroll (now that scroll works).
 
 ## STORE / TESTFLIGHT (mandate item (a))
 
