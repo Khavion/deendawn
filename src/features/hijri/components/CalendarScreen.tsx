@@ -6,8 +6,10 @@ import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { keyDatesFor, toHijri } from '../hijri';
 import { AppText } from '@/src/components/ui';
 import { useSettings } from '@/src/features/settings/SettingsContext';
-import { radius, spacing } from '@/src/lib/theme/tokens';
+import { elevation, radius, richMode, spacing } from '@/src/lib/theme/tokens';
+import { useThemeMode } from '@/src/lib/theme/ThemeProvider';
 import { useTokens } from '@/src/lib/theme/useTokens';
+import { useDeviceTier } from '@/src/lib/theme/useDeviceTier';
 
 interface Cell {
   gregorianDay: number;
@@ -45,6 +47,9 @@ function buildMonth(year: number, month: number, hijriOffset: -1 | 0 | 1, todayK
 
 export function CalendarScreen({ initialDate }: { initialDate?: Date }) {
   const t = useTokens();
+  const mode = useThemeMode();
+  const rm = richMode(mode);
+  const { flat } = useDeviceTier();
   const { t: tr, i18n } = useTranslation();
   const { settings } = useSettings();
   const today = useMemo(() => initialDate ?? new Date(), [initialDate]);
@@ -123,7 +128,14 @@ export function CalendarScreen({ initialDate }: { initialDate?: Date }) {
           {todayHijri.year}
         </AppText>
 
-        <View style={styles.grid} testID="calendar-grid">
+        <View
+          style={[
+            styles.gridCard,
+            { backgroundColor: t.bgSurface, borderColor: t.border },
+            flat ? undefined : elevation[rm].e2,
+          ]}
+        >
+          <View style={styles.grid} testID="calendar-grid">
           {cells.map((cell, i) => (
             <View
               key={i}
@@ -154,6 +166,7 @@ export function CalendarScreen({ initialDate }: { initialDate?: Date }) {
               )}
             </View>
           ))}
+          </View>
         </View>
 
         {legend.length > 0 && (
@@ -169,8 +182,13 @@ export function CalendarScreen({ initialDate }: { initialDate?: Date }) {
           </View>
         )}
 
-        <View style={[styles.disclaimer, { backgroundColor: t.bgElevated }]}>
-          <AppText variant="caption" style={{ color: t.textSecondary, textAlign: 'center' }}>
+        <View
+          style={[
+            styles.disclaimer,
+            { backgroundColor: t.bgElevated, borderLeftColor: t.ochre },
+          ]}
+        >
+          <AppText variant="caption" style={{ color: t.textSecondary }}>
             {tr('calendar.disclaimer')}
           </AppText>
         </View>
@@ -186,6 +204,12 @@ const styles = StyleSheet.create({
   headerTitles: { flex: 1, gap: 2 },
   centerText: { textAlign: 'center' },
   todayLine: { textAlign: 'center', marginTop: spacing.s, marginBottom: spacing.l },
+  gridCard: {
+    borderRadius: radius.card,
+    borderWidth: StyleSheet.hairlineWidth,
+    overflow: 'hidden',
+    padding: spacing.xs,
+  },
   grid: { flexDirection: 'row', flexWrap: 'wrap' },
   cell: {
     width: `${100 / 7}%`,
@@ -199,6 +223,7 @@ const styles = StyleSheet.create({
   disclaimer: {
     marginTop: spacing.xl,
     borderRadius: radius.control,
+    borderLeftWidth: 3,
     padding: spacing.m,
   },
 });

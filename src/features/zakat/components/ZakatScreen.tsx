@@ -17,9 +17,21 @@ import {
   NISAB_SILVER_GRAMS,
   ZakatInputs,
 } from '../zakat';
-import { AppText } from '@/src/components/ui';
-import { fonts, fontSize, radius, spacing } from '@/src/lib/theme/tokens';
+import { AppText, GoldFrameCard, SectionRule } from '@/src/components/ui';
+import {
+  dimOnFeatured,
+  elevation,
+  featuredGradient,
+  fonts,
+  fontSize,
+  radius,
+  richMode,
+  spacing,
+  textOnFeatured,
+} from '@/src/lib/theme/tokens';
+import { useThemeMode } from '@/src/lib/theme/ThemeProvider';
 import { useTokens } from '@/src/lib/theme/useTokens';
+import { useDeviceTier } from '@/src/lib/theme/useDeviceTier';
 
 type FieldKey = keyof ZakatInputs;
 
@@ -46,7 +58,15 @@ export function parseAmount(text: string): number {
 
 export function ZakatScreen() {
   const t = useTokens();
+  const mode = useThemeMode();
+  const rm = richMode(mode);
+  const { flat } = useDeviceTier();
   const { t: tr, i18n } = useTranslation();
+  const elevatedCard = [
+    styles.groupCard,
+    { backgroundColor: t.bgSurface, borderColor: t.border },
+    flat ? undefined : elevation[rm].e2,
+  ];
   const [raw, setRaw] = useState<Record<FieldKey, string>>(
     Object.fromEntries(Object.keys(EMPTY_INPUTS).map((k) => [k, ''])) as Record<FieldKey, string>
   );
@@ -88,51 +108,54 @@ export function ZakatScreen() {
     >
       <Stack.Screen options={{ title: tr('zakat.title') }} />
       <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
-        <View style={[styles.resultCard, { backgroundColor: t.accent }]} testID="zakat-result">
+        <GoldFrameCard
+          gradientColors={featuredGradient[rm]}
+          style={styles.resultCard}
+          testID="zakat-result"
+        >
           {result.status === 'due' ? (
             <>
-              <AppText variant="bodyStrong" style={{ color: t.textOnAccent, opacity: 0.85 }}>
+              <AppText variant="bodyStrong" style={{ color: dimOnFeatured[rm] }}>
                 {tr('zakat.due')}
               </AppText>
-              <AppText style={[styles.resultAmount, { color: t.textOnAccent }]}>
+              <AppText style={[styles.resultAmount, { color: textOnFeatured[rm] }]}>
                 {fmt(result.zakatDue)}
               </AppText>
             </>
           ) : (
             <AppText
               variant="bodyStrong"
-              style={{ color: t.textOnAccent, textAlign: 'center' }}
+              style={{ color: textOnFeatured[rm], textAlign: 'center' }}
             >
               {tr(result.status === 'needPrices' ? 'zakat.needPrices' : 'zakat.belowNisab')}
             </AppText>
           )}
           {result.nisabThreshold !== null && (
-            <AppText variant="caption" style={{ color: t.textOnAccent, opacity: 0.85 }}>
+            <AppText variant="caption" style={{ color: dimOnFeatured[rm] }}>
               {tr('zakat.nisabLine', { amount: fmt(result.nisabThreshold) })}
             </AppText>
           )}
-        </View>
+        </GoldFrameCard>
 
-        <AppText variant="subtitle" style={styles.section}>
-          {tr('zakat.assets')}
-        </AppText>
-        {ASSET_FIELDS.map(field)}
+        <SectionRule label={tr('zakat.assets')} style={styles.sectionRule} />
+        <View style={elevatedCard}>{ASSET_FIELDS.map(field)}</View>
 
-        <AppText variant="subtitle" style={styles.section}>
-          {tr('zakat.liabilitiesSection')}
-        </AppText>
-        {field('liabilities')}
+        <SectionRule label={tr('zakat.liabilitiesSection')} style={styles.sectionRule} />
+        <View style={elevatedCard}>{field('liabilities')}</View>
 
-        <AppText variant="subtitle" style={styles.section}>
-          {tr('zakat.prices')}
-        </AppText>
+        <SectionRule label={tr('zakat.prices')} style={styles.sectionRule} />
         <AppText variant="caption" style={[styles.note, { color: t.textSecondary }]}>
           {tr('zakat.pricesNote', { gold: NISAB_GOLD_GRAMS, silver: NISAB_SILVER_GRAMS })}
         </AppText>
-        {PRICE_FIELDS.map(field)}
+        <View style={elevatedCard}>{PRICE_FIELDS.map(field)}</View>
 
-        <View style={[styles.disclaimer, { backgroundColor: t.ochreSoft }]}>
-          <AppText variant="caption" style={{ color: t.ochre, textAlign: 'center' }}>
+        <View
+          style={[
+            styles.disclaimer,
+            { backgroundColor: t.ochreSoft, borderLeftColor: t.ochre },
+          ]}
+        >
+          <AppText variant="caption" style={{ color: t.ochre }}>
             {tr('zakat.disclaimer')}
           </AppText>
         </View>
@@ -152,8 +175,14 @@ const styles = StyleSheet.create({
     marginBottom: spacing.l,
   },
   resultAmount: { fontFamily: fonts.serifSemiBold, fontSize: fontSize.display, lineHeight: 44 },
-  section: { marginTop: spacing.l, marginBottom: spacing.s },
+  sectionRule: { marginTop: spacing.l, marginBottom: spacing.s },
   note: { marginBottom: spacing.s },
+  groupCard: {
+    borderRadius: radius.card,
+    borderWidth: StyleSheet.hairlineWidth,
+    paddingHorizontal: spacing.l,
+    paddingVertical: spacing.xs,
+  },
   fieldRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -171,5 +200,10 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     fontSize: fontSize.body,
   },
-  disclaimer: { marginTop: spacing.xl, borderRadius: radius.control, padding: spacing.m },
+  disclaimer: {
+    marginTop: spacing.xl,
+    borderRadius: radius.control,
+    borderLeftWidth: 3,
+    padding: spacing.m,
+  },
 });
