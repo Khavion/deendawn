@@ -14,12 +14,17 @@ import {
   TASBIH_TARGETS,
 } from '../tasbihState';
 import { useSettings } from '../../settings/SettingsContext';
-import { AppText } from '@/src/components/ui';
-import { fonts, radius, spacing } from '@/src/lib/theme/tokens';
+import { AppText, Gradient } from '@/src/components/ui';
+import { ambientGradient, elevation, fonts, radius, richMode, spacing } from '@/src/lib/theme/tokens';
+import { useThemeMode } from '@/src/lib/theme/ThemeProvider';
 import { useTokens } from '@/src/lib/theme/useTokens';
+import { useDeviceTier } from '@/src/lib/theme/useDeviceTier';
 
 export function TasbihScreen() {
   const t = useTokens();
+  const mode = useThemeMode();
+  const rm = richMode(mode);
+  const { flat } = useDeviceTier();
   const { t: tr } = useTranslation();
   const { store } = useSettings();
   const [state, setState] = useState(() => loadTasbih(store));
@@ -54,6 +59,13 @@ export function TasbihScreen() {
   return (
     <View style={[styles.container, { backgroundColor: t.bgCanvas }]}>
       <Stack.Screen options={{ title: tr('tasbih.title') }} />
+      <Gradient
+        pointerEvents="none"
+        colors={ambientGradient[rm].day}
+        flat={flat}
+        flatColor={t.bgCanvas}
+        style={styles.ambient}
+      />
 
       <TextInput
         testID="tasbih-label"
@@ -74,7 +86,13 @@ export function TasbihScreen() {
         onPress={onTap}
         style={styles.tapArea}
       >
-        <View style={[styles.ring, { borderColor: ringColor }]}>
+        <View
+          style={[
+            styles.ring,
+            { borderColor: ringColor, backgroundColor: t.bgSurface },
+            !flat && milestone === 'round' && { shadowColor: t.success, ...styles.ringGlow },
+          ]}
+        >
           <AppText style={[styles.count, { color: t.textPrimary }]} testID="tasbih-count">
             {displayCount}
           </AppText>
@@ -121,7 +139,13 @@ export function TasbihScreen() {
         </Pressable>
       </View>
 
-      <View style={styles.history}>
+      <View
+        style={[
+          styles.history,
+          { backgroundColor: t.bgSurface, borderColor: t.border },
+          flat ? undefined : elevation[rm].e2,
+        ]}
+      >
         {history.map((day) => (
           <View key={day.date} style={styles.historyRow}>
             <AppText variant="caption" style={{ color: t.textSecondary }}>
@@ -139,6 +163,7 @@ export function TasbihScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: spacing.xl },
+  ambient: { position: 'absolute', top: 0, left: 0, right: 0, height: 360 },
   label: {
     fontFamily: fonts.serif,
     fontSize: 17,
@@ -155,6 +180,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: spacing.xs,
   },
+  ringGlow: { shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.55, shadowRadius: 24, elevation: 12 },
   count: { fontFamily: fonts.serifSemiBold, fontSize: 80, lineHeight: 96 },
   hint: { opacity: 0.8 },
   controls: {
@@ -173,6 +199,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  history: { marginTop: spacing.xl, gap: spacing.xs },
+  history: {
+    marginTop: spacing.xl,
+    gap: spacing.xs,
+    borderRadius: radius.card,
+    borderWidth: StyleSheet.hairlineWidth,
+    padding: spacing.l,
+  },
   historyRow: { flexDirection: 'row', justifyContent: 'space-between' },
 });
