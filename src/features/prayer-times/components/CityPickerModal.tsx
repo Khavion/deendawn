@@ -5,11 +5,10 @@ import { Modal, Pressable, StyleSheet, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AppText } from '@/src/components/ui';
-import { ThemedView } from '@/components/themed-view';
-import { Colors } from '@/constants/theme';
 import { City } from '@/src/features/settings/cities';
 import { searchCities } from '@/src/features/settings/citySearch';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { radius, spacing } from '@/src/lib/theme/tokens';
+import { useTokens } from '@/src/lib/theme/useTokens';
 
 export function CityPickerModal({
   visible,
@@ -21,14 +20,16 @@ export function CityPickerModal({
   onSelect: (city: City) => void;
 }) {
   const insets = useSafeAreaInsets();
-  const scheme = useColorScheme() ?? 'light';
+  const tk = useTokens();
   const { t } = useTranslation();
   const [query, setQuery] = useState('');
   const results = searchCities(query, 25);
 
   return (
     <Modal visible={visible} animationType="slide" onRequestClose={onClose}>
-      <ThemedView style={[styles.container, { paddingTop: insets.top + 12 }]}>
+      <View
+        style={[styles.container, { backgroundColor: tk.bgCanvas, paddingTop: insets.top + 12 }]}
+      >
         <View style={styles.header}>
           <AppText variant="subtitle">{t('cityPicker.title')}</AppText>
           <Pressable accessibilityRole="button" testID="close-picker" onPress={onClose}>
@@ -40,10 +41,10 @@ export function CityPickerModal({
           value={query}
           onChangeText={setQuery}
           placeholder={t('cityPicker.placeholder')}
-          placeholderTextColor={Colors[scheme].icon}
+          placeholderTextColor={tk.icon}
           autoFocus
           autoCorrect={false}
-          style={[styles.input, { color: Colors[scheme].text, borderColor: Colors[scheme].icon }]}
+          style={[styles.input, { color: tk.textPrimary, borderColor: tk.border }]}
         />
         <FlashList
           data={results}
@@ -59,41 +60,40 @@ export function CityPickerModal({
               accessibilityRole="button"
               testID={`city-${item.id}`}
               onPress={() => onSelect(item)}
-              style={styles.row}
+              style={[styles.row, { borderBottomColor: tk.border }]}
             >
               <AppText>{item.name}</AppText>
-              <AppText style={styles.country}>{item.country}</AppText>
+              <AppText style={[styles.country, { color: tk.textSecondary }]}>{item.country}</AppText>
             </Pressable>
           )}
         />
-      </ThemedView>
+      </View>
     </Modal>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, paddingHorizontal: 20 },
+  container: { flex: 1, paddingHorizontal: spacing.l },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: spacing.m,
   },
   input: {
     borderWidth: 1,
-    borderRadius: 10,
-    paddingHorizontal: 14,
-    paddingVertical: 10,
+    borderRadius: radius.control,
+    paddingHorizontal: spacing.m,
+    paddingVertical: spacing.s,
     fontSize: 16,
-    marginBottom: 8,
+    marginBottom: spacing.s,
   },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: 14,
+    paddingVertical: spacing.m,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: 'rgba(128,128,128,0.25)',
   },
-  country: { opacity: 0.6 },
-  hint: { textAlign: 'center', marginTop: 24, opacity: 0.7 },
+  country: {},
+  hint: { textAlign: 'center', marginTop: spacing.xl, opacity: 0.7 },
 });
