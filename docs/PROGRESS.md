@@ -368,3 +368,13 @@ Verified (no code change needed) that Quran search results inherit the reader's 
 - iOS: searched "Pharaoh" → tapped result 7:103 → reader opened An-A'raf scrolled exactly to 7:103.
 - Android: searched "Moses" → tapped result 2:67 → reader opened Al-Baqara scrolled exactly to 2:67.
 Both land on the matched ayah at the top. Search deep-links pass `?ayah=` like continue-reading/bookmarks/verse-of-day, so the single reader fix (sync load + scrollToIndex on load) covers all four entry points. Confirmed working on both platforms.
+
+## Session 2026-07-21 (cont.) — Reader-header font-size control
+
+Reading size was Settings-only; added an in-reader control where you actually feel the effect.
+
+Done:
+
+- Reader header (`SurahScreen` Stack.Screen headerRight) now has an **A− / A+** pair (small/large "A", mirroring the Settings stepper) beside the translation toggle. `readingScale` is now reader state; tapping steps it (`stepReadingScale`), saves it (`saveReadingScale`, shared with the Settings pref), and re-renders the Arabic + translation live. Buttons disable at the min/max of `READING_SCALES` with `more.readingSizeSmaller/Larger` accessible labels (no new i18n keys).
+- Verified live on BOTH platforms: iOS (A+ grows, A− shrinks live) and Android (A− shrinks live; small-A greys out at the 85% minimum — confirming the clamp in the UI). Header fits cleanly with the translation toggle.
+- Gates green: tsc, expo lint 0 errors, **421/421** (53 suites). Logic reuses already-tested stepReadingScale/saveReadingScale + the reader scale-application test.

@@ -37,7 +37,8 @@ Epics in build order. Top unblocked item is always the current task.
 - [x] Deep-link scroll-to-ayah fix — DONE 2026-07-21. Reader now scrolls to the exact ayah for verse-of-day/bookmarks/search deep-links (sync row load + scrollToIndex on load); was opening at the top. 2 tests; verified live.
 - [x] Continue-reading reliability — DONE 2026-07-21. Deep-link scroll no longer clobbers the saved position (tracking gated until scroll settles; pure recordReadingPosition + tests); chip re-reads on tab focus (useFocusEffect) so it's never stale. Verified iOS+Android.
 - [x] Search deep-link spot-check — DONE 2026-07-21. Confirmed search results scroll the reader precisely to the matched ayah on both platforms (iOS 7:103, Android 2:67); free win from the reader fix, no code change.
-- [ ] Candidate backlog: Quran audio full reciter catalog (gated on recordings); prayer-time notification richness; reading-size control also surfaced in the reader header (currently only in Settings); Ask/Library screens could adopt Skeleton loaders.
+- [x] Reader-header font-size control — DONE 2026-07-21. A−/A+ in the reader header resize Quran+translation live (shared with the Settings pref); min/max disabled. Verified iOS+Android.
+- [ ] Candidate backlog: Quran audio full reciter catalog (gated on recordings); prayer-time notification richness; Ask/Library screens could adopt Skeleton loaders; onboarding/empty-state manuscript-art (scholar-gated).
 
 ## STORE / TESTFLIGHT (mandate item (a))
 
