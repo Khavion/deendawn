@@ -44,6 +44,13 @@ Epics in build order. Top unblocked item is always the current task.
 - [ ] After owner approves audio (Gate 5 + R2 keys): download Husary from QUL, confirm the resource license, upload to R2, wire per-surah gapless + ayah-highlighting via QUL segment timings, flip listen feature off the stand-in tone (behind a flag until confirmed).
 - [ ] Candidate backlog: prayer-time notification richness; onboarding/empty-state manuscript-art (scholar-gated); ayah-highlighting scaffolding in the audio player (build against the timing-data shape now, dormant until audio lands).
 
+## PUBLICATION (owner directive — publish so people can download, free/no-data)
+
+- [x] Publish-prep — DONE 2026-07-21. Two-store publish guide (BLOCKERS #1/#1b, Apple-first per 2026 rules research); Android permissions trimmed (blocked mic/overlay/storage); privacy + support web pages written (docs/legal/); Play listing + Data Safety prepped (docs/store/PLAY_LISTING.md, fastlane android metadata); eas Android submit; brand name reconciled; 6.9" screenshot pipeline verified.
+- [ ] GATE (owner): create Apple Developer account ($99) + Expo token + ASC API key → I build+upload; you host the 2 web pages + click Submit for Review. (Optional: Google Play $25, org route to skip the 12-tester wait.)
+- [ ] After keys land: eas init → eas build production → submit to store; capture final badge-free 6.9" (+ iPad) screenshot set from the release build; fill listings.
+- [ ] Physical-device test pass (docs/TESTPLAN.md) before external release — magnetometer, adhan on locked device, background audio, cold start, IAP sandbox.
+
 ## STORE / TESTFLIGHT (mandate item (a))
 
 - [x] EAS pipeline — DONE 2026-07-21. `eas.json` at repo root: `development` (dev-client + `ios.simulator:true`, no-credentials sim build), `preview` (internal), `production` (store, `autoIncrement`). `appVersionSource: remote`. `submit.production.ios` prepared with `ascAppId` placeholder; API key via `EXPO_ASC_*` env (documented in `.env.example`, aliased to constitution `ASC_*`, plus headless `EXPO_TOKEN`). BLOCKERS.md rewritten into ranked "WHAT NEEDS YOU" with full Apple/ASC-key click-by-click as #1. DECISIONS.md logged.

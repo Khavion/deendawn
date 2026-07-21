@@ -401,3 +401,17 @@ Done:
 ## Pending — deep-research: real Quran recitation audio (BLOCKERS #2 / Gate 5)
 
 Owner asked to make the "listen" feature use real recitation (currently a placeholder tone) and, if possible, live recitation. Launched a deep-research brief on legally-usable recitation audio (self-hosted files + live-stream options) for a commercial-adjacent free app. Findings + a plain-English owner recommendation to be written into BLOCKERS.md when the research returns.
+
+## Session 2026-07-21 (cont.) — Publication prep (App Store + Google Play)
+
+Owner pivoted to publishing (without recitation) so people can download it and see it's free / no data collection. Publication itself stays a Human Gate (dev accounts + final submit); did all the autonomous prep to make it near-one-click.
+
+Done:
+
+- **Researched current (2026) publishing rules.** Result flips the earlier assumption: **Apple is the faster public path** (~1–3 days: $99, upload, ~1–2 day review, no tester gate). New **personal** Google Play accounts must run a **12-tester × 14-day** closed test before production (~2–4 weeks); **organization** accounts (free D-U-N-S) skip it. Rewrote BLOCKERS #1/#1b as an accurate two-store guide with this recommendation.
+- **Trimmed Android permissions** (`app.json` blockedPermissions): removed RECORD_AUDIO (mic), SYSTEM_ALERT_WINDOW, external storage — verified via prebuild the merged manifest marks them `tools:node="remove"`. Store build ships only INTERNET, LOCATION, MODIFY_AUDIO_SETTINGS, VIBRATE — clean for the "no data collected" story.
+- **Wrote the two required web pages** (`docs/legal/privacy-policy.html`, `support.html`) — ready to host, emphasizing genuine zero-data-collection; one email placeholder each.
+- **Prepped Google Play** — `fastlane/metadata/android/en-US/` (title/short/full) + `docs/store/PLAY_LISTING.md` (Data Safety = No data collected, content rating, target-API, asset list); `eas.json` Android submit block.
+- **Reconciled brand name** to "Deen Dawn" (store name + description).
+- **Verified the 6.9" screenshot pipeline** on iPhone 17 Pro Max; `fastlane/screenshots/en-US/01-today.png` is now correct-size 1320×2868. Full badge-free set to be captured from the release build (reader/audio DEV badges are dev-only).
+- Confirmed (via audit) the privacy claim genuinely holds: no analytics/ad/tracking SDKs; on-device storage only; only outbound domain is the user's own R2 audio (on explicit play). App is submission-ready pending owner accounts/keys + final submit sign-off.
