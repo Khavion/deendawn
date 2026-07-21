@@ -289,3 +289,23 @@ Done:
 - **Qibla** — the compass dial ring now sits on a restrained elevated surface (`bgSurface` + tier-gated `elevation.e2`); aligned state still swaps to `accentSoft`+success. Caveat/calibration chips adopt the gold-left-border treatment. Verified live on iOS: dial reads as a clean elevated disc, calm — no gradient or gold brackets (reverent). All qibla testIDs + haptics semantics preserved.
 - Gates green: tsc clean, expo lint 0 errors, full suite **397/397** (47 suites). Reverence invariant intact — no decorative element touches Quranic/Arabic content on either screen.
 - Rich roadmap: steps 2–4 complete. Remaining: step 5 (motion/haptics vocabulary/skeletons) + the tab-bar-reads-raw-scheme fix.
+
+## Session 2026-07-21 (cont.) — Cycle: Rich design step 5 (motion · haptics · skeletons) — ROADMAP COMPLETE
+
+Plan (final Rich step — the "signature feel" layer, all pure-JS since Reanimated isn't wired):
+
+1. Haptics vocabulary (one named verb per meaning), Reduce-Motion-aware, refactor the 3 ad-hoc sites onto it.
+2. Fix the tab bar reading the raw OS scheme instead of the app ThemeProvider.
+3. Press-scale micro-interaction via built-in Animated (no native rebuild), wired into Button.
+4. Skeleton loaders replacing bare spinners; tier-gated shimmer.
+
+Done (4 commits):
+
+- **Haptics** — `src/lib/haptics.ts`: press/detent/select/success/warning verbs mapped once to expo-haptics; `useHaptics()` silences them under Reduce Motion only (low-end phones keep feedback → tasbih/qibla call-count tests stay green). Refactored Tasbih, Qibla, HapticTab. 3 new tests.
+- **Tab-bar bug** — `app/(tabs)/_layout.tsx` switched from `Colors[useColorScheme()]` (raw OS scheme, no night-warm entry) to `useTokens()`: active tint = accent, inactive = icon, bar bg/border tokenized. Verified live on iOS — green active tab, grey inactive, correct surface. Now correct in every theme incl. night-warm.
+- **Motion** — `src/lib/theme/usePressScale.ts`: reusable press-scale on the Animated native driver, timed to `duration.fast`, disabled on essential tier / Reduce Motion. Wired into Button (Pressable stays the a11y node; presses/labels unchanged).
+- **Skeletons** — `src/components/ui/Skeleton.tsx`: content-shaped placeholder, opacity-pulse on capable tiers / static on essential, a11y-hidden. Tips loading shows three tip-pill skeletons (was a bare ActivityIndicator).
+- Reanimated is installed but NOT wired (no babel.config.js / worklets plugin) — deliberately used built-in `Animated` for all motion so nothing needs a native rebuild. Motion `duration` tokens (previously unconsumed) now drive press-scale (fast) + shimmer (slow).
+- Gates green: tsc clean, expo lint 0 errors, full suite **400/400** (48 suites). Reader relaunch + tab bar verified live on iOS.
+
+**Rich design (Direction 1c) steps 2–5 are now all complete.** Remaining design backlog: manuscript-art editorial moments (scholar gate), Dynamic-Type/RTL device audits, and adopting `usePressScale`/`Skeleton` more widely as screens are touched.

@@ -22,7 +22,10 @@ Epics in build order. Top unblocked item is always the current task.
 - [x] Step 2 Home/hero — DONE (prior session).
 - [x] Step 3 rich chrome — DONE 2026-07-21: Zakat, Calendar, Tasbih, Quran list, More (featured cards / elevated groups / gold rules / tier-gated accents). Legacy ThemedView/Colors path fully retired (SurahList + More migrated). 397/397 green.
 - [x] Step 4 — Reader + Qibla — DONE 2026-07-21. Reader: audio player is the one featured GoldFrameCard (gold frame + brackets), ayat untouched with calm hairlines (reverence held); GoldFrameCard gained a `mode` prop for the night-warm reader. Qibla: dial on a restrained elevated surface (e2, no gradient/brackets), chips gold-left-border. Verified live on iOS; 397/397 green.
-- [ ] Step 5 — Motion/haptics/skeletons: shared useMotion() reading useDeviceTier; haptics vocabulary helper (press/select/success/arrival); skeleton/shimmer loaders replacing bare ActivityIndicator; fix tab-bar-reads-raw-scheme bug. Reduce-Motion/Low-Power always wins; 60fps floor.
+- [x] Step 5 — Motion/haptics/skeletons — DONE 2026-07-21. Haptics vocabulary (src/lib/haptics.ts, Reduce-Motion-aware); press-scale (src/lib/theme/usePressScale.ts, built-in Animated, wired into Button); Skeleton (src/components/ui/Skeleton.tsx) replacing bare spinners in Tips; tab-bar-reads-raw-scheme bug fixed. All pure-JS (Reanimated not wired). 400/400 green, tab bar verified live.
+- [x] **Rich design (Direction 1c) steps 2–5 COMPLETE** 2026-07-21.
+- [ ] Adopt usePressScale / Skeleton more widely as screens are touched (continue-reading card, tip buttons, etc.).
+- [ ] Cleanup: migrate remaining legacy useColorScheme sites (CityPickerModal, components/ui/collapsible.tsx) to useTokens.
 - [ ] Add missing spec primitives when a native rebuild is available: Surface/elevation wrapper, GirihTexture (needs react-native-svg) — currently deferred (pure-JS approach).
 - [x] On-device iOS Simulator + Android emulator visual pass over the step-3 screens — DONE 2026-07-21. All featured cards / gold rules / elevated groups / gold-left disclaimers / ambient gradients render correctly on both platforms; iOS⇄Android parity confirmed; reverence held; no layout breaks or jank found.
 
