@@ -9,7 +9,7 @@ import { ask, AskResponse, extractTerms } from '../router';
 import { askLibrary, LibraryAskResponse, sectionSnippet } from '../libraryAsk';
 import { openLibraryDb } from '../../library/libraryDb';
 import { AyahRow, QuranDb } from '../../quran/repo';
-import { AppText } from '@/src/components/ui';
+import { AppText, Skeleton } from '@/src/components/ui';
 import { fonts, fontSize, radius, spacing } from '@/src/lib/theme/tokens';
 import { useTokens } from '@/src/lib/theme/useTokens';
 
@@ -25,6 +25,7 @@ export function AskScreen() {
   const [source, setSource] = useState<AskSource>('quran');
   const [response, setResponse] = useState<AskResponse | null>(null);
   const [libResponse, setLibResponse] = useState<LibraryAskResponse | null>(null);
+  const [libLoading, setLibLoading] = useState(false);
 
   const submit = () => {
     const q = input.trim();
@@ -34,9 +35,12 @@ export function AskScreen() {
         setLibResponse(null);
         return;
       }
-      void openLibraryDb().then((libDb) => {
-        setLibResponse(askLibrary(libDb as unknown as QuranDb, q));
-      });
+      // Opening the library db + running the query is async — show skeletons.
+      setLibResponse(null);
+      setLibLoading(true);
+      void openLibraryDb()
+        .then((libDb) => setLibResponse(askLibrary(libDb as unknown as QuranDb, q)))
+        .finally(() => setLibLoading(false));
       return;
     }
     setLibResponse(null);
@@ -47,6 +51,7 @@ export function AskScreen() {
     setSource(next);
     setResponse(null);
     setLibResponse(null);
+    setLibLoading(false);
   };
 
   const openRef = (row: AyahRow) => router.push(`/surah/${row.surah}?ayah=${row.ayah}`);
@@ -138,10 +143,22 @@ export function AskScreen() {
       </View>
 
       <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
-        {response === null && libResponse === null && (
+        {response === null && libResponse === null && !libLoading && (
           <AppText variant="reading" style={[styles.hint, { color: t.textSecondary }]}>
             {tr(source === 'library' ? 'ask.hintLibrary' : 'ask.hint')}
           </AppText>
+        )}
+
+        {libLoading && (
+          <View style={styles.verseList} testID="ask-loading">
+            {[0, 1, 2].map((row) => (
+              <View key={row} style={[styles.verseRow, { borderBottomColor: t.border }]}>
+                <Skeleton width="45%" height={16} />
+                <Skeleton width="100%" height={13} style={styles.skelGap} />
+                <Skeleton width="80%" height={13} style={styles.skelGap} />
+              </View>
+            ))}
+          </View>
         )}
 
         {libResponse?.kind === 'sections' && (
@@ -261,4 +278,5 @@ const styles = StyleSheet.create({
     padding: spacing.l,
     marginBottom: spacing.l,
   },
+  skelGap: { marginTop: spacing.xs },
 });

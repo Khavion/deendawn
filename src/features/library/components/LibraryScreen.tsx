@@ -8,7 +8,7 @@ import { Pressable, StyleSheet, TextInput, View } from 'react-native';
 import { openLibraryDb } from '../libraryDb';
 import { searchSections } from '../repo';
 import { THINKERS } from '../thinkers';
-import { AppText } from '@/src/components/ui';
+import { AppText, Skeleton } from '@/src/components/ui';
 import { radius, spacing } from '@/src/lib/theme/tokens';
 import { useTokens } from '@/src/lib/theme/useTokens';
 
@@ -46,7 +46,17 @@ export function LibraryScreen() {
         maxFontSizeMultiplier={1.4}
         style={[styles.input, { color: t.textPrimary, borderColor: t.border }]}
       />
-      {searching ? (
+      {searching && !db ? (
+        <View testID="library-loading">
+          {[0, 1, 2, 3].map((row) => (
+            <View key={row} style={[styles.row, { borderBottomColor: t.border }]}>
+              <Skeleton width="55%" height={16} />
+              <Skeleton width="100%" height={13} style={styles.skelGap} />
+              <Skeleton width="85%" height={13} style={styles.skelGap} />
+            </View>
+          ))}
+        </View>
+      ) : searching ? (
         <FlashList
           data={results}
           keyExtractor={(s) => String(s.id)}
@@ -119,4 +129,5 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
   reviewNote: { borderRadius: radius.control, padding: spacing.s, marginBottom: spacing.m },
+  skelGap: { marginTop: spacing.xs },
 });
