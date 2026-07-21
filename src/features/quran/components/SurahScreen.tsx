@@ -1,7 +1,7 @@
-import { FlashList } from '@shopify/flash-list';
+import { FlashList, type FlashListRef } from '@shopify/flash-list';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   InteractionManager,
@@ -51,22 +51,30 @@ export function SurahScreen() {
   const tajPalette = nightWarm || scheme === 'dark' ? tajweedColors.dark : tajweedColors.light;
 
   const surah = useMemo(() => getSurah(db, surahNumber), [db, surahNumber]);
-  // E7: keep the push animation clean — heavy row materialization waits for
-  // the transition to finish (Interactions), then the list mounts.
-  const [ayahs, setAyahs] = useState<AyahRow[]>([]);
+  const targetAyah = params.ayah ? Number(params.ayah) : null;
+  // E7: keep the push animation clean — heavy row materialization waits for the
+  // transition to finish (Interactions), then the list mounts. EXCEPTION: when
+  // deep-linking to a specific ayah (bookmarks, verse-of-day, search), load the
+  // rows synchronously so FlashList's initialScrollIndex lands on that ayah at
+  // mount instead of opening at the top.
+  const [ayahs, setAyahs] = useState<AyahRow[]>(() =>
+    targetAyah ? listAyahs(db, surahNumber) : []
+  );
   useEffect(() => {
+    if (targetAyah) return;
     const task = InteractionManager.runAfterInteractions(() => {
       setAyahs(listAyahs(db, surahNumber));
     });
     return () => task.cancel();
-  }, [db, surahNumber]);
+  }, [db, surahNumber, targetAyah]);
   const [showTranslation, setShowTranslation] = useState(() => loadShowTranslation(store));
   const [bookmarkVersion, setBookmarkVersion] = useState(0);
+  const listRef = useRef<FlashListRef<AyahRow>>(null);
 
-  const initialIndex = params.ayah
+  const initialIndex = targetAyah
     ? Math.max(
         0,
-        ayahs.findIndex((a) => a.ayah === Number(params.ayah))
+        ayahs.findIndex((a) => a.ayah === targetAyah)
       )
     : 0;
 
@@ -120,9 +128,17 @@ export function SurahScreen() {
         />
       </View>
       <FlashList
+        ref={listRef}
         data={ayahs}
         keyExtractor={(a) => String(a.id)}
-        initialScrollIndex={initialIndex > 0 ? initialIndex : undefined}
+        onLoad={() => {
+          // Scroll to the deep-linked ayah once the list has measured its
+          // (variable-height) rows — scrollToIndex is exact, whereas
+          // initialScrollIndex only estimates and overshoots for long ayat.
+          if (initialIndex > 0) {
+            void listRef.current?.scrollToIndex({ index: initialIndex, animated: false });
+          }
+        }}
         onViewableItemsChanged={onViewableItemsChanged}
         viewabilityConfig={{ itemVisiblePercentThreshold: 60 }}
         contentContainerStyle={styles.list}
