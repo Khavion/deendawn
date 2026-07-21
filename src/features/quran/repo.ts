@@ -54,6 +54,23 @@ export function getAyah(db: QuranDb, surah: number, ayah: number): AyahRow | nul
 }
 
 /**
+ * Fetch the ayah rows for a list of (surah, ayah) refs, preserving the given
+ * order and dropping any ref not found. Used by the bookmarks browser to
+ * render saved verses with their text.
+ */
+export function getAyahsByRefs(
+  db: QuranDb,
+  refs: { surah: number; ayah: number }[]
+): AyahRow[] {
+  const rows: AyahRow[] = [];
+  for (const ref of refs) {
+    const row = getAyah(db, ref.surah, ref.ayah);
+    if (row) rows.push(row);
+  }
+  return rows;
+}
+
+/**
  * FTS search over the derived normalized columns. Arabic queries are folded
  * with the same normalization the index was built with; every token is
  * quoted so user input can never inject FTS syntax.

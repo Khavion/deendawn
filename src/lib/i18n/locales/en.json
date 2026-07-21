@@ -63,6 +63,8 @@
     "share": "Share",
     "bookmarkAdd": "Add bookmark",
     "bookmarkRemove": "Remove bookmark",
+    "bookmarksTitle": "Bookmarks",
+    "bookmarksEmpty": "No saved verses yet. Tap the star on any verse to bookmark it.",
     "notFound": "Surah not found.",
     "tajweed": {
       "pendingReview": "Tajweed colors — draft, pending scholarly review",

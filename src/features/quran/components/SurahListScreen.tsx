@@ -52,9 +52,21 @@ export function SurahListScreen() {
     <View
       style={[styles.container, { backgroundColor: tk.bgCanvas, paddingTop: insets.top + 12 }]}
     >
-      <AppText variant="title" style={styles.title}>
-        {t('quran.title')}
-      </AppText>
+      <View style={styles.headerRow}>
+        <AppText variant="title" style={styles.title}>
+          {t('quran.title')}
+        </AppText>
+        <Pressable
+          accessibilityRole="button"
+          testID="quran-bookmarks"
+          onPress={() => router.push('/bookmarks')}
+          hitSlop={8}
+          style={styles.bookmarksLink}
+        >
+          <AppText style={{ color: tk.ochre }}>★</AppText>
+          <AppText variant="link">{t('quran.bookmarksTitle')}</AppText>
+        </Pressable>
+      </View>
       <TextInput
         testID="quran-search"
         value={query}
@@ -140,7 +152,14 @@ export function SurahListScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, paddingHorizontal: spacing.l },
-  title: { marginBottom: spacing.s },
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: spacing.s,
+  },
+  title: {},
+  bookmarksLink: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
   input: {
     borderWidth: 1,
     borderRadius: radius.control,
