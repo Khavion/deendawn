@@ -20,8 +20,11 @@ import {
   loadReadingScale,
   loadShowTranslation,
   loadTajweed,
+  READING_SCALES,
   recordReadingPosition,
+  saveReadingScale,
   saveShowTranslation,
+  stepReadingScale,
   toggleBookmark,
 } from '../readerState';
 import { AyahRow, buildShareText, getSurah, listAyahs } from '../repo';
@@ -46,7 +49,7 @@ export function SurahScreen() {
   const nightWarm = loadNightWarm(store);
   const t = useTokens(nightWarm ? 'nightWarm' : undefined);
   const scheme = useColorScheme();
-  const readingScale = loadReadingScale(store);
+  const [readingScale, setReadingScale] = useState(() => loadReadingScale(store));
   const tajweedOn = TAJWEED_ENABLED && loadTajweed(store);
   const tajPalette = nightWarm || scheme === 'dark' ? tajweedColors.dark : tajweedColors.light;
 
@@ -89,6 +92,15 @@ export function SurahScreen() {
     });
   };
 
+  const changeReadingScale = (dir: 1 | -1) => {
+    setReadingScale((current) => {
+      const next = stepReadingScale(current, dir);
+      saveReadingScale(store, next);
+      return next;
+    });
+  };
+  const sizeGlyph = 'A';
+
   const onViewableItemsChanged = useCallback(
     ({ viewableItems }: { viewableItems: ViewToken[] }) => {
       recordReadingPosition(store, viewableItems[0]?.item as AyahRow | undefined, trackReadingRef.current);
@@ -110,16 +122,48 @@ export function SurahScreen() {
         options={{
           title: `${surah.number}. ${surah.name_transliteration}`,
           headerRight: () => (
-            <Pressable
-              accessibilityRole="button"
-              testID="toggle-translation"
-              onPress={onToggleTranslation}
-              hitSlop={8}
-            >
-              <AppText variant="link">
-                {showTranslation ? tr('quran.arabicOnly') : tr('quran.translation')}
-              </AppText>
-            </Pressable>
+            <View style={styles.headerControls}>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={tr('more.readingSizeSmaller')}
+                testID="reader-size-dec"
+                disabled={readingScale <= READING_SCALES[0]}
+                onPress={() => changeReadingScale(-1)}
+                hitSlop={8}
+                style={readingScale <= READING_SCALES[0] ? styles.sizeDisabled : undefined}
+              >
+                <AppText variant="link" style={styles.sizeSmall}>
+                  {sizeGlyph}
+                </AppText>
+              </Pressable>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={tr('more.readingSizeLarger')}
+                testID="reader-size-inc"
+                disabled={readingScale >= READING_SCALES[READING_SCALES.length - 1]}
+                onPress={() => changeReadingScale(1)}
+                hitSlop={8}
+                style={
+                  readingScale >= READING_SCALES[READING_SCALES.length - 1]
+                    ? styles.sizeDisabled
+                    : undefined
+                }
+              >
+                <AppText variant="link" style={styles.sizeLarge}>
+                  {sizeGlyph}
+                </AppText>
+              </Pressable>
+              <Pressable
+                accessibilityRole="button"
+                testID="toggle-translation"
+                onPress={onToggleTranslation}
+                hitSlop={8}
+              >
+                <AppText variant="link">
+                  {showTranslation ? tr('quran.arabicOnly') : tr('quran.translation')}
+                </AppText>
+              </Pressable>
+            </View>
           ),
         }}
       />
@@ -287,6 +331,10 @@ export function SurahScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
+  headerControls: { flexDirection: 'row', alignItems: 'center', gap: spacing.m },
+  sizeSmall: { fontSize: 14 },
+  sizeLarge: { fontSize: 20 },
+  sizeDisabled: { opacity: 0.35 },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   audioWrap: { paddingHorizontal: spacing.xl, paddingTop: spacing.s },
   list: { paddingHorizontal: spacing.xl, paddingBottom: spacing.xxl, paddingTop: spacing.s },
