@@ -24,11 +24,16 @@ jest.mock('../../libraryDb', () => ({
       mockResolveDb = res;
     }),
 }));
+let mockParams: Record<string, string> = { id: '1' };
 jest.mock('expo-localization', () => ({ getLocales: () => [{ languageTag: 'en-US' }] }));
 jest.mock('expo-router', () => ({
-  useLocalSearchParams: () => ({ id: '1' }),
+  useLocalSearchParams: () => mockParams,
   Stack: { Screen: () => null },
 }));
+
+beforeEach(() => {
+  mockParams = { id: '1' };
+});
 
 describe('WorkReaderScreen', () => {
   test('shows a skeleton while the library db opens, then the work content', async () => {
@@ -44,5 +49,14 @@ describe('WorkReaderScreen', () => {
     // After it resolves: skeleton gone, real sections render.
     expect(view.queryByTestId('work-loading')).toBeNull();
     expect(view.getByTestId('section-1')).toBeOnTheScreen();
+  });
+
+  test('a section deep-link renders that section (Ask/Library "open section")', async () => {
+    mockParams = { id: '1', section: '3' };
+    const view = await render(<WorkReaderScreen />);
+    await act(async () => {
+      mockResolveDb(mockDb);
+    });
+    expect(view.getByTestId('section-3')).toBeOnTheScreen();
   });
 });

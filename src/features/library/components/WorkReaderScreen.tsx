@@ -1,7 +1,7 @@
-import { FlashList } from '@shopify/flash-list';
+import { FlashList, type FlashListRef } from '@shopify/flash-list';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { SQLiteDatabase } from 'expo-sqlite';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 
@@ -19,6 +19,7 @@ export function WorkReaderScreen() {
   const [work, setWork] = useState<WorkRow | null>(null);
   const [sections, setSections] = useState<SectionRow[]>([]);
   const [loaded, setLoaded] = useState(false);
+  const listRef = useRef<FlashListRef<SectionRow>>(null);
 
   useEffect(() => {
     let mounted = true;
@@ -57,18 +58,26 @@ export function WorkReaderScreen() {
         </View>
       ) : (
         <FlashList
-        data={sections}
-        keyExtractor={(s) => String(s.id)}
-        initialScrollIndex={initialIndex > 0 ? initialIndex : undefined}
-        contentContainerStyle={styles.list}
-        ListHeaderComponent={
-          work ? (
-            <AppText variant="caption" style={[styles.attribution, { color: t.textSecondary }]}>
-              {tr('library.translatedBy', { translator: work.translator, year: work.year })} ·{' '}
-              {tr('library.publicDomain')}
-            </AppText>
-          ) : null
-        }
+          ref={listRef}
+          data={sections}
+          keyExtractor={(s) => String(s.id)}
+          onLoad={() => {
+            // Scroll to the deep-linked section once rows are measured
+            // (scrollToIndex is exact; initialScrollIndex overshoots on the
+            // variable-height section bodies). Ask/Library "open section" jumps.
+            if (initialIndex > 0) {
+              void listRef.current?.scrollToIndex({ index: initialIndex, animated: false });
+            }
+          }}
+          contentContainerStyle={styles.list}
+          ListHeaderComponent={
+            work ? (
+              <AppText variant="caption" style={[styles.attribution, { color: t.textSecondary }]}>
+                {tr('library.translatedBy', { translator: work.translator, year: work.year })} ·{' '}
+                {tr('library.publicDomain')}
+              </AppText>
+            ) : null
+          }
           renderItem={({ item }) => (
             <View style={styles.sectionBlock} testID={`section-${item.section_index}`}>
               <AppText variant="caption" style={{ color: t.accent }}>
