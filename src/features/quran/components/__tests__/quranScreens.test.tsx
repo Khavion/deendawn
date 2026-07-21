@@ -36,6 +36,7 @@ jest.mock('@/src/features/audio/config', () => ({ getAudioSource: () => null }))
 jest.mock('expo-router', () => ({
   useRouter: () => ({ push: mockRouterPush }),
   useLocalSearchParams: () => mockSearchParams,
+  useFocusEffect: () => {},
   Stack: { Screen: () => null },
 }));
 

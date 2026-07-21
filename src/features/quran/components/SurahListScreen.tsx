@@ -1,6 +1,6 @@
-import { useRouter } from 'expo-router';
+import { useFocusEffect, useRouter } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FlashList } from '@shopify/flash-list';
 import { Pressable, StyleSheet, TextInput, View } from 'react-native';
@@ -33,9 +33,17 @@ export function SurahListScreen() {
   const { store } = useSettings();
   const { t } = useTranslation();
   const [query, setQuery] = useState('');
+  // Force a re-render each time the tab regains focus so `lastRead` (read below)
+  // reflects where you actually stopped reading, not a stale memoized value.
+  const [, bumpFocus] = useState(0);
+  useFocusEffect(
+    useCallback(() => {
+      bumpFocus((n) => n + 1);
+    }, [])
+  );
 
   const surahs = useMemo(() => listSurahs(db), [db]);
-  const lastRead = useMemo(() => loadLastRead(store), [store]);
+  const lastRead = loadLastRead(store);
   const results: AyahRow[] = useMemo(
     () => (query.trim().length >= 2 ? searchAyahs(db, query, 50) : []),
     [db, query]

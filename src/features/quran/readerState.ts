@@ -60,6 +60,21 @@ export function saveLastRead(store: KVStore, ref: AyahRef): void {
   if (isRef(ref)) store.set(LAST_READ_KEY, JSON.stringify(ref));
 }
 
+/**
+ * Record the reader's scroll position as last-read — but only while `tracking`
+ * is on. Tracking stays OFF during a deep-link open until the scroll settles,
+ * so the top-of-surah render doesn't clobber the position we deep-linked to
+ * (continue-reading / bookmark / verse-of-the-day).
+ */
+export function recordReadingPosition(
+  store: KVStore,
+  first: AyahRef | undefined,
+  tracking: boolean
+): void {
+  if (!tracking || !first) return;
+  saveLastRead(store, { surah: first.surah, ayah: first.ayah });
+}
+
 export function loadShowTranslation(store: KVStore): boolean {
   return store.get(SHOW_TRANSLATION_KEY) !== 'false';
 }

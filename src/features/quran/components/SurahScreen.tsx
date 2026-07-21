@@ -20,7 +20,7 @@ import {
   loadReadingScale,
   loadShowTranslation,
   loadTajweed,
-  saveLastRead,
+  recordReadingPosition,
   saveShowTranslation,
   toggleBookmark,
 } from '../readerState';
@@ -70,6 +70,10 @@ export function SurahScreen() {
   const [showTranslation, setShowTranslation] = useState(() => loadShowTranslation(store));
   const [bookmarkVersion, setBookmarkVersion] = useState(0);
   const listRef = useRef<FlashListRef<AyahRow>>(null);
+  // Don't record a last-read position until any initial deep-link scroll has
+  // settled — otherwise the top-of-surah render fires first and overwrites the
+  // very position we deep-linked to (continue-reading / bookmark / verse).
+  const trackReadingRef = useRef(targetAyah === null);
 
   const initialIndex = targetAyah
     ? Math.max(
@@ -87,8 +91,7 @@ export function SurahScreen() {
 
   const onViewableItemsChanged = useCallback(
     ({ viewableItems }: { viewableItems: ViewToken[] }) => {
-      const first = viewableItems[0]?.item as AyahRow | undefined;
-      if (first) saveLastRead(store, { surah: first.surah, ayah: first.ayah });
+      recordReadingPosition(store, viewableItems[0]?.item as AyahRow | undefined, trackReadingRef.current);
     },
     [store]
   );
@@ -135,8 +138,16 @@ export function SurahScreen() {
           // Scroll to the deep-linked ayah once the list has measured its
           // (variable-height) rows — scrollToIndex is exact, whereas
           // initialScrollIndex only estimates and overshoots for long ayat.
+          // Only start recording the last-read position AFTER that scroll, so
+          // the deep-linked position isn't clobbered by the top-of-surah render.
           if (initialIndex > 0) {
-            void listRef.current?.scrollToIndex({ index: initialIndex, animated: false });
+            void listRef.current
+              ?.scrollToIndex({ index: initialIndex, animated: false })
+              .finally(() => {
+                trackReadingRef.current = true;
+              });
+          } else {
+            trackReadingRef.current = true;
           }
         }}
         onViewableItemsChanged={onViewableItemsChanged}

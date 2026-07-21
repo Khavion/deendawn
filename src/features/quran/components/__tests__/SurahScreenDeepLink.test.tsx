@@ -35,8 +35,8 @@ jest.mock('expo-router', () => ({
   Stack: { Screen: () => null },
 }));
 
-const wrap = () => (
-  <SettingsProvider store={createMemoryKVStore()}>
+const wrap = (store = createMemoryKVStore()) => (
+  <SettingsProvider store={store}>
     <SurahScreen />
   </SettingsProvider>
 );
@@ -64,4 +64,5 @@ describe('SurahScreen deep-link to an ayah', () => {
     // Deferral stubbed out → no rows yet (proves ordinary opens stay deferred).
     expect(view.queryByTestId('ayah-2-1')).toBeNull();
   });
+
 });
