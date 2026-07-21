@@ -52,6 +52,7 @@
   },
   "quran": {
     "title": "قرآن",
+    "surahsSection": "سورتیں",
     "searchPlaceholder": "قرآن میں تلاش کریں (عربی یا انگریزی)",
     "noMatches": "کوئی نتیجہ نہیں۔",
     "continueReading": "پڑھنا جاری رکھیں — {{surah}}:{{ayah}}",

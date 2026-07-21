@@ -52,6 +52,7 @@
   },
   "quran": {
     "title": "القرآن",
+    "surahsSection": "السور",
     "searchPlaceholder": "ابحث في القرآن (عربي أو إنجليزي)",
     "noMatches": "لا نتائج.",
     "continueReading": "تابع القراءة — {{surah}}:{{ayah}}",
