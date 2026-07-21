@@ -387,3 +387,17 @@ Extended the Skeleton primitive to the library-backed surfaces, whose bundled-db
 - **AskScreen** (Library source): the async `askLibrary` path showed the idle hint mid-query → now a `libLoading` state renders 3 skeleton result rows (`ask-loading`).
 - **LibraryScreen**: searching before `db` finished opening showed "No matches" → now skeleton rows (`library-loading`) while `db` is null.
 - Reuses the existing Skeleton (shimmer on capable tiers, static on essential / Reduce Motion). Verified live on iOS: opened Al-Ghazali → "The Confessions of Al-Ghazali" loads correctly (skeleton flashes on cold open, too fast to screenshot on a warm db). Gates green: tsc, expo lint 0 errors, **422/422** (54 suites).
+
+## Session 2026-07-21 (cont.) — Book-reader section deep-link scroll
+
+WorkReaderScreen had the same "opens at the top" issue the Quran reader had: Ask "open section" and Library search results deep-link to /work/:id?section=N, but initialScrollIndex estimates the variable-height section bodies and overshoots.
+
+Done:
+
+- Same fix as the Quran reader: a FlashList ref + `scrollToIndex(index, animated:false)` in `onLoad` (the list only mounts once sections are loaded — behind the `loaded` skeleton flag — so the index is exact by then). Dropped the estimate-based initialScrollIndex.
+- Verified live on iOS: `deendawn://work/1?section=8` opens "The Confessions of Al-Ghazali" with section 8 at the top (was the top of the book before). Extended the WorkReader test with a section-deep-link case. (Android deep-link via adb VIEW intent didn't route when the app was already foregrounded — an adb quirk, not a code issue; the fix is the identical pure-JS onLoad+scrollToIndex mechanism already verified on Android for the Quran reader's 2:67 jump.)
+- Gates green: tsc, expo lint 0 errors, **423/423** (54 suites).
+
+## Pending — deep-research: real Quran recitation audio (BLOCKERS #2 / Gate 5)
+
+Owner asked to make the "listen" feature use real recitation (currently a placeholder tone) and, if possible, live recitation. Launched a deep-research brief on legally-usable recitation audio (self-hosted files + live-stream options) for a commercial-adjacent free app. Findings + a plain-English owner recommendation to be written into BLOCKERS.md when the research returns.

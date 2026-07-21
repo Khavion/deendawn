@@ -121,27 +121,41 @@ says Fajr in Houston on July 20 is 5:18 AM — does your mosque agree within a m
 
 **My recommendation: YES, later — I'll bring you the table when we're close to outside testers.**
 
-### 5. Quran recitation recordings (the "listen" feature)
+### 5. Quran recitation recordings (the "listen" feature) — I did the deep research; here's the plan
 
-**What this is:** The listening feature is built and tested against a clearly-labeled stand-in
-sound. Real recordings are needed before outside testers should hear actual recitation. Each
-recording legally belongs to whoever made it (the Quran text itself belongs to no one).
+**What this is:** The "listen" feature is fully built and tested, but it currently plays a
+clearly-labeled **stand-in tone**, not real recitation. To play actual recitation we need
+recordings we're legally allowed to put in the app. The Quran's words belong to no one, but a
+*recording* of a specific reciter is that person's (or a radio station's) property — like a song.
 
-**What I found (researched):** The most popular reciter online (Mishary Alafasy) explicitly does
-**not** allow free use. The biggest free site (everyayah.com) is "free for non-commercial use" —
-and because our app has a tip jar, that's legally risky. I won't ship anything on a "probably fine."
+**What the research found (done 2026-07-21):** I researched this thoroughly. The uncomfortable but
+honest headline: **almost none** of the popular "free Quran audio" websites actually post written
+permission saying "you may put this in your app." Because DeenDawn has a tip jar, we count as
+slightly commercial, so "free for personal use only" audio is legally risky for us — I won't ship
+on a "probably fine." Specifically: **Mishary Alafasy** (the most popular reciter) does **not**
+allow free use — ruled out. **Live Quran radio streams** are also out (no permission to relay them,
+and it would break our "no other companies' servers" privacy promise).
 
-**My recommendation: the safest path is written permission** — from a rights-holder of classic
-recordings, or a living reciter who'd like his recitation in a free, no-ads app. When you're
-ready, I'll draft the email for you to send.
+**The one good path I found:** a library called **QUL** (qul.tarteel.ai, run by the makers of the
+Tarteel app). It's the **only** source that states *in writing* you may use its data in commercial
+projects (it asks you to check each recording's own terms), and it uniquely includes the
+verse-by-verse timing data we'd need to highlight each ayah as it plays. My plan: use the classic
+teaching reciter **Sheikh Mahmoud al-Husary** from QUL, copy the files onto **our own** Cloudflare
+storage (never streaming from anyone else's site), with **Sheikh Abdul Basit** as a fallback.
 
-*Optional homework — paste this into Claude chat's Research feature and send me the results:*
-> "Find Quran recitation audio recordings (full Quran, mp3, by a qualified reciter) explicitly
-> licensed for free redistribution inside a free mobile app that also has an optional tip jar
-> (commercial-adjacent use). I need: the reciter's name, where the files are hosted, the exact
-> license text or permission statement and its URL, and any attribution requirements. Explicit
-> written licenses only. Check archive.org, quranicaudio.com, everyayah.com, King Fahd Complex
-> releases, and any reciter who has publicly waived rights in writing."
+**My recommendation (YES / NO for you):** **Approve me drafting one short, polite permission email**
+so we have proof-on-file before shipping any recitation. I've already written the draft — see
+`docs/AUDIO_PERMISSION_EMAIL.md`. What you'd do:
+1. Read the draft (2 minutes). Say **yes** if the wording is fine (or tell me what to change).
+2. Because sending an email on your behalf is your call, **you send it** (I'll give you the exact
+   addresses). If they reply, forward it to me and I'll keep it on file.
+3. Separately, when you set up the Cloudflare storage (item 1's storage keys), I'll download the
+   Husary files from QUL, double-check that recording's specific license, and upload them to your
+   storage — then flip the listen feature from the stand-in tone to real recitation.
+
+**Until then:** the listen feature stays on the honest stand-in tone (and hides itself entirely if
+no audio is configured), so nothing is blocked. Choosing the final reciter is your call (a Human
+Gate) — I've narrowed it to a clear first choice + fallback and prepared everything else.
 
 ### 6. Name a human reviewer for the Urdu and Arabic text (before public release)
 

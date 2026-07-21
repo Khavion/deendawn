@@ -39,7 +39,10 @@ Epics in build order. Top unblocked item is always the current task.
 - [x] Search deep-link spot-check — DONE 2026-07-21. Confirmed search results scroll the reader precisely to the matched ayah on both platforms (iOS 7:103, Android 2:67); free win from the reader fix, no code change.
 - [x] Reader-header font-size control — DONE 2026-07-21. A−/A+ in the reader header resize Quran+translation live (shared with the Settings pref); min/max disabled. Verified iOS+Android.
 - [x] Skeleton loaders on Ask + Library — DONE 2026-07-21. WorkReader (book load), Ask (Library source query), LibraryScreen (search before db ready) now show content-shaped skeletons; new WorkReaderScreen test. Verified iOS.
-- [ ] Candidate backlog: WorkReaderScreen section deep-links open at the top (same async-load pattern the Quran reader fix solved — apply sync-load + scrollToIndex so Ask/Library "open section" jumps land precisely); Quran audio full reciter catalog (gated on recordings); prayer-time notification richness; onboarding/empty-state manuscript-art (scholar-gated).
+- [x] Book-reader section deep-link scroll — DONE 2026-07-21. WorkReader now scrolls to the deep-linked section (Ask/Library "open section" jumps land precisely). Verified iOS (`work/1?section=8`).
+- [x] Recitation audio deep-research — DONE 2026-07-21. Recommendation logged (QUL → Husary, self-host R2, per-surah gapless + ayah timings); permission email drafted (docs/AUDIO_PERMISSION_EMAIL.md); owner action + gate in BLOCKERS #5.
+- [ ] After owner approves audio (Gate 5 + R2 keys): download Husary from QUL, confirm the resource license, upload to R2, wire per-surah gapless + ayah-highlighting via QUL segment timings, flip listen feature off the stand-in tone (behind a flag until confirmed).
+- [ ] Candidate backlog: prayer-time notification richness; onboarding/empty-state manuscript-art (scholar-gated); ayah-highlighting scaffolding in the audio player (build against the timing-data shape now, dormant until audio lands).
 
 ## STORE / TESTFLIGHT (mandate item (a))
 
