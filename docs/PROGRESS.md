@@ -352,3 +352,12 @@ Done — deep-link scroll fix (found via verse-of-day testing; also fixes bookma
 - Deep-linking to an ayah opened the reader at the TOP because rows load after the transition (E7) → initial index computed as 0. Fix: when a target ayah is in params, load rows synchronously at mount; scroll to the exact ayah via a FlashList ref + `scrollToIndex` in `onLoad` (measures variable-height rows; `initialScrollIndex` only estimates and overshot ~30 ayat). Ordinary opens keep the deferred load + smooth push.
 - Verified live on iOS: verse-of-day (An-Nahl 16:47) now opens with 16:47 at the top. 2 tests prove the synchronous deep-link load.
 - Gates green: tsc, expo lint 0 errors, **418/418** (53 suites).
+
+## Session 2026-07-21 (cont.) — Continue-reading reliability (tracking + chip freshness)
+
+Followed the deep-link scroll fix with the two remaining continue-reading gaps (both real bugs found while testing):
+
+1. **Position clobbered on deep-link open**: `onViewableItemsChanged` saved last-read from the FIRST visible verse, so a deep-link open recorded the top-of-surah render BEFORE `scrollToIndex` ran — briefly overwriting the deep-linked position (lost if you backed out fast). Fix: tracking stays OFF until the initial deep-link scroll settles (`onLoad → scrollToIndex.finally`). Extracted the decision into a pure `recordReadingPosition(store, first, tracking)` with unit tests (on/off/empty).
+2. **Stale chip**: the "Continue reading" chip memoized `lastRead` for the tab's lifetime → showed the old position until an app reload. Fix: read `lastRead` fresh + `useFocusEffect` bump so it re-reads on tab focus.
+- Verified live on iOS AND Android: read Al-Baqara, back → chip instantly shows the new position (2:4 iOS / 2:6 Android); continue-reading lands on the exact ayah; saved position survives.
+- Gates green: tsc, expo lint 0 errors, **421/421** (53 suites).
