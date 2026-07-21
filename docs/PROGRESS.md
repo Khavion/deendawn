@@ -259,4 +259,17 @@ Done:
 - **Legacy-theme migration:** SurahListScreen, MoreScreen + its PickerModal moved off ThemedView/Colors[scheme]/useColorScheme to useTokens() + useThemeMode/useDeviceTier; raw px → spacing/radius tokens. (TodayScreen was already migrated; only these two remained on the legacy path.)
 - **Reverence held:** no gradient/texture over Quranic/Arabic content — surah Arabic names untouched and still accessibilityLanguage="ar"; all effects tier-gated via `flat` (nothing on essential tier / Reduce Motion).
 - Gates green throughout: tsc clean, expo lint 0 errors, full suite **397/397** (47 suites); every screen's existing testIDs + a11y semantics preserved.
-- Remaining Rich roadmap: step 4 (Reader/Qibla restrained featured cards) + step 5 (motion/haptics/skeletons) — next cycles. On-device simulator screenshot pass queued for the next reliability cycle.
+- Remaining Rich roadmap: step 4 (Reader/Qibla restrained featured cards) + step 5 (motion/haptics/skeletons) — next cycles.
+
+## Session 2026-07-21 (cont.) — Reliability: cross-platform visual verification of the rich screens
+
+- Owner opened the emulators for me. Ran the app on BOTH the iOS Simulator (iPhone 17 Pro, iOS 26.3) and the Android emulator (deendawn_pixel) against live Metro — reused the existing dev build + debug APK (JS-only changes, served via fast refresh; no native rebuild, so the Ruby/CocoaPods blocker never came up).
+- Visually verified all five step-3 screens plus Today on iOS, and Today + Quran list on Android:
+  - Featured gold-framed cards render with crisp gold corner brackets (Today next-prayer, Quran continue-reading, Zakat total, More privacy).
+  - Gold SectionRules (Quran SURAHS, Zakat WHAT-YOU-OWN/OWE/PRICES, More ADHAN-NOTIFICATIONS/READING) render with the fading gold hairline.
+  - Elevated grouped cards (times, surah list, settings/notifications/reading, zakat form, calendar grid, tasbih history) render with the e2 shadow + hairline border.
+  - Gold-left-border disclaimers (Calendar, Zakat) confirmed via zoom.
+  - Ambient gradients (Today, Tasbih) render soft and calm; reverence held — Arabic surah names untouched, correct RTL.
+  - **iOS ⇄ Android parity confirmed** — the design reads identically on both.
+- **No bugs / layout breaks / jank / overflow found.** The only friction was the iOS Simulator's hardware-keyboard accent-popup during city text entry — a test-harness quirk, not an app defect (discrete key presses worked). No code change needed.
+- Verdict: rich design step 3 is production-quality on both platforms. Clean device screenshots captured in scratchpad; formal store-size captures remain gate 9.

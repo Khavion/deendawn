@@ -24,7 +24,7 @@ Epics in build order. Top unblocked item is always the current task.
 - [ ] Step 4 — Reader + Qibla: restrained featured cards only (reverence — audio player is the Reader's one featured card; Qibla dial featured but calm). No gradient/texture over ayat.
 - [ ] Step 5 — Motion/haptics/skeletons: shared useMotion() reading useDeviceTier; haptics vocabulary helper (press/select/success/arrival); skeleton/shimmer loaders replacing bare ActivityIndicator; fix tab-bar-reads-raw-scheme bug. Reduce-Motion/Low-Power always wins; 60fps floor.
 - [ ] Add missing spec primitives when a native rebuild is available: Surface/elevation wrapper, GirihTexture (needs react-native-svg) — currently deferred (pure-JS approach).
-- [ ] On-device simulator + Android emulator screenshot pass over the step-3 screens (reliability cycle).
+- [x] On-device iOS Simulator + Android emulator visual pass over the step-3 screens — DONE 2026-07-21. All featured cards / gold rules / elevated groups / gold-left disclaimers / ambient gradients render correctly on both platforms; iOS⇄Android parity confirmed; reverence held; no layout breaks or jank found.
 
 ## STORE / TESTFLIGHT (mandate item (a))
 
