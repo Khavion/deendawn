@@ -4,13 +4,18 @@
 captured from the iOS Simulator (iPhone 17, English, default text size). They
 show the shipping layout for the App Store listing.
 
-**Size caveat for submission:** these are 1206×2796-class (6.3" display). App
-Store Connect's _primary_ required size is 6.9" (iPhone 17 Pro Max, 1320×2868).
-Regenerate the final set on a 6.9" simulator right before submission (they must
-come from the release build anyway). The Maestro capture flow is reusable —
-boot an iPhone 17 Pro Max sim, install the release build, and re-run the same
-navigation. This is step 9 on the READY FOR HUMAN SUBMIT checklist in
-docs/BLOCKERS.md.
+**Status (2026-07-21):** the 6.9" capture pipeline is verified. `01-today.png`
+is now a correct-size **1320×2868** (6.9", iPhone 17 Pro Max) hero. `02-quran`,
+`03-ask`, `04-calendar` are still the older 1206×2622 (6.3") drafts.
+
+**Before submission:** regenerate the FULL set at 6.9" from the **release build**
+(the release build hides the `__DEV__` "DEV translation / DEV audio" badges that
+appear on the reader + audio bar in dev builds — those screens can't be used for
+the store until then). To capture: boot an iPhone 17 Pro Max sim, install the
+release build, navigate, and `xcrun simctl io <device> screenshot`. This is
+step 9 on the READY FOR HUMAN SUBMIT checklist in docs/BLOCKERS.md. Non-reader
+screens (Today, Qibla, Calendar, Tasbih, Zakat, Quran list) are already
+badge-free and store-ready in any build.
 
 Chosen hero screens and why:
 
