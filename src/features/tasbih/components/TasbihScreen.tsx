@@ -1,4 +1,3 @@
-import * as Haptics from 'expo-haptics';
 import { Stack } from 'expo-router';
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -15,6 +14,7 @@ import {
 } from '../tasbihState';
 import { useSettings } from '../../settings/SettingsContext';
 import { AppText, Gradient } from '@/src/components/ui';
+import { useHaptics } from '@/src/lib/haptics';
 import { ambientGradient, elevation, fonts, radius, richMode, spacing } from '@/src/lib/theme/tokens';
 import { useThemeMode } from '@/src/lib/theme/ThemeProvider';
 import { useTokens } from '@/src/lib/theme/useTokens';
@@ -25,6 +25,7 @@ export function TasbihScreen() {
   const mode = useThemeMode();
   const rm = richMode(mode);
   const { flat } = useDeviceTier();
+  const h = useHaptics();
   const { t: tr } = useTranslation();
   const { store } = useSettings();
   const [state, setState] = useState(() => loadTasbih(store));
@@ -43,13 +44,13 @@ export function TasbihScreen() {
     setState(result.state);
     setHistory(recentHistory(store, 7));
     if (result.completedRound) {
-      void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      h.success();
       flash('round');
     } else if (result.hitThirtyThree) {
-      void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+      h.detent();
       flash('detent');
     } else {
-      void Haptics.selectionAsync();
+      h.select();
     }
   };
 

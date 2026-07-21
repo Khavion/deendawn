@@ -1,4 +1,3 @@
-import * as Haptics from 'expo-haptics';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, View } from 'react-native';
@@ -11,6 +10,7 @@ import { useSettings } from '../../settings/SettingsContext';
 import { resolveLocation } from '../../settings/settingsStore';
 import { AppText } from '@/src/components/ui';
 import { IconSymbol } from '@/components/ui/icon-symbol';
+import { useHaptics } from '@/src/lib/haptics';
 import { elevation, fonts, fontSize, radius, richMode, spacing } from '@/src/lib/theme/tokens';
 import { useThemeMode } from '@/src/lib/theme/ThemeProvider';
 import { useTokens } from '@/src/lib/theme/useTokens';
@@ -24,6 +24,7 @@ export function QiblaScreen() {
   const mode = useThemeMode();
   const rm = richMode(mode);
   const { flat } = useDeviceTier();
+  const h = useHaptics();
   const { t: tr } = useTranslation();
   const { settings, update } = useSettings();
   const [pickerOpen, setPickerOpen] = useState(false);
@@ -44,10 +45,10 @@ export function QiblaScreen() {
   useEffect(() => {
     if (!rel) return;
     if (rel.aligned && !wasAligned.current) {
-      void Haptics.selectionAsync();
+      h.select();
       if (!celebrated.current) {
         celebrated.current = true;
-        void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+        h.success();
       }
     }
     wasAligned.current = rel.aligned;
