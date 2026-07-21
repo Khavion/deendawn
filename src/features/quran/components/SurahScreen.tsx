@@ -17,6 +17,7 @@ import {
 import {
   isBookmarked,
   loadNightWarm,
+  loadReadingScale,
   loadShowTranslation,
   loadTajweed,
   saveLastRead,
@@ -29,8 +30,12 @@ import { TAJWEED_ENABLED } from '../tajweedFlag';
 import { AppText } from '@/src/components/ui';
 import { SurahAudioBar } from '@/src/features/audio/components/SurahAudioBar';
 import { useSettings } from '@/src/features/settings/SettingsContext';
-import { fonts, quranType, radius, spacing, tajweedColors } from '@/src/lib/theme/tokens';
+import { fonts, fontSize, quranType, radius, spacing, tajweedColors } from '@/src/lib/theme/tokens';
 import { useTokens } from '@/src/lib/theme/useTokens';
+
+// Base translation type (latinType.reading) — scaled by the reader size pref.
+const TRANSLATION_SIZE = fontSize.body;
+const TRANSLATION_LINE_HEIGHT = 26;
 
 export function SurahScreen() {
   const db = useSQLiteContext();
@@ -41,6 +46,7 @@ export function SurahScreen() {
   const nightWarm = loadNightWarm(store);
   const t = useTokens(nightWarm ? 'nightWarm' : undefined);
   const scheme = useColorScheme();
+  const readingScale = loadReadingScale(store);
   const tajweedOn = TAJWEED_ENABLED && loadTajweed(store);
   const tajPalette = nightWarm || scheme === 'dark' ? tajweedColors.dark : tajweedColors.light;
 
@@ -171,7 +177,14 @@ export function SurahScreen() {
             >
               <AppText
                 accessibilityLanguage="ar"
-                style={[styles.arabic, { color: t.textPrimary }]}
+                style={[
+                  styles.arabic,
+                  {
+                    color: t.textPrimary,
+                    fontSize: quranType.ayahSize * readingScale,
+                    lineHeight: quranType.ayahLineHeight * readingScale,
+                  },
+                ]}
               >
                 {tajweedOn
                   ? getAyahRuns(item.surah, item.ayah, item.text_uthmani).map((run, i) =>
@@ -188,7 +201,14 @@ export function SurahScreen() {
               {showTranslation && (
                 <AppText
                   variant="reading"
-                  style={[styles.translation, { color: t.textSecondary }]}
+                  style={[
+                    styles.translation,
+                    {
+                      color: t.textSecondary,
+                      fontSize: TRANSLATION_SIZE * readingScale,
+                      lineHeight: TRANSLATION_LINE_HEIGHT * readingScale,
+                    },
+                  ]}
                   testID={`translation-${item.ayah}`}
                 >
                   {item.text_translation}
@@ -232,7 +252,7 @@ export function SurahScreen() {
             </View>
           );
         }}
-        extraData={`${showTranslation}-${bookmarkVersion}-${nightWarm}-${tajweedOn}`}
+        extraData={`${showTranslation}-${bookmarkVersion}-${nightWarm}-${tajweedOn}-${readingScale}`}
       />
     </View>
   );

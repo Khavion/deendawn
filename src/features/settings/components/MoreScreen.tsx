@@ -22,7 +22,16 @@ import {
 } from '../../notifications/prefsStore';
 import { ADHAN_PRAYERS, AdhanPrayer, SoundKey } from '../../notifications/scheduler';
 import { ensurePermission, rescheduleAll } from '../../notifications/service';
-import { loadNightWarm, loadTajweed, saveNightWarm, saveTajweed } from '../../quran/readerState';
+import {
+  loadNightWarm,
+  loadReadingScale,
+  loadTajweed,
+  READING_SCALES,
+  saveNightWarm,
+  saveReadingScale,
+  saveTajweed,
+  stepReadingScale,
+} from '../../quran/readerState';
 import { TAJWEED_ENABLED } from '../../quran/tajweedFlag';
 import { TierBCard } from '../../ask/tierb/components/TierBCard';
 import {
@@ -142,6 +151,7 @@ export function MoreScreen() {
   const [prefs, setPrefs] = useState(() => loadNotificationPrefs(store));
   const [nightWarm, setNightWarm] = useState(() => loadNightWarm(store));
   const [tajweed, setTajweed] = useState(() => loadTajweed(store));
+  const [readingScale, setReadingScale] = useState(() => loadReadingScale(store));
   const [soundPickerFor, setSoundPickerFor] = useState<AdhanPrayer | null>(null);
   const location = resolveLocation(settings);
   const currentLanguage = (loadLanguage(store) ?? i18n.language) as LanguageCode;
@@ -160,6 +170,16 @@ export function MoreScreen() {
     saveNotificationPrefs(store, next);
     void rescheduleAll(new Date(), store);
   };
+
+  const changeReadingScale = (dir: 1 | -1) => {
+    const next = stepReadingScale(readingScale, dir);
+    setReadingScale(next);
+    saveReadingScale(store, next);
+  };
+  const minScale = READING_SCALES[0];
+  const maxScale = READING_SCALES[READING_SCALES.length - 1];
+  const sizeGlyph = 'A';
+  const scalePercent = `${Math.round(readingScale * 100)}%`;
 
   const SOUND_KEYS: SoundKey[] = ['default', 'clip', 'fullAdhan', 'silent'];
 
@@ -337,6 +357,51 @@ export function MoreScreen() {
         <View style={groupCard}>
           <View style={[styles.settingRowInline, { borderBottomColor: tk.border }]}>
             <View style={styles.rowText}>
+              <AppText variant="bodyStrong">{t('more.readingSize')}</AppText>
+              <AppText style={[styles.settingValue, { color: tk.textSecondary }]}>
+                {t('more.readingSizeDesc')}
+              </AppText>
+            </View>
+            <View style={styles.stepper}>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={t('more.readingSizeSmaller')}
+                testID="reading-size-dec"
+                disabled={readingScale <= minScale}
+                onPress={() => changeReadingScale(-1)}
+                style={[
+                  styles.stepBtn,
+                  { borderColor: tk.border },
+                  readingScale <= minScale && styles.stepDisabled,
+                ]}
+              >
+                <AppText style={styles.stepSmall}>{sizeGlyph}</AppText>
+              </Pressable>
+              <AppText
+                variant="caption"
+                testID="reading-size-value"
+                style={[styles.stepValue, { color: tk.textSecondary }]}
+              >
+                {scalePercent}
+              </AppText>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={t('more.readingSizeLarger')}
+                testID="reading-size-inc"
+                disabled={readingScale >= maxScale}
+                onPress={() => changeReadingScale(1)}
+                style={[
+                  styles.stepBtn,
+                  { borderColor: tk.border },
+                  readingScale >= maxScale && styles.stepDisabled,
+                ]}
+              >
+                <AppText style={styles.stepLarge}>{sizeGlyph}</AppText>
+              </Pressable>
+            </View>
+          </View>
+          <View style={[styles.settingRowInline, { borderBottomColor: tk.border }]}>
+            <View style={styles.rowText}>
               <AppText variant="bodyStrong">{t('more.nightWarm')}</AppText>
               <AppText style={[styles.settingValue, { color: tk.textSecondary }]}>
                 {t('more.nightWarmDesc')}
@@ -501,6 +566,19 @@ const styles = StyleSheet.create({
   },
   settingValue: {},
   rowText: { flex: 1, paddingRight: spacing.m, gap: 2 },
+  stepper: { flexDirection: 'row', alignItems: 'center', gap: spacing.s },
+  stepBtn: {
+    width: 44,
+    height: 44,
+    borderRadius: radius.control,
+    borderWidth: StyleSheet.hairlineWidth,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  stepDisabled: { opacity: 0.35 },
+  stepSmall: { fontSize: 13 },
+  stepLarge: { fontSize: 22 },
+  stepValue: { minWidth: 44, textAlign: 'center' },
   settingRowInline: {
     flexDirection: 'row',
     justifyContent: 'space-between',

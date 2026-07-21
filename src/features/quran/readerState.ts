@@ -10,6 +10,11 @@ const LAST_READ_KEY = 'quran.lastRead.v1';
 const SHOW_TRANSLATION_KEY = 'quran.showTranslation.v1';
 const NIGHT_WARM_KEY = 'quran.nightWarm.v1';
 const TAJWEED_KEY = 'quran.tajweed.v1';
+const READING_SCALE_KEY = 'quran.readingScale.v1';
+
+/** Allowed reader text-size multipliers (applied to both Arabic + translation). */
+export const READING_SCALES = [0.85, 1, 1.15, 1.3, 1.5] as const;
+export const DEFAULT_READING_SCALE = 1;
 
 const isRef = (o: unknown): o is AyahRef =>
   typeof o === 'object' &&
@@ -79,4 +84,24 @@ export function loadTajweed(store: KVStore): boolean {
 
 export function saveTajweed(store: KVStore, on: boolean): void {
   store.set(TAJWEED_KEY, String(on));
+}
+
+export function loadReadingScale(store: KVStore): number {
+  const v = Number(store.get(READING_SCALE_KEY));
+  return (READING_SCALES as readonly number[]).includes(v) ? v : DEFAULT_READING_SCALE;
+}
+
+export function saveReadingScale(store: KVStore, scale: number): void {
+  if ((READING_SCALES as readonly number[]).includes(scale)) {
+    store.set(READING_SCALE_KEY, String(scale));
+  }
+}
+
+/** Move the reading scale one allowed step up (+1) or down (-1), clamped. */
+export function stepReadingScale(current: number, dir: 1 | -1): number {
+  const scales = READING_SCALES as readonly number[];
+  const idx = scales.indexOf(current);
+  const base = idx < 0 ? scales.indexOf(DEFAULT_READING_SCALE) : idx;
+  const next = Math.min(scales.length - 1, Math.max(0, base + dir));
+  return scales[next];
 }

@@ -70,6 +70,14 @@ describe('MoreScreen', () => {
     expect(service.ensurePermission).toHaveBeenCalledWith(true);
   });
 
+  test('reading-size stepper persists a new scale and updates the readout', async () => {
+    const { store, view } = await renderMore();
+    expect(view.getByTestId('reading-size-value').props.children).toBe('100%');
+    await fireEvent.press(view.getByTestId('reading-size-inc'));
+    expect(view.getByTestId('reading-size-value').props.children).toBe('115%');
+    expect(store.get('quran.readingScale.v1')).toBe('1.15');
+  });
+
   test('setting location through the city picker persists the city', async () => {
     const { store, view } = await renderMore();
     await fireEvent.press(view.getByTestId('setting-city'));
