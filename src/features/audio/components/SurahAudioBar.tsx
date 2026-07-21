@@ -8,10 +8,10 @@ import { getAudioSource } from '../config';
 import { formatClock, progressFraction, resumeSeekTarget } from '../playerLogic';
 import { clearResumePosition, getResumePosition, saveResumePosition } from '../resumeStore';
 import { surahAudioUrl } from '../urls';
-import { AppText } from '@/src/components/ui';
+import { AppText, GoldFrameCard } from '@/src/components/ui';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { useSettings } from '@/src/features/settings/SettingsContext';
-import { radius, spacing } from '@/src/lib/theme/tokens';
+import { spacing } from '@/src/lib/theme/tokens';
 import { useTokens } from '@/src/lib/theme/useTokens';
 
 const SAVE_INTERVAL_SECONDS = 5;
@@ -114,8 +114,9 @@ function AudioBarInner({
   const busy = started && (status.isBuffering || !status.isLoaded);
 
   return (
-    <View
-      style={[styles.card, { backgroundColor: t.bgSurface, borderColor: t.border }]}
+    <GoldFrameCard
+      mode={nightWarm ? 'nightWarm' : undefined}
+      style={styles.card}
       testID="surah-audio-bar"
     >
       <View style={styles.row}>
@@ -164,14 +165,12 @@ function AudioBarInner({
           {tr('audio.devBadge')}
         </AppText>
       )}
-    </View>
+    </GoldFrameCard>
   );
 }
 
 const styles = StyleSheet.create({
   card: {
-    borderRadius: radius.card,
-    borderWidth: StyleSheet.hairlineWidth,
     padding: spacing.m,
     marginBottom: spacing.m,
     gap: spacing.s,

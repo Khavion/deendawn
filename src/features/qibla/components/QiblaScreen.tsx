@@ -11,14 +11,19 @@ import { useSettings } from '../../settings/SettingsContext';
 import { resolveLocation } from '../../settings/settingsStore';
 import { AppText } from '@/src/components/ui';
 import { IconSymbol } from '@/components/ui/icon-symbol';
-import { fonts, fontSize, radius, spacing } from '@/src/lib/theme/tokens';
+import { elevation, fonts, fontSize, radius, richMode, spacing } from '@/src/lib/theme/tokens';
+import { useThemeMode } from '@/src/lib/theme/ThemeProvider';
 import { useTokens } from '@/src/lib/theme/useTokens';
+import { useDeviceTier } from '@/src/lib/theme/useDeviceTier';
 
 const RING_SIZE = 280;
 
 export function QiblaScreen() {
   const insets = useSafeAreaInsets();
   const t = useTokens();
+  const mode = useThemeMode();
+  const rm = richMode(mode);
+  const { flat } = useDeviceTier();
   const { t: tr } = useTranslation();
   const { settings, update } = useSettings();
   const [pickerOpen, setPickerOpen] = useState(false);
@@ -138,8 +143,11 @@ export function QiblaScreen() {
         <View
           style={[
             styles.ring,
-            { borderColor: rel?.aligned ? t.success : t.border },
-            rel?.aligned && { backgroundColor: t.accentSoft },
+            {
+              backgroundColor: rel?.aligned ? t.accentSoft : t.bgSurface,
+              borderColor: rel?.aligned ? t.success : t.border,
+            },
+            flat ? undefined : elevation[rm].e2,
           ]}
         >
           {/* Compass rose: N marker rotates opposite the device heading. */}
@@ -176,14 +184,20 @@ export function QiblaScreen() {
 
       <View style={styles.chips}>
         {heading !== null && !trueNorth && (
-          <View style={[styles.chip, { backgroundColor: t.ochreSoft }]} testID="magnetic-caveat">
+          <View
+            style={[styles.chip, { backgroundColor: t.ochreSoft, borderLeftColor: t.ochre }]}
+            testID="magnetic-caveat"
+          >
             <AppText variant="caption" style={{ color: t.ochre }}>
               {tr('qibla.magneticCaveat')}
             </AppText>
           </View>
         )}
         {heading !== null && accuracy <= 1 && (
-          <View style={[styles.chip, { backgroundColor: t.ochreSoft }]} testID="calibration-chip">
+          <View
+            style={[styles.chip, { backgroundColor: t.ochreSoft, borderLeftColor: t.ochre }]}
+            testID="calibration-chip"
+          >
             <AppText variant="caption" style={{ color: t.ochre }}>
               {tr('qibla.calibrate')}
             </AppText>
@@ -240,9 +254,10 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   status: { fontSize: fontSize.h2, lineHeight: 28 },
-  chips: { alignItems: 'center', gap: spacing.s, marginTop: spacing.xl },
+  chips: { alignItems: 'stretch', gap: spacing.s, marginTop: spacing.xl },
   chip: {
     borderRadius: radius.control,
+    borderLeftWidth: 3,
     paddingHorizontal: spacing.l,
     paddingVertical: spacing.s,
   },

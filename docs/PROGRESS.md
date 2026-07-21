@@ -273,3 +273,19 @@ Done:
   - **iOS ⇄ Android parity confirmed** — the design reads identically on both.
 - **No bugs / layout breaks / jank / overflow found.** The only friction was the iOS Simulator's hardware-keyboard accent-popup during city text entry — a test-harness quirk, not an app defect (discrete key presses worked). No code change needed.
 - Verdict: rich design step 3 is production-quality on both platforms. Clean device screenshots captured in scratchpad; formal store-size captures remain gate 9.
+
+## Session 2026-07-21 (cont.) — Cycle: Rich design step 4 (Reader + Qibla, restrained)
+
+Plan (spec build-order step 4 — the reverence-critical screens):
+
+1. Reader: make ONLY the audio player the featured gold-framed card; leave every ayah and its calm hairline rule untouched (reverence hold).
+2. Qibla: give the compass dial a restrained elevated surface (e2, no gradient/brackets); keep it calm.
+3. Add a `mode` override to GoldFrameCard so the reader's night-warm theme frames correctly.
+
+Done:
+
+- **GoldFrameCard** gained an optional `mode?: ThemeMode` prop — when set, it themes the frame/elevation from that mode (via `useTokens(mode)` + `richMode`) instead of the app mode. Default behavior unchanged. Lets the night-warm reader frame its audio card in the right gold.
+- **Reader (SurahAudioBar)** — the audio player is now the ONE featured `GoldFrameCard` (gold frame + corner brackets + e3), passing `mode` from the reader's `nightWarm`. Verified live on iOS: gold-framed "Listen" card at top, DEV placeholder badge intact; **the ayat are completely untouched** — Uthmani script, calm hairline separators, no decoration (reverence held). `testID="surah-audio-bar"` + all audio testIDs preserved.
+- **Qibla** — the compass dial ring now sits on a restrained elevated surface (`bgSurface` + tier-gated `elevation.e2`); aligned state still swaps to `accentSoft`+success. Caveat/calibration chips adopt the gold-left-border treatment. Verified live on iOS: dial reads as a clean elevated disc, calm — no gradient or gold brackets (reverent). All qibla testIDs + haptics semantics preserved.
+- Gates green: tsc clean, expo lint 0 errors, full suite **397/397** (47 suites). Reverence invariant intact — no decorative element touches Quranic/Arabic content on either screen.
+- Rich roadmap: steps 2–4 complete. Remaining: step 5 (motion/haptics vocabulary/skeletons) + the tab-bar-reads-raw-scheme fix.

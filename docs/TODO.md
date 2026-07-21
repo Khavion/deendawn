@@ -21,7 +21,7 @@ Epics in build order. Top unblocked item is always the current task.
 
 - [x] Step 2 Home/hero — DONE (prior session).
 - [x] Step 3 rich chrome — DONE 2026-07-21: Zakat, Calendar, Tasbih, Quran list, More (featured cards / elevated groups / gold rules / tier-gated accents). Legacy ThemedView/Colors path fully retired (SurahList + More migrated). 397/397 green.
-- [ ] Step 4 — Reader + Qibla: restrained featured cards only (reverence — audio player is the Reader's one featured card; Qibla dial featured but calm). No gradient/texture over ayat.
+- [x] Step 4 — Reader + Qibla — DONE 2026-07-21. Reader: audio player is the one featured GoldFrameCard (gold frame + brackets), ayat untouched with calm hairlines (reverence held); GoldFrameCard gained a `mode` prop for the night-warm reader. Qibla: dial on a restrained elevated surface (e2, no gradient/brackets), chips gold-left-border. Verified live on iOS; 397/397 green.
 - [ ] Step 5 — Motion/haptics/skeletons: shared useMotion() reading useDeviceTier; haptics vocabulary helper (press/select/success/arrival); skeleton/shimmer loaders replacing bare ActivityIndicator; fix tab-bar-reads-raw-scheme bug. Reduce-Motion/Low-Power always wins; 60fps floor.
 - [ ] Add missing spec primitives when a native rebuild is available: Surface/elevation wrapper, GirihTexture (needs react-native-svg) — currently deferred (pure-JS approach).
 - [x] On-device iOS Simulator + Android emulator visual pass over the step-3 screens — DONE 2026-07-21. All featured cards / gold rules / elevated groups / gold-left disclaimers / ambient gradients render correctly on both platforms; iOS⇄Android parity confirmed; reverence held; no layout breaks or jank found.

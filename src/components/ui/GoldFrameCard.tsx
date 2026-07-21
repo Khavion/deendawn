@@ -3,7 +3,13 @@ import { StyleSheet, View, type ViewProps } from 'react-native';
 
 import { Gradient } from './Gradient';
 import { useThemeMode } from '@/src/lib/theme/ThemeProvider';
-import { elevation, radius, richMode, type ElevationStep } from '@/src/lib/theme/tokens';
+import {
+  elevation,
+  radius,
+  richMode,
+  type ElevationStep,
+  type ThemeMode,
+} from '@/src/lib/theme/tokens';
 import { useTokens } from '@/src/lib/theme/useTokens';
 import { useDeviceTier } from '@/src/lib/theme/useDeviceTier';
 
@@ -14,6 +20,11 @@ export type GoldFrameCardProps = ViewProps & {
   step?: ElevationStep;
   /** Show the gold corner brackets (auto-off on the essential tier). */
   corners?: boolean;
+  /**
+   * Override the theme mode (e.g. the reader's night-warm) so the frame color
+   * and elevation match a locally-themed surface. Defaults to the app mode.
+   */
+  mode?: ThemeMode;
 };
 
 /**
@@ -26,14 +37,15 @@ export function GoldFrameCard({
   gradientColors,
   step = 'e3',
   corners = true,
+  mode,
   style,
   children,
   ...rest
 }: GoldFrameCardProps) {
-  const t = useTokens();
-  const mode = useThemeMode();
+  const appMode = useThemeMode();
+  const t = useTokens(mode);
   const { flat } = useDeviceTier();
-  const rm = richMode(mode);
+  const rm = richMode(mode ?? appMode);
   const shadow = flat ? undefined : elevation[rm][step];
   const showCorners = corners && !flat;
 
