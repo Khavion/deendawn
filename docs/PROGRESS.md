@@ -378,3 +378,12 @@ Done:
 - Reader header (`SurahScreen` Stack.Screen headerRight) now has an **A− / A+** pair (small/large "A", mirroring the Settings stepper) beside the translation toggle. `readingScale` is now reader state; tapping steps it (`stepReadingScale`), saves it (`saveReadingScale`, shared with the Settings pref), and re-renders the Arabic + translation live. Buttons disable at the min/max of `READING_SCALES` with `more.readingSizeSmaller/Larger` accessible labels (no new i18n keys).
 - Verified live on BOTH platforms: iOS (A+ grows, A− shrinks live) and Android (A− shrinks live; small-A greys out at the 85% minimum — confirming the clamp in the UI). Header fits cleanly with the translation toggle.
 - Gates green: tsc, expo lint 0 errors, **421/421** (53 suites). Logic reuses already-tested stepReadingScale/saveReadingScale + the reader scale-application test.
+
+## Session 2026-07-21 (cont.) — Skeleton loaders on Ask + Library
+
+Extended the Skeleton primitive to the library-backed surfaces, whose bundled-db opens are async and previously flashed blank / "No matches" before content (most visible on a cold first open / slow device):
+
+- **WorkReaderScreen** (book reader): was a blank list until the db opened + the work loaded → now skeleton paragraphs (attribution + 4 section blocks) behind a `loaded` flag. New component test controls the async open and asserts skeleton → content (net-new coverage — the library screens had no component tests before).
+- **AskScreen** (Library source): the async `askLibrary` path showed the idle hint mid-query → now a `libLoading` state renders 3 skeleton result rows (`ask-loading`).
+- **LibraryScreen**: searching before `db` finished opening showed "No matches" → now skeleton rows (`library-loading`) while `db` is null.
+- Reuses the existing Skeleton (shimmer on capable tiers, static on essential / Reduce Motion). Verified live on iOS: opened Al-Ghazali → "The Confessions of Al-Ghazali" loads correctly (skeleton flashes on cold open, too fast to screenshot on a warm db). Gates green: tsc, expo lint 0 errors, **422/422** (54 suites).
