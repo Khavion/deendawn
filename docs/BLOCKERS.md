@@ -19,26 +19,25 @@ store text, privacy answers ("Data Not Collected"), and the two required web pag
 and the build+upload is one command. The only things I *can't* do for you are: create the developer
 accounts, and click the final "publish" button. Here's the honest, current plan.
 
-**Which store is fastest? (I researched this.)** Surprisingly, **Apple is the faster path to a
-public download**, even though it costs more:
-- **Apple App Store — ~1 to 3 days.** Pay the $99/year, I build + upload, you fill the listing
-  (I've prepped it) and click Submit; Apple reviews in about 1–2 days. No hoops.
-- **Google Play — ~2 to 4 weeks for a brand-new personal account.** Google now makes *new personal*
-  accounts run a **closed test with 12 people for 14 straight days** before they'll allow a public
-  release. There's a shortcut: registering as an **"organization"** account (your publisher name
-  is already "Khavion Apps") **skips the 12-tester wait** — it just needs a free "D-U-N-S number"
-  (a business ID) that can take a few days to get.
+**Your plan (confirmed): both stores at once, as "professional" (organization) accounts under
+apps@khavion.com.** Good news — the **organization** route is actually the *better* one: it
+publishes under "Khavion Apps" and it **skips Google's 12-tester / 14-day waiting period** that
+personal accounts have. So both stores can go live together, fast.
 
-**My recommendation (yes/no for you):** **Do Apple first** (fastest to "people can download it"),
-and if you also want Android, start Google Play in parallel — I'd lean toward the **organization**
-route to skip the 12-tester delay. You can also just do Apple for now and add Android later; the
-app is 100% ready for both.
+**One shared first step for organization accounts (do this first — it takes the longest):** both
+Apple and Google require a free **D-U-N-S number** for your business ("Khavion Apps"). It's a free
+business ID from Dun & Bradstreet.
+- **Get it here:** Apple provides a free D-U-N-S lookup/request tool at
+  **developer.apple.com/enroll/duns-lookup**. Look up "Khavion Apps" — if it's not found, request a
+  new one on that page. A brand-new number can take a few days to a couple of weeks (there's a free
+  expedite for Apple enrollment). **Start this now**, because everything else waits on it.
+- The *same* D-U-N-S number works for both the Apple and Google organization accounts.
 
-**What it costs:** Apple **$99/year**; Google Play **$25 one-time** (optional / only if you want
-Android too). Everything else below is free.
+**What it costs:** Apple **$99/year**; Google Play **$25 one-time**. The D-U-N-S number and
+everything else below is free.
 
-Here's the Apple click-by-click (Google Play steps are in item 1b below). Do them in order and
-paste me what each gives you.
+Once you have the D-U-N-S number, do the Apple steps below (A–C); Google Play steps are in item 1b.
+Do them in order and paste me what each gives you.
 
 ---
 
@@ -54,14 +53,18 @@ paste me what each gives you.
 
 ---
 
-#### Step B — Join the Apple Developer Program ($99/year, ~10 min + Apple's approval wait)
+#### Step B — Join the Apple Developer Program ($99/year, as an Organization)
 
-1. Go to **developer.apple.com/programs/enroll** and sign in with your normal Apple ID (the one
-   on your iPhone).
-2. Follow Apple's steps — it asks for your name, address, and the $99 payment. Choose the
-   **Individual** account type unless you have a registered company.
-3. Apple usually approves within a few hours (sometimes up to a day). You'll get an email.
-   **Nothing more to do here until that email arrives.**
+1. Go to **developer.apple.com/programs/enroll** and sign in with the Apple ID for apps@khavion.com.
+2. Choose **Organization / Company** (not Individual). It will ask for your **D-U-N-S number** (from
+   the step above), your legal entity name ("Khavion Apps"), address, a work email, and the $99
+   payment. You'll confirm you have authority to sign for the organization.
+3. Apple verifies the organization — this can take a few days (sometimes they phone to confirm).
+   You'll get an email when approved. **Nothing more to do here until that email arrives.**
+
+*(If getting the D-U-N-S / organization verification turns into a long wait and you'd rather launch
+sooner, an **Individual** account is instant-ish and can publish immediately — just tell me and
+I'll adjust. The only difference is the seller name shown on the store.)*
 
 ---
 
@@ -97,24 +100,24 @@ TestFlight for you instantly — no review needed. Just say so.)*
 
 ---
 
-### 1b. (Optional) Google Play — only if you want DeenDawn on Android too
+### 1b. Google Play — Android (doing this alongside Apple)
 
-Android is 100% ready as well. If you want it:
-1. Go to **play.google.com/console**, sign up, pay the **$25 one-time** fee.
-2. **Choose your account type — this matters for speed:**
-   - **Organization** (recommended): skips Google's 12-tester waiting period. Needs a free
-     "D-U-N-S number" (a business ID for "Khavion Apps") — I'll give you the link to request one;
-     it can take a few days.
-   - **Personal** (cheaper/simpler but slower): Google makes you run a 14-day test with **12 people**
-     before you can go public. If you pick this, recruit 12 friends/family with Android phones early
-     and I'll set up the test build so the clock starts.
-3. When you're set up, I'll walk you through creating one "service account key" (a permission file,
-   like Apple's) so I can upload builds, and I'll fill the whole Play listing (text, screenshots,
-   and the "no data collected" Data Safety form — all already drafted, see `docs/store/PLAY_LISTING.md`).
-4. You click publish when you're ready.
+Android is 100% ready too, and the **organization** account you're setting up **skips Google's
+12-tester / 14-day wait** — so it can launch on the same timeline as iOS.
+1. Go to **play.google.com/console**, sign in with apps@khavion.com, pay the **$25 one-time** fee.
+2. Choose the **Organization** account type and verify with the **same D-U-N-S number** from the
+   step above (that's what exempts you from the 12-tester requirement).
+3. Then I'll walk you through two clicks: (a) create one **service account key** in Google Cloud
+   (a permission file, like Apple's `.p8`) and grant it access in the Play Console, so I can upload
+   builds headlessly, and (b) create the app entry. I'll fill the whole listing — title, description,
+   screenshots, and the mandatory **Data Safety form** ("no data collected") — all already drafted in
+   `docs/store/PLAY_LISTING.md` and `fastlane/metadata/android/`.
+4. **Note:** Google requires the very first build to be uploaded manually once (their rule) before my
+   headless uploads work — I'll hand you that one file and the exact click.
+5. You click publish when you're ready.
 
-**My recommendation: OPTIONAL — do Apple first; add Android when you want to, ideally via the
-organization route to skip the tester wait.**
+**Recommendation: YES — both stores in parallel via the organization accounts; the D-U-N-S number is
+the shared gate, so start that first.**
 
 ---
 

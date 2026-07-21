@@ -48,7 +48,7 @@ Thank you for your time and for the service you provide to the ummah.
 Jazakum Allahu khayran,
 Zohaib Khawaja
 DeenDawn — Khavion Apps
-[your email]
+apps@khavion.com
 
 ---
 

@@ -8,7 +8,7 @@ Everything needed to fill out the Play Console listing. Store text lives in
 - **Short description (≤80):** `Prayer times, adhan, Quran, qibla — free forever, no ads, no tracking.` (72)
 - **Full description (≤4000):** see `fastlane/metadata/android/en-US/full_description.txt` (~1.9k)
 - **Category:** Lifestyle (or Books & Reference). **Tags:** prayer, quran, islam.
-- **Contact email:** REPLACE_WITH_YOUR_EMAIL
+- **Contact email:** apps@khavion.com
 - **Privacy policy URL:** the hosted `privacy-policy.html` (see docs/legal/) — REQUIRED.
 
 ## Graphic assets (Play requirements)
