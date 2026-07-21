@@ -238,3 +238,25 @@ Done:
 - `docs/BLOCKERS.md` rewritten into the mandated **ranked "WHAT NEEDS YOU"** shape: item #1 is the full plain-English, click-by-click Apple setup (free Expo token → $99 Developer enrollment → App Store Connect API key: Users and Access ▸ Integrations ▸ + ▸ App Manager ▸ download .p8 once ▸ copy Key ID + Issuer ID). Weeks-away AI-model upload demoted to #8. Clarified that TestFlight **internal** upload is allowed autonomously (only external/App-Review is gated), so the moment keys land the path is one command on my side. Test count refreshed 324 → 397.
 - DECISIONS.md + TODO.md logged. Gates green: tsc clean (baseline), expo lint 0 errors, eas.json/app.json parse-valid, 397 tests green (no source changed — config/docs only).
 - GATE: Apple Developer account + App Store Connect API key — see BLOCKERS.md #1. Rolling straight into Cycle 2 (Rich design step 3: rich chrome on Quran list / Tasbih / Calendar / Zakat / Settings).
+
+## Session 2026-07-21 (cont.) — Cycle 2: Rich design step 3 (5 more screens)
+
+Plan (mandate item (b) — extend the proven Home rich pattern to the next screens per docs/RICH_DESIGN_SPEC.md build order 3):
+
+1. Study TodayScreen's use of the rich primitives (Gradient / GoldFrameCard / PeriodEyebrow / SectionRule / useDeviceTier / elevation tokens) as the reference; keep the pure-JS, no-native-rebuild approach.
+2. Apply rich chrome to the five screens, one featured element each per spec: Quran list (continue-reading featured + gold header rule + elevated surah card), Tasbih (counter ring featured), Calendar (elevated month grid + gold-left disclaimer), Zakat (ZAKAT-DUE featured green gold-framed card), Settings/More (grouped elevated rows + featured About/privacy card). Reverence holds — no gradient/texture over Quranic/Arabic content.
+3. Per screen: extend existing tests for the new chrome; keep tsc + lint + jest green; commit incrementally.
+4. Verify on the iOS simulator (screenshots) once the batch is in; log design calls in DECISIONS.md.
+
+Done:
+
+- Rich chrome applied to all five step-3 screens, one featured element each, in 4 commits (Zakat+Calendar, Tasbih, Quran list, More):
+  - **Zakat** — "Zakat due" total → featured gold-framed green card; asset/liability/price rows → elevated (e2) cards under gold SectionRules; gold-left-border disclaimer.
+  - **Calendar** — month grid → elevated card; disclaimer → gold-left-border.
+  - **Tasbih** — soft ambient day-gradient behind the counter; ring gains a tier-gated gold/success completion glow (the specced "gold-glow at completion"); history → elevated card.
+  - **Quran list** — continue-reading → featured gold card (Pressable-wrapped to stay tappable); gold SectionRule header; surah/search rows → elevated card. New UI key `quran.surahsSection` (en + ur/ar gate-8 drafts).
+  - **More/Settings** — settings/notifications/reading groups → elevated cards under gold SectionRules; privacy note → featured GoldFrameCard.
+- **Legacy-theme migration:** SurahListScreen, MoreScreen + its PickerModal moved off ThemedView/Colors[scheme]/useColorScheme to useTokens() + useThemeMode/useDeviceTier; raw px → spacing/radius tokens. (TodayScreen was already migrated; only these two remained on the legacy path.)
+- **Reverence held:** no gradient/texture over Quranic/Arabic content — surah Arabic names untouched and still accessibilityLanguage="ar"; all effects tier-gated via `flat` (nothing on essential tier / Reduce Motion).
+- Gates green throughout: tsc clean, expo lint 0 errors, full suite **397/397** (47 suites); every screen's existing testIDs + a11y semantics preserved.
+- Remaining Rich roadmap: step 4 (Reader/Qibla restrained featured cards) + step 5 (motion/haptics/skeletons) — next cycles. On-device simulator screenshot pass queued for the next reliability cycle.
