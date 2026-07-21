@@ -25,7 +25,7 @@ Epics in build order. Top unblocked item is always the current task.
 - [x] Step 5 — Motion/haptics/skeletons — DONE 2026-07-21. Haptics vocabulary (src/lib/haptics.ts, Reduce-Motion-aware); press-scale (src/lib/theme/usePressScale.ts, built-in Animated, wired into Button); Skeleton (src/components/ui/Skeleton.tsx) replacing bare spinners in Tips; tab-bar-reads-raw-scheme bug fixed. All pure-JS (Reanimated not wired). 400/400 green, tab bar verified live.
 - [x] **Rich design (Direction 1c) steps 2–5 COMPLETE** 2026-07-21.
 - [ ] Adopt usePressScale / Skeleton more widely as screens are touched (continue-reading card, tip buttons, etc.).
-- [ ] Cleanup: migrate remaining legacy useColorScheme sites (CityPickerModal, components/ui/collapsible.tsx) to useTokens.
+- [x] Cleanup: migrated CityPickerModal to useTokens and DELETED the whole dead legacy theme chain (collapsible, themed-view, use-theme-color, use-color-scheme(.web), constants/theme) — DONE 2026-07-21. One theming source now.
 - [ ] Add missing spec primitives when a native rebuild is available: Surface/elevation wrapper, GirihTexture (needs react-native-svg) — currently deferred (pure-JS approach).
 - [x] On-device iOS Simulator + Android emulator visual pass over the step-3 screens — DONE 2026-07-21. All featured cards / gold rules / elevated groups / gold-left disclaimers / ambient gradients render correctly on both platforms; iOS⇄Android parity confirmed; reverence held; no layout breaks or jank found.
 
