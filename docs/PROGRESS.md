@@ -361,3 +361,10 @@ Followed the deep-link scroll fix with the two remaining continue-reading gaps (
 2. **Stale chip**: the "Continue reading" chip memoized `lastRead` for the tab's lifetime → showed the old position until an app reload. Fix: read `lastRead` fresh + `useFocusEffect` bump so it re-reads on tab focus.
 - Verified live on iOS AND Android: read Al-Baqara, back → chip instantly shows the new position (2:4 iOS / 2:6 Android); continue-reading lands on the exact ayah; saved position survives.
 - Gates green: tsc, expo lint 0 errors, **421/421** (53 suites).
+
+## Session 2026-07-21 (cont.) — Spot-check: search-result deep-links scroll precisely
+
+Verified (no code change needed) that Quran search results inherit the reader's deep-link scroll fix:
+- iOS: searched "Pharaoh" → tapped result 7:103 → reader opened An-A'raf scrolled exactly to 7:103.
+- Android: searched "Moses" → tapped result 2:67 → reader opened Al-Baqara scrolled exactly to 2:67.
+Both land on the matched ayah at the top. Search deep-links pass `?ayah=` like continue-reading/bookmarks/verse-of-day, so the single reader fix (sync load + scrollToIndex on load) covers all four entry points. Confirmed working on both platforms.

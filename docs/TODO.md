@@ -36,7 +36,8 @@ Epics in build order. Top unblocked item is always the current task.
 - [x] Verse of the Day — DONE 2026-07-21. Deterministic date-based daily ayah on Today (no curation); elevated card, Arabic undecorated; deep-links to reader; en+ur/ar(draft) key; 7 tests; verified iOS+Android.
 - [x] Deep-link scroll-to-ayah fix — DONE 2026-07-21. Reader now scrolls to the exact ayah for verse-of-day/bookmarks/search deep-links (sync row load + scrollToIndex on load); was opening at the top. 2 tests; verified live.
 - [x] Continue-reading reliability — DONE 2026-07-21. Deep-link scroll no longer clobbers the saved position (tracking gated until scroll settles; pure recordReadingPosition + tests); chip re-reads on tab focus (useFocusEffect) so it's never stale. Verified iOS+Android.
-- [ ] Candidate backlog: Quran audio full reciter catalog (gated on recordings); prayer-time notification richness; reading-size control also surfaced in the reader header (currently only in Settings); Ask/Library screens could adopt Skeleton loaders; search-result deep-links now scroll precisely (free win from the reader fix — spot-check).
+- [x] Search deep-link spot-check — DONE 2026-07-21. Confirmed search results scroll the reader precisely to the matched ayah on both platforms (iOS 7:103, Android 2:67); free win from the reader fix, no code change.
+- [ ] Candidate backlog: Quran audio full reciter catalog (gated on recordings); prayer-time notification richness; reading-size control also surfaced in the reader header (currently only in Settings); Ask/Library screens could adopt Skeleton loaders.
 
 ## STORE / TESTFLIGHT (mandate item (a))
 
