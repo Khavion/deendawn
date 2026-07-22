@@ -1,1 +1,1 @@
-PENDING-HUMAN: privacy policy URL required before submit (see BLOCKERS checklist)
+https://khavion.com/apps/deendawn/privacy.html

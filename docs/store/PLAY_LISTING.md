@@ -9,7 +9,9 @@ Everything needed to fill out the Play Console listing. Store text lives in
 - **Full description (≤4000):** see `fastlane/metadata/android/en-US/full_description.txt` (~1.9k)
 - **Category:** Lifestyle (or Books & Reference). **Tags:** prayer, quran, islam.
 - **Contact email:** apps@khavion.com
-- **Privacy policy URL:** the hosted `privacy-policy.html` (see docs/legal/) — REQUIRED.
+- **Privacy policy URL (REQUIRED):** `https://khavion.com/apps/deendawn/privacy.html`
+- **Support/website URL:** `https://khavion.com/apps/deendawn/support.html`
+  (both hosted from the khavion.com Next.js site — see `docs/legal/README.md`)
 
 ## Graphic assets (Play requirements)
 | Asset | Requirement | Status |
@@ -35,7 +37,7 @@ in Play's definition = **transmitting data off the device**. Deen Dawn transmits
 - **Do you provide a way to request data deletion?** → N/A (no data collected; all app data lives
   on the device and is removed when the app is uninstalled).
 - **Result:** the Data Safety card shows **"No data collected · No data shared."** This must match
-  the privacy policy (it does — see docs/legal/privacy-policy.html).
+  the privacy policy (it does — see docs/legal/privacy.html).
 
 ## Content rating (IARC questionnaire)
 - No violence, no sexual content, no profanity, no gambling, no user-generated content, no ads.

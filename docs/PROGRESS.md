@@ -415,3 +415,15 @@ Done:
 - **Reconciled brand name** to "Deen Dawn" (store name + description).
 - **Verified the 6.9" screenshot pipeline** on iPhone 17 Pro Max; `fastlane/screenshots/en-US/01-today.png` is now correct-size 1320×2868. Full badge-free set to be captured from the release build (reader/audio DEV badges are dev-only).
 - Confirmed (via audit) the privacy claim genuinely holds: no analytics/ad/tracking SDKs; on-device storage only; only outbound domain is the user's own R2 audio (on explicit play). App is submission-ready pending owner accounts/keys + final submit sign-off.
+
+## Session 2026-07-21 (cont.) — Web pages will live on khavion.com
+
+Owner already owns khavion.com and proposed hosting the store-required pages there as an /apps subpage — the right call (own domain, professional URLs, matches the "Khavion Apps" publisher name).
+
+- Checked khavion.com: it's a **Next.js site on Vercel** (AI-consulting landing page, no /apps page yet). That makes hosting a copy-paste job — files in `public/` are served as-is, no code changes.
+- Restructured the pages for it: `docs/legal/` now holds `index.html` (a simple Deen Dawn app page so `/apps/deendawn/` isn't a 404), `privacy.html`, `support.html` + a `README.md` with exact drop-in instructions.
+- **Locked the real store URLs** into the metadata (no more PENDING-HUMAN placeholders):
+  - privacy: `https://khavion.com/apps/deendawn/privacy.html`
+  - support: `https://khavion.com/apps/deendawn/support.html`
+  Recorded in `fastlane/metadata/en-US/{privacy,support}_url.txt` + `docs/store/PLAY_LISTING.md`.
+- BLOCKERS #2 rewritten: copy 3 files into khavion.com's `public/apps/deendawn/`, push, Vercel deploys. Offered Next.js-route (extension-less URL) and nav-link variants if wanted.

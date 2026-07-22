@@ -121,24 +121,34 @@ the shared gate, so start that first.**
 
 ---
 
-### 2. Two simple web pages: a Support page and a Privacy Policy page — I've already written them
+### 2. The two required web pages — written, and they'll live on khavion.com
 
-**What this is:** Both stores require two public web links — a "support" page and a "privacy policy"
-page. **I've already written both**, styled in the app's colors, ready to publish:
-- `docs/legal/privacy-policy.html`
-- `docs/legal/support.html`
+**What this is:** Both stores require a public **Privacy Policy** link and a **Support** link.
+**I've written both** (plus a small Deen Dawn app page), styled in the app's colours, with your
+email already filled in. They're in `docs/legal/`:
+- `index.html` (app page) · `privacy.html` · `support.html`
 
-Both currently have one placeholder — **your contact email** (search for `REPLACE_WITH_YOUR_EMAIL`).
-Tell me the email and I'll drop it in.
+**Your idea to host them on khavion.com is the right call** — you already own the domain, the URLs
+look professional, and it matches the "Khavion Apps" publisher name. khavion.com is a Next.js site
+on Vercel, which makes this a copy-paste job with **no code changes**:
 
-**What you'd do (10 minutes, free):** host these two files somewhere with a public link. Easiest
-free options: **GitHub Pages** (free, I can set it up in the repo), or a free host like **Netlify
-Drop** (drag the two files onto netlify.com/drop). Either gives you two URLs I paste into both
-store listings. (Publishing anything public is your call — so you do the final "make it live" step,
-or tell me to set up GitHub Pages and I'll prepare it.)
+**What you'd do (5 minutes):** copy the three files into the khavion.com repo at:
+```
+public/apps/deendawn/index.html
+public/apps/deendawn/privacy.html
+public/apps/deendawn/support.html
+```
+Anything in `public/` is served as-is. Commit + push → Vercel deploys automatically. That gives you:
+- `https://khavion.com/apps/deendawn/` — the app page
+- `https://khavion.com/apps/deendawn/privacy.html` — **Privacy Policy**
+- `https://khavion.com/apps/deendawn/support.html` — **Support**
 
-**My recommendation: YES — say the word and I'll wire up free GitHub Pages hosting so the two links
-exist; you just approve making the repo/pages public.**
+I've **already recorded those exact URLs** in the store metadata, so nothing else needs changing.
+
+**My recommendation: YES — drop the three files into khavion.com's `public/apps/deendawn/` folder.**
+(If you'd rather I prepare them as proper Next.js pages with extension-less URLs, or want an "Apps"
+link added to the khavion.com nav, say the word — but the `.html` URLs work perfectly for both
+stores.) Full instructions: `docs/legal/README.md`.
 
 ### 3. RevenueCat key — only if you want the "tip jar" live (free, 10 minutes)
 

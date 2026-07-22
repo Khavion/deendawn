@@ -1,1 +1,1 @@
-PENDING-HUMAN: support URL required before submit (see BLOCKERS checklist)
+https://khavion.com/apps/deendawn/support.html
