@@ -463,3 +463,19 @@ and chose to drop the tip jar instead. Decision recorded in DECISIONS 2026-07-29
   justified by "the tip jar makes us commercial-adjacent." That's now false. Audio genuinely may
   re-open (Alafasy et al. were ruled out on commercial grounds); WBW probably still blocked by the
   ND clause, not the NC one. Both marked for re-check, neither assumed reversed.
+
+### Session log (2026-07-29, cont.)
+
+- Phase 2 (native chrome) SHIPPED: NativeTabs (floating Liquid Glass bar, Ask as the iOS 26 search
+  capsule, HapticTab retired), pickers as native pageSheets (swipe-dismiss verified), +not-found
+  route, theme-preview registered. Headers verified already-glass on iOS 26 (scroll-under capsules)
+  — the planned "de-opaque nav theme" commit proved unnecessary. OPEN: dark-mode appearance
+  oscillation on RN 0.86 (JS reports light/dark alternately while the OS is dark; native bar and JS
+  content disagree) — reproduced with JS tabs too, so not a tabs regression; deep-research in
+  flight.
+- Phase 3 (perf correctness) SHIPPED: Today ticks only in a <Countdown> child (minute-aligned clock
+  otherwise; SectionRule gradient memo fixed; city search gated+memoized), reader loads rows
+  synchronously (InteractionManager deferral removed — RN 0.86 deprecates it; no more blank page
+  after surah taps, verified live on al-Baqara), bookmark Set replaces per-row KV reads, 150ms
+  debounced FTS (Quran + Library), single DeviceTierProvider (was: one AccessibilityInfo listener
+  per hook call site). 412/412 green throughout.
