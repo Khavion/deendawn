@@ -15,9 +15,10 @@ import {
 } from '@expo-google-fonts/public-sans';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
+import * as SplashScreen from 'expo-splash-screen';
 import { SQLiteProvider } from 'expo-sqlite';
 import { StatusBar } from 'expo-status-bar';
-import React, { Suspense, useMemo } from 'react';
+import React, { Suspense, useEffect, useMemo } from 'react';
 import { enableFreeze, enableScreens } from 'react-native-screens';
 import 'react-native-reanimated';
 
@@ -44,6 +45,11 @@ installForegroundHandler();
 void registerBackgroundRefresh();
 // Module scope on purpose: the React Compiler may drop side-effectful useMemo.
 initI18n(loadLanguage(getUserKVStore()));
+
+// Keep the native splash up until fonts + quran.db are ready — otherwise the OS
+// hides it on bundle load and the user sees blank frames while useFonts resolves.
+void SplashScreen.preventAutoHideAsync();
+SplashScreen.setOptions({ fade: true, duration: 200 });
 
 /** Must render inside SettingsProvider to react to settings changes. */
 function NotificationScheduler() {
@@ -81,6 +87,10 @@ function buildNavTheme(mode: ThemeMode) {
 function ThemedNavigation() {
   const { mode } = useTheme();
   const navTheme = useMemo(() => buildNavTheme(mode), [mode]);
+  // Mounting here means fonts loaded AND the SQLite Suspense resolved.
+  useEffect(() => {
+    void SplashScreen.hideAsync();
+  }, []);
   return (
     <ThemeProvider value={navTheme}>
       <Stack>
