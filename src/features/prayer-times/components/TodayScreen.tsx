@@ -30,12 +30,27 @@ import { useThemeMode } from '@/src/lib/theme/ThemeProvider';
 import { useTokens } from '@/src/lib/theme/useTokens';
 import { useDeviceTier } from '@/src/lib/theme/useDeviceTier';
 
-function useNow(intervalMs: number): Date {
+/**
+ * A clock that ticks exactly on minute boundaries. Prayer times are
+ * minute-precise, so the screen recomputes the next prayer / period / dates at
+ * the same instant they can change — and only then. The per-second tick lives
+ * inside <Countdown> so the rest of the screen never re-renders for it.
+ */
+function useMinuteNow(): Date {
   const [now, setNow] = useState(() => new Date());
   useEffect(() => {
-    const id = setInterval(() => setNow(new Date()), intervalMs);
-    return () => clearInterval(id);
-  }, [intervalMs]);
+    let id: ReturnType<typeof setTimeout>;
+    const arm = () => {
+      const d = new Date();
+      const untilNextMinute = 60_000 - (d.getSeconds() * 1000 + d.getMilliseconds());
+      id = setTimeout(() => {
+        setNow(new Date());
+        arm();
+      }, untilNextMinute + 20);
+    };
+    arm();
+    return () => clearTimeout(id);
+  }, []);
   return now;
 }
 
@@ -48,6 +63,26 @@ function countdownParts(ms: number) {
   };
 }
 
+/** The one per-second surface: isolates the tick from the whole screen. */
+function Countdown({ target, color }: { target: Date; color: string }) {
+  const { t: tr } = useTranslation();
+  const [now, setNow] = useState(() => new Date());
+  useEffect(() => {
+    const id = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(id);
+  }, []);
+  const p = countdownParts(target.getTime() - now.getTime());
+  const time =
+    p.hours > 0
+      ? tr('today.hoursMinutes', { hours: p.hours, minutes: p.minutes })
+      : tr('today.minutesSeconds', { minutes: p.minutes, seconds: p.seconds });
+  return (
+    <AppText variant="body" style={{ color }}>
+      {tr('today.countdown', { time })}
+    </AppText>
+  );
+}
+
 export function TodayScreen() {
   const insets = useSafeAreaInsets();
   const t = useTokens();
@@ -57,7 +92,7 @@ export function TodayScreen() {
   const { t: tr, i18n } = useTranslation();
   const { settings, update } = useSettings();
   const [pickerOpen, setPickerOpen] = useState(false);
-  const now = useNow(1000);
+  const now = useMinuteNow();
 
   const location = resolveLocation(settings);
   const config = useMemo(() => resolvePrayerConfig(settings), [settings]);
@@ -183,16 +218,7 @@ export function TodayScreen() {
             <AppText style={[styles.nextTime, { color: textOnFeatured[rm] }]}>
               {formatTimeInZone(next.time)}
             </AppText>
-            <AppText variant="body" style={{ color: dimOnFeatured[rm] }}>
-              {(() => {
-                const p = countdownParts(next.time.getTime() - now.getTime());
-                const time =
-                  p.hours > 0
-                    ? tr('today.hoursMinutes', { hours: p.hours, minutes: p.minutes })
-                    : tr('today.minutesSeconds', { minutes: p.minutes, seconds: p.seconds });
-                return tr('today.countdown', { time });
-              })()}
-            </AppText>
+            <Countdown target={next.time} color={dimOnFeatured[rm]} />
           </GoldFrameCard>
         )}
 

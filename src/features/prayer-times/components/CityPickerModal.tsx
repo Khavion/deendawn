@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FlashList } from '@shopify/flash-list';
 import { Modal, Pressable, StyleSheet, TextInput, View } from 'react-native';
@@ -21,7 +21,9 @@ export function CityPickerModal({
   const tk = useTokens();
   const { t } = useTranslation();
   const [query, setQuery] = useState('');
-  const results = searchCities(query, 25);
+  // Gated on visibility: this component stays mounted behind its host screens,
+  // and an ungated call would re-scan the city list on every host re-render.
+  const results = useMemo(() => (visible ? searchCities(query, 25) : []), [visible, query]);
 
   return (
     <Modal

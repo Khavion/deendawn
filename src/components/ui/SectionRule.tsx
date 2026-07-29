@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 
 import { AppText } from './AppText';
@@ -17,6 +17,9 @@ export function SectionRule({ label, style }: { label: string; style?: StyleProp
   const mode = useThemeMode();
   const { flat } = useDeviceTier();
   const gold = mode === 'light' ? '138,100,48' : '198,155,95';
+  // Stable identity: Gradient memoizes per-band colors on this array, and a
+  // fresh literal each render would recompute all bands on every host render.
+  const colors = useMemo(() => [`rgba(${gold},0.5)`, `rgba(${gold},0)`], [gold]);
 
   return (
     <View style={[styles.row, style]}>
@@ -24,7 +27,7 @@ export function SectionRule({ label, style }: { label: string; style?: StyleProp
         {label}
       </AppText>
       <Gradient
-        colors={[`rgba(${gold},0.5)`, `rgba(${gold},0)`]}
+        colors={colors}
         direction="horizontal"
         flat={flat}
         flatColor={`rgba(${gold},0.25)`}
