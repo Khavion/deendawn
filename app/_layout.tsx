@@ -23,6 +23,7 @@ import { enableFreeze, enableScreens } from 'react-native-screens';
 import 'react-native-reanimated';
 
 import { AppThemeProvider, useTheme } from '@/src/lib/theme/ThemeProvider';
+import { DeviceTierProvider } from '@/src/lib/theme/useDeviceTier';
 import { fonts, palette, ThemeMode } from '@/src/lib/theme/tokens';
 
 import { FullAdhanPlayer } from '@/src/features/notifications/FullAdhanPlayer';
@@ -136,18 +137,20 @@ export default function RootLayout() {
 
   return (
     <SettingsProvider>
-      <AppThemeProvider>
-        <NotificationScheduler />
-        <Suspense fallback={null}>
-          <SQLiteProvider
-            databaseName="quran.db"
-            assetSource={{ assetId: require('@/assets/db/quran.db') }}
-            useSuspense
-          >
-            <ThemedNavigation />
-          </SQLiteProvider>
-        </Suspense>
-      </AppThemeProvider>
+      <DeviceTierProvider>
+        <AppThemeProvider>
+          <NotificationScheduler />
+          <Suspense fallback={null}>
+            <SQLiteProvider
+              databaseName="quran.db"
+              assetSource={{ assetId: require('@/assets/db/quran.db') }}
+              useSuspense
+            >
+              <ThemedNavigation />
+            </SQLiteProvider>
+          </Suspense>
+        </AppThemeProvider>
+      </DeviceTierProvider>
     </SettingsProvider>
   );
 }
