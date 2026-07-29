@@ -290,5 +290,10 @@
     "streamed": "Streamed — nothing stored on your phone",
     "devBadge": "DEV audio — placeholder tone, not recitation",
     "lockScreenArtist": "DeenDawn"
+  },
+  "notFound": {
+    "title": "Screen not found",
+    "body": "That link doesn't match anything in DeenDawn.",
+    "home": "Go to Today"
   }
 }

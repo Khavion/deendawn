@@ -105,6 +105,8 @@ function ThemedNavigation() {
         <Stack.Screen name="onboarding" options={{ headerShown: false, gestureEnabled: false }} />
         <Stack.Screen name="thinker/[key]" options={{ headerBackButtonDisplayMode: 'minimal' }} />
         <Stack.Screen name="work/[id]" options={{ headerBackButtonDisplayMode: 'minimal' }} />
+        <Stack.Screen name="theme-preview" options={{ headerBackButtonDisplayMode: 'minimal' }} />
+        <Stack.Screen name="+not-found" options={{ headerBackButtonDisplayMode: 'minimal' }} />
       </Stack>
       <FullAdhanPlayer />
       <StatusBar style={mode === 'light' ? 'dark' : 'light'} />
