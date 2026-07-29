@@ -55,7 +55,9 @@ function AudioBarInner({
   const startedRef = useRef(false);
   const lastSavedRef = useRef(0);
   const positionRef = useRef(0);
-  positionRef.current = status.currentTime;
+  useEffect(() => {
+    positionRef.current = status.currentTime;
+  }, [status.currentTime]);
 
   // Periodic resume-point save while playing; final save on unmount.
   useEffect(() => {
@@ -83,6 +85,10 @@ function AudioBarInner({
     lastSavedRef.current = 0;
     positionRef.current = 0;
     startedRef.current = false;
+    // expo-audio surfaces track-finish only as a status flag (no event/callback
+    // API), so resetting the session UI in response to it is the supported
+    // pattern; didJustFinish is not affected by the reset, so it cannot cascade.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setStarted(false);
   }, [status.didJustFinish, store, source.reciterId, surah]);
 

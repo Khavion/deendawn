@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useState } from 'react';
 import { Animated } from 'react-native';
 
 import { duration } from './tokens';
@@ -19,7 +19,7 @@ import { useDeviceTier } from './useDeviceTier';
 export function usePressScale(to = 0.97) {
   const { flat, reduceMotion } = useDeviceTier();
   const enabled = !flat && !reduceMotion;
-  const scale = useRef(new Animated.Value(1)).current;
+  const [scale] = useState(() => new Animated.Value(1));
 
   const animate = (value: number) => {
     if (!enabled) return;

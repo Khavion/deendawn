@@ -12,15 +12,21 @@ jest.mock('react-native/Libraries/Utilities/useColorScheme', () => ({
   default: () => 'light',
 }));
 
-let captured: ReturnType<typeof useTheme> | null = null;
+const capture = jest.fn<void, [ReturnType<typeof useTheme>]>();
+function latest(): ReturnType<typeof useTheme> {
+  const call = capture.mock.calls.at(-1);
+  if (!call) throw new Error('Probe never rendered');
+  return call[0];
+}
 function Probe() {
-  captured = useTheme();
-  return <Text>{captured.mode}</Text>;
+  const theme = useTheme();
+  capture(theme);
+  return <Text>{theme.mode}</Text>;
 }
 
 describe('AppThemeProvider', () => {
   beforeEach(() => {
-    captured = null;
+    capture.mockClear();
   });
 
   it("defaults to 'system' → light and exposes the matching tokens", async () => {
@@ -30,9 +36,9 @@ describe('AppThemeProvider', () => {
         <Probe />
       </AppThemeProvider>
     );
-    expect(captured?.pref).toBe('system');
-    expect(captured?.mode).toBe('light');
-    expect(captured?.tokens).toBe(palette.light);
+    expect(latest().pref).toBe('system');
+    expect(latest().mode).toBe('light');
+    expect(latest().tokens).toBe(palette.light);
   });
 
   it('a manual override changes the resolved mode + tokens and persists', async () => {
@@ -42,9 +48,9 @@ describe('AppThemeProvider', () => {
         <Probe />
       </AppThemeProvider>
     );
-    await act(async () => captured!.setPref('nightWarm'));
-    expect(captured?.mode).toBe('nightWarm');
-    expect(captured?.tokens).toBe(palette.nightWarm);
+    await act(async () => latest().setPref('nightWarm'));
+    expect(latest().mode).toBe('nightWarm');
+    expect(latest().tokens).toBe(palette.nightWarm);
     expect(store.get('theme.pref.v1')).toBe('nightWarm');
   });
 
@@ -55,8 +61,8 @@ describe('AppThemeProvider', () => {
         <Probe />
       </AppThemeProvider>
     );
-    expect(captured?.pref).toBe('dark');
-    expect(captured?.mode).toBe('dark');
+    expect(latest().pref).toBe('dark');
+    expect(latest().mode).toBe('dark');
   });
 
   it('ignores a corrupt stored value (falls back to system)', async () => {
@@ -66,6 +72,6 @@ describe('AppThemeProvider', () => {
         <Probe />
       </AppThemeProvider>
     );
-    expect(captured?.pref).toBe('system');
+    expect(latest().pref).toBe('system');
   });
 });
