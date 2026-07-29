@@ -316,3 +316,28 @@ premise is now false. Both need re-checking — neither is assumed reversed:**
    The **NC** objection is resolved by zero monetization, but **ND** (no derivatives) independently
    blocks building a restructured/indexed database from it, so the conclusion probably still stands.
    Re-read the licence before acting; do not assume either way.
+
+## 2026-07-29 — eslint: Node globals for the Node-only directories (lint gate was red on main)
+
+`npx eslint .` had been failing with 9 `'Buffer' is not defined` (`no-undef`) errors across
+`content-pipeline/{build,fetch,verify}.mjs` and `scripts/{dev-audio-server,generate-placeholder-sounds}.mjs`
+— pre-existing, present at 9e3d787 and earlier, so the constitution's per-commit `eslint` gate was
+technically red.
+
+Cause: `eslint-config-expo/flat` grants Node globals to `**/metro.config.js` **only**; every other
+file gets the browser/RN global set (1175 keys, no `Buffer`). Our pipeline and scripts run under
+Node, not the RN runtime.
+
+Fix: a scoped flat-config override giving `scripts/**` and `content-pipeline/**` (`.js`/`.mjs`/`.cjs`)
+`globals.node`. Rejected alternatives: file-level `eslint-disable` comments (hides the class of bug
+in files that legitimately use Node APIs) and relaxing `no-undef` globally (loses the rule
+everywhere).
+
+- `globals` promoted from a transitive dep to an explicit devDependency, pinned `^14.0.0` to match
+  the version already resolved in the tree so it dedupes rather than adding a second copy.
+- Scoping verified in both directions with throwaway probe files: a `.mjs` **outside** the globs
+  still errors on `Buffer`; the same file **inside** `scripts/` passes. Probes deleted.
+- Note `no-undef` is `off` for `**/*.ts(x)` in the expo config (typescript-eslint's standard
+  posture — TS catches undefined identifiers itself), so a `.ts` probe proves nothing here.
+
+Result: eslint 0 errors / 6 warnings (the 6 are pre-existing and unchanged), tsc clean, 412 tests green.
