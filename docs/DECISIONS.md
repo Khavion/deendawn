@@ -341,3 +341,30 @@ everywhere).
   posture — TS catches undefined identifiers itself), so a `.ts` probe proves nothing here.
 
 Result: eslint 0 errors / 6 warnings (the 6 are pre-existing and unchanged), tsc clean, 412 tests green.
+
+## 2026-07-29 — iOS perfection Phase 0: toolchain re-proven + pre-upgrade config wins
+
+- **CocoaPods works again on this machine.** `npx expo prebuild --clean -p ios` + `pod install`
+  succeeded end-to-end (Homebrew cocoapods 1.16.2_2 bundles its own gem home; the July-14
+  Ruby-4/unicode_normalize breakage no longer reproduces). The 2026-07-14 "native rebuild blocked"
+  constraint is lifted; the stale `ios/` tree (which still contained RevenueCat pods and placeholder
+  purpose strings) was regenerated from scratch.
+- **Purpose-string fix at the plugin level, not infoPlist:** expo-audio and expo-location inject
+  placeholder `NSMicrophoneUsageDescription` / `NSLocationAlways*` strings by default — an App Review
+  5.1.1(ii) rejection vector for permissions we don't use. Disabled via plugin config
+  (`microphonePermission: false`, `locationAlwaysPermission: false`,
+  `locationAlwaysAndWhenInUsePermission: false`). Verified gone from the generated Info.plist; only
+  the real when-in-use sentence remains.
+- **Locales declared:** `CFBundleLocalizations [en, ur, ar]` + `CFBundleAllowMixedLocalizations` —
+  without this iOS can silently refuse RTL layout for ar/ur (the app supports both). This was the
+  single highest-value missing config key.
+- **deploymentTarget 16.4** via expo-build-properties (was unset → SDK 54's 15.1 floor). Matches
+  Expo's current floor and the planned SDK 57 minimum; verified in the generated pbxproj.
+- **Privacy manifest: no `ios.privacyManifests` needed.** RN's pod install auto-generates
+  `PrivacyInfo.xcprivacy` with all four required-reason categories (FileTimestamp, UserDefaults,
+  DiskSpace, SystemBootTime) aggregated from pods. Our own code calls none of those APIs directly.
+  Re-check if a future dependency adds one.
+- **Splash controlled + tokened:** `preventAutoHideAsync` at module scope, `hideAsync` when the
+  navigation subtree mounts (fonts + quran.db Suspense both resolved), 200ms fade. Splash bg colors
+  moved off pure white/black to the canvas tokens (`#F7F6F2` / `#15181D`) — pure black violated the
+  app's own halation rule.

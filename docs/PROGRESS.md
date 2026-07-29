@@ -398,6 +398,15 @@ Done:
 - Verified live on iOS: `deendawn://work/1?section=8` opens "The Confessions of Al-Ghazali" with section 8 at the top (was the top of the book before). Extended the WorkReader test with a section-deep-link case. (Android deep-link via adb VIEW intent didn't route when the app was already foregrounded — an adb quirk, not a code issue; the fix is the identical pure-JS onLoad+scrollToIndex mechanism already verified on Android for the Quran reader's 2:67 jump.)
 - Gates green: tsc, expo lint 0 errors, **423/423** (54 suites).
 
+## Session 2026-07-29 — iOS perfection session (approved plan: ~/.claude/plans/deendawn-ios-wild-pumpkin.md)
+
+Plan:
+
+1. Phase 0: prove native build path (prebuild --clean + pod install + xcodebuild — first since the July 14 Ruby/CocoaPods breakage), baseline screenshots, then config wins (CFBundleLocalizations, deploymentTarget 16.4, privacy manifest, splash control).
+2. Phase 1: SDK 54→57 in one jump, gated on a llama.rn spike build; remove unused reanimated.
+3. Phases 2–8: native chrome (NativeTabs + de-opaqued nav), perf correctness, Dynamic Type per-role caps, layout/iPad, touch feel (41 dead Pressables → AppPressable), accessibility, Arabic/RTL.
+4. Phases 9–11: exhaustive simulator evidence sweep, perf measurement, store assets (iPad screenshots are a submission blocker).
+
 ## Pending — deep-research: real Quran recitation audio (BLOCKERS #2 / Gate 5)
 
 Owner asked to make the "listen" feature use real recitation (currently a placeholder tone) and, if possible, live recitation. Launched a deep-research brief on legally-usable recitation audio (self-hosted files + live-stream options) for a commercial-adjacent free app. Findings + a plain-English owner recommendation to be written into BLOCKERS.md when the research returns.
