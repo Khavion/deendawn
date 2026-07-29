@@ -10,7 +10,7 @@ Zohaib is very non-technical. Every summary, blocker, and question addressed to 
 
 ## Mission
 
-Build and ship DeenDawn for iOS (Android fast-follow from the same codebase): prayer times, adhan notifications, qibla, Quran with translation and streamed audio, tasbih, hijri calendar, suhoor/iftar times, zakat calculator. Free forever, donations (developer tips) only, no ads, no tracking, no accounts. Built with Expo/React Native + TypeScript.
+Build and ship DeenDawn for iOS (Android fast-follow from the same codebase): prayer times, adhan notifications, qibla, Quran with translation and streamed audio, tasbih, hijri calendar, suhoor/iftar times, zakat calculator. Free forever, no revenue surface of any kind, no ads, no tracking, no accounts. Built with Expo/React Native + TypeScript.
 
 ## Absolute rules (violating any of these is a defect, not a judgment call)
 
@@ -38,7 +38,8 @@ Build and ship DeenDawn for iOS (Android fast-follow from the same codebase): pr
 ### 3. Monetization invariants
 
 - Free. No ads, ever, in any form. No paywalls on worship features.
-- The only revenue surface is a tip jar via Apple IAP (RevenueCat), framed strictly as "Support DeenDawn's development." NEVER frame it as charity, zakat, or sadaqah collection — Apple guideline 3.2.1 prohibits in-app charity fundraising by non-approved entities. Zakat CALCULATOR is fine; zakat PAYMENT is out of scope entirely.
+- **ZERO monetization (amended 2026-07-29 at Zohaib's direction — supersedes the earlier tip-jar rule).** DeenDawn has no revenue surface at all: no in-app purchases, no subscriptions, no tip jar, no external donate links, no payment SDK in the binary. The tip jar and RevenueCat were removed on that date; see `docs/DECISIONS.md`. Do not reintroduce any purchase surface without a direct instruction from Zohaib — it would also break the store-account posture below (any IAP makes the Google Play account a "merchant," which forces his home address onto the public Play listing).
+- Soliciting money from users is out of scope entirely, and NEVER frame anything as charity, zakat, or sadaqah collection — Apple guideline 3.2.1 prohibits in-app charity fundraising by non-approved entities. Zakat CALCULATOR is fine; zakat PAYMENT is out of scope entirely.
 
 ### 4. Security
 
@@ -63,8 +64,9 @@ When you hit a gate: write the exact context and your recommendation to `docs/BL
 
 ## One-time human-provided setup (assume present; if missing, log to BLOCKERS.md and keep working on what doesn't need it)
 
-- `.env` at repo root: `ASC_KEY_ID`, `ASC_ISSUER_ID`, `ASC_KEY_PATH` (App Store Connect API key for headless EAS submit later), `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET`, `REVENUECAT_IOS_KEY`.
+- `.env` at repo root: `ASC_KEY_ID`, `ASC_ISSUER_ID`, `ASC_KEY_PATH` (App Store Connect API key for headless EAS submit later), `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET`.
 - Apple Developer Program membership active; app record creation is a gated step you will PREPARE (metadata files) but Zohaib clicks.
+- **Store accounts are PERSONAL/INDIVIDUAL, not organization (decided 2026-07-29 — see `docs/DECISIONS.md`).** Three consequences you must respect and never quietly work around: (a) the App Store *seller* name is Zohaib's personal legal name, is set once at first app-record creation, and cannot be changed afterwards — "Khavion Apps" stays the brand everywhere else (in-app About, website, legal pages, copyright) but is not the App Store developer name; (b) the app must declare **non-trader** status for the EU under the DSA, which is only truthful while there is zero monetization; (c) Google Play production release requires 12 testers opted into a closed test for 14 continuous days — plan Android release around that, it is not skippable on a personal account.
 - Xcode + iOS Simulator installed; `eas-cli` logged in.
 
 All App Store operations go through App Store Connect API keys + EAS/Fastlane headlessly. You do not automate browser logins to Apple/Google; 2FA-gated credential entry is human-only by design.
@@ -74,9 +76,9 @@ All App Store operations go through App Store Connect API keys + EAS/Fastlane he
 - Expo SDK 54, React Native 0.81, TypeScript strict, expo-router.
 - Data: expo-sqlite (bundled read-only `quran.db` + user-data db). Prayer engine: `adhan` (npm, MIT).
 - Notifications: expo-notifications. Audio: expo-audio (NOT expo-av). Sensors: expo-sensors + expo-location.
-- IAP: react-native-purchases (RevenueCat). Errors: none in v1 (privacy) — structured local logging only.
+- IAP: NONE — no billing library is permitted in the dependency tree (rule 3). Errors: none in v1 (privacy) — structured local logging only.
 - Fonts: Amiri Quran / Scheherazade New (SIL OFL; subsetting allowed). KFGQPC Uthmanic Hafs may be bundled UNMODIFIED only — never subset or convert it (license prohibits modification).
-- Design system (see docs/DESIGN.md; single source `src/lib/theme/tokens.ts`, contrast-tested): Khavion brand palette — forest-green PRIMARY (`accent` token) + bronze/gold ACCENT (`ochre` token), warm-ivory / cool-near-black grounds, three themes (light/dark/night-warm) via `AppThemeProvider`. This SUPERSEDES the earlier lapis/ochre palette. Latin fonts: Newsreader (display serif, incl. italic accent word) + Public Sans (UI/body). Arabic stack (Amiri Quran + Noto Nastaliq) is UNCHANGED and always takes precedence for Quranic/Arabic content. Radii 8/6. Base UI primitives in `src/components/ui/` (Screen, AppText, Button, Card, Divider). Display name "Deen Dawn"; publisher "Khavion Apps".
+- Design system (see docs/DESIGN.md; single source `src/lib/theme/tokens.ts`, contrast-tested): Khavion brand palette — forest-green PRIMARY (`accent` token) + bronze/gold ACCENT (`ochre` token), warm-ivory / cool-near-black grounds, three themes (light/dark/night-warm) via `AppThemeProvider`. This SUPERSEDES the earlier lapis/ochre palette. Latin fonts: Newsreader (display serif, incl. italic accent word) + Public Sans (UI/body). Arabic stack (Amiri Quran + Noto Nastaliq) is UNCHANGED and always takes precedence for Quranic/Arabic content. Radii 8/6. Base UI primitives in `src/components/ui/` (Screen, AppText, Button, Card, Divider). Display name "Deen Dawn"; brand/publisher "Khavion Apps" in-app and on the web (the App Store *seller* name is separate and is Zohaib's legal name — see the setup section).
 - Audio hosting: Cloudflare R2, HTTPS streaming with range requests.
 - i18n: react-i18next + expo-localization, typed keys. RTL switch via I18nManager + expo-updates reloadAsync.
 - Ask feature: llama.rn (MIT) for Tier B inference; op-sqlite + sqlite-vec (MIT/Apache-2.0) for the vector store in a SEPARATE database file from the expo-sqlite Quran DB (dual-SQLite compile conflict is a known iOS build risk — use the static-libraries approach and verify the build after adding op-sqlite); Qwen3-1.7B Q4 GGUF (Apache 2.0) default model, Qwen3-0.6B Q4 fallback; all-MiniLM-L6-v2 (Apache 2.0) embeddings. Models and embeddings are OPTIONAL downloads from our R2 bucket only — never bundled (binary stays <100MB), never fetched from Hugging Face or any third-party domain.
@@ -87,7 +89,7 @@ All App Store operations go through App Store Connect API keys + EAS/Fastlane he
 
 ```
 app/                      # expo-router routes
-src/features/<feature>/   # prayer-times, notifications, qibla, quran, audio, tasbih, hijri, zakat, tips, settings, onboarding
+src/features/<feature>/   # prayer-times, notifications, qibla, quran, audio, tasbih, hijri, zakat, settings, onboarding
 src/lib/                  # shared utils, db access, theme
 content-pipeline/         # Node scripts: fetch, verify, build quran.db; content.lock lives here
 assets/                   # fonts, adhan clips (<30s), icons
@@ -121,7 +123,7 @@ ADHKAR: excluded from v1 builds entirely. Do not scaffold it until the scholar-r
 7. Hijri: Umm al-Qura conversion, labeled "calculated — may differ from local moonsighting"; adjustable ±1 day offset in settings.
 8. Suhoor/Iftar: fajr and maghrib surfaced as suhoor-ends/iftar during Ramadan (hijri-detected), optional pre-fajr reminder using the same scheduler.
 9. Zakat calculator: assets/liabilities form, nisab from user-entered gold/silver price (NO live price API in v1 — privacy), 2.5% math unit-tested, disclaimer + `SCHOLAR-REVIEW` flag on all guidance text.
-10. Tips: RevenueCat sandbox products ($4.99/$9.99/$19.99 one-time), restore purchases, thank-you state. Sandbox testing allowed autonomously; real product creation in ASC is prepared-not-submitted.
+10. ~~Tips~~ — REMOVED 2026-07-29 (rule 3: zero monetization). The epic shipped and was then deleted at Zohaib's direction; the acceptance criterion now is the negative one, asserted by the store-metadata and dependency checks: no billing SDK, no IAP, no donate link anywhere in the app.
 11. Settings/Onboarding: location permission flow with manual-city path, method/madhab pickers, notification setup, attribution screen, privacy policy screen (static, local).
 
 ## Testing policy — all inside this environment
@@ -130,9 +132,9 @@ ADHKAR: excluded from v1 builds entirely. Do not scaffold it until the scholar-r
 - Unit (Jest): prayer engine fixture matrix — cities {Houston, NYC, London, Toronto, Karachi, Jeddah, Anchorage, Stockholm} × dates {both DST transitions, both solstices, equinox, Ramadan start} × methods × madhabs × high-lat rules. Fixtures are generated once from the adhan reference implementation, committed, and marked for one-time human spot-check against published timetables (BLOCKERS.md task). Scheduler math, qibla bearings, zakat math, hijri conversion: exhaustive unit tests.
 - Golden tests: `quran.db` text hashes vs `content.lock`; ayah counts; first/last ayah byte-equality.
 - Component (React Testing Library): RTL layout, translation toggle, bookmark flows.
-- E2E (Maestro on iOS Simulator): flows for onboarding, view times, change method, open surah, play audio (dev set), tasbih increment, zakat calc, tip sheet (sandbox), airplane-mode offline suite. Boot sim via `xcrun simctl boot`, drive via `maestro test e2e/`, screenshot via `xcrun simctl io booted screenshot` into `docs/screens/` for the store-prep phase.
+- E2E (Maestro on iOS Simulator): flows for onboarding, view times, change method, open surah, play audio (dev set), tasbih increment, zakat calc, airplane-mode offline suite. Boot sim via `xcrun simctl boot`, drive via `maestro test e2e/`, screenshot via `xcrun simctl io booted screenshot` into `docs/screens/` for the store-prep phase.
 - Build gates: `npx expo prebuild --platform ios` + `xcodebuild -workspace ... -sdk iphonesimulator build` green before any push; `eas build --profile preview --platform ios` at each phase end.
-- Simulator limits (no real magnetometer, no push-notification delivery guarantees, no IAP receipts beyond sandbox): unit-test the logic, E2E the UI with mocked sensor streams, and append every physical-device-only check to `docs/TESTPLAN.md` § "Device pass (human)".
+- Simulator limits (no real magnetometer, no push-notification delivery guarantees): unit-test the logic, E2E the UI with mocked sensor streams, and append every physical-device-only check to `docs/TESTPLAN.md` § "Device pass (human)".
 
 ## Autonomous operating loop (every session)
 

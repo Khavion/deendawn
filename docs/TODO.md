@@ -127,11 +127,11 @@ Epics in build order. Top unblocked item is always the current task.
 - [ ] Suhoor/Iftar: fajr/maghrib surfaced during Ramadan (hijri-detected), optional pre-fajr reminder
 - [ ] Zakat: assets/liabilities form, user-entered nisab prices, 2.5% math unit-tested, disclaimer + SCHOLAR-REVIEW
 
-## 8. Tips
+## 8. ~~Tips~~ — REMOVED 2026-07-29 (owner decision: zero monetization)
 
-- [ ] RevenueCat sandbox one-time products $4.99/$9.99/$19.99
-- [ ] Restore purchases, thank-you state
-- [ ] ASC product definitions prepared-not-submitted
+- [x] Tip jar, RevenueCat, and all purchase surfaces deleted from the app, the store listings, and
+      the constitution. Nothing to build here. Re-adding any purchase surface needs a direct
+      instruction from Zohaib — see DECISIONS 2026-07-29 for why it's a one-way door.
 
 ## 9. Settings / Onboarding
 

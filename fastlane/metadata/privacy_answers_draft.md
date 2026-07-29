@@ -11,7 +11,7 @@ That single answer produces the "Data Not Collected" label. It holds because:
 - No accounts, no analytics SDKs, no ad SDKs, no crash reporters (constitution rule 2).
 - Location is processed on-device only and never transmitted.
 - Recitation-audio streaming requests to our R2 bucket carry no identifiers beyond a bare HTTPS request; nothing is logged or linked to identity (verify bucket logging stays off before shipping audio).
-- RevenueCat (tip jar): purchases are processed by Apple; when the key ships, re-verify the answer against RevenueCat's then-current data-collection docs — if their SDK's purchase handling counts as "Purchases" data collection, the label must change to Purchases → Not linked to identity → No tracking, and this file plus the review notes must be updated. Until the key exists the SDK is never configured, so "Data Not Collected" is accurate for TestFlight.
+- No purchases at all: the tip jar and the RevenueCat SDK were removed on 2026-07-29 (owner decision — see DECISIONS.md). With no IAP there is no "Purchases" data category to declare and no payment-processor SDK in the binary, so this answer is now unconditional rather than pending a key.
 
 Also in ASC:
 

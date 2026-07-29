@@ -7,12 +7,12 @@ NO ACCOUNT NEEDED: there is no login, no registration, and no server-side user d
 DIFFERENTIATION (guideline 4.3(b)): DeenDawn is not a re-skin of an existing prayer app. It offers a meaningfully different, privacy-first experience that the common apps in this category do not:
 - App Privacy label is "Data Not Collected": no accounts, no analytics SDK, no advertising SDK, no third-party trackers of any kind.
 - Fully functional offline: prayer times, the complete Quran text, translation, search, qibla, tasbih, hijri calendar, and the zakat calculator all work in airplane mode (bundled on-device databases, no server dependency).
-- No advertising anywhere, and no paywall on any worship feature.
+- No advertising anywhere, no paywall on any worship feature, and no in-app purchases of any kind — the app has no monetization surface at all.
 - The "Ask" feature answers by deterministic full-text search over the bundled Quran and classical-text databases on-device — exact counts and verse references, phrased as verifiable facts, with no cloud AI and no generated theological content. Ruling-seeking questions are redirected to qualified scholars, never answered by the app.
 - Religious text is verified byte-for-byte against pinned public sources with SHA-256 checksums; the app never generates or alters scripture.
 Happy to clarify any of the above in the Resolution Center.
 
-IN-APP PURCHASES (guideline 3.2.1): the only purchase surface is an optional developer tip ("Support DeenDawn"). It is framed strictly as supporting app development — never as charity, zakat, or sadaqah collection — and no functionality is gated behind it.
+IN-APP PURCHASES: there are none. DeenDawn contains no in-app purchases, no subscriptions, and no external purchase links. It solicits no money from users in any form — in particular it does not collect charity, zakat, or sadaqah (guideline 3.2.1). The zakat feature is a calculator only: it does arithmetic on figures the user types in and has no payment path.
 
 AUDIO: Quran recitation streams from our own storage; notification sounds are bundled and under 30 seconds.
 

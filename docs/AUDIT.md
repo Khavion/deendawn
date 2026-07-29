@@ -1,5 +1,14 @@
 # DeenDawn — Technical Audit v2 (2026-07-14)
 
+> **⚠️ Point-in-time snapshot. Superseded on one point as of 2026-07-29:** the app now has **zero
+> monetization** — the tip jar and RevenueCat were removed entirely, and it publishes under
+> **personal/individual** store accounts (see `docs/DECISIONS.md`, 2026-07-29). Wherever this
+> document reasons from "a free app with a tip jar" — notably the RevenueCat privacy caveat (§ near
+> line 79), the translation-licensing research question (§13), and the legal-entity /
+> tip-payments question (§13) — read it as "a free app with no revenue of any kind." That is a
+> *stronger* position for licensing negotiations, and it makes the legal-entity question moot.
+> The rest of the audit stands.
+
 A privacy-first, free, no-ads Islamic app, now running on **both iOS and
 Android**. This is a full technical snapshot for external review, written for a
 technical reader; the goal is to surface where an outside research pass would

@@ -21,4 +21,4 @@ Tasbih counter with haptics and daily history. Hijri calendar with key Islamic d
 PRIVACY, PLAINLY
 No accounts. No analytics. No ad networks. Location is used on your device only. Everything essential works in airplane mode. The only network use is streaming recitation audio you request.
 
-Deen Dawn is free and complete — an optional tip in Settings supports development, and nothing is ever locked behind it.
+Deen Dawn is free and complete. There is nothing to buy — no ads, no subscriptions, no in-app purchases, and nothing locked behind anything.

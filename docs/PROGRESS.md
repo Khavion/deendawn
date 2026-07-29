@@ -427,3 +427,30 @@ Owner already owns khavion.com and proposed hosting the store-required pages the
   - support: `https://khavion.com/apps/deendawn/support.html`
   Recorded in `fastlane/metadata/en-US/{privacy,support}_url.txt` + `docs/store/PLAY_LISTING.md`.
 - BLOCKERS #2 rewritten: copy 3 files into khavion.com's `public/apps/deendawn/`, push, Vercel deploys. Offered Next.js-route (extension-less URL) and nav-link variants if wanted.
+
+## Session 2026-07-29 — Personal accounts + tip jar removed (owner decision)
+
+Zohaib asked whether a personal developer account was fine given the app is free with no ads or
+tracking. Verified current Apple/Google rules rather than answering from memory; the answer was "not
+quite, for three reasons unrelated to monetization scale" (permanent legal-name seller field, home
+address published for monetizing Play accounts, 12-tester gate). He accepted the name being public
+and chose to drop the tip jar instead. Decision recorded in DECISIONS 2026-07-29.
+
+- **Tip jar fully removed:** `app/tips.tsx`, `src/features/tips/**`, `e2e/tips.yaml`,
+  `react-native-purchases`, `REVENUECAT_IOS_KEY`, the More-screen row, the `_layout` route, and the
+  `tips` + `more.tips` keys in en/ar/ur. Locale edits done as line-range deletions (never a JSON
+  re-serialize) so no Arabic/Urdu byte was touched — rule 1. **412 tests green, tsc clean.**
+- **Constitution amended:** rule 3 is now ZERO monetization (no IAP, no billing library permitted in
+  the dependency tree); added a store-account section recording the three personal-account
+  consequences so a future session can't quietly undo them; v1 epic 10 struck.
+- **Store metadata:** description + Play full description say there is nothing to buy; review notes
+  now assert zero IAP (which also strengthens the 4.3(b) differentiation case); privacy answers are
+  unconditional now that no payment SDK exists; PLAY_LISTING explains why no address is published.
+- **BLOCKERS #1/#1b rewritten** for the individual path: no D-U-N-S, Apple Individual enrollment with
+  the legal-name warning, EU non-trader declaration, and a concrete plan for recruiting the 12
+  Play testers (sign up 15–16 for slack; Android lands ~3 weeks behind Apple). BLOCKERS #3
+  (RevenueCat) closed.
+- **Flagged two stale premises:** the recitation-audio and word-by-word-Quran decisions were both
+  justified by "the tip jar makes us commercial-adjacent." That's now false. Audio genuinely may
+  re-open (Alafasy et al. were ruled out on commercial grounds); WBW probably still blocked by the
+  ND clause, not the NC one. Both marked for re-check, neither assumed reversed.

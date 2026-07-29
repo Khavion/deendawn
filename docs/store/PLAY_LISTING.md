@@ -30,8 +30,9 @@ in Play's definition = **transmitting data off the device**. Deen Dawn transmits
   - **Location note:** the app *accesses* location on-device (qibla + prayer times) but **never
     transmits or stores it**, so under Play's definition it is **not collected**. Manual city
     entry is a full alternative.
-  - **Payments note:** the optional tip is processed entirely by Google Play Billing; the app
-    never receives or stores payment data.
+  - **Payments note:** there are none. The app has no in-app purchases, no billing integration,
+    and no payment path of any kind, so it is not a "merchant" account for Play's purposes —
+    which is also why the developer's full address is not published on the listing.
 - **Is all user data encrypted in transit?** → N/A (no data collected). The only network call
   (recitation audio you choose to play) is HTTPS.
 - **Do you provide a way to request data deletion?** → N/A (no data collected; all app data lives

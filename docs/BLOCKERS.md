@@ -14,54 +14,42 @@ I keep building everything that doesn't need you.
 
 **Goal:** get DeenDawn onto the App Store (and Google Play) so anyone can download it, free, and
 see for themselves that it collects zero data. Everything on my side is ready: the app is built
-and tested (**423 automated tests pass**, including one proving it works with no internet), the
+and tested (**412 automated tests pass**, including one proving it works with no internet), the
 store text, privacy answers ("Data Not Collected"), and the two required web pages are all drafted,
 and the build+upload is one command. The only things I *can't* do for you are: create the developer
 accounts, and click the final "publish" button. Here's the honest, current plan.
 
-**Your plan (confirmed): both stores at once, as "professional" (organization) accounts under
-apps@khavion.com.** Good news — the **organization** route is actually the *better* one: it
-publishes under "Khavion Apps" and it **skips Google's 12-tester / 14-day waiting period** that
-personal accounts have. So both stores can go live together, fast.
+**Your plan (decided 2026-07-29): personal / individual accounts on both stores, and NO tip jar —
+the app takes no money at all.** You weighed the trade-offs and accepted them. **No D-U-N-S number
+is needed**, which removes the single longest wait from the plan. What you accepted, on the record
+so neither of us re-opens it later:
+- **Your legal name will be the seller name on the App Store**, permanently. Apple only allows a
+  trade name like "Khavion Apps" on company accounts, and the name can't be edited after the first
+  app is created. You said you're fine with this app being attached to your name.
+- **No revenue from this app, ever** — I removed the tip jar and the payment library from the code
+  on 2026-07-29. Turning it back on later would republish your home address on the Google Play
+  listing, so treat this as a one-way door.
 
-**Why not just use a personal account?** (You asked on 2026-07-29. Short answer: don't — and it has
-nothing to do with the app being free.) These rules key off *who you are* and *whether any money at
-all changes hands*, not off ads or tracking. Three concrete reasons, all verified against Apple's
-and Google's own help pages:
-1. **Apple would print your personal legal name on the App Store, permanently.** On a personal
-   account Apple forces the developer name to be your legal name — "Khavion Apps" is not an option,
-   trade names are organization-only. You set that name once, when the first app record is created,
-   and Apple's docs say it can never be edited afterwards. The one reported attempt at fixing it
-   later (converting personal → organization) says the personal name *stayed*. The only other escape
-   is transferring the app to a second account, which permanently kills promo codes for it.
-2. **Google would publish your home address.** The tip jar makes you a "merchant" in Google's eyes —
-   $1 counts the same as $1M. Merchant accounts must show their full address on the Play listing,
-   and personal accounts can't use a PO box or virtual address (they verify against a utility bill
-   or ID). An organization account shows the LLC's business address instead.
-3. **Google's 12-tester / 14-day gate**, as noted above — personal accounts only.
+**The good news, and it's real:** dropping the tip jar is what *protects* your address. Google only
+publishes a personal developer's full address when the account takes money. With nothing to buy,
+Google shows your name, country, and an email — no address. Same for the EU: with no money changing
+hands you'll declare **"not a trader"**, and Apple then publishes no address or phone number for you
+either. (The one visible side effect: EU users see a small note that EU consumer-protection rules
+don't apply to a non-trader's app. That's normal for free apps and costs you nothing.)
 
-Costs are identical either way ($99 + $25), so a personal account buys nothing except skipping the
-D-U-N-S wait. Recommendation: **stay with the organization plan.**
+**"Khavion Apps" still survives as your brand** — it stays on the in-app About screen, on
+khavion.com, on the legal pages, and in the copyright line. The only place it can't appear is
+Apple's seller-name field.
 
-**One shared first step for organization accounts (do this first — it takes the longest):** both
-Apple and Google require a free **D-U-N-S number** for your business. It's a free business ID from
-Dun & Bradstreet.
-- **Use the legal entity name — "Khavion LLC" — not "Khavion Apps".** Apple and Google enroll the
-  *registered company*, and both explicitly reject DBAs/trade names at the enrollment step. "Khavion
-  Apps" is still what customers see: it gets set separately, as the developer name, inside App Store
-  Connect (organization accounts are allowed a trade name there; personal accounts are not).
-- **Get it here:** Apple provides a free D-U-N-S lookup/request tool at
-  **developer.apple.com/enroll/duns-lookup**. Look up "Khavion LLC" — if it's not found, request a
-  new one on that page. Have your Texas LLC registration document handy; D&B may phone you to check
-  details. **Start this now**, because everything else waits on it: Apple says ~5 business days but
-  Dun & Bradstreet's own page says up to **30 business days**, so plan for the longer number.
-- The *same* D-U-N-S number works for both the Apple and Google organization accounts.
+**The one thing this costs you: Google's 12-tester rule.** Personal Play accounts have to run a
+closed test with **12 people opted in for 14 continuous days** before the app can go public. That's
+unavoidable on a personal account and it doesn't care that the app is free. iOS is unaffected — it
+can ship while the Android clock runs. See item 1b for exactly how to line up the 12 people.
 
-**What it costs:** Apple **$99/year**; Google Play **$25 one-time**. The D-U-N-S number and
-everything else below is free.
+**What it costs:** Apple **$99/year**; Google Play **$25 one-time**. Nothing else.
 
-Once you have the D-U-N-S number, do the Apple steps below (A–C); Google Play steps are in item 1b.
-Do them in order and paste me what each gives you.
+Do the Apple steps below (A–C); Google Play steps are in item 1b. Do them in order and paste me
+what each gives you.
 
 ---
 
@@ -77,21 +65,25 @@ Do them in order and paste me what each gives you.
 
 ---
 
-#### Step B — Join the Apple Developer Program ($99/year, as an Organization)
+#### Step B — Join the Apple Developer Program ($99/year, as an Individual)
 
 1. Go to **developer.apple.com/programs/enroll** and sign in with the Apple ID for apps@khavion.com.
-2. Choose **Organization / Company** (not Individual). It will ask for your **D-U-N-S number** (from
-   the step above), your legal entity name (**"Khavion LLC"** — the registered company, not the
-   "Khavion Apps" brand name), address, a work email, and the $99 payment. You'll confirm you have
-   authority to sign for the organization. Apple also checks that **khavion.com** is live and
-   plausibly belongs to Khavion LLC, so make sure it isn't a parked/registrar placeholder page.
-3. Apple verifies the organization — this can take a few days (sometimes they phone to confirm).
-   You'll get an email when approved. **Nothing more to do here until that email arrives.**
+   (You can still use that address — an individual account just means Apple verifies *you*, it
+   doesn't force you to use a personal email.)
+2. Choose **Individual / Sole Proprietor** (NOT Organization). No D-U-N-S number is asked for.
+3. Enter your name **exactly as it appears on your government ID**. Apple warns that a nickname or a
+   company name here delays or fails approval — so no "Khavion", just your legal name. ⚠️ This is
+   the name that will show as the seller on your App Store page, and it can't be changed later.
+4. Give a real street address (Apple's membership record doesn't accept PO boxes) and pay the $99.
+   This address is for Apple's records only — it is **not** published anywhere, because you'll be
+   declaring "not a trader" in the EU.
+5. Approval is usually quick — often same-day to a couple of days, since there's no company to
+   verify. You'll get an email. **Nothing more to do here until it arrives.**
 
-*(If the D-U-N-S wait becomes intolerable, an **Individual** account is faster to approve — but read
-"Why not just use a personal account?" above first. It is **not** a small cosmetic difference and it
-is **not** cleanly undoable: it would put your personal legal name on the App Store permanently and
-your home address on the Google Play listing. My recommendation is to wait out the D-U-N-S.)*
+*(One field I'll fill in later, not you: when I create the app record, App Store Connect asks
+whether you're an EU "trader." With no purchases in the app the honest answer is **no**, and that's
+what keeps your address and phone number off the listing. I'll set it and show you before anything
+goes public.)*
 
 ---
 
@@ -129,11 +121,14 @@ TestFlight for you instantly — no review needed. Just say so.)*
 
 ### 1b. Google Play — Android (doing this alongside Apple)
 
-Android is 100% ready too, and the **organization** account you're setting up **skips Google's
-12-tester / 14-day wait** — so it can launch on the same timeline as iOS.
+Android is 100% ready too. On a **personal** account there's one extra hoop — the 12-tester test —
+so **start Android early and let it run in the background while iOS ships.**
+
 1. Go to **play.google.com/console**, sign in with apps@khavion.com, pay the **$25 one-time** fee.
-2. Choose the **Organization** account type and verify with the **same D-U-N-S number** from the
-   step above (that's what exempts you from the 12-tester requirement).
+2. Choose the **Personal** account type. Google will verify your identity (name, address, and
+   possibly a photo ID or a utility bill). ⚠️ Use your real home address — Google rejects PO boxes
+   and virtual offices for personal accounts. It is **not** published, because the app takes no
+   money; only paid apps have to show an address.
 3. Then I'll walk you through two clicks: (a) create one **service account key** in Google Cloud
    (a permission file, like Apple's `.p8`) and grant it access in the Play Console, so I can upload
    builds headlessly, and (b) create the app entry. I'll fill the whole listing — title, description,
@@ -141,10 +136,22 @@ Android is 100% ready too, and the **organization** account you're setting up **
    `docs/store/PLAY_LISTING.md` and `fastlane/metadata/android/`.
 4. **Note:** Google requires the very first build to be uploaded manually once (their rule) before my
    headless uploads work — I'll hand you that one file and the exact click.
-5. You click publish when you're ready.
 
-**Recommendation: YES — both stores in parallel via the organization accounts; the D-U-N-S number is
-the shared gate, so start that first.**
+**The 12-tester requirement — what you actually have to do.** Before Google will let the app go
+public, 12 people must be signed up to a private test and *stay* signed up for 14 days in a row.
+- **Who:** any 12 adults with a Google account — family, friends, people at the masjid. They do
+  **not** need Android phones to count as opted in, but real Android users give you useful feedback,
+  so aim for a mix.
+- **What they do:** I'll give you one link. They open it, tap "Become a tester," and that's it.
+  About 30 seconds each.
+- **The one rule that trips people up:** they must not leave the test. The 14 days restart if you
+  drop below 12. So sign up **15–16 people** for slack, and tell them "don't tap Leave."
+- **Timing:** get the 12 signed up on day 1, wait 14 days, then apply for production access
+  (Google reviews that in about a week). So Android is roughly **3 weeks behind** the day you
+  create the account — which is exactly why it's worth starting now, in parallel with Apple.
+
+**Recommendation: YES — create the Google Play account at the same time as the Apple one, and
+start collecting your 12 testers immediately. iOS doesn't wait for any of this.**
 
 ---
 
@@ -177,21 +184,16 @@ I've **already recorded those exact URLs** in the store metadata, so nothing els
 link added to the khavion.com nav, say the word — but the `.html` URLs work perfectly for both
 stores.) Full instructions: `docs/legal/README.md`.
 
-### 3. RevenueCat key — only if you want the "tip jar" live (free, 10 minutes)
+### 3. ~~RevenueCat key / tip jar~~ — CLOSED 2026-07-29, nothing for you to do
 
-**What this is:** The optional "Support DeenDawn's development" tip jar is fully built. Without a
-key it simply shows "Tips aren't set up in this build yet," which is honest and fine for testing.
-To make it live you need one free key.
+You decided the app takes no money at all, so I removed the tip jar, the payment library, and the
+tip text from the store listings. There is no key to sign up for and no account to create. **Item
+closed — skip it.**
 
-**Steps (free):** 1) go to **revenuecat.com**, click "Start for free," sign up; 2) create a
-**project** named DeenDawn; 3) add an **App Store** app; when it asks for the bundle ID, paste
-exactly **com.khavion.deendawn**; 4) it shows a **Public API key** starting with **appl_** — copy
-it and paste it to me. (The actual tip products also need your Apple Developer account from item 1,
-so it's fine to do both together.)
-
-**When it's needed:** Any time you want the tip jar working. Not required for testing.
-
-**My recommendation: OPTIONAL — skip for your first phone test; do it before public launch.**
+Two knock-on effects, both good: the App Store "Data Not Collected" answer is now unconditional
+(there's no payment company touching the app at all), and your address stays off the Google Play
+listing. If you ever want to revisit this, tell me — but note it's the one change that would
+republish your home address, so it's a real decision, not a toggle.
 
 ### 4. A five-minute prayer-times spot check
 
@@ -214,11 +216,17 @@ recordings we're legally allowed to put in the app. The Quran's words belong to 
 
 **What the research found (done 2026-07-21):** I researched this thoroughly. The uncomfortable but
 honest headline: **almost none** of the popular "free Quran audio" websites actually post written
-permission saying "you may put this in your app." Because DeenDawn has a tip jar, we count as
-slightly commercial, so "free for personal use only" audio is legally risky for us — I won't ship
-on a "probably fine." Specifically: **Mishary Alafasy** (the most popular reciter) does **not**
-allow free use — ruled out. **Live Quran radio streams** are also out (no permission to relay them,
-and it would break our "no other companies' servers" privacy promise).
+permission saying "you may put this in your app." **Live Quran radio streams** are out regardless
+(no permission to relay them, and it would break our "no other companies' servers" privacy promise).
+
+**⚠️ This item improved on 2026-07-29 and I owe you a re-check.** The original research assumed the
+tip jar made us "slightly commercial," which is what ruled out several reciters whose audio is
+offered for **non-commercial use only** — including **Mishary Alafasy**, the most popular one. Now
+that the app takes no money at all, has no ads, and has no revenue of any kind, our non-commercial
+claim is much stronger. That doesn't automatically clear anyone — "non-commercial" is a fuzzy term
+and I still want permission in writing rather than a "probably fine" — but it plausibly re-opens
+options I'd closed. **I'll redo that piece of research and report back**; nothing below is blocked
+on it, and it may end up giving you a better-known reciter than the current plan.
 
 **The one good path I found:** a library called **QUL** (qul.tarteel.ai, run by the makers of the
 Tarteel app). It's the **only** source that states *in writing* you may use its data in commercial
@@ -279,7 +287,7 @@ approved — flag it only if you object.
 
 ## READY FOR HUMAN SUBMIT — the path from here to the App Store
 
-The app is **feature-complete for a first test version**: **397 automated tests green** (47 suites),
+The app is **feature-complete for a first test version**: **412 automated tests green** (52 suites),
 including an offline test that proves everything works without internet. Store text (description,
 keywords, reviewer notes, privacy answers = "Data Not Collected") is drafted in `fastlane/metadata/`.
 The build pipeline is now configured too: **`eas.json` exists** with build + submit profiles, so
@@ -287,10 +295,12 @@ the moment your keys (item 1) land I can build and upload with essentially one c
 
 **You (whenever you're ready — walkthroughs above):**
 1. **Apple setup (item 1)** — the single item that unlocks your first real test on your phone.
-2. Support + Privacy web pages (item 2) — only for a public release; I draft them.
-3. RevenueCat key (item 3) — optional; the app is fine without it.
-4. The 5-minute prayer spot check (item 4) — before outside testers.
-5. Recitation recordings decision (item 5) — until then the listen feature hides itself.
+2. **Google Play setup + start collecting 12 testers (item 1b)** — start it the same day as Apple;
+   the 14-day clock is the long pole on Android and it runs in the background.
+3. Support + Privacy web pages (item 2) — only for a public release; I draft them.
+4. ~~RevenueCat key~~ (item 3) — **closed, nothing to do.**
+5. The 5-minute prayer spot check (item 4) — before outside testers.
+6. Recitation recordings decision (item 5) — until then the listen feature hides itself.
 
 **Reviewers (before PUBLIC release, not for your own TestFlight testing):**
 6. Urdu/Arabic review (item 6) — English-only shipping is fine meanwhile.

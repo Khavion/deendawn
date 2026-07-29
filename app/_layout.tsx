@@ -92,7 +92,6 @@ function ThemedNavigation() {
         <Stack.Screen name="zakat" options={{ headerBackButtonDisplayMode: 'minimal' }} />
         <Stack.Screen name="library" options={{ headerBackButtonDisplayMode: 'minimal' }} />
         <Stack.Screen name="about" options={{ headerBackButtonDisplayMode: 'minimal' }} />
-        <Stack.Screen name="tips" options={{ headerBackButtonDisplayMode: 'minimal' }} />
         <Stack.Screen name="onboarding" options={{ headerShown: false, gestureEnabled: false }} />
         <Stack.Screen name="thinker/[key]" options={{ headerBackButtonDisplayMode: 'minimal' }} />
         <Stack.Screen name="work/[id]" options={{ headerBackButtonDisplayMode: 'minimal' }} />

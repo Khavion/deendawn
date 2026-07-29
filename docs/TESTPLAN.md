@@ -7,7 +7,7 @@
 - Golden: quran.db hashes vs content.lock, ayah counts, first/last ayah byte-equality.
 - Component: RTL layout, translation toggle, bookmark flows.
 - Accessibility audits (2026-07-13, on-device, no defects): Dynamic Type at accessibility-extra-large (Today/Ask/Tips/Zakat — 1.4x cap holds) and RTL/Arabic mirroring of the newer screens (Ask source toggle, surah audio bar). Method + Maestro RTL selector gotchas in DECISIONS.
-- E2E (Maestro, iOS Simulator): onboarding, view times, change method, open surah, play audio (dev set), tasbih, zakat, tip sheet (sandbox), airplane-mode offline suite.
+- E2E (Maestro, iOS Simulator): onboarding, view times, change method, open surah, play audio (dev set), tasbih, zakat, airplane-mode offline suite. (`e2e/tips.yaml` deleted 2026-07-29 with the tip jar.)
 - Offline suite (e2e/offline.yaml): runs against a RELEASE build with Metro and the dev audio server stopped — the simulator cannot toggle airplane mode, so "no servers of any kind" is the automated proxy; the flow covers onboarding → prayer times → Quran text → Ask counts → qibla → tasbih → zakat → calendar plus five offline cold starts, and asserts the audio bar is absent in release builds without a configured source.
 
 ## Device pass (human)
@@ -19,7 +19,7 @@ Checks that cannot run in the simulator; verify on a physical iPhone before exte
 - [ ] Adhan notification fires with sound on a locked device; silent-switch and Focus behavior.
 - [ ] Notification rescheduling after device reboot.
 - [ ] Background audio continues under screen lock; lock-screen controls work.
-- [ ] IAP sandbox purchase + restore on device.
+- [x] ~~IAP sandbox purchase + restore on device.~~ N/A from 2026-07-29 — the app has no in-app purchases. Instead, verify the negative once on device: no purchase UI anywhere, and the App Store page shows no "In-App Purchases" badge.
 - [ ] Cold start < 2s on iPhone 12-class hardware.
 - [ ] Navigation frame profile on oldest supported hardware: open al-Baqara from the surah list, switch all tabs, language-switch restart — no visible hitching (E7).
 - [ ] Prayer-countdown widget (docs/WIDGET.md): add to Home Screen, confirm next prayer + live countdown, verify timeline flips at a prayer boundary and across midnight without opening the app.

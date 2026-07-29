@@ -268,3 +268,51 @@ Constitution requires "one clearly-redistributable translation from Tanzil's col
 - **Play listing prepped:** `fastlane/metadata/android/en-US/` (title 25c, short 72c, full ~1.9k) + `docs/store/PLAY_LISTING.md` (Data Safety = No data collected, content rating, target-API note, asset requirements).
 - **Kept `supportsTablet: true`** (no reduction of reach) — means the App Store listing also needs iPad screenshots; I'll capture both iPhone 6.9" and iPad sizes in the screenshot pass rather than dropping iPad support.
 - **Screenshots:** current fastlane shots are the wrong size (1206×2622); Apple needs 6.9" (1320×2868). Final store screenshots should come from a badge-free RELEASE build; I can capture the badge-free screens (Today/Qibla/Calendar/Tasbih/Zakat/Quran-list) now from the dev build since DEV badges are Quran-reader-only.
+
+## 2026-07-29 — Personal store accounts + ZERO monetization (owner decision, supersedes prior monetization + account-type plans)
+
+**Owner decision, made after being shown the trade-offs twice and reaffirming both times.** Publish
+under **personal/individual** developer accounts on both stores, and remove **all** monetization.
+Constitution rule 3 amended accordingly; the earlier "tip jar is the only revenue surface" rule is
+void.
+
+**What was verified before deciding** (Apple/Google primary sources, 2026-07-29):
+- Apple forces an individual enrollment's public seller name to the enrollee's **legal personal
+  name**; trade names ("Khavion Apps") are organization-only, and the name is set once at first
+  app-record creation and is not editable afterwards. Escape hatches are unreliable: a Jan-2026
+  forum report says an individual→organization conversion left the personal name in place, and the
+  fallback (app transfer to a second account) permanently destroys promo-code generation.
+- Google publishes a personal developer's **full address** only for "merchant" accounts, i.e. those
+  monetizing via paid apps or IAP — and personal-account verification rejects PO boxes / virtual
+  offices. **Removing the tip jar is therefore what keeps the owner's home address off the listing.**
+- Google's **12-tester × 14-continuous-day** closed-test gate applies to all personal accounts
+  created after 2023-11-13, regardless of monetization. It does NOT go away by dropping the tip jar;
+  it is now the long pole on Android (~3 weeks from account creation).
+- With zero monetization the app declares **non-trader** under the EU DSA, so Apple publishes no
+  address or phone on EU product pages. (Non-trader apps stay in the EU; users see a notice that EU
+  consumer-protection rules don't apply. Only *failing to declare* causes EU removal.)
+
+**Trade-offs the owner explicitly accepted:** legal name public on the App Store permanently; no
+revenue from this app ever; re-adding any purchase surface later would republish the home address on
+Play and is treated as a one-way door.
+
+**Implementation:** deleted `app/tips.tsx`, `src/features/tips/**`, `e2e/tips.yaml`, the
+`react-native-purchases` dependency, `REVENUECAT_IOS_KEY`, and the `tips`/`more.tips` keys in all
+three locales (surgical line-range deletion, not a JSON re-serialize, to avoid touching Arabic/Urdu
+bytes — rule 1). Store copy, review notes, privacy answers and PLAY_LISTING updated to state there
+are no purchases. 412 tests green (was 423; the 11 tip tests went with the feature).
+
+**Kept deliberately:** `fastlane/metadata/copyright.txt` still reads "2026 Khavion LLC" — the LLC can
+own the copyright regardless of who holds the store account, and Apple does not verify that field.
+Flagged to the owner; trivial to change to his personal name if he prefers them to match.
+
+**⚠️ Two earlier decisions were justified by "the tip jar makes us commercial-adjacent" and that
+premise is now false. Both need re-checking — neither is assumed reversed:**
+1. **Recitation audio (2026-07-21, above):** Mishary Alafasy and other non-commercial-only sets were
+   ruled out on commercial grounds. A free, ad-free, revenue-free app is a materially stronger
+   non-commercial claim. Re-run that research; written permission is still required either way.
+   Flagged in BLOCKERS #5.
+2. **Word-by-word Quran data (2026-07-12, top of this file):** QUL/hablullah WBW is CC BY-NC-**ND**.
+   The **NC** objection is resolved by zero monetization, but **ND** (no derivatives) independently
+   blocks building a restructured/indexed database from it, so the conclusion probably still stands.
+   Re-read the licence before acting; do not assume either way.
