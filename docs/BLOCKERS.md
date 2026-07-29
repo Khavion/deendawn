@@ -24,13 +24,37 @@ apps@khavion.com.** Good news — the **organization** route is actually the *be
 publishes under "Khavion Apps" and it **skips Google's 12-tester / 14-day waiting period** that
 personal accounts have. So both stores can go live together, fast.
 
+**Why not just use a personal account?** (You asked on 2026-07-29. Short answer: don't — and it has
+nothing to do with the app being free.) These rules key off *who you are* and *whether any money at
+all changes hands*, not off ads or tracking. Three concrete reasons, all verified against Apple's
+and Google's own help pages:
+1. **Apple would print your personal legal name on the App Store, permanently.** On a personal
+   account Apple forces the developer name to be your legal name — "Khavion Apps" is not an option,
+   trade names are organization-only. You set that name once, when the first app record is created,
+   and Apple's docs say it can never be edited afterwards. The one reported attempt at fixing it
+   later (converting personal → organization) says the personal name *stayed*. The only other escape
+   is transferring the app to a second account, which permanently kills promo codes for it.
+2. **Google would publish your home address.** The tip jar makes you a "merchant" in Google's eyes —
+   $1 counts the same as $1M. Merchant accounts must show their full address on the Play listing,
+   and personal accounts can't use a PO box or virtual address (they verify against a utility bill
+   or ID). An organization account shows the LLC's business address instead.
+3. **Google's 12-tester / 14-day gate**, as noted above — personal accounts only.
+
+Costs are identical either way ($99 + $25), so a personal account buys nothing except skipping the
+D-U-N-S wait. Recommendation: **stay with the organization plan.**
+
 **One shared first step for organization accounts (do this first — it takes the longest):** both
-Apple and Google require a free **D-U-N-S number** for your business ("Khavion Apps"). It's a free
-business ID from Dun & Bradstreet.
+Apple and Google require a free **D-U-N-S number** for your business. It's a free business ID from
+Dun & Bradstreet.
+- **Use the legal entity name — "Khavion LLC" — not "Khavion Apps".** Apple and Google enroll the
+  *registered company*, and both explicitly reject DBAs/trade names at the enrollment step. "Khavion
+  Apps" is still what customers see: it gets set separately, as the developer name, inside App Store
+  Connect (organization accounts are allowed a trade name there; personal accounts are not).
 - **Get it here:** Apple provides a free D-U-N-S lookup/request tool at
-  **developer.apple.com/enroll/duns-lookup**. Look up "Khavion Apps" — if it's not found, request a
-  new one on that page. A brand-new number can take a few days to a couple of weeks (there's a free
-  expedite for Apple enrollment). **Start this now**, because everything else waits on it.
+  **developer.apple.com/enroll/duns-lookup**. Look up "Khavion LLC" — if it's not found, request a
+  new one on that page. Have your Texas LLC registration document handy; D&B may phone you to check
+  details. **Start this now**, because everything else waits on it: Apple says ~5 business days but
+  Dun & Bradstreet's own page says up to **30 business days**, so plan for the longer number.
 - The *same* D-U-N-S number works for both the Apple and Google organization accounts.
 
 **What it costs:** Apple **$99/year**; Google Play **$25 one-time**. The D-U-N-S number and
@@ -57,14 +81,17 @@ Do them in order and paste me what each gives you.
 
 1. Go to **developer.apple.com/programs/enroll** and sign in with the Apple ID for apps@khavion.com.
 2. Choose **Organization / Company** (not Individual). It will ask for your **D-U-N-S number** (from
-   the step above), your legal entity name ("Khavion Apps"), address, a work email, and the $99
-   payment. You'll confirm you have authority to sign for the organization.
+   the step above), your legal entity name (**"Khavion LLC"** — the registered company, not the
+   "Khavion Apps" brand name), address, a work email, and the $99 payment. You'll confirm you have
+   authority to sign for the organization. Apple also checks that **khavion.com** is live and
+   plausibly belongs to Khavion LLC, so make sure it isn't a parked/registrar placeholder page.
 3. Apple verifies the organization — this can take a few days (sometimes they phone to confirm).
    You'll get an email when approved. **Nothing more to do here until that email arrives.**
 
-*(If getting the D-U-N-S / organization verification turns into a long wait and you'd rather launch
-sooner, an **Individual** account is instant-ish and can publish immediately — just tell me and
-I'll adjust. The only difference is the seller name shown on the store.)*
+*(If the D-U-N-S wait becomes intolerable, an **Individual** account is faster to approve — but read
+"Why not just use a personal account?" above first. It is **not** a small cosmetic difference and it
+is **not** cleanly undoable: it would put your personal legal name on the App Store permanently and
+your home address on the Google Play listing. My recommendation is to wait out the D-U-N-S.)*
 
 ---
 
