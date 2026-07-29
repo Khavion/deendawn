@@ -68,7 +68,8 @@ describe('SurahListScreen', () => {
   test('search mode shows FTS hits and navigates with the ayah target', async () => {
     const view = await render(wrap(<SurahListScreen />));
     await fireEvent.changeText(view.getByTestId('quran-search'), 'merciful');
-    const hit = view.getByTestId('result-1-1');
+    // Search is debounced off the keystroke path — poll for the result row.
+    const hit = await view.findByTestId('result-1-1');
     expect(hit).toBeOnTheScreen();
     await fireEvent.press(hit);
     expect(mockRouterPush).toHaveBeenCalledWith('/surah/1?ayah=1');

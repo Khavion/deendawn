@@ -1,10 +1,9 @@
 import { FlashList, type FlashListRef } from '@shopify/flash-list';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  InteractionManager,
   Pressable,
   Share,
   StyleSheet,
@@ -15,7 +14,7 @@ import {
 } from 'react-native';
 
 import {
-  isBookmarked,
+  loadBookmarks,
   loadNightWarm,
   loadReadingScale,
   loadShowTranslation,
@@ -55,23 +54,19 @@ export function SurahScreen() {
 
   const surah = useMemo(() => getSurah(db, surahNumber), [db, surahNumber]);
   const targetAyah = params.ayah ? Number(params.ayah) : null;
-  // E7: keep the push animation clean — heavy row materialization waits for the
-  // transition to finish (Interactions), then the list mounts. EXCEPTION: when
-  // deep-linking to a specific ayah (bookmarks, verse-of-day, search), load the
-  // rows synchronously so FlashList's initialScrollIndex lands on that ayah at
-  // mount instead of opening at the top.
-  const [ayahs, setAyahs] = useState<AyahRow[]>(() =>
-    targetAyah ? listAyahs(db, surahNumber) : []
-  );
-  useEffect(() => {
-    if (targetAyah) return;
-    const task = InteractionManager.runAfterInteractions(() => {
-      setAyahs(listAyahs(db, surahNumber));
-    });
-    return () => task.cancel();
-  }, [db, surahNumber, targetAyah]);
+  // Rows load synchronously: the bundled db read is millisecond-fast and
+  // FlashList v2 mounts rows lazily, so the push stays clean and the reader
+  // never shows an empty page. (Replaced the deprecated InteractionManager
+  // deferral, which caused a blank frame after every surah tap.)
+  const ayahs = useMemo(() => listAyahs(db, surahNumber), [db, surahNumber]);
   const [showTranslation, setShowTranslation] = useState(() => loadShowTranslation(store));
   const [bookmarkVersion, setBookmarkVersion] = useState(0);
+  // One bookmark read per change, not one KV read + JSON parse per visible row
+  // per render — that was directly on the 60fps scroll budget.
+  const bookmarkSet = useMemo(() => {
+    return new Set(loadBookmarks(store).map((b) => `${b.surah}:${b.ayah}`));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [store, bookmarkVersion]);
   const listRef = useRef<FlashListRef<AyahRow>>(null);
   // Don't record a last-read position until any initial deep-link scroll has
   // settled — otherwise the top-of-surah render fires first and overwrites the
@@ -240,7 +235,7 @@ export function SurahScreen() {
           </>
         }
         renderItem={({ item }) => {
-          const bookmarked = isBookmarked(store, { surah: item.surah, ayah: item.ayah });
+          const bookmarked = bookmarkSet.has(`${item.surah}:${item.ayah}`);
           return (
             <View
               style={[styles.ayahBlock, { borderBottomColor: t.border }]}

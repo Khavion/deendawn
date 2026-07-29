@@ -1,7 +1,6 @@
 import { render } from '@testing-library/react-native';
 import Database from 'better-sqlite3';
 import React from 'react';
-import { InteractionManager } from 'react-native';
 import path from 'node:path';
 
 import { SurahScreen } from '../SurahScreen';
@@ -41,28 +40,18 @@ const wrap = (store = createMemoryKVStore()) => (
   </SettingsProvider>
 );
 
-describe('SurahScreen deep-link to an ayah', () => {
-  beforeEach(() => {
-    // Stub the post-transition deferral so ONLY the synchronous deep-link load
-    // can populate the list — this is exactly the on-device timing that used to
-    // leave the reader scrolled to the top instead of the target ayah.
-    jest
-      .spyOn(InteractionManager, 'runAfterInteractions')
-      .mockReturnValue({ then: jest.fn(), done: jest.fn(), cancel: jest.fn() } as never);
-  });
-  afterEach(() => jest.restoreAllMocks());
-
-  test('with an ayah param, the target verse is loaded at mount (no deferral)', async () => {
+describe('SurahScreen row loading', () => {
+  test('with an ayah param, the target verse is loaded at mount', async () => {
     mockSearchParams = { id: '2', ayah: '255' };
     const view = await render(wrap());
     expect(view.getByTestId('ayah-2-255')).toBeOnTheScreen();
   });
 
-  test('without an ayah param, rows wait for the post-transition load', async () => {
+  test('without an ayah param, rows are also present at mount (no deferral, no blank page)', async () => {
     mockSearchParams = { id: '2' };
     const view = await render(wrap());
-    // Deferral stubbed out → no rows yet (proves ordinary opens stay deferred).
-    expect(view.queryByTestId('ayah-2-1')).toBeNull();
+    // The InteractionManager deferral is gone: the reader must never show an
+    // empty page after a surah tap.
+    expect(view.getByTestId('ayah-2-1')).toBeOnTheScreen();
   });
-
 });

@@ -10,6 +10,7 @@ import { loadLastRead } from '../readerState';
 import { AyahRow, listSurahs, searchAyahs } from '../repo';
 import { AppText, GoldFrameCard, SectionRule } from '@/src/components/ui';
 import { useSettings } from '@/src/features/settings/SettingsContext';
+import { useDebouncedValue } from '@/src/lib/useDebouncedValue';
 import {
   elevation,
   featuredGradient,
@@ -44,9 +45,10 @@ export function SurahListScreen() {
 
   const surahs = useMemo(() => listSurahs(db), [db]);
   const lastRead = loadLastRead(store);
+  const debouncedQuery = useDebouncedValue(query, 150);
   const results: AyahRow[] = useMemo(
-    () => (query.trim().length >= 2 ? searchAyahs(db, query, 50) : []),
-    [db, query]
+    () => (debouncedQuery.trim().length >= 2 ? searchAyahs(db, debouncedQuery, 50) : []),
+    [db, debouncedQuery]
   );
   const searching = query.trim().length >= 2;
 

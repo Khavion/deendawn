@@ -7,6 +7,7 @@ import { Pressable, StyleSheet, TextInput, View } from 'react-native';
 
 import { openLibraryDb } from '../libraryDb';
 import { searchSections } from '../repo';
+import { useDebouncedValue } from '@/src/lib/useDebouncedValue';
 import { THINKERS } from '../thinkers';
 import { AppText, Skeleton } from '@/src/components/ui';
 import { radius, spacing } from '@/src/lib/theme/tokens';
@@ -27,9 +28,10 @@ export function LibraryScreen() {
     };
   }, []);
 
+  const debouncedQuery = useDebouncedValue(query, 150);
   const results = useMemo(
-    () => (db && query.trim().length >= 3 ? searchSections(db, query, 25) : []),
-    [db, query]
+    () => (db && debouncedQuery.trim().length >= 3 ? searchSections(db, debouncedQuery, 25) : []),
+    [db, debouncedQuery]
   );
   const searching = query.trim().length >= 3;
 
