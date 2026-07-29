@@ -15,6 +15,13 @@
         "ITSAppUsesNonExemptEncryption": false,
         "UIBackgroundModes": [
           "audio"
+        ],
+        "CFBundleDevelopmentRegion": "en",
+        "CFBundleAllowMixedLocalizations": true,
+        "CFBundleLocalizations": [
+          "en",
+          "ur",
+          "ar"
         ]
       }
     },
@@ -47,9 +54,9 @@
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff",
+          "backgroundColor": "#F7F6F2",
           "dark": {
-            "backgroundColor": "#000000"
+            "backgroundColor": "#15181D"
           }
         }
       ],
@@ -67,11 +74,26 @@
       [
         "expo-location",
         {
-          "locationWhenInUsePermission": "DeenDawn uses your location only on this device to point the qibla compass and compute prayer times. It is never transmitted anywhere."
+          "locationWhenInUsePermission": "DeenDawn uses your location only on this device to point the qibla compass and compute prayer times. It is never transmitted anywhere.",
+          "locationAlwaysAndWhenInUsePermission": false,
+          "locationAlwaysPermission": false
         }
       ],
-      "expo-audio",
-      "expo-asset"
+      [
+        "expo-audio",
+        {
+          "microphonePermission": false
+        }
+      ],
+      "expo-asset",
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "deploymentTarget": "16.4"
+          }
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,
