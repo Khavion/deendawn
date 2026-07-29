@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Animated, type DimensionValue, type StyleProp, type ViewStyle } from 'react-native';
 
 import { duration, radius as radii } from '@/src/lib/theme/tokens';
@@ -22,7 +22,7 @@ export function Skeleton({ width = '100%', height = 16, radius = radii.control, 
   const t = useTokens();
   const { flat, reduceMotion } = useDeviceTier();
   const animate = !flat && !reduceMotion;
-  const opacity = useRef(new Animated.Value(0.6)).current;
+  const [opacity] = useState(() => new Animated.Value(0.6));
 
   useEffect(() => {
     if (!animate) return;

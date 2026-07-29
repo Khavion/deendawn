@@ -62,11 +62,12 @@ export function TodayScreen() {
   const location = resolveLocation(settings);
   const config = useMemo(() => resolvePrayerConfig(settings), [settings]);
 
+  // Recompute times when the calendar day flips, not every tick.
+  const dayKey = now.toDateString();
   const times = useMemo(
     () => (location ? computeDayTimes(location, now, config) : null),
-    // Recompute when the calendar day flips, not every tick.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [location?.latitude, location?.longitude, config, now.toDateString()]
+    [location?.latitude, location?.longitude, config, dayKey]
   );
   const next = location ? nextPrayer(location, now, config) : null;
   const period = times ? currentPeriod(now, times) : 'day';

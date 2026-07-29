@@ -16,6 +16,35 @@ import { useTokens } from '@/src/lib/theme/useTokens';
 
 type Step = 'welcome' | 'city' | 'notifications';
 
+function StepButton({
+  label,
+  onPress,
+  subtle,
+  testID,
+}: {
+  label: string;
+  onPress: () => void;
+  subtle?: boolean;
+  testID: string;
+}) {
+  const t = useTokens();
+  return (
+    <Pressable
+      accessibilityRole="button"
+      testID={testID}
+      onPress={onPress}
+      style={[
+        styles.button,
+        subtle ? { borderColor: t.border, borderWidth: 1 } : { backgroundColor: t.accent },
+      ]}
+    >
+      <AppText variant="bodyStrong" style={{ color: subtle ? t.textSecondary : t.textOnAccent }}>
+        {label}
+      </AppText>
+    </Pressable>
+  );
+}
+
 export function OnboardingScreen() {
   const t = useTokens();
   const { t: tr } = useTranslation();
@@ -37,35 +66,6 @@ export function OnboardingScreen() {
     finish();
   };
 
-  const Button = ({
-    label,
-    onPress,
-    subtle,
-    testID,
-  }: {
-    label: string;
-    onPress: () => void;
-    subtle?: boolean;
-    testID: string;
-  }) => (
-    <Pressable
-      accessibilityRole="button"
-      testID={testID}
-      onPress={onPress}
-      style={[
-        styles.button,
-        subtle ? { borderColor: t.border, borderWidth: 1 } : { backgroundColor: t.accent },
-      ]}
-    >
-      <AppText
-        variant="bodyStrong"
-        style={{ color: subtle ? t.textSecondary : t.textOnAccent }}
-      >
-        {label}
-      </AppText>
-    </Pressable>
-  );
-
   return (
     <View
       style={[
@@ -86,7 +86,7 @@ export function OnboardingScreen() {
           <AppText variant="reading" style={[styles.center, { color: t.textSecondary }]}>
             {tr('onboarding.welcomeBody')}
           </AppText>
-          <Button
+          <StepButton
             label={tr('onboarding.begin')}
             onPress={() => setStep('city')}
             testID="ob-begin"
@@ -103,13 +103,13 @@ export function OnboardingScreen() {
           <AppText variant="reading" style={[styles.center, { color: t.textSecondary }]}>
             {tr('onboarding.cityBody')}
           </AppText>
-          <Button
+          <StepButton
             label={location ? location.label : tr('onboarding.chooseCity')}
             onPress={() => setPickerOpen(true)}
             testID="ob-city"
           />
           {location && (
-            <Button
+            <StepButton
               label={tr('common.close')}
               onPress={() => setStep('notifications')}
               subtle
@@ -137,12 +137,12 @@ export function OnboardingScreen() {
           <AppText variant="reading" style={[styles.center, { color: t.textSecondary }]}>
             {tr('onboarding.notifBody')}
           </AppText>
-          <Button
+          <StepButton
             label={tr('onboarding.enableReminders')}
             onPress={() => void enableReminders()}
             testID="ob-reminders"
           />
-          <Button label={tr('onboarding.skip')} onPress={finish} subtle testID="ob-skip" />
+          <StepButton label={tr('onboarding.skip')} onPress={finish} subtle testID="ob-skip" />
         </View>
       )}
     </View>
