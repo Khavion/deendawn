@@ -86,15 +86,16 @@ function PickerModal<T extends string>({
   closeLabel: string;
   hint?: string;
 }) {
-  const insets = useSafeAreaInsets();
   const tk = useTokens();
   return (
-    <Modal visible={visible} animationType="slide" onRequestClose={onClose}>
+    <Modal
+      visible={visible}
+      animationType="slide"
+      presentationStyle="pageSheet"
+      onRequestClose={onClose}
+    >
       <View
-        style={[
-          styles.modalContainer,
-          { backgroundColor: tk.bgCanvas, paddingTop: insets.top + 12 },
-        ]}
+        style={[styles.modalContainer, { backgroundColor: tk.bgCanvas, paddingTop: spacing.l }]}
       >
         <View style={styles.modalHeader}>
           <AppText variant="subtitle">{title}</AppText>

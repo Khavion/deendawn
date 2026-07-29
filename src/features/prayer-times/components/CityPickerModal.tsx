@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FlashList } from '@shopify/flash-list';
 import { Modal, Pressable, StyleSheet, TextInput, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AppText } from '@/src/components/ui';
 import { City } from '@/src/features/settings/cities';
@@ -19,16 +18,20 @@ export function CityPickerModal({
   onClose: () => void;
   onSelect: (city: City) => void;
 }) {
-  const insets = useSafeAreaInsets();
   const tk = useTokens();
   const { t } = useTranslation();
   const [query, setQuery] = useState('');
   const results = searchCities(query, 25);
 
   return (
-    <Modal visible={visible} animationType="slide" onRequestClose={onClose}>
+    <Modal
+      visible={visible}
+      animationType="slide"
+      presentationStyle="pageSheet"
+      onRequestClose={onClose}
+    >
       <View
-        style={[styles.container, { backgroundColor: tk.bgCanvas, paddingTop: insets.top + 12 }]}
+        style={[styles.container, { backgroundColor: tk.bgCanvas, paddingTop: spacing.l }]}
       >
         <View style={styles.header}>
           <AppText variant="subtitle">{t('cityPicker.title')}</AppText>
