@@ -368,3 +368,29 @@ Result: eslint 0 errors / 6 warnings (the 6 are pre-existing and unchanged), tsc
   navigation subtree mounts (fonts + quran.db Suspense both resolved), 200ms fade. Splash bg colors
   moved off pure white/black to the canvas tokens (`#F7F6F2` / `#15181D`) — pure black violated the
   app's own halation rule.
+
+## 2026-07-29 — Expo SDK 54 → 57 in one jump (owner pre-authorized; research-backed)
+
+- **Why:** SDK 57 (RN 0.86) is the current SDK; 56 carries the one breaking change (expo-router
+  forks React Navigation) and 57 adds none on top, so one jump = one migration. The upgrade's
+  concrete win for this session: expo-router Native Tabs on a maintained API (alpha, stabilizing
+  ~SDK 58), precompiled Expo modules (faster clean builds), and staying inside Expo's support
+  window. System Liquid Glass (headers/sheets/alerts) was already free on Xcode 26 builds of 54.
+- **The gate that made it safe:** llama.rn 0.12.8 had zero *reported* RN 0.86 issues but zero
+  positive confirmation either — treated as the go/no-go. It compiled + registered + the app ran
+  cleanly on both form factors. Full gates green (tsc/eslint/jest 412 + checksums/xcodebuild).
+- **Reanimated removal REVERSED:** the plan (brief §2: "use it deliberately or remove it") assumed
+  reanimated was removable dead weight. It is not removable — expo-router 57 hard-depends on it via
+  react-native-drawer-layout. Kept at the SDK pin (4.5.0). "Use it deliberately" remains open for
+  the qibla needle (Phase 3), which is the one genuine candidate.
+- **FlashList pinned DOWN 2.3.2 → 2.0.2 by `expo install --fix`** (Expo's known-good pin for 57).
+  Deep-link scrollToIndex precision re-verified live (2:255 lands exactly) — the behavior the app
+  cares most about survives. Left at Expo's pin; revisit only if list QA shows regressions.
+- **TypeScript 6.0.3 (SDK pin) stops auto-including `@types/*`** — `types: ["jest"]` added to
+  tsconfig. Remember this when adding any new global-types package.
+- **react-test-renderer must equal react's exact version** (19.2.3). Its caret range floating to
+  19.2.8 broke npm's whole tree layout (expo-modules-core failed to hoist → jest-expo unresolvable).
+  If react bumps, bump react-test-renderer in the same commit.
+- **New React Compiler lint rules (eslint-config-expo 57) adopted, not silenced.** They flagged five
+  real issues (render-scope component in onboarding, ref-during-render ×3, complex memo dep) — all
+  fixed properly; one justified inline suppression (expo-audio exposes finish only as a status flag).
