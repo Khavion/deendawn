@@ -1,6 +1,6 @@
 {
   "name": "deendawn",
-  "main": "expo-router/entry",
+  "main": "index.ts",
   "version": "1.0.0",
   "scripts": {
     "start": "expo start",
@@ -59,6 +59,7 @@
     "react-dom": "19.2.3",
     "react-i18next": "^17.0.9",
     "react-native": "0.86.0",
+    "react-native-android-widget": "^0.21.0",
     "react-native-gesture-handler": "~2.32.0",
     "react-native-reanimated": "4.5.0",
     "react-native-safe-area-context": "~5.7.0",

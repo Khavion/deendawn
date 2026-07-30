@@ -108,6 +108,25 @@
           }
         }
       ],
+      [
+        "react-native-android-widget",
+        {
+          "widgets": [
+            {
+              "name": "PrayerTimes",
+              "label": "Prayer times",
+              "description": "Today's prayer times with the next prayer highlighted",
+              "minWidth": "250dp",
+              "minHeight": "60dp",
+              "targetCellWidth": 4,
+              "targetCellHeight": 1,
+              "previewImage": "./assets/images/widget-preview.png",
+              "updatePeriodMillis": 1800000,
+              "resizeMode": "horizontal|vertical"
+            }
+          ]
+        }
+      ],
       "expo-font",
       "expo-image",
       "expo-status-bar",

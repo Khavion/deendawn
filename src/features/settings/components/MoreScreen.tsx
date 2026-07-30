@@ -346,6 +346,16 @@ export function MoreScreen() {
           {t(Platform.OS === 'android' ? 'more.notificationsHint_android' : 'more.notificationsHint')}
         </AppText>
         <ExactAlarmCard />
+        {Platform.OS === 'android' ? (
+          <AppPressable
+            accessibilityRole="button"
+            testID="setting-adhan-help"
+            onPress={() => router.push('/adhan-help')}
+            style={styles.helpLink}
+          >
+            <AppText variant="link">{t('more.adhanHelpLink')}</AppText>
+          </AppPressable>
+        ) : null}
         <View style={groupCard}>
           {ADHAN_PRAYERS.map((prayer) => (
             <View key={prayer} style={[styles.settingRowInline, { borderBottomColor: tk.border }]}>
@@ -647,6 +657,7 @@ const styles = StyleSheet.create({
   },
   title: { marginBottom: spacing.s },
   sectionHint: { marginBottom: spacing.m },
+  helpLink: { marginBottom: spacing.m, minHeight: 44, justifyContent: 'center' },
   sectionRule: { marginTop: spacing.xl, marginBottom: spacing.s },
   groupCard: {
     borderRadius: radius.card,

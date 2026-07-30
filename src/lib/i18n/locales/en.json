@@ -156,7 +156,8 @@
     "themeLight": "Light",
     "themeDark": "Dark",
     "haptics": "Touch feedback",
-    "hapticsDesc": "Gentle taps confirm actions"
+    "hapticsDesc": "Gentle taps confirm actions",
+    "adhanHelpLink": "Adhan not playing?"
   },
   "methods": {
     "MuslimWorldLeague": "Muslim World League",
@@ -312,5 +313,24 @@
     "title": "Screen not found",
     "body": "That link doesn't match anything in DeenDawn.",
     "home": "Go to Today"
+  },
+  "widget": {
+    "chooseCity": "Open Deen Dawn and choose your city"
+  },
+  "adhanHelp": {
+    "title": "Adhan not playing?",
+    "lead": "Android phones sometimes quiet apps to save battery. These checks fix nearly every missed adhan.",
+    "volumeTitle": "Volume & Do Not Disturb",
+    "volumeBody": "Adhan reminders play on the alarm volume. Check the alarm slider in your volume settings, and remember Do Not Disturb can silence notifications entirely.",
+    "exactTitle": "Exact timing",
+    "exactBody": "With \"Alarms & reminders\" allowed, the adhan arrives at the exact minute. If the card below is visible, timing is currently inexact.",
+    "batteryTitle": "Battery optimization",
+    "batteryBody": "If your phone puts Deen Dawn to sleep, reminders can stop after a few days. Find Deen Dawn in the battery optimization list and choose \"Don't optimize\".",
+    "batteryButton": "Open battery settings",
+    "oemTitle": "Phone-brand app killers",
+    "oemBody": "Some brands add their own aggressive battery managers on top of Android:",
+    "oemSamsung": "Samsung — Settings → Battery → Background usage limits: make sure Deen Dawn is not in \"Sleeping\" or \"Deep sleeping\" apps.",
+    "oemXiaomi": "Xiaomi / Redmi — Settings → Apps → Manage apps → Deen Dawn: enable Autostart, and set Battery saver to \"No restrictions\".",
+    "footer": "Deen Dawn never asks for special exemptions itself — these are your phone's own settings, and you stay in control."
   }
 }

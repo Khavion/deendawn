@@ -18,6 +18,7 @@ import { diffPlans, planNotifications, PlannedNotification } from './scheduler';
 import { log } from '../../lib/log';
 import { getUserKVStore, KVStore } from '../../lib/kvStore';
 import { loadSettings, resolveLocation, resolvePrayerConfig } from '../settings/settingsStore';
+import { refreshPrayerWidget } from '../widget/refreshWidget';
 
 /** Foreground presentation: show banner + play sound like a normal alert. */
 export function installForegroundHandler(): void {
@@ -192,6 +193,9 @@ export async function rescheduleAll(
     if (android) await deleteStaleChannels(desiredChannelIds);
     saveScheduleContext(store, context);
     if (android) recordGrant(store, exactGranted);
+    // Home-screen widget rides the same triggers (fire-and-forget no-op
+    // when no widget is placed or the lib is absent, e.g. in tests).
+    if (android) refreshPrayerWidget();
     log.info('notifications', 'rescheduled', {
       kept: actions.keepIds.length,
       cancelled: actions.cancelIds.length,

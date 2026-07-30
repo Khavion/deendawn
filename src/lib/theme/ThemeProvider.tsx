@@ -20,7 +20,8 @@ interface ThemeContextValue {
 
 export const ThemeContext = createContext<ThemeContextValue | null>(null);
 
-function readPref(store: KVStore): ThemePref {
+/** Exported for the headless Android widget renderer (no provider there). */
+export function readThemePref(store: KVStore): ThemePref {
   const raw = store.get(PREF_KEY);
   return (PREFS as string[]).includes(raw ?? '') ? (raw as ThemePref) : 'system';
 }
@@ -41,7 +42,7 @@ export function AppThemeProvider({
 }) {
   const kv = useMemo(() => store ?? getUserKVStore(), [store]);
   const system = useColorScheme() ?? 'light';
-  const [pref, setPrefState] = useState<ThemePref>(() => readPref(kv));
+  const [pref, setPrefState] = useState<ThemePref>(() => readThemePref(kv));
 
   const mode: ThemeMode = pref === 'system' ? (system === 'dark' ? 'dark' : 'light') : pref;
 
