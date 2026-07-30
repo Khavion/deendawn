@@ -1,6 +1,7 @@
 import { fireEvent, render } from '@testing-library/react-native';
 import Database from 'better-sqlite3';
 import React from 'react';
+import { StyleSheet } from 'react-native';
 import path from 'node:path';
 
 import { BookmarksScreen } from '../BookmarksScreen';
@@ -62,6 +63,21 @@ describe('BookmarksScreen', () => {
     const view = await render(wrap(store));
     await fireEvent.press(view.getByTestId('bookmark-open-2-255'));
     expect(mockRouterPush).toHaveBeenCalledWith('/surah/2?ayah=255');
+  });
+
+  test('saved verses honor the reader size preference', async () => {
+    const store = createMemoryKVStore({
+      'quran.bookmarks.v1': BOOKMARKS,
+      'quran.readingScale.v1': '1.3',
+    });
+    const view = await render(wrap(store));
+    const dbText = (
+      raw
+        .prepare('SELECT text_uthmani FROM ayahs WHERE surah=1 AND ayah=1')
+        .get() as { text_uthmani: string }
+    ).text_uthmani;
+    const arabicStyle = StyleSheet.flatten(view.getByText(dbText).props.style);
+    expect(arabicStyle.fontSize).toBeCloseTo(28 * 1.3);
   });
 
   test('removing a bookmark drops it from storage and the list', async () => {

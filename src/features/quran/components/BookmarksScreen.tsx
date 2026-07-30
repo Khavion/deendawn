@@ -5,12 +5,18 @@ import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, View } from 'react-native';
 
-import { loadBookmarks, toggleBookmark } from '../readerState';
+import { loadBookmarks, loadReadingScale, toggleBookmark } from '../readerState';
 import { AyahRow, getAyahsByRefs, listSurahs } from '../repo';
 import { AppText } from '@/src/components/ui';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { useSettings } from '@/src/features/settings/SettingsContext';
-import { fonts, quranType, spacing } from '@/src/lib/theme/tokens';
+import {
+  fonts,
+  fontScaleCaps,
+  MAX_ARABIC_EFFECTIVE_SCALE,
+  quranType,
+  spacing,
+} from '@/src/lib/theme/tokens';
 import { useTokens } from '@/src/lib/theme/useTokens';
 
 export function BookmarksScreen() {
@@ -20,6 +26,10 @@ export function BookmarksScreen() {
   const t = useTokens();
   const router = useRouter();
   const [version, setVersion] = useState(0);
+  // Same sizing rule as the reader: the user's A−/A+ pref applies here too,
+  // and its product with system Dynamic Type is clamped, never compounded.
+  const [readingScale] = useState(() => loadReadingScale(store));
+  const arabicCap = Math.min(fontScaleCaps.content, MAX_ARABIC_EFFECTIVE_SCALE / readingScale);
 
   // Newest bookmark first. `version` forces a refresh after a removal.
   const rows = useMemo(() => {
@@ -77,7 +87,15 @@ export function BookmarksScreen() {
               </View>
               <AppText
                 accessibilityLanguage="ar"
-                style={[styles.arabic, { color: t.textPrimary }]}
+                maxFontSizeMultiplier={arabicCap}
+                style={[
+                  styles.arabic,
+                  {
+                    color: t.textPrimary,
+                    fontSize: quranType.ayahSize * readingScale,
+                    lineHeight: quranType.ayahLineHeight * readingScale,
+                  },
+                ]}
               >
                 {item.text_uthmani}
               </AppText>

@@ -7,7 +7,15 @@ import { Pressable, StyleSheet } from 'react-native';
 import { getAyahByOrdinal, getSurah } from '../repo';
 import { verseOfDayOrdinal } from '../verseOfDay';
 import { AppText, SectionRule } from '@/src/components/ui';
-import { elevation, fonts, radius, richMode, spacing } from '@/src/lib/theme/tokens';
+import {
+  elevation,
+  fonts,
+  fontScaleCaps,
+  quranType,
+  radius,
+  richMode,
+  spacing,
+} from '@/src/lib/theme/tokens';
 import { useThemeMode } from '@/src/lib/theme/ThemeProvider';
 import { useTokens } from '@/src/lib/theme/useTokens';
 import { useDeviceTier } from '@/src/lib/theme/useDeviceTier';
@@ -49,7 +57,11 @@ export function VerseOfDayCard({ date }: { date: Date }) {
           flat ? undefined : elevation[rm].e2,
         ]}
       >
-        <AppText accessibilityLanguage="ar" style={[styles.arabic, { color: t.textPrimary }]}>
+        <AppText
+          accessibilityLanguage="ar"
+          maxFontSizeMultiplier={fontScaleCaps.content}
+          style={[styles.arabic, { color: t.textPrimary }]}
+        >
           {ayah.text_uthmani}
         </AppText>
         <AppText
@@ -77,8 +89,8 @@ const styles = StyleSheet.create({
   },
   arabic: {
     fontFamily: fonts.quran,
-    fontSize: 24,
-    lineHeight: 46,
+    fontSize: quranType.cardAyahSize,
+    lineHeight: quranType.cardAyahLineHeight,
     textAlign: 'right',
     writingDirection: 'rtl',
   },

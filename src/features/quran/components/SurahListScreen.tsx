@@ -14,7 +14,9 @@ import { useDebouncedValue } from '@/src/lib/useDebouncedValue';
 import {
   elevation,
   featuredGradient,
+  fonts,
   fontScaleCaps,
+  quranType,
   radius,
   richMode,
   spacing,
@@ -149,7 +151,11 @@ export function SurahListScreen() {
                       {item.name_english} · {t('quran.verses', { count: item.ayah_count })}
                     </AppText>
                   </View>
-                  <AppText accessibilityLanguage="ar" style={styles.arabicName}>
+                  <AppText
+                    accessibilityLanguage="ar"
+                    maxFontSizeMultiplier={fontScaleCaps.label}
+                    style={styles.arabicName}
+                  >
                     {item.name_arabic}
                   </AppText>
                 </Pressable>
@@ -206,7 +212,14 @@ const styles = StyleSheet.create({
   },
   names: { flex: 1, gap: 2 },
   sub: { fontSize: 13 },
-  arabicName: { fontFamily: 'AmiriQuran', fontSize: 20, lineHeight: 36 },
+  arabicName: {
+    fontFamily: fonts.quran,
+    fontSize: quranType.surahNameSize,
+    lineHeight: quranType.surahNameLineHeight,
+    textAlign: 'right',
+    writingDirection: 'rtl',
+    flexShrink: 1,
+  },
   continueChip: {
     padding: spacing.l,
     alignItems: 'center',

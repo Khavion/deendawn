@@ -238,6 +238,9 @@ export const quranType = {
   ayahLineHeight: 56,
   surahNameSize: 20,
   surahNameLineHeight: 36,
+  /** Preview-card scale (Verse of the Day) — smaller than the reader on purpose. */
+  cardAyahSize: 24,
+  cardAyahLineHeight: 46,
 } as const;
 
 /** Motion durations (ms) — transform/opacity only, ease-in-out. */
