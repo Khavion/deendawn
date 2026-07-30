@@ -36,7 +36,10 @@ export async function ensureChannels(
     await Notifications.setNotificationChannelAsync(id, {
       name: displayName(id),
       importance: Notifications.AndroidImportance.HIGH,
-      sound: spec.sound === null ? null : spec.sound,
+      // 'default' (system default sound) = OMIT the field — passing the
+      // string makes expo-notifications look for a res/raw file named
+      // "default" and warn (verified on emulator). null = silent channel.
+      ...(spec.sound === 'default' ? {} : { sound: spec.sound }),
       audioAttributes:
         spec.audioUsage === 'alarm' ? { usage: Notifications.AndroidAudioUsage.ALARM } : undefined,
     });

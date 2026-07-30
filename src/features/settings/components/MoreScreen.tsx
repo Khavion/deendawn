@@ -7,6 +7,7 @@ import {
   Alert,
   DevSettings,
   Modal,
+  Platform,
   ScrollView,
   StyleSheet,
   Switch,
@@ -20,6 +21,7 @@ import {
   setPrayerEnabled,
   setPrayerSound,
 } from '../../notifications/prefsStore';
+import { ExactAlarmCard } from '../../notifications/components/ExactAlarmCard';
 import { ADHAN_PRAYERS, AdhanPrayer, SoundKey } from '../../notifications/scheduler';
 import { ensurePermission, rescheduleAll } from '../../notifications/service';
 import {
@@ -339,8 +341,9 @@ export function MoreScreen() {
         </View>
         <SectionRule label={t('more.notifications')} style={styles.sectionRule} />
         <AppText style={[styles.sectionHint, { color: tk.textSecondary }]}>
-          {t('more.notificationsHint')}
+          {t(Platform.OS === 'android' ? 'more.notificationsHint_android' : 'more.notificationsHint')}
         </AppText>
+        <ExactAlarmCard />
         <View style={groupCard}>
           {ADHAN_PRAYERS.map((prayer) => (
             <View key={prayer} style={[styles.settingRowInline, { borderBottomColor: tk.border }]}>
@@ -610,7 +613,9 @@ export function MoreScreen() {
         visible={soundPickerFor !== null}
         title={t('more.sound')}
         closeLabel={t('common.close')}
-        hint={t('more.fullAdhanHonesty')}
+        hint={t(
+          Platform.OS === 'android' ? 'more.fullAdhanHonesty_android' : 'more.fullAdhanHonesty'
+        )}
         options={SOUND_KEYS.map((k) => ({ key: k, label: t(`more.sound_${k}`) }))}
         selected={soundPickerFor ? prefs.sound[soundPickerFor] : 'default'}
         onSelect={(sound) => soundPickerFor && selectSound(soundPickerFor, sound)}

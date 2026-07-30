@@ -4,6 +4,7 @@ import React from 'react';
 import { FullAdhanPlayer, wantsFullAdhan } from '../../FullAdhanPlayer';
 
 let mockResponseCb: ((r: unknown) => void) | null = null;
+let mockLastResponse: unknown = null;
 const mockPlayer = { play: jest.fn(), pause: jest.fn(), remove: jest.fn() };
 
 jest.mock('expo-notifications', () => ({
@@ -11,6 +12,7 @@ jest.mock('expo-notifications', () => ({
     mockResponseCb = cb;
     return { remove: jest.fn() };
   }),
+  getLastNotificationResponseAsync: jest.fn(() => Promise.resolve(mockLastResponse)),
 }));
 jest.mock('expo-audio', () => ({
   createAudioPlayer: jest.fn(() => mockPlayer),
@@ -20,12 +22,13 @@ jest.mock('react-native-safe-area-context', () => ({
   useSafeAreaInsets: () => ({ top: 0, bottom: 0, left: 0, right: 0 }),
 }));
 
-const response = (data: Record<string, unknown>) => ({
-  notification: { request: { content: { data } } },
+const response = (data: Record<string, unknown>, identifier = 'test-id') => ({
+  notification: { request: { identifier, content: { data } } },
 });
 
 beforeEach(() => {
   mockResponseCb = null;
+  mockLastResponse = null;
   jest.clearAllMocks();
 });
 
@@ -66,5 +69,35 @@ describe('FullAdhanPlayer', () => {
     });
     expect(mockPlayer.play).not.toHaveBeenCalled();
     expect(view.queryByTestId('full-adhan-banner')).toBeNull();
+  });
+
+  test('cold start: the launch response plays via getLastNotificationResponseAsync', async () => {
+    mockLastResponse = response({ fullAdhan: true, prayer: 'fajr' }, 'fajr-2026-07-30');
+    const view = await render(<FullAdhanPlayer />);
+    await act(async () => {});
+    expect(mockPlayer.play).toHaveBeenCalledTimes(1);
+    expect(view.getByTestId('full-adhan-banner')).toBeOnTheScreen();
+  });
+
+  test('the same response delivered warm AND as last-response plays once (dedupe)', async () => {
+    mockLastResponse = response({ fullAdhan: true, prayer: 'fajr' }, 'fajr-2026-07-30');
+    await render(<FullAdhanPlayer />);
+    await act(async () => {});
+    await act(async () => {
+      mockResponseCb?.(response({ fullAdhan: true, prayer: 'fajr' }, 'fajr-2026-07-30'));
+      await Promise.resolve();
+    });
+    expect(mockPlayer.play).toHaveBeenCalledTimes(1);
+  });
+
+  test('distinct notifications are not deduped', async () => {
+    mockLastResponse = response({ fullAdhan: true, prayer: 'fajr' }, 'fajr-2026-07-30');
+    await render(<FullAdhanPlayer />);
+    await act(async () => {});
+    await act(async () => {
+      mockResponseCb?.(response({ fullAdhan: true, prayer: 'dhuhr' }, 'dhuhr-2026-07-30'));
+      await Promise.resolve();
+    });
+    expect(mockPlayer.play).toHaveBeenCalledTimes(2);
   });
 });

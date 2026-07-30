@@ -14,3 +14,7 @@ Reviewer: NOT YET NAMED — see docs/BLOCKERS.md.
 Interim glossary defaults (flagged in SCHOLAR_REVIEW.md): EN "Prayer", UR "نماز",
 AR "الصلاة"; prayer names stay Arabic-derived in all locales (Fajr, Dhuhr, Asr,
 Maghrib, Isha).
+
+Added 2026-07-30 (Android phase): `more.notificationsHint_android`,
+`more.exactAlarmTitle/Body/Button/Caveat`, `more.fullAdhanHonesty_android` —
+ur + ar machine-drafted, covered by the blanket `@draft` rows above.

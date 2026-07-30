@@ -5,6 +5,8 @@ import i18n from '../../lib/i18n';
 
 import { deriveChannelId } from './channels';
 import { ensureChannels, deleteStaleChannels } from './channelSync';
+import { canScheduleExactAlarms } from './exactAlarm';
+import { grantTransition, loadStoredGrant, recordGrant } from './exactAlarmState';
 import { loadNotificationPrefs } from './prefsStore';
 import {
   contextChanged,
@@ -114,11 +116,17 @@ export async function rescheduleAll(
     const granted = await ensurePermission(false);
     if (!granted) return;
 
-    // Timezone change → force full re-registration: the pending ids' local
-    // days no longer line up, and on Android exactness/registration state
-    // can't be trusted across environment changes.
+    // Two force-full-re-registration triggers (see DECISIONS 2026-07-30):
+    // 1. Timezone change — the pending ids' local days no longer line up.
+    // 2. Exact-alarm grant flip — on revoke Android cancelled our alarms but
+    //    expo's store still lists them (a plain diff would keep ghosts); on
+    //    grant, only re-registration upgrades pending alarms to exact.
     const context = currentScheduleContext();
-    const force = contextChanged(loadScheduleContext(store), context);
+    const android = platform === 'android';
+    const exactGranted = android ? canScheduleExactAlarms() : true;
+    const force =
+      contextChanged(loadScheduleContext(store), context) ||
+      (android && grantTransition(loadStoredGrant(store), exactGranted));
 
     const prefs = loadNotificationPrefs(store);
     const suhoorEnabled = !!settings.suhoorReminderMinutes;
@@ -131,7 +139,6 @@ export async function rescheduleAll(
       hijriOffset: settings.hijriOffset,
     });
 
-    const android = platform === 'android';
     // Channels first — scheduling below points notifications at them, and
     // stale-channel deletion must come AFTER the queue sync (a deleted
     // channel silently drops any notification still pointed at it).
@@ -184,6 +191,7 @@ export async function rescheduleAll(
     }
     if (android) await deleteStaleChannels(desiredChannelIds);
     saveScheduleContext(store, context);
+    if (android) recordGrant(store, exactGranted);
     log.info('notifications', 'rescheduled', {
       kept: actions.keepIds.length,
       cancelled: actions.cancelIds.length,

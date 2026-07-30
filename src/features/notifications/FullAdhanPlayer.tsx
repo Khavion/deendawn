@@ -18,9 +18,16 @@ export function wantsFullAdhan(response: Notifications.NotificationResponse): Ad
 }
 
 /**
- * iOS cannot play long audio from a notification itself; the full adhan plays
- * when the app is opened from the reminder (the sound picker says exactly
- * that). Placeholder audio until license-cleared recordings arrive.
+ * Notification sounds can't carry a full-length adhan (iOS hard 30s limit;
+ * Android stops channel sounds when the shade is cleared) — the full adhan
+ * plays when the app is opened from the reminder (the sound picker says
+ * exactly that, per platform). Placeholder audio until license-cleared
+ * recordings arrive.
+ *
+ * Cold starts: the warm response listener misses taps that LAUNCH the app
+ * (especially Android, where the process usually isn't resident) —
+ * getLastNotificationResponseAsync covers that path, deduped by request id
+ * so a warm delivery never double-plays.
  */
 export function FullAdhanPlayer() {
   const t = useTokens();
@@ -28,6 +35,7 @@ export function FullAdhanPlayer() {
   const { t: tr } = useTranslation();
   const [playing, setPlaying] = useState<AdhanPrayer | null>(null);
   const player = useRef<AudioPlayer | null>(null);
+  const handledResponseIds = useRef<Set<string>>(new Set());
 
   const stop = () => {
     player.current?.pause();
@@ -37,9 +45,14 @@ export function FullAdhanPlayer() {
   };
 
   useEffect(() => {
-    const sub = Notifications.addNotificationResponseReceivedListener((response) => {
+    const handleResponse = (response: Notifications.NotificationResponse) => {
       const prayer = wantsFullAdhan(response);
       if (!prayer) return;
+      const requestId = response.notification.request.identifier;
+      if (typeof requestId === 'string') {
+        if (handledResponseIds.current.has(requestId)) return;
+        handledResponseIds.current.add(requestId);
+      }
       void (async () => {
         await setAudioModeAsync({ playsInSilentMode: true });
         player.current?.remove();
@@ -47,6 +60,10 @@ export function FullAdhanPlayer() {
         player.current.play();
         setPlaying(prayer);
       })();
+    };
+    const sub = Notifications.addNotificationResponseReceivedListener(handleResponse);
+    void Notifications.getLastNotificationResponseAsync().then((response) => {
+      if (response) handleResponse(response);
     });
     return () => {
       sub.remove();

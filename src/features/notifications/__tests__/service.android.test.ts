@@ -74,6 +74,11 @@ jest.mock('expo-localization', () => ({
   getLocales: () => [{ languageTag: 'en-US' }],
 }));
 
+let mockExactGranted = true;
+jest.mock('../exactAlarm', () => ({
+  canScheduleExactAlarms: () => mockExactGranted,
+}));
+
 // Import after the mocks so the service binds to them.
 // eslint-disable-next-line import/first
 import { rescheduleAll } from '../service';
@@ -94,6 +99,7 @@ beforeEach(() => {
   mockState.channelSets = [];
   mockState.channelDeletes = [];
   mockState.events = [];
+  mockExactGranted = true;
 });
 
 describe('rescheduleAll on android', () => {
@@ -137,6 +143,14 @@ describe('rescheduleAll on android', () => {
     expect(silent.importance).toBe(6);
     expect(silent.sound).toBeNull();
     expect(silent.audioAttributes).toBeUndefined();
+  });
+
+  test('system-default channels OMIT the sound field (a "default" string would be resolved as a res/raw filename)', async () => {
+    const store = createMemoryKVStore({ 'settings.v1': HOUSTON_SETTINGS });
+    await rescheduleAll(NOW, store, 'android');
+    const ch = mockState.channels.get('adhan.fajr.default.v1')!;
+    expect('sound' in ch).toBe(false);
+    expect(ch.importance).toBe(6);
   });
 
   test('sound change: pending entries reschedule onto the new channel, old channel deleted, in order', async () => {
@@ -218,6 +232,31 @@ describe('rescheduleAll on android', () => {
     mockState.events = [];
     await rescheduleAll(NOW, store, 'android');
     expect(mockState.events.filter((e) => e.startsWith('cancel:'))).toHaveLength(0);
+  });
+
+  test('exact-alarm grant flip forces full re-registration (both directions)', async () => {
+    const store = createMemoryKVStore({ 'settings.v1': HOUSTON_SETTINGS });
+    mockExactGranted = false;
+    await rescheduleAll(NOW, store, 'android'); // first observation: records, no force
+    expect(store.get('notifications.exactAlarmGranted.v1')).toBe('false');
+    mockState.events = [];
+    // Denied -> granted: pending alarms were registered INEXACT; only a full
+    // re-registration upgrades them.
+    mockExactGranted = true;
+    await rescheduleAll(NOW, store, 'android');
+    expect(mockState.events.filter((e) => e.startsWith('cancel:'))).toHaveLength(40);
+    expect(mockState.events.filter((e) => e.startsWith('schedule:'))).toHaveLength(40);
+    expect(store.get('notifications.exactAlarmGranted.v1')).toBe('true');
+    // Steady state: no force.
+    mockState.events = [];
+    await rescheduleAll(NOW, store, 'android');
+    expect(mockState.events.filter((e) => e.startsWith('cancel:'))).toHaveLength(0);
+    // Granted -> revoked: the OS cancelled our alarms but the expo store
+    // still lists them — the force re-registers (inexact but real).
+    mockExactGranted = false;
+    mockState.events = [];
+    await rescheduleAll(NOW, store, 'android');
+    expect(mockState.events.filter((e) => e.startsWith('schedule:'))).toHaveLength(40);
   });
 
   test('suhoor reminder gets its own channel', async () => {
