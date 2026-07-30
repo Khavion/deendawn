@@ -13,4 +13,9 @@ if (Platform.OS === 'android') {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { widgetTaskHandler } = require('./src/features/widget/widgetTaskHandler');
   registerWidgetTaskHandler(widgetTaskHandler);
+  // Killed-state "Silence today" action handling (expo-task-manager task —
+  // must be defined at entry module scope).
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { registerNotificationTasks } = require('./src/features/notifications/notificationTasks');
+  registerNotificationTasks();
 }

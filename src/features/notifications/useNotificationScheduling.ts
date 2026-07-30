@@ -27,9 +27,13 @@ export function useNotificationScheduling(): void {
     const received = Notifications.addNotificationReceivedListener(() => {
       void rescheduleAll();
     });
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { installSilenceTodayListener } = require('./notificationTasks');
+    const silence = installSilenceTodayListener();
     return () => {
       appState.remove();
       received.remove();
+      silence.remove();
     };
   }, []);
 }

@@ -83,7 +83,8 @@
       "idghaam": "إدغام",
       "silent": "ساكن",
       "attribution": "بيانات التجويد: cpfair/quran-tajweed (CC BY 4.0)"
-    }
+    },
+    "continueShort": "متابعة القراءة"
   },
   "qibla": {
     "title": "القبلة",
@@ -162,7 +163,9 @@
     "themeDark": "داكن",
     "haptics": "الاستجابة اللمسية",
     "hapticsDesc": "نقرات خفيفة تؤكد الإجراءات",
-    "adhanHelpLink": "الأذان لا يعمل؟"
+    "adhanHelpLink": "الأذان لا يعمل؟",
+    "stickyToggle": "تثبيت الصلاة التالية",
+    "stickyToggleDesc": "إشعار صامت دائم بوقت الصلاة التالية"
   },
   "methods": {
     "MuslimWorldLeague": "رابطة العالم الإسلامي",
@@ -182,7 +185,11 @@
     "body": "حان وقت صلاة {{prayer}}.",
     "playingFullAdhan": "يُشغَّل أذان {{prayer}}",
     "suhoorTitle": "تذكير السحور",
-    "suhoorBody": "اقترب الفجر — السحور على وشك الانتهاء."
+    "suhoorBody": "اقترب الفجر — السحور على وشك الانتهاء.",
+    "silenceToday": "إسكات اليوم",
+    "stickyChannelName": "الصلاة التالية (مثبَّت)",
+    "stickyTitle": "التالية: {{prayer}} · {{time}}",
+    "stickyBody": "يتحدّث خلال اليوم. أزِله متى شئت."
   },
   "hijriMonths": {
     "1": "محرم",

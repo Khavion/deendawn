@@ -68,6 +68,8 @@ jest.mock('expo-notifications', () => ({
     mockState.channelDeletes.push(id);
     mockState.channels.delete(id);
   }),
+  setNotificationCategoryAsync: jest.fn(async () => {}),
+  dismissNotificationAsync: jest.fn(async () => {}),
 }));
 
 jest.mock('expo-localization', () => ({
@@ -271,6 +273,38 @@ describe('rescheduleAll on android', () => {
     });
     await rescheduleAll(NOW, store, 'android');
     expect(mockState.channels.has('suhoor.default.v1')).toBe(true);
+  });
+
+  test('adhan content carries the silence-today category; sticky posts when enabled', async () => {
+    const store = createMemoryKVStore({
+      'settings.v1': HOUSTON_SETTINGS,
+      'notifications.nextPrayerSticky.v1': 'true',
+    });
+    await rescheduleAll(NOW, store, 'android');
+    const Notifications = jest.requireMock('expo-notifications');
+    expect(Notifications.setNotificationCategoryAsync).toHaveBeenCalledWith(
+      'adhan',
+      expect.arrayContaining([
+        expect.objectContaining({
+          identifier: 'silence-today',
+          options: { opensAppToForeground: false },
+        }),
+      ])
+    );
+    const adhan = mockState.pending.find((p) => p.identifier.startsWith('fajr-'))!;
+    expect((adhan.content as { categoryIdentifier?: string }).categoryIdentifier).toBe('adhan');
+    const sticky = mockState.pending.find((p) => p.identifier === 'next-prayer-sticky');
+    expect(sticky).toBeDefined();
+    expect((sticky!.content as { sticky?: boolean }).sticky).toBe(true);
+    expect(mockState.channels.has('nextprayer.low.v1')).toBe(true);
+  });
+
+  test('sticky disabled -> dismissed, never posted', async () => {
+    const store = createMemoryKVStore({ 'settings.v1': HOUSTON_SETTINGS });
+    await rescheduleAll(NOW, store, 'android');
+    const Notifications = jest.requireMock('expo-notifications');
+    expect(Notifications.dismissNotificationAsync).toHaveBeenCalledWith('next-prayer-sticky');
+    expect(mockState.pending.some((p) => p.identifier === 'next-prayer-sticky')).toBe(false);
   });
 
   test('foreign channels are never deleted', async () => {

@@ -70,7 +70,11 @@
       [
         "expo-localization",
         {
-          "supportedLocales": ["en", "ur", "ar"]
+          "supportedLocales": [
+            "en",
+            "ur",
+            "ar"
+          ]
         }
       ],
       "expo-background-task",
@@ -131,7 +135,8 @@
       "expo-image",
       "expo-status-bar",
       "expo-web-browser",
-      "./plugins/withAppearanceHardening"
+      "./plugins/withAppearanceHardening",
+      "expo-quick-actions"
     ],
     "experiments": {
       "typedRoutes": true,

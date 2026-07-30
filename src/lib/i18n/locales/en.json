@@ -78,7 +78,8 @@
       "idghaam": "Idghaam",
       "silent": "Silent",
       "attribution": "Tajweed data: cpfair/quran-tajweed (CC BY 4.0)"
-    }
+    },
+    "continueShort": "Continue reading"
   },
   "qibla": {
     "title": "Qibla",
@@ -157,7 +158,9 @@
     "themeDark": "Dark",
     "haptics": "Touch feedback",
     "hapticsDesc": "Gentle taps confirm actions",
-    "adhanHelpLink": "Adhan not playing?"
+    "adhanHelpLink": "Adhan not playing?",
+    "stickyToggle": "Pin next prayer",
+    "stickyToggleDesc": "Silent ongoing notification with the next prayer time"
   },
   "methods": {
     "MuslimWorldLeague": "Muslim World League",
@@ -177,7 +180,11 @@
     "body": "It's time for {{prayer}} prayer.",
     "playingFullAdhan": "Playing the {{prayer}} adhan",
     "suhoorTitle": "Suhoor reminder",
-    "suhoorBody": "Fajr is coming soon — suhoor is ending."
+    "suhoorBody": "Fajr is coming soon — suhoor is ending.",
+    "silenceToday": "Silence today",
+    "stickyChannelName": "Next prayer (pinned)",
+    "stickyTitle": "Next: {{prayer}} · {{time}}",
+    "stickyBody": "Updates through the day. Swipe away any time."
   },
   "hijriMonths": {
     "1": "Muharram",

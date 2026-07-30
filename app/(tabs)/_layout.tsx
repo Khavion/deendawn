@@ -1,9 +1,13 @@
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import * as QuickActions from 'expo-quick-actions';
+import { useQuickActionRouting } from 'expo-quick-actions/router';
 import { NativeTabs } from 'expo-router/unstable-native-tabs';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Platform } from 'react-native';
 
+import { loadLastRead } from '@/src/features/quran/readerState';
+import { getUserKVStore } from '@/src/lib/kvStore';
 import { useTokens } from '@/src/lib/theme/useTokens';
 
 /**
@@ -27,7 +31,24 @@ const androidIcon = (name: React.ComponentProps<typeof MaterialIcons>['name']) =
 
 export default function TabLayout() {
   const t = useTokens();
-  const { t: tr } = useTranslation();
+  const { t: tr, i18n } = useTranslation();
+
+  // Long-press-icon app shortcuts (Android; iOS gets the same list as Home
+  // Screen quick actions for free). Re-set on language change so titles
+  // localize; "Continue reading" deep-links to the exact last-read ayah,
+  // refreshed each time the tab layout mounts.
+  useQuickActionRouting();
+  useEffect(() => {
+    const lastRead = loadLastRead(getUserKVStore());
+    const readerHref = lastRead
+      ? `/surah/${lastRead.surah}?ayah=${lastRead.ayah}`
+      : '/quran';
+    void QuickActions.setItems([
+      { id: 'qibla', title: tr('tabs.qibla'), params: { href: '/qibla' } },
+      { id: 'tasbih', title: tr('more.tasbih'), params: { href: '/tasbih' } },
+      { id: 'continue', title: tr('quran.continueShort'), params: { href: readerHref } },
+    ]);
+  }, [tr, i18n.language]);
 
   return (
     <NativeTabs tintColor={t.accent}>

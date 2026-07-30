@@ -14,7 +14,10 @@ import {
   loadScheduleContext,
   saveScheduleContext,
 } from './scheduleContext';
+import { ensureAdhanCategory } from './notificationTasks';
 import { diffPlans, planNotifications, PlannedNotification } from './scheduler';
+import { ADHAN_CATEGORY } from './silenceToday';
+import { loadStickyEnabled, syncStickyNextPrayer } from './stickyNextPrayer';
 import { log } from '../../lib/log';
 import { getUserKVStore, KVStore } from '../../lib/kvStore';
 import { loadSettings, resolveLocation, resolvePrayerConfig } from '../settings/settingsStore';
@@ -84,6 +87,9 @@ function toContent(
     sound,
     // iOS-only field; Android urgency lives on the channel (IMPORTANCE_HIGH).
     interruptionLevel: 'timeSensitive',
+    // Android-only (channelId is the android marker): the "Silence today"
+    // action button. iOS has no registered category — field omitted there.
+    ...(channelId ? { categoryIdentifier: ADHAN_CATEGORY } : {}),
     data: {
       prayer: p.prayer,
       plannedId: p.id,
@@ -144,6 +150,7 @@ export async function rescheduleAll(
     // stale-channel deletion must come AFTER the queue sync (a deleted
     // channel silently drops any notification still pointed at it).
     const desiredChannelIds = android ? await ensureChannels(prefs, suhoorEnabled) : [];
+    if (android) await ensureAdhanCategory();
 
     const planForDiff = plan.map((p) => ({
       ...p,
@@ -191,6 +198,7 @@ export async function rescheduleAll(
       });
     }
     if (android) await deleteStaleChannels(desiredChannelIds);
+    if (android) await syncStickyNextPrayer(loadStickyEnabled(store), plan, now);
     saveScheduleContext(store, context);
     if (android) recordGrant(store, exactGranted);
     // Home-screen widget rides the same triggers (fire-and-forget no-op

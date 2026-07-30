@@ -24,6 +24,7 @@ import {
 import { ExactAlarmCard } from '../../notifications/components/ExactAlarmCard';
 import { ADHAN_PRAYERS, AdhanPrayer, SoundKey } from '../../notifications/scheduler';
 import { ensurePermission, rescheduleAll } from '../../notifications/service';
+import { loadStickyEnabled, saveStickyEnabled } from '../../notifications/stickyNextPrayer';
 import {
   loadNightWarm,
   loadReadingScale,
@@ -171,6 +172,7 @@ export function MoreScreen() {
   const [tajweed, setTajweed] = useState(() => loadTajweed(store));
   const [readingScale, setReadingScale] = useState(() => loadReadingScale(store));
   const [soundPickerFor, setSoundPickerFor] = useState<AdhanPrayer | null>(null);
+  const [stickyEnabled, setStickyEnabled] = useState(() => loadStickyEnabled(store));
   const location = resolveLocation(settings);
   const currentLanguage = (loadLanguage(store) ?? i18n.language) as LanguageCode;
 
@@ -357,6 +359,27 @@ export function MoreScreen() {
           </AppPressable>
         ) : null}
         <View style={groupCard}>
+          {Platform.OS === 'android' ? (
+            <View style={[styles.settingRowInline, { borderBottomColor: tk.border }]}>
+              <View style={styles.rowText}>
+                <AppText variant="bodyStrong">{t('more.stickyToggle')}</AppText>
+                <AppText style={[styles.settingValue, { color: tk.textSecondary }]}>
+                  {t('more.stickyToggleDesc')}
+                </AppText>
+              </View>
+              <Switch
+                testID="sticky-next-prayer"
+                accessibilityLabel={t('more.stickyToggle')}
+                value={stickyEnabled}
+                onValueChange={(v) => {
+                  h.select();
+                  setStickyEnabled(v);
+                  saveStickyEnabled(store, v);
+                  void rescheduleAll(new Date(), store);
+                }}
+              />
+            </View>
+          ) : null}
           {ADHAN_PRAYERS.map((prayer) => (
             <View key={prayer} style={[styles.settingRowInline, { borderBottomColor: tk.border }]}>
               <AppPressable
