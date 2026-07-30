@@ -509,3 +509,22 @@ Done:
   tracks OS flips both directions; dark-pin holds under light OS incl. native header; no flip on
   background/foreground. **RN 0.86.2 bump attempted and REVERTED** — precompiled ExpoModulesCore
   aborts at startup (Fabric adopt() assert): RN patch is locked to Expo's prebuilts (DECISIONS).
+- **Phase 6 (feel) SHIPPED, verified live**: AppPressable across all 41 dead Pressables (press-scale
+  80/140ms on the node; haptic verbs only where a value changes; ripple = the Android budget);
+  haptics moved off Reduce Motion onto a user setting (More ▸ Appearance & feel, fire-time flag,
+  every Switch ticks, `error` verb added); **theme picker shipped** (System/Light/Dark — picked Dark
+  live: whole app + native chrome pinned instantly, reset to System after); qibla needle rides the
+  UI thread via Reanimated shared values at full sensor rate (the brief's "use it deliberately" —
+  removal impossible, expo-router dep); designed empty states (Ask ×2, WorkReader defensive;
+  Thinker already degrades honestly). Jest wiring for reanimated 4 mocks documented in setup.
+  418/418 green. a11y lint plugin swapped for react-native-accessibility-engine (eslint-9 peer
+  conflict; DECISIONS).
+- **Phase 5 (layout correctness) SHIPPED, verified on iPhone 17 + iPad Pro 13"**: (a) native-bar
+  insets — `contentInsetAdjustmentBehavior="automatic"` on every tab scroller (surah 114 no longer
+  trapped under the floating glass bar; scroll-under blur correct), bottom clearances on pushed
+  screens/sheets, adhan banner moved off the native headers to a bottom float; (b) Qibla + Tasbih +
+  Onboarding scroll instead of overlapping at large type; (c) `measure` tokens give every surface a
+  real iPad layout (verified: reader wraps Ayat al-Kursi on a centered column; Zakat's ~800pt
+  label/input gap gone; NativeTabs renders the iPadOS top-strip idiom); new resize-safe
+  `useLayout()` scales the qibla dial on tablet widths; (d) keyboard: CityPicker KAV,
+  dismiss-on-drag on all search surfaces.
