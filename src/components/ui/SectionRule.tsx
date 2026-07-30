@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { I18nManager, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
+import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 
 import { AppText } from './AppText';
 import { Gradient } from './Gradient';
@@ -10,9 +10,8 @@ import { useDeviceTier } from '@/src/lib/theme/useDeviceTier';
 
 /**
  * A section eyebrow followed by an illuminated gold hairline that fades out
- * AWAY from the label (docs/RICH_DESIGN_SPEC.md). The gradient bands render in
- * physical space, so the stop order reverses under RTL to keep the strong end
- * hugging the label. `label` is caller-provided i18n copy.
+ * AWAY from the label (docs/RICH_DESIGN_SPEC.md) — in RTL too, because the
+ * band row mirrors natively. `label` is caller-provided i18n copy.
  */
 export function SectionRule({ label, style }: { label: string; style?: StyleProp<ViewStyle> }) {
   const t = useTokens();
@@ -21,10 +20,11 @@ export function SectionRule({ label, style }: { label: string; style?: StyleProp
   const gold = mode === 'light' ? '138,100,48' : '198,155,95';
   // Stable identity: Gradient memoizes per-band colors on this array, and a
   // fresh literal each render would recompute all bands on every host render.
-  const colors = useMemo(() => {
-    const stops = [`rgba(${gold},0.5)`, `rgba(${gold},0)`];
-    return I18nManager.isRTL ? stops.reverse() : stops;
-  }, [gold]);
+  // NO explicit RTL stop-reversal: the Gradient renders its bands in a flex
+  // row, and yoga mirrors that row under the native RTL tree — the fade
+  // already hugs the label in Arabic/Urdu (verified in the evidence sweep).
+  // Reversing again would double-flip (ultra-review finding).
+  const colors = useMemo(() => [`rgba(${gold},0.5)`, `rgba(${gold},0)`], [gold]);
 
   return (
     <View style={[styles.row, style]}>

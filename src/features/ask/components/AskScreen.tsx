@@ -103,46 +103,50 @@ export function AskScreen() {
         { backgroundColor: t.bgCanvas, paddingTop: insets.top + spacing.m },
       ]}
     >
-      <AppText variant="title" style={styles.title}>
-        {tr('ask.title')}
-      </AppText>
-      <TextInput
-        testID="ask-input"
-        value={input}
-        onChangeText={setInput}
-        onSubmitEditing={submit}
-        returnKeyType="search"
-        placeholder={tr('ask.placeholder')}
-        accessibilityLabel={tr('ask.placeholder')}
-        placeholderTextColor={t.icon}
-        autoCorrect={false}
-        maxFontSizeMultiplier={fontScaleCaps.content}
-        style={[styles.input, { color: t.textPrimary, borderColor: t.border }]}
-      />
+      {/* Same measure as the results below — on iPad the header must not
+          span wider than the column it feeds (ultra-review finding). */}
+      <View style={styles.headerCap}>
+        <AppText variant="title" style={styles.title}>
+          {tr('ask.title')}
+        </AppText>
+        <TextInput
+          testID="ask-input"
+          value={input}
+          onChangeText={setInput}
+          onSubmitEditing={submit}
+          returnKeyType="search"
+          placeholder={tr('ask.placeholder')}
+          accessibilityLabel={tr('ask.placeholder')}
+          placeholderTextColor={t.icon}
+          autoCorrect={false}
+          maxFontSizeMultiplier={fontScaleCaps.content}
+          style={[styles.input, { color: t.textPrimary, borderColor: t.border }]}
+        />
 
-      <View style={styles.sourceRow}>
-        {(['quran', 'library'] as const).map((s) => (
-          <AppPressable
-            key={s}
-            accessibilityRole="button"
-            testID={`ask-source-${s}`}
-            haptic="select"
-            onPress={() => switchSource(s)}
-            style={[
-              styles.sourceChip,
-              source === s
-                ? { backgroundColor: t.accent }
-                : { borderColor: t.border, borderWidth: 1 },
-            ]}
-          >
-            <AppText
-              variant="bodyStrong"
-              style={{ color: source === s ? t.textOnAccent : t.textSecondary }}
+        <View style={styles.sourceRow}>
+          {(['quran', 'library'] as const).map((s) => (
+            <AppPressable
+              key={s}
+              accessibilityRole="button"
+              testID={`ask-source-${s}`}
+              haptic="select"
+              onPress={() => switchSource(s)}
+              style={[
+                styles.sourceChip,
+                source === s
+                  ? { backgroundColor: t.accent }
+                  : { borderColor: t.border, borderWidth: 1 },
+              ]}
             >
-              {tr(s === 'quran' ? 'ask.sourceQuran' : 'ask.sourceLibrary')}
-            </AppText>
-          </AppPressable>
-        ))}
+              <AppText
+                variant="bodyStrong"
+                style={{ color: source === s ? t.textOnAccent : t.textSecondary }}
+              >
+                {tr(s === 'quran' ? 'ask.sourceQuran' : 'ask.sourceLibrary')}
+              </AppText>
+            </AppPressable>
+          ))}
+        </View>
       </View>
 
       <ScrollView
@@ -265,6 +269,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  headerCap: { maxWidth: measure.content, width: '100%', alignSelf: 'center' },
   scroll: {
     paddingBottom: spacing.l,
     maxWidth: measure.content,

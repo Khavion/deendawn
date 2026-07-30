@@ -369,6 +369,29 @@ Result: eslint 0 errors / 6 warnings (the 6 are pre-existing and unchanged), tsc
   moved off pure white/black to the canvas tokens (`#F7F6F2` / `#15181D`) — pure black violated the
   app's own halation rule.
 
+## 2026-07-30 — Post-session ultra review: 9 confirmed findings, all resolved
+
+An 8-dimension multi-agent review of the session diff (every finding adversarially verified by two
+independent lenses; 12 raw → 9 confirmed / 3 plausible / 0 fabricated) caught real residue:
+- **Tasbih counts could be silently dropped** — the new ScrollView's pan recognizer cancels
+  in-flight ring presses after ~10pt of finger travel. Fixed: the screen scrolls ONLY when content
+  actually overflows (onLayout/onContentSizeChange gate + no bounce); static and press-safe at
+  default sizes, scrollable at large type where it's needed.
+- **The reader's own verse rows missed the FlashList RTL fix** (footer row LTR under ar/ur) — the
+  one virtualized list the c9dd7eb pass skipped. Fixed with listCellDirection().
+- **SectionRule's RTL stop-reversal was a latent double-flip** — the band row already mirrors
+  natively (which is why the ar evidence looked right: the JS reversal never actually ran, being
+  keyed on the stale isRTL constant). Reversal removed; native mirroring is the mechanism.
+- Ask + Library headers now share the 640pt measure with their lists on iPad (banner/input no
+  longer span wider than the column they feed); Bookmarks re-reads the reader text-size pref on
+  focus (it stays mounted under the reader).
+- Coverage: AppPressable gained direct regression tests (plain-Pressable layout preservation — the
+  52883bb class — and haptic gating) and listCellDirection a unit test. 432 tests.
+- Plausible-tier items handled as docs: Android inset fallback tracked in TODO; evidence-sweep
+  scripts' silent-failure caveat in their README; the appearance plugin's verification method
+  remains prebuild + pbxproj/file grep (each prebuild exercises it; no jest harness exists for
+  dangerous-mods worth the maintenance).
+
 ## 2026-07-30 — Performance numbers (Phase 10) + brand assets (Phase 11)
 
 - **Cold start**: ~1.8s app-attributable to first meaningful paint (median 2.05s measured minus

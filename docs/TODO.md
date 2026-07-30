@@ -42,6 +42,9 @@ Epics in build order. Top unblocked item is always the current task.
 - [x] Book-reader section deep-link scroll — DONE 2026-07-21. WorkReader now scrolls to the deep-linked section (Ask/Library "open section" jumps land precisely). Verified iOS (`work/1?section=8`).
 - [x] Recitation audio deep-research — DONE 2026-07-21. Recommendation logged (QUL → Husary, self-host R2, per-surah gapless + ayah timings); permission email drafted (docs/AUDIO_PERMISSION_EMAIL.md); owner action + gate in BLOCKERS #5.
 - [ ] After owner approves audio (Gate 5 + R2 keys): download Husary from QUL, confirm the resource license, upload to R2, wire per-surah gapless + ayah-highlighting via QUL segment timings, flip listen feature off the stand-in tone (behind a flag until confirmed).
+- [ ] ANDROID (when the fast-follow starts): `contentInsetAdjustmentBehavior` is iOS-only — every
+      converted tab scroller needs a Platform fallback (status-bar top padding + nav-bar bottom
+      clearance), and Today dropped its manual top inset relying on it (ultra-review, 2026-07-30).
 - [ ] Candidate backlog: prayer-time notification richness; onboarding/empty-state manuscript-art (scholar-gated); ayah-highlighting scaffolding in the audio player (build against the timing-data shape now, dormant until audio lands).
 
 ## PUBLICATION (owner directive — publish so people can download, free/no-data)

@@ -94,7 +94,10 @@ export function WorkReaderScreen() {
             ) : null
           }
           renderItem={({ item }) => (
-            <View style={[styles.sectionBlock, listCellDirection()]} testID={`section-${item.section_index}`}>
+            <View
+              style={[styles.sectionBlock, listCellDirection()]}
+              testID={`section-${item.section_index}`}
+            >
               <AppText variant="caption" style={{ color: t.accent }}>
                 {item.section_index}
               </AppText>

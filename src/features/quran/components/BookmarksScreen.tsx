@@ -1,7 +1,7 @@
 import { FlashList } from '@shopify/flash-list';
-import { Stack, useRouter } from 'expo-router';
+import { Stack, useFocusEffect, useRouter } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -32,7 +32,14 @@ export function BookmarksScreen() {
   const [version, setVersion] = useState(0);
   // Same sizing rule as the reader: the user's A−/A+ pref applies here too,
   // and its product with system Dynamic Type is clamped, never compounded.
-  const [readingScale] = useState(() => loadReadingScale(store));
+  // Re-read on focus: this screen stays mounted while the reader (pushed on
+  // top) changes the pref (ultra-review finding).
+  const [readingScale, setReadingScale] = useState(() => loadReadingScale(store));
+  useFocusEffect(
+    useCallback(() => {
+      setReadingScale(loadReadingScale(store));
+    }, [store])
+  );
   const arabicCap = Math.min(fontScaleCaps.content, MAX_ARABIC_EFFECTIVE_SCALE / readingScale);
 
   // Newest bookmark first. `version` forces a refresh after a removal.

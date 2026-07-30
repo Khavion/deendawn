@@ -39,6 +39,9 @@ export function TasbihScreen() {
   const [state, setState] = useState(() => loadTasbih(store));
   const [history, setHistory] = useState(() => recentHistory(store, 7));
   const [milestone, setMilestone] = useState<'detent' | 'round' | null>(null);
+  const [scrollNeeded, setScrollNeeded] = useState(false);
+  const viewportH = useRef(0);
+  const contentH = useRef(0);
   const milestoneTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const flash = (kind: 'detent' | 'round') => {
@@ -84,6 +87,20 @@ export function TasbihScreen() {
         contentInsetAdjustmentBehavior="automatic"
         contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled"
+        // Scroll ONLY when content genuinely overflows (large Dynamic Type):
+        // an always-armed pan recognizer cancels in-flight ring presses after
+        // ~10pt of finger travel, silently dropping dhikr counts (ultra-review
+        // finding). Static when everything fits — like the pre-scroll layout.
+        scrollEnabled={scrollNeeded}
+        alwaysBounceVertical={false}
+        onLayout={(e) => {
+          viewportH.current = e.nativeEvent.layout.height;
+          setScrollNeeded(contentH.current > viewportH.current + 1);
+        }}
+        onContentSizeChange={(_w, h) => {
+          contentH.current = h;
+          setScrollNeeded(h > viewportH.current + 1);
+        }}
       >
         <TextInput
           testID="tasbih-label"

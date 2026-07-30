@@ -53,7 +53,10 @@ export function LibraryScreen() {
       {searching && !db ? (
         <View testID="library-loading">
           {[0, 1, 2, 3].map((row) => (
-            <View key={row} style={[styles.row, listCellDirection(), { borderBottomColor: t.border }]}>
+            <View
+              key={row}
+              style={[styles.row, listCellDirection(), { borderBottomColor: t.border }]}
+            >
               <Skeleton width="55%" height={16} />
               <Skeleton width="100%" height={13} style={styles.skelGap} />
               <Skeleton width="85%" height={13} style={styles.skelGap} />
@@ -123,6 +126,9 @@ const styles = StyleSheet.create({
   container: { flex: 1, paddingHorizontal: spacing.xl },
   listContent: { paddingBottom: spacing.xxl },
   input: {
+    maxWidth: measure.content,
+    width: '100%',
+    alignSelf: 'center',
     borderWidth: 1,
     borderRadius: radius.control,
     paddingHorizontal: spacing.l,
@@ -139,6 +145,13 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
-  reviewNote: { borderRadius: radius.control, padding: spacing.s, marginBottom: spacing.m },
+  reviewNote: {
+    maxWidth: measure.content,
+    width: '100%',
+    alignSelf: 'center',
+    borderRadius: radius.control,
+    padding: spacing.s,
+    marginBottom: spacing.m,
+  },
   skelGap: { marginTop: spacing.xs },
 });

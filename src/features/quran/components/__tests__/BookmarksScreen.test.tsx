@@ -26,6 +26,10 @@ jest.mock('react-native-safe-area-context', () => ({
 jest.mock('expo-sqlite', () => ({ useSQLiteContext: () => mockDb }));
 jest.mock('expo-router', () => ({
   useRouter: () => ({ push: mockRouterPush }),
+  useFocusEffect: (cb: () => void) => {
+    const React = jest.requireActual('react');
+    React.useEffect(cb, [cb]);
+  },
   Stack: { Screen: () => null },
 }));
 

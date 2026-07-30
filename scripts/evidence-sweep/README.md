@@ -12,6 +12,7 @@ Reusable scripts behind `docs/screens/final/` (see its MANIFEST.md):
 - `manifest.py` — regenerates docs/screens/final/MANIFEST.md.
 
 Hard-won rules (full detail in DECISIONS 2026-07-30):
+
 - Sweep the RELEASE build — three shipped-pixel defects were invisible on dev.
 - `simctl ui <udid> appearance` can silently stop applying on a long-booted
   sim; reboot the sim when captures disagree with the setting.
@@ -19,3 +20,8 @@ Hard-won rules (full detail in DECISIONS 2026-07-30):
   sheet selection via the keyboard (the city picker's return key exists for
   exactly this) and never assert on tab labels with ", tab" regexes
   (NativeTabs exposes plain labels).
+
+**Known limitation (by design):** these are capture helpers, not CI — errors are
+suppressed and "SWEEP DONE" prints regardless, UDIDs/paths are machine-specific.
+After any run, `manifest.py` counts are the integrity check; treat missing or
+stale files as the failure signal.

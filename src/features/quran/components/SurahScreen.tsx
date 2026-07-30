@@ -44,6 +44,7 @@ import {
   spacing,
   tajweedColors,
 } from '@/src/lib/theme/tokens';
+import { listCellDirection } from '@/src/lib/theme/direction';
 import { useTokens } from '@/src/lib/theme/useTokens';
 
 // Base translation type (latinType.reading) — scaled by the reader size pref.
@@ -265,7 +266,7 @@ export function SurahScreen() {
           const bookmarked = bookmarkSet.has(`${item.surah}:${item.ayah}`);
           return (
             <View
-              style={[styles.ayahBlock, { borderBottomColor: t.border }]}
+              style={[styles.ayahBlock, listCellDirection(), { borderBottomColor: t.border }]}
               testID={`ayah-${item.surah}-${item.ayah}`}
             >
               <AppText
