@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FlashList } from '@shopify/flash-list';
 import { Modal, Pressable, StyleSheet, TextInput, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AppText } from '@/src/components/ui';
 import { City } from '@/src/features/settings/cities';
@@ -20,6 +21,7 @@ export function CityPickerModal({
 }) {
   const tk = useTokens();
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
   const [query, setQuery] = useState('');
   // Gated on visibility: this component stays mounted behind its host screens,
   // and an ungated call would re-scan the city list on every host re-render.
@@ -32,9 +34,7 @@ export function CityPickerModal({
       presentationStyle="pageSheet"
       onRequestClose={onClose}
     >
-      <View
-        style={[styles.container, { backgroundColor: tk.bgCanvas, paddingTop: spacing.l }]}
-      >
+      <View style={[styles.container, { backgroundColor: tk.bgCanvas, paddingTop: spacing.l }]}>
         <View style={styles.header}>
           <AppText variant="subtitle">{t('cityPicker.title')}</AppText>
           <Pressable accessibilityRole="button" testID="close-picker" onPress={onClose}>
@@ -56,6 +56,7 @@ export function CityPickerModal({
           data={results}
           keyExtractor={(c) => c.id}
           keyboardShouldPersistTaps="handled"
+          contentContainerStyle={{ paddingBottom: insets.bottom + spacing.l }}
           ListEmptyComponent={
             <AppText style={styles.hint}>
               {query.trim() ? t('cityPicker.noMatch') : t('cityPicker.hint')}
@@ -69,7 +70,9 @@ export function CityPickerModal({
               style={[styles.row, { borderBottomColor: tk.border }]}
             >
               <AppText>{item.name}</AppText>
-              <AppText style={[styles.country, { color: tk.textSecondary }]}>{item.country}</AppText>
+              <AppText style={[styles.country, { color: tk.textSecondary }]}>
+                {item.country}
+              </AppText>
             </Pressable>
           )}
         />

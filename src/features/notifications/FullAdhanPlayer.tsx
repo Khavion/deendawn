@@ -58,7 +58,10 @@ export function FullAdhanPlayer() {
 
   return (
     <View
-      style={[styles.banner, { backgroundColor: t.accent, top: insets.top + spacing.s }]}
+      style={[
+        styles.banner,
+        { backgroundColor: t.accent, bottom: insets.bottom + TAB_BAR_CLEARANCE },
+      ]}
       testID="full-adhan-banner"
     >
       <AppText variant="bodyStrong" style={{ color: t.textOnAccent }}>
@@ -72,6 +75,12 @@ export function FullAdhanPlayer() {
     </View>
   );
 }
+
+// The banner mounts outside the navigation tree, so a top placement would sit
+// on pushed screens' native headers. Bottom-anchored it floats above the
+// floating tab bar (height not queryable with NativeTabs — a visual constant,
+// verified on-sim) and simply rides a little higher on pushed screens.
+const TAB_BAR_CLEARANCE = 64;
 
 const styles = StyleSheet.create({
   banner: {

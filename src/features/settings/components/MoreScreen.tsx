@@ -87,6 +87,7 @@ function PickerModal<T extends string>({
   hint?: string;
 }) {
   const tk = useTokens();
+  const insets = useSafeAreaInsets();
   return (
     <Modal
       visible={visible}
@@ -104,7 +105,7 @@ function PickerModal<T extends string>({
           </Pressable>
         </View>
         {hint ? <AppText style={styles.sectionHint}>{hint}</AppText> : null}
-        <ScrollView>
+        <ScrollView contentContainerStyle={{ paddingBottom: insets.bottom + spacing.l }}>
           {options.map((o) => (
             <Pressable
               key={o.key}
@@ -298,11 +299,13 @@ export function MoreScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: tk.bgCanvas, paddingTop: insets.top + 12 }]}>
-      <ScrollView contentContainerStyle={styles.scroll}>
+      <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={styles.scroll}>
         <AppText variant="title" style={styles.title}>
           {t('more.title')}
         </AppText>
-        <AppText style={[styles.sectionHint, { color: tk.textSecondary }]}>{t('more.hint')}</AppText>
+        <AppText style={[styles.sectionHint, { color: tk.textSecondary }]}>
+          {t('more.hint')}
+        </AppText>
         <View style={groupCard}>
           {rows.map((row) => (
             <Pressable
@@ -325,10 +328,7 @@ export function MoreScreen() {
         </AppText>
         <View style={groupCard}>
           {ADHAN_PRAYERS.map((prayer) => (
-            <View
-              key={prayer}
-              style={[styles.settingRowInline, { borderBottomColor: tk.border }]}
-            >
+            <View key={prayer} style={[styles.settingRowInline, { borderBottomColor: tk.border }]}>
               <Pressable
                 accessibilityRole="button"
                 testID={`sound-${prayer}`}
@@ -548,7 +548,7 @@ export function MoreScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  scroll: { paddingHorizontal: spacing.l, paddingBottom: spacing.xxl },
+  scroll: { paddingHorizontal: spacing.l, paddingBottom: spacing.l },
   title: { marginBottom: spacing.s },
   sectionHint: { marginBottom: spacing.m },
   sectionRule: { marginTop: spacing.xl, marginBottom: spacing.s },

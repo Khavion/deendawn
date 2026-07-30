@@ -3,15 +3,8 @@ import { Stack, useLocalSearchParams } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Pressable,
-  Share,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-  ViewToken,
-} from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Pressable, Share, StyleSheet, Text, useColorScheme, View, ViewToken } from 'react-native';
 
 import {
   loadBookmarks,
@@ -53,6 +46,7 @@ export function SurahScreen() {
   const { store } = useSettings();
   const { t: tr } = useTranslation();
   const params = useLocalSearchParams<{ id: string; ayah?: string }>();
+  const insets = useSafeAreaInsets();
   const surahNumber = Number(params.id);
   const nightWarm = loadNightWarm(store);
   const t = useTokens(nightWarm ? 'nightWarm' : undefined);
@@ -111,7 +105,11 @@ export function SurahScreen() {
 
   const onViewableItemsChanged = useCallback(
     ({ viewableItems }: { viewableItems: ViewToken[] }) => {
-      recordReadingPosition(store, viewableItems[0]?.item as AyahRow | undefined, trackReadingRef.current);
+      recordReadingPosition(
+        store,
+        viewableItems[0]?.item as AyahRow | undefined,
+        trackReadingRef.current
+      );
     },
     [store]
   );
@@ -205,7 +203,7 @@ export function SurahScreen() {
         }}
         onViewableItemsChanged={onViewableItemsChanged}
         viewabilityConfig={{ itemVisiblePercentThreshold: 60 }}
-        contentContainerStyle={styles.list}
+        contentContainerStyle={[styles.list, { paddingBottom: insets.bottom + spacing.xl }]}
         ListHeaderComponent={
           <>
             {showTranslation && __DEV__ ? (
@@ -351,7 +349,7 @@ const styles = StyleSheet.create({
   sizeDisabled: { opacity: 0.35 },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   audioWrap: { paddingHorizontal: spacing.xl, paddingTop: spacing.s },
-  list: { paddingHorizontal: spacing.xl, paddingBottom: spacing.xxl, paddingTop: spacing.s },
+  list: { paddingHorizontal: spacing.xl, paddingTop: spacing.s },
   devBadge: {
     borderRadius: radius.control,
     padding: spacing.s,

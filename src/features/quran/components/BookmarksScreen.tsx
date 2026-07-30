@@ -4,6 +4,7 @@ import { useSQLiteContext } from 'expo-sqlite';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { loadBookmarks, loadReadingScale, toggleBookmark } from '../readerState';
 import { AyahRow, getAyahsByRefs, listSurahs } from '../repo';
@@ -25,6 +26,7 @@ export function BookmarksScreen() {
   const { t: tr } = useTranslation();
   const t = useTokens();
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const [version, setVersion] = useState(0);
   // Same sizing rule as the reader: the user's A−/A+ pref applies here too,
   // and its product with system Dynamic Type is clamped, never compounded.
@@ -63,7 +65,7 @@ export function BookmarksScreen() {
         <FlashList
           data={rows}
           keyExtractor={(a) => `${a.surah}:${a.ayah}`}
-          contentContainerStyle={styles.list}
+          contentContainerStyle={[styles.list, { paddingBottom: insets.bottom + spacing.xl }]}
           renderItem={({ item }) => (
             <Pressable
               accessibilityRole="button"
@@ -116,7 +118,7 @@ export function BookmarksScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  list: { paddingHorizontal: spacing.xl, paddingTop: spacing.s, paddingBottom: spacing.xxl },
+  list: { paddingHorizontal: spacing.xl, paddingTop: spacing.s },
   empty: {
     flex: 1,
     alignItems: 'center',

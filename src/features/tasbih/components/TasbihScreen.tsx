@@ -1,7 +1,7 @@
 import { Stack } from 'expo-router';
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, StyleSheet, TextInput, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 
 import {
   loadTasbih,
@@ -15,7 +15,15 @@ import {
 import { useSettings } from '../../settings/SettingsContext';
 import { AppText, Gradient } from '@/src/components/ui';
 import { useHaptics } from '@/src/lib/haptics';
-import { ambientGradient, elevation, fonts, fontScaleCaps, radius, richMode, spacing } from '@/src/lib/theme/tokens';
+import {
+  ambientGradient,
+  elevation,
+  fonts,
+  fontScaleCaps,
+  radius,
+  richMode,
+  spacing,
+} from '@/src/lib/theme/tokens';
 import { useThemeMode } from '@/src/lib/theme/ThemeProvider';
 import { useTokens } from '@/src/lib/theme/useTokens';
 import { useDeviceTier } from '@/src/lib/theme/useDeviceTier';
@@ -68,106 +76,118 @@ export function TasbihScreen() {
         style={styles.ambient}
       />
 
-      <TextInput
-        testID="tasbih-label"
-        value={state.label}
-        onChangeText={(text) => setState(setLabel(store, text))}
-        placeholder={tr('tasbih.labelPlaceholder')}
-        placeholderTextColor={t.icon}
-        maxLength={60}
-        style={[styles.label, { color: t.textSecondary }]}
-        maxFontSizeMultiplier={fontScaleCaps.content}
-      />
-
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel={tr('tasbih.tapArea')}
-        accessibilityValue={{ now: state.count, min: 0, max: state.target }}
-        testID="tasbih-tap"
-        onPress={onTap}
-        style={styles.tapArea}
+      {/* Scrollable so large Dynamic Type degrades by scrolling — the ring,
+          hint and history stop colliding; `automatic` clears the home
+          indicator on this pushed screen. */}
+      <ScrollView
+        contentInsetAdjustmentBehavior="automatic"
+        contentContainerStyle={styles.scrollContent}
+        keyboardShouldPersistTaps="handled"
       >
-        <View
-          style={[
-            styles.ring,
-            { borderColor: ringColor, backgroundColor: t.bgSurface },
-            !flat && milestone === 'round' && { shadowColor: t.success, ...styles.ringGlow },
-          ]}
-        >
-          <AppText
-            maxFontSizeMultiplier={fontScaleCaps.label}
-            style={[styles.count, { color: t.textPrimary }]}
-            testID="tasbih-count"
-          >
-            {displayCount}
-          </AppText>
-          <AppText variant="caption" style={{ color: t.textSecondary }}>
-            {displayCount}
-            {' / '}
-            {state.target}
-          </AppText>
-        </View>
-        <AppText variant="caption" style={[styles.hint, { color: t.textSecondary }]}>
-          {tr('tasbih.tapAnywhere')}
-        </AppText>
-      </Pressable>
+        <TextInput
+          testID="tasbih-label"
+          value={state.label}
+          onChangeText={(text) => setState(setLabel(store, text))}
+          placeholder={tr('tasbih.labelPlaceholder')}
+          placeholderTextColor={t.icon}
+          maxLength={60}
+          style={[styles.label, { color: t.textSecondary }]}
+          maxFontSizeMultiplier={fontScaleCaps.content}
+        />
 
-      <View style={styles.controls}>
-        {TASBIH_TARGETS.map((target) => (
-          <Pressable
-            key={target}
-            accessibilityRole="button"
-            accessibilityState={{ selected: state.target === target }}
-            testID={`target-${target}`}
-            onPress={() => setState(setTarget(store, target))}
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={tr('tasbih.tapArea')}
+          accessibilityValue={{ now: state.count, min: 0, max: state.target }}
+          testID="tasbih-tap"
+          onPress={onTap}
+          style={styles.tapArea}
+        >
+          <View
             style={[
-              styles.chip,
-              { borderColor: t.border },
-              state.target === target && { backgroundColor: t.accentSoft, borderColor: t.accent },
+              styles.ring,
+              { borderColor: ringColor, backgroundColor: t.bgSurface },
+              !flat && milestone === 'round' && { shadowColor: t.success, ...styles.ringGlow },
             ]}
           >
             <AppText
-              variant={state.target === target ? 'bodyStrong' : 'body'}
-              style={state.target === target ? { color: t.textOnAccentSoft } : undefined}
+              maxFontSizeMultiplier={fontScaleCaps.label}
+              style={[styles.count, { color: t.textPrimary }]}
+              testID="tasbih-count"
             >
-              {target}
+              {displayCount}
             </AppText>
-          </Pressable>
-        ))}
-        <Pressable
-          accessibilityRole="button"
-          testID="tasbih-reset"
-          onPress={() => setState(resetCount(store))}
-          style={[styles.chip, { borderColor: t.border }]}
-        >
-          <AppText style={{ color: t.textSecondary }}>{tr('tasbih.reset')}</AppText>
-        </Pressable>
-      </View>
-
-      <View
-        style={[
-          styles.history,
-          { backgroundColor: t.bgSurface, borderColor: t.border },
-          flat ? undefined : elevation[rm].e2,
-        ]}
-      >
-        {history.map((day) => (
-          <View key={day.date} style={styles.historyRow}>
             <AppText variant="caption" style={{ color: t.textSecondary }}>
-              {day.date.slice(5)}
-            </AppText>
-            <AppText variant="caption" style={{ color: day.count > 0 ? t.ochre : t.icon }}>
-              {day.count}
+              {displayCount}
+              {' / '}
+              {state.target}
             </AppText>
           </View>
-        ))}
-      </View>
+          <AppText variant="caption" style={[styles.hint, { color: t.textSecondary }]}>
+            {tr('tasbih.tapAnywhere')}
+          </AppText>
+        </Pressable>
+
+        <View style={styles.controls}>
+          {TASBIH_TARGETS.map((target) => (
+            <Pressable
+              key={target}
+              accessibilityRole="button"
+              accessibilityState={{ selected: state.target === target }}
+              testID={`target-${target}`}
+              onPress={() => setState(setTarget(store, target))}
+              style={[
+                styles.chip,
+                { borderColor: t.border },
+                state.target === target && { backgroundColor: t.accentSoft, borderColor: t.accent },
+              ]}
+            >
+              <AppText
+                variant={state.target === target ? 'bodyStrong' : 'body'}
+                style={state.target === target ? { color: t.textOnAccentSoft } : undefined}
+              >
+                {target}
+              </AppText>
+            </Pressable>
+          ))}
+          <Pressable
+            accessibilityRole="button"
+            testID="tasbih-reset"
+            onPress={() => setState(resetCount(store))}
+            style={[styles.chip, { borderColor: t.border }]}
+          >
+            <AppText style={{ color: t.textSecondary }}>{tr('tasbih.reset')}</AppText>
+          </Pressable>
+        </View>
+
+        <View
+          style={[
+            styles.history,
+            { backgroundColor: t.bgSurface, borderColor: t.border },
+            flat ? undefined : elevation[rm].e2,
+          ]}
+        >
+          {history.map((day) => (
+            <View key={day.date} style={styles.historyRow}>
+              <AppText variant="caption" style={{ color: t.textSecondary }}>
+                {day.date.slice(5)}
+              </AppText>
+              <AppText variant="caption" style={{ color: day.count > 0 ? t.ochre : t.icon }}>
+                {day.count}
+              </AppText>
+            </View>
+          ))}
+        </View>
+      </ScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: spacing.xl },
+  container: { flex: 1 },
+  // flexGrow keeps the tap ring vertically centered when content fits; at
+  // large type sizes the same content simply scrolls instead of overlapping.
+  scrollContent: { flexGrow: 1, padding: spacing.xl },
   ambient: { position: 'absolute', top: 0, left: 0, right: 0, height: 360 },
   label: {
     fontFamily: fonts.serif,
@@ -190,7 +210,12 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
     padding: spacing.l,
   },
-  ringGlow: { shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.55, shadowRadius: 24, elevation: 12 },
+  ringGlow: {
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.55,
+    shadowRadius: 24,
+    elevation: 12,
+  },
   count: { fontFamily: fonts.serifSemiBold, fontSize: 80, lineHeight: 96 },
   hint: { opacity: 0.8 },
   controls: {

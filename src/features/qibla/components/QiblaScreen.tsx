@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { qiblaBearing, relativeQibla } from '../bearing';
@@ -130,87 +130,96 @@ export function QiblaScreen() {
     : undefined;
 
   return (
-    <View
-      style={[
-        styles.container,
-        { backgroundColor: t.bgCanvas, paddingTop: insets.top + spacing.m },
-      ]}
-    >
-      <AppText variant="title" style={styles.header}>
-        {tr('qibla.title')}
-      </AppText>
+    <View style={[styles.container, { backgroundColor: t.bgCanvas }]}>
+      {/* Scrollable so large type sizes degrade by scrolling instead of
+          pushing the calibration chips off-screen; `automatic` handles the
+          status-bar top and the floating tab bar bottom. */}
+      <ScrollView
+        contentInsetAdjustmentBehavior="automatic"
+        contentContainerStyle={styles.scrollContent}
+      >
+        <AppText variant="title" style={styles.header}>
+          {tr('qibla.title')}
+        </AppText>
 
-      <View style={styles.compassArea} accessible accessibilityLabel={statusText} testID="compass">
         <View
-          style={[
-            styles.ring,
-            {
-              backgroundColor: rel?.aligned ? t.accentSoft : t.bgSurface,
-              borderColor: rel?.aligned ? t.success : t.border,
-            },
-            flat ? undefined : elevation[rm].e2,
-          ]}
+          style={styles.compassArea}
+          accessible
+          accessibilityLabel={statusText}
+          testID="compass"
         >
-          {/* Compass rose: N marker rotates opposite the device heading. */}
-          <View style={[styles.rose, { transform: [{ rotate: `${roseRotation}deg` }] }]}>
-            <AppText variant="caption" style={[styles.north, { color: t.textSecondary }]}>
-              {tr('qibla.northMarker')}
-            </AppText>
-          </View>
-          {/* Needle points toward the qibla relative to the device. */}
           <View
-            testID="needle"
-            style={[styles.needleWrap, { transform: [{ rotate: `${needleRotation}deg` }] }]}
+            style={[
+              styles.ring,
+              {
+                backgroundColor: rel?.aligned ? t.accentSoft : t.bgSurface,
+                borderColor: rel?.aligned ? t.success : t.border,
+              },
+              flat ? undefined : elevation[rm].e2,
+            ]}
           >
+            {/* Compass rose: N marker rotates opposite the device heading. */}
+            <View style={[styles.rose, { transform: [{ rotate: `${roseRotation}deg` }] }]}>
+              <AppText variant="caption" style={[styles.north, { color: t.textSecondary }]}>
+                {tr('qibla.northMarker')}
+              </AppText>
+            </View>
+            {/* Needle points toward the qibla relative to the device. */}
             <View
-              style={[styles.needle, { backgroundColor: rel?.aligned ? t.success : t.accent }]}
-            />
-            <View style={[styles.needleDot, { backgroundColor: t.ochre }]} />
+              testID="needle"
+              style={[styles.needleWrap, { transform: [{ rotate: `${needleRotation}deg` }] }]}
+            >
+              <View
+                style={[styles.needle, { backgroundColor: rel?.aligned ? t.success : t.accent }]}
+              />
+              <View style={[styles.needleDot, { backgroundColor: t.ochre }]} />
+            </View>
           </View>
+
+          <AppText
+            variant="bodyStrong"
+            testID="qibla-status"
+            style={[styles.status, rel?.aligned && { color: t.success }]}
+          >
+            {statusText ?? '—'}
+          </AppText>
+          {bearing !== null && (
+            <AppText variant="caption" style={{ color: t.textSecondary }}>
+              {tr('qibla.bearingLabel', { degrees: Math.round(bearing) })} · {location.label}
+            </AppText>
+          )}
         </View>
 
-        <AppText
-          variant="bodyStrong"
-          testID="qibla-status"
-          style={[styles.status, rel?.aligned && { color: t.success }]}
-        >
-          {statusText ?? '—'}
-        </AppText>
-        {bearing !== null && (
-          <AppText variant="caption" style={{ color: t.textSecondary }}>
-            {tr('qibla.bearingLabel', { degrees: Math.round(bearing) })} · {location.label}
-          </AppText>
-        )}
-      </View>
-
-      <View style={styles.chips}>
-        {heading !== null && !trueNorth && (
-          <View
-            style={[styles.chip, { backgroundColor: t.ochreSoft, borderLeftColor: t.ochre }]}
-            testID="magnetic-caveat"
-          >
-            <AppText variant="caption" style={{ color: t.ochre }}>
-              {tr('qibla.magneticCaveat')}
-            </AppText>
-          </View>
-        )}
-        {heading !== null && accuracy <= 1 && (
-          <View
-            style={[styles.chip, { backgroundColor: t.ochreSoft, borderLeftColor: t.ochre }]}
-            testID="calibration-chip"
-          >
-            <AppText variant="caption" style={{ color: t.ochre }}>
-              {tr('qibla.calibrate')}
-            </AppText>
-          </View>
-        )}
-      </View>
+        <View style={styles.chips}>
+          {heading !== null && !trueNorth && (
+            <View
+              style={[styles.chip, { backgroundColor: t.ochreSoft, borderLeftColor: t.ochre }]}
+              testID="magnetic-caveat"
+            >
+              <AppText variant="caption" style={{ color: t.ochre }}>
+                {tr('qibla.magneticCaveat')}
+              </AppText>
+            </View>
+          )}
+          {heading !== null && accuracy <= 1 && (
+            <View
+              style={[styles.chip, { backgroundColor: t.ochreSoft, borderLeftColor: t.ochre }]}
+              testID="calibration-chip"
+            >
+              <AppText variant="caption" style={{ color: t.ochre }}>
+                {tr('qibla.calibrate')}
+              </AppText>
+            </View>
+          )}
+        </View>
+      </ScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, paddingHorizontal: spacing.xl },
+  container: { flex: 1 },
+  scrollContent: { paddingHorizontal: spacing.xl, paddingTop: spacing.m, paddingBottom: spacing.l },
   center: { alignItems: 'center', justifyContent: 'center', gap: spacing.m, padding: spacing.xxl },
   centerText: { textAlign: 'center' },
   primaryButton: {

@@ -142,7 +142,11 @@ export function AskScreen() {
         ))}
       </View>
 
-      <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
+      <ScrollView
+        contentInsetAdjustmentBehavior="automatic"
+        contentContainerStyle={styles.scroll}
+        keyboardShouldPersistTaps="handled"
+      >
         {response === null && libResponse === null && !libLoading && (
           <AppText variant="reading" style={[styles.hint, { color: t.textSecondary }]}>
             {tr(source === 'library' ? 'ask.hintLibrary' : 'ask.hint')}
@@ -251,7 +255,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  scroll: { paddingBottom: spacing.xxl },
+  scroll: { paddingBottom: spacing.l },
   hint: { textAlign: 'center', marginTop: spacing.xl, opacity: 0.9 },
   countAnswer: {
     fontFamily: fonts.serifMedium,

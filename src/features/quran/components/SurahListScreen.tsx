@@ -62,9 +62,7 @@ export function SurahListScreen() {
   ];
 
   return (
-    <View
-      style={[styles.container, { backgroundColor: tk.bgCanvas, paddingTop: insets.top + 12 }]}
-    >
+    <View style={[styles.container, { backgroundColor: tk.bgCanvas, paddingTop: insets.top + 12 }]}>
       <View style={styles.headerRow}>
         <AppText variant="title" style={styles.title}>
           {t('quran.title')}
@@ -97,6 +95,8 @@ export function SurahListScreen() {
             data={results}
             keyExtractor={(a) => String(a.id)}
             keyboardShouldPersistTaps="handled"
+            contentInsetAdjustmentBehavior="automatic"
+            contentContainerStyle={styles.listContent}
             ListEmptyComponent={<AppText style={styles.hint}>{t('quran.noMatches')}</AppText>}
             renderItem={({ item }) => (
               <Pressable
@@ -135,6 +135,8 @@ export function SurahListScreen() {
             <FlashList
               data={surahs}
               keyExtractor={(s) => String(s.number)}
+              contentInsetAdjustmentBehavior="automatic"
+              contentContainerStyle={styles.listContent}
               renderItem={({ item }) => (
                 <Pressable
                   accessibilityRole="button"
@@ -143,7 +145,10 @@ export function SurahListScreen() {
                   style={[styles.row, { borderBottomColor: tk.border }]}
                 >
                   <View style={[styles.numberBadge, { borderColor: tk.accent }]}>
-                    <AppText maxFontSizeMultiplier={fontScaleCaps.label} style={{ color: tk.accent }}>
+                    <AppText
+                      maxFontSizeMultiplier={fontScaleCaps.label}
+                      style={{ color: tk.accent }}
+                    >
                       {item.number}
                     </AppText>
                   </View>
@@ -196,6 +201,9 @@ const styles = StyleSheet.create({
     borderWidth: StyleSheet.hairlineWidth,
     overflow: 'hidden',
   },
+  // The card passes under the floating tab bar; `automatic` insets the rows
+  // so the last one is never trapped beneath it.
+  listContent: { paddingBottom: spacing.m },
   row: {
     flexDirection: 'row',
     alignItems: 'center',

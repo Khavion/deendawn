@@ -157,7 +157,9 @@ export function TodayScreen() {
         flatColor={t.bgCanvas}
         style={[styles.ambient, { height: insets.top + 340 }]}
       />
-      <ScrollView contentContainerStyle={[styles.scroll, { paddingTop: insets.top + spacing.m }]}>
+      {/* `automatic` insets the content below the status bar and above the
+          floating native tab bar (whose height is unmeasurable by design). */}
+      <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={styles.scroll}>
         <PeriodEyebrow label={eyebrowLabel} style={styles.periodEyebrow} />
 
         <View style={styles.header}>
@@ -185,7 +187,10 @@ export function TodayScreen() {
         </View>
 
         {times && isRamadan(now, settings.hijriOffset) && (
-          <View style={[styles.ramadanCard, { backgroundColor: t.ochreSoft }]} testID="ramadan-card">
+          <View
+            style={[styles.ramadanCard, { backgroundColor: t.ochreSoft }]}
+            testID="ramadan-card"
+          >
             <View style={styles.ramadanRow}>
               <AppText variant="bodyStrong" style={{ color: t.ochre }}>
                 {tr('today.suhoorEnds')}
@@ -282,7 +287,7 @@ export function TodayScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   ambient: { position: 'absolute', top: 0, left: 0, right: 0 },
-  scroll: { paddingHorizontal: spacing.xl, paddingBottom: spacing.xxl },
+  scroll: { paddingHorizontal: spacing.xl, paddingTop: spacing.m, paddingBottom: spacing.l },
   empty: { alignItems: 'center', justifyContent: 'center', padding: spacing.xxl, gap: spacing.m },
   emptyTitle: { textAlign: 'center' },
   emptyBody: { textAlign: 'center' },
