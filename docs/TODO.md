@@ -157,16 +157,20 @@ set reviewed (docs/screens/android/final/MANIFEST.md). What remains is HUMAN: th
 HUMAN SUBMIT (Google Play) checklist in BLOCKERS.md, plus gate-5 recitation for the demo video.
 The polish backlog below is post-wrap work — none of it blocks the closed test.
 
-## ANDROID POLISH BACKLOG (from the 8-cell sweep review, 2026-07-30 — all polish-tier, shippable)
+## ANDROID POLISH BACKLOG — ALL DONE 2026-07-30 (verified live on release build at fs2.0)
 
-- [ ] Font-scale 2.0: search-input placeholders wrap & clip (Quran/Ask/Library) and the tasbih
-      label field clips behind the counter ring — allow input growth or shorten placeholders.
-- [ ] Font-scale 2.0: multi-word Arabic surah names truncate without ellipsis in the list
-      (e.g. surah 3) — flexible name column.
-- [ ] ar/ur locale pass: surah rows lead with English transliteration (decide Arabic-primary
-      per locale); AM/PM + mixed digit systems in times/dates; tasbih history MM-DD; About
-      attributions stay English (probably fine — decide).
-- [ ] Qibla dial: cardinal markings absent in some cells; needle-vs-caption contradiction on
-      no-magnetometer devices (emulator) — consider an explicit compass-unavailable state
-      (the '—' placeholder is already fixed → calibrate guidance).
-- [ ] h-compound nit: More tab's ellipsis icon renders smaller/lower-contrast in its pill.
+- [x] Font-scale 2.0 input clipping — shortened placeholders (en/ur/ar, gate-8 logged).
+- [x] Multi-word Arabic surah-name truncation — root cause was Android under-measuring RTL
+      text width in LTR layout; decorative name pinned to its proven 1.0 rendering.
+- [x] ar/ur locale pass — digit policy (ar = Arabic-Indic everywhere, ur = Latin; DECISIONS),
+      Arabic-primary surah rows in ar/ur, localized tasbih dates/counts, About stays English.
+- [x] Qibla — N/E/S/W cardinal marks + explicit no-compass state (expo-sensors probe).
+- [x] More tab icon — MaterialIcons 'pending' (filled disc), matches other icons' weight.
+
+## AUDIO / POST-WRAP BACKLOG
+
+- [ ] Headphone-unplug pause: expo-audio 57.0.x will not get upstream fix #48151 — add a tiny
+      local module (ACTION_AUDIO_BECOMING_NOISY receiver → pause), same pattern as
+      modules/exact-alarm. Polish-tier; device-pass item until then.
+- [ ] Final evidence re-sweep (8 cells) on the release build once R2 audio is live — refreshes
+      the store screenshot source with the polish fixes in place.
