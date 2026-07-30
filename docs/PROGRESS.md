@@ -662,3 +662,19 @@ Done:
 - Perf trends (emulator): cold start 493ms median, 0.22% janky, p95 22ms (surah scroll).
 - Sweep harness bugs found+fixed (nested-quote seeding, maestro stdin); 76-capture matrix
   re-run; parallel review in flight.
+
+### ANDROID PERFECTION PHASE — SESSION WRAP (2026-07-30)
+Phases 0–4 all delivered in one continuous run:
+- P0 toolchain/harness; P1 correctness (channels, exact alarms, icons, insets, audio,
+  language, brand); P2 excellence (widget, shortcuts, silence-today, sticky, help screen);
+- P3 proof: release build with 16KB + manifest gates PASSED, Play download 38.5–68.9MB;
+  five Maestro suites + offline constitutional proof green ON RELEASE; adhan fired exactly,
+  through deep Doze, survived reboot, Silence-today scoped correctly; 76-capture 8-cell
+  reviewed evidence set (1 blocker found→fixed→re-captured: Qibla inset; gradient seams
+  fixed); perf trends recorded.
+- P4 prepared to the last inch: READY FOR HUMAN SUBMIT (Google Play) in BLOCKERS (GATE
+  printed), FGS declaration draft, feature graphic, screenshot-source plan, Oct-28 location-
+  declaration prep. Remaining human items: Play account + device verification + first manual
+  upload + 12 testers (Zohaib); real recitation for the demo video (gate 5).
+- Polish backlog logged in TODO (fs2.0 input clipping, ar/ur locale refinements, compass-
+  unavailable state, surah-name truncation). 488/488 tests green at wrap.

@@ -91,3 +91,20 @@ review for any app requesting location. Deen Dawn's case: when-in-use
 foreground location, processed entirely on-device for prayer times + qibla
 (core functionality), never transmitted; manual city entry is a full
 alternative. File the declaration when the Console form appears.
+
+## Screenshot source (prepared 2026-07-30)
+
+The Android evidence set (docs/screens/android/final/, release build) is the
+screenshot source. NOTE the Play constraint: max dimension ≤ 2× min — the raw
+1080×2400 frames must be cropped to 1080×2160 (or reframed 1080×1920) for
+upload. Suggested store set: a-light/today (hero), a-light/quran,
+a-light/qibla, b-dark/today, f-ar/today (RTL proof), + a home-screen shot
+with the widget. Final curation (badge-free, cropped, possibly device-framed)
+happens at the store pass alongside the demo video.
+
+## Demo video note
+
+The mediaPlayback FGS demo video should show REAL recitation — recording it
+waits for the gate-5 recordings (the release build hides the audio player
+without a configured source; a dev-build video with the placeholder tone is
+the fallback if the declaration is needed sooner).
