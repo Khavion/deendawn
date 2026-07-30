@@ -606,3 +606,14 @@ Done:
   FlashList bumped for a known Android crash. Open investigation: NativeTabs dead under
   transition-scale 0 (accessibility "Remove animations" — retest on release build).
 - Notification arch commit 1/9 landed (pure channel model, 16 tests). 453/453 green.
+
+### Notification architecture COMPLETE (same session)
+- All 9 planned commits landed (pure channel model → soundKey/timezone/channel wiring →
+  SCHEDULE_EXACT_ALARM + branded small icon → exact-alarm module/state machine/card →
+  cold-start full-adhan). 481/481 green.
+- **Proven live on the emulator**: five adhan channels in dumpsys with localized names;
+  alarms registered window=+1h while denied → tapped "Allow exact timing" → system screen →
+  grant → card gone and all 39 alarms re-registered window=0 (EXACT) automatically.
+- Live-found fixes: channel 'default' sound string resolves as a res/raw filename (now
+  omitted); LogBox toast confirmed it before any user ever would.
+- TESTPLAN Android matrix doc + Doze/reboot/clock-jump truth-testing = Phase 3 (task #14).
