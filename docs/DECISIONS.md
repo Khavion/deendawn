@@ -369,6 +369,23 @@ Result: eslint 0 errors / 6 warnings (the 6 are pre-existing and unchanged), tsc
   moved off pure white/black to the canvas tokens (`#F7F6F2` / `#15181D`) — pure black violated the
   app's own halation rule.
 
+## 2026-07-30 — Performance numbers (Phase 10) + brand assets (Phase 11)
+
+- **Cold start**: ~1.8s app-attributable to first meaningful paint (median 2.05s measured minus
+  ~0.25s per-poll screenshot overhead; 3 runs, RELEASE build, iPhone 17 sim, pixel-probe on the
+  featured card region — method in scripts/evidence-sweep/README). xctrace App Launch hung against
+  this simulator twice and was abandoned. The constitution's "<2s on iPhone 12-class" stays a
+  device-pass item (sims aren't hardware-honest); the sim number plus the controlled splash
+  (no blank frames) is the pre-device evidence.
+- **Binary**: unsigned device archive .app = **66.4MB** (JS bundle 6.0MB, assets 9.6MB) — under
+  the 100MB budget before App Store compression/thinning. Scheduling <500ms: enforced by the
+  existing scheduler test. 60fps scroll: TESTPLAN device pass (sim GPU ≠ device GPU).
+- **Brand assets**: the app had shipped the Expo TEMPLATE icon and splash unnoticed. New identity:
+  gold dawn (half-sun + horizon + concentric arcs) on forest green, from the token palette;
+  light/dark/tinted via `ios.icon`; splash = the gold mark alone with true alpha. Tooling gotcha:
+  qlmanage white-backs transparent SVG renders — opaque art survives it, transparent marks need
+  Pillow (venv in scripts pipeline). SVG sources in assets/design-source/.
+
 ## 2026-07-30 — What the release-build evidence sweep caught (and dev spot-checks never would)
 
 The Phase-9 sweep ran every screen on a RELEASE build across 8 devices × theme/type/locale cells

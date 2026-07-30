@@ -305,11 +305,20 @@ gesture to the open-source project the app is built on.
 
 ## READY FOR HUMAN SUBMIT — the path from here to the App Store
 
-The app is **feature-complete for a first test version**: **412 automated tests green** (52 suites),
-including an offline test that proves everything works without internet. Store text (description,
-keywords, reviewer notes, privacy answers = "Data Not Collected") is drafted in `fastlane/metadata/`.
-The build pipeline is now configured too: **`eas.json` exists** with build + submit profiles, so
-the moment your keys (item 1) land I can build and upload with essentially one command.
+The app is **feature-complete for a first test version**: **425 automated tests green**,
+including an offline test that proves everything works without internet — now verified end-to-end
+on a store-style release build. Store text (description, keywords, reviewer notes, privacy answers
+= "Data Not Collected") is drafted in `fastlane/metadata/`. The build pipeline is configured
+(**`eas.json`** with build + submit profiles), so the moment your keys (item 1) land I can build
+and upload with essentially one command.
+
+**New since 2026-07-30 (the "make it excellent" pass):** the app got a big quality overhaul —
+it now looks and feels native on the newest iPhones and iPads (the new "liquid glass" look),
+works beautifully at the largest accessibility text sizes, in Arabic and Urdu, in dark mode, and
+on iPads (which Apple requires screenshots for — **those screenshots now exist**, so nothing
+blocks the store listing anymore on my side). It also finally has a **real app icon** — a gold
+dawn rising over the horizon on the deep green — replacing a leftover placeholder none of us had
+noticed. Proof of all of it: 205 screenshots across 8 simulated devices in `docs/screens/final/`.
 
 **You (whenever you're ready — walkthroughs above):**
 1. **Apple setup (item 1)** — the single item that unlocks your first real test on your phone.

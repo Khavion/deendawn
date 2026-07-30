@@ -532,7 +532,22 @@ Done:
   verified on **2:282 — the longest ayah — with tajweed runs and zero last-word clipping**
   (the RN #55220 shape), audio card + share rows mirrored, English translation correctly LTR.
   Urdu: Nastaliq leading intact on More, rows mirrored. Language reset to en after.
-- **Phase 9 (evidence sweep) IN FLIGHT — and it earned its keep immediately**: the release-build
+- **Phases 9–11 COMPLETE (2026-07-30).** Phase 9 final: 205 release-build captures across 20 cells
+  (8 devices × EN/dark/night-warm/310% type/ar/ur/compound/Reduce-Motion + the iPadOS
+  narrow-floating-window probe — the app relaid out live into a compact window, nothing broke),
+  MANIFEST.md in docs/screens/final/, **all five Maestro suites green on the release build**
+  (incl. the full offline constitutional proof from a wiped container). The sweep caught and we
+  fixed three release-only defects (animated-wrapper layout loss → AppPressable is a plain
+  Pressable now; aspectRatio-in-cells explosion; FlashList v2 cells ignore RTL → explicit
+  per-row direction) — full detail in DECISIONS 2026-07-30. Phase 10: cold start ~1.8s FMP (sim,
+  release), binary 66.4MB device .app (<100MB ✓), scheduling <500ms test pre-existing; scroll +
+  iPhone-12-class numbers remain TESTPLAN device items. Phase 11: **the template Expo icon and
+  splash are gone** — real gold-dawn-on-forest brand icon (light/dark/tinted, verified on the
+  home screen + asset catalog), seamless splash mark, badge-free store sets: 6× iPhone 6.9" +
+  5× iPad 13" in fastlane/screenshots (the iPad set was the App Store submission blocker).
+  Sweep tooling preserved in scripts/evidence-sweep/. 425/425 tests; return-key city selection
+  shipped as a bonus affordance.
+- Phase 9 log (historical): **and it earned its keep immediately**: the release-build
   sweep across 8 devices caught a class of defect every dev-build spot check missed:
   `Animated.createAnimatedComponent(Pressable)` + function-styles **drops caller layout styles on
   release builds** (surah rows lost flexDirection; number badge exploded to fill its cell).
