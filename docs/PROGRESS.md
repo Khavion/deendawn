@@ -532,6 +532,17 @@ Done:
   verified on **2:282 — the longest ayah — with tajweed runs and zero last-word clipping**
   (the RN #55220 shape), audio card + share rows mirrored, English translation correctly LTR.
   Urdu: Nastaliq leading intact on More, rows mirrored. Language reset to en after.
+- **Phase 9 (evidence sweep) IN FLIGHT — and it earned its keep immediately**: the release-build
+  sweep across 8 devices caught a class of defect every dev-build spot check missed:
+  `Animated.createAnimatedComponent(Pressable)` + function-styles **drops caller layout styles on
+  release builds** (surah rows lost flexDirection; number badge exploded to fill its cell).
+  AppPressable rewritten as a plain Pressable with instant pressed-state feedback (the native iOS
+  list-highlight idiom; state not motion, so it correctly survives Reduce Motion); Button keeps its
+  animated label flourish on an inner Animated.View (layout-safe). Also fixed: aspectRatio inside
+  virtualized list cells (independent explosion vector), a Maestro debounce race in the city-picker
+  taps (e2e flows now wait for results), tab selectors updated for NativeTabs. Suites: smoke/ask/
+  locales green on release; offline/onboarding rerunning after the fix. Evidence: ~200 captures
+  into docs/screens/final/ (8 devices × EN/dark/night-warm/200%/ar/ur/compound/RM cells).
 - **Phase 5 (layout correctness) SHIPPED, verified on iPhone 17 + iPad Pro 13"**: (a) native-bar
   insets — `contentInsetAdjustmentBehavior="automatic"` on every tab scroller (surah 114 no longer
   trapped under the floating glass bar; scroll-under blur correct), bottom clearances on pushed

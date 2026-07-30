@@ -9,7 +9,7 @@ appId: com.khavion.deendawn
     visible:
       id: 'prayer-row-fajr'
     timeout: 20000
-- tapOn: 'Quran, tab.*'
+- tapOn: 'Quran'
 - extendedWaitUntil:
     visible:
       id: 'quran-search'

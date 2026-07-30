@@ -26,6 +26,13 @@ appId: com.khavion.deendawn
 - tapOn:
     id: 'city-search'
 - inputText: 'Houston'
+# The city search is debounced (150ms); tapping before the results settle
+# races the FlashList re-render and the tap is dropped.
+- extendedWaitUntil:
+    visible:
+      id: 'city-houston-us'
+    timeout: 5000
+- waitForAnimationToEnd
 - tapOn:
     id: 'city-houston-us'
 - extendedWaitUntil:

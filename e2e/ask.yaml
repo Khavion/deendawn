@@ -6,7 +6,7 @@ appId: com.khavion.deendawn
     visible:
       id: 'prayer-row-fajr'
     timeout: 20000
-- tapOn: '.*, tab, 3 of 5'
+- tapOn: 'Ask'
 - extendedWaitUntil:
     visible:
       id: 'ask-input'

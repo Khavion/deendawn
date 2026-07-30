@@ -26,6 +26,13 @@ appId: com.khavion.deendawn
 - tapOn:
     id: 'city-search'
 - inputText: 'Houston'
+# The city search is debounced (150ms); tapping before the results settle
+# races the FlashList re-render and the tap is dropped.
+- extendedWaitUntil:
+    visible:
+      id: 'city-houston-us'
+    timeout: 5000
+- waitForAnimationToEnd
 - tapOn:
     id: 'city-houston-us'
 - extendedWaitUntil:
@@ -41,7 +48,7 @@ appId: com.khavion.deendawn
     timeout: 20000
 - takeScreenshot: docs/screens/offline-today
 # Quran text from the bundled database; no audio bar in release (no source)
-- tapOn: 'Quran, tab.*'
+- tapOn: 'Quran'
 - extendedWaitUntil:
     visible:
       id: 'quran-search'
@@ -62,7 +69,7 @@ appId: com.khavion.deendawn
     visible:
       id: 'prayer-row-fajr'
     timeout: 20000
-- tapOn: 'Ask, tab.*'
+- tapOn: 'Ask'
 - extendedWaitUntil:
     visible:
       id: 'ask-input'
@@ -77,7 +84,7 @@ appId: com.khavion.deendawn
     timeout: 10000
 - takeScreenshot: docs/screens/offline-ask
 # Qibla renders its screen (no live sensors on sim — but no crash, no network)
-- tapOn: 'Qibla, tab.*'
+- tapOn: 'Qibla'
 - extendedWaitUntil:
     visible:
       id: 'compass'
@@ -89,7 +96,7 @@ appId: com.khavion.deendawn
     visible:
       id: 'prayer-row-fajr'
     timeout: 20000
-- tapOn: 'More, tab.*'
+- tapOn: 'More'
 - scrollUntilVisible:
     element:
       id: 'setting-tasbih'
@@ -110,7 +117,7 @@ appId: com.khavion.deendawn
     visible:
       id: 'prayer-row-fajr'
     timeout: 20000
-- tapOn: 'More, tab.*'
+- tapOn: 'More'
 - scrollUntilVisible:
     element:
       id: 'setting-zakat'
@@ -129,7 +136,7 @@ appId: com.khavion.deendawn
     visible:
       id: 'prayer-row-fajr'
     timeout: 20000
-- tapOn: 'More, tab.*'
+- tapOn: 'More'
 - scrollUntilVisible:
     element:
       id: 'setting-calendar'

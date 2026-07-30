@@ -7,7 +7,7 @@ appId: com.khavion.deendawn
     visible:
       id: 'prayer-row-fajr'
     timeout: 20000
-- tapOn: 'More, tab.*'
+- tapOn: 'More'
 - extendedWaitUntil:
     visible:
       id: 'setting-language'
