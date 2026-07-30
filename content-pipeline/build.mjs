@@ -7,6 +7,7 @@ import { readFileSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
 import path from 'node:path';
 import {
   DATA_DIR,
+  PIPELINE_DIR,
   REPO_ROOT,
   loadSources,
   loadLock,
@@ -275,19 +276,34 @@ if (libSources.length > 0) {
   console.log(`library.db: ${workCount} works, ${sectionCount} sections`);
 }
 
-// Attribution manifest — rendered on the About screen.
+// Attribution manifest — rendered on the About screen. Recitation audio
+// entries ride the same manifest, sourced from the audio pipeline's own
+// sources.json (files live in R2, not the binary — no hash column here;
+// per-file hashes are in content-pipeline/audio/audio.lock).
+const audioSources = JSON.parse(
+  readFileSync(path.join(PIPELINE_DIR, 'audio', 'sources.json'), 'utf8')
+).recitations;
 const attribution = {
   generatedFrom: 'content-pipeline/sources.json',
-  artifacts: sources.map((s) => ({
-    id: s.id,
-    kind: s.kind,
-    attribution: s.attribution,
-    license: s.license,
-    url: s.url,
-    sha256: lock.artifacts[s.id].sha256,
-    pinnedAt: lock.artifacts[s.id].pinnedAt,
-    ...(s.devOnly && { devOnly: true }),
-  })),
+  artifacts: [
+    ...sources.map((s) => ({
+      id: s.id,
+      kind: s.kind,
+      attribution: s.attribution,
+      license: s.license,
+      url: s.url,
+      sha256: lock.artifacts[s.id].sha256,
+      pinnedAt: lock.artifacts[s.id].pinnedAt,
+      ...(s.devOnly && { devOnly: true }),
+    })),
+    ...audioSources.map((r) => ({
+      id: `recitation-${r.id}`,
+      kind: 'recitation-audio',
+      attribution: r.attribution,
+      license: r.license,
+      url: r.licenseUrl,
+    })),
+  ],
 };
 writeFileSync(
   path.join(REPO_ROOT, 'assets', 'attribution.json'),

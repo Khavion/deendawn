@@ -7,6 +7,7 @@ import type { AudioSource } from '../config';
 import { getAudioSource } from '../config';
 import { formatClock, progressFraction, resumeSeekTarget } from '../playerLogic';
 import { clearResumePosition, getResumePosition, saveResumePosition } from '../resumeStore';
+import { reciterName } from '../reciters';
 import { surahAudioUrl } from '../urls';
 import { AppPressable, AppText, GoldFrameCard } from '@/src/components/ui';
 import { IconSymbol } from '@/components/ui/icon-symbol';
@@ -109,7 +110,9 @@ function AudioBarInner({
       if (target > 0) player.seekTo(target);
       player.setActiveForLockScreen(true, {
         title,
-        artist: tr('audio.lockScreenArtist'),
+        // Real recitation credits the reciter on the lock screen; the dev
+        // tone credits the app so it can never read as recitation (rule 1).
+        artist: reciterName(source.reciterId) ?? tr('audio.lockScreenArtist'),
       });
       startedRef.current = true;
       setStarted(true);
@@ -152,7 +155,9 @@ function AudioBarInner({
           <AppText variant="caption" style={{ color: t.textSecondary }} testID="surah-audio-time">
             {started || status.currentTime > 0
               ? `${formatClock(status.currentTime)} / ${formatClock(status.duration)}`
-              : tr('audio.streamed')}
+              : [reciterName(source.reciterId), tr('audio.streamed')]
+                  .filter(Boolean)
+                  .join(' · ')}
           </AppText>
         </View>
       </View>

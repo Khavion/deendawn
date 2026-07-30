@@ -1,3 +1,5 @@
+import { DEFAULT_RECITER_ID } from './reciters';
+
 /**
  * Recitation audio source configuration.
  *
@@ -5,10 +7,11 @@
  * is our R2 bucket, injected at build time via EXPO_PUBLIC_AUDIO_BASE_URL.
  * When it is unset the listening feature is hidden entirely — no dead UI.
  *
- * Dev builds fall back to a localhost server so the full streaming player can
- * be exercised with placeholder tones before licensed recordings exist
- * (BLOCKERS item 2). Placeholder audio is NEVER presented as recitation: the
- * player shows a persistent dev badge whenever the placeholder source is used.
+ * With a base URL set, the bucket serves REAL recitation (the audio
+ * pipeline's verified set — see content-pipeline/audio/), so no placeholder
+ * badge regardless of build type. Without one, dev builds fall back to the
+ * localhost tone server, which is NEVER presented as recitation: the player
+ * shows a persistent dev badge for that source (rule 1).
  */
 export interface AudioSource {
   baseUrl: string;
@@ -24,11 +27,17 @@ export const DEV_AUDIO_BASE_URL = 'http://localhost:8083';
 
 export function resolveAudioSource(
   envBaseUrl: string | undefined,
-  isDev: boolean
+  isDev: boolean,
+  envReciterId?: string
 ): AudioSource | null {
   const base = envBaseUrl?.trim();
   if (base) {
-    return { baseUrl: base, reciterId: 'dev', fileExt: 'mp3', placeholder: isDev };
+    return {
+      baseUrl: base,
+      reciterId: envReciterId?.trim() || DEFAULT_RECITER_ID,
+      fileExt: 'mp3',
+      placeholder: false,
+    };
   }
   if (isDev) {
     return { baseUrl: DEV_AUDIO_BASE_URL, reciterId: 'dev', fileExt: 'm4a', placeholder: true };
@@ -37,5 +46,9 @@ export function resolveAudioSource(
 }
 
 export function getAudioSource(): AudioSource | null {
-  return resolveAudioSource(process.env.EXPO_PUBLIC_AUDIO_BASE_URL, __DEV__);
+  return resolveAudioSource(
+    process.env.EXPO_PUBLIC_AUDIO_BASE_URL,
+    __DEV__,
+    process.env.EXPO_PUBLIC_AUDIO_RECITER
+  );
 }

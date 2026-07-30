@@ -39,10 +39,23 @@ describe('surahAudioUrl', () => {
 });
 
 describe('resolveAudioSource', () => {
-  it('uses the env base URL when provided', () => {
+  it('uses the env base URL with the default reciter and no placeholder badge', () => {
     const src = resolveAudioSource('https://r2.example.com/audio', false);
     expect(src?.baseUrl).toBe('https://r2.example.com/audio');
+    expect(src?.reciterId).toBe('alafasy');
+    expect(src?.fileExt).toBe('mp3');
     expect(src?.placeholder).toBe(false);
+  });
+
+  it('bucket audio is real recitation even in dev builds — no dev badge', () => {
+    expect(resolveAudioSource('https://r2.example.com', true)?.placeholder).toBe(false);
+  });
+
+  it('honors an explicit reciter override', () => {
+    expect(resolveAudioSource('https://r2.example.com', false, 'husary')?.reciterId).toBe(
+      'husary'
+    );
+    expect(resolveAudioSource('https://r2.example.com', false, '  ')?.reciterId).toBe('alafasy');
   });
 
   it('falls back to localhost placeholder only in dev', () => {
@@ -52,10 +65,6 @@ describe('resolveAudioSource', () => {
     expect(dev?.placeholder).toBe(true);
     expect(resolveAudioSource(undefined, false)).toBeNull();
     expect(resolveAudioSource('   ', false)).toBeNull();
-  });
-
-  it('marks any dev-build source as placeholder until recordings clear', () => {
-    expect(resolveAudioSource('https://r2.example.com', true)?.placeholder).toBe(true);
   });
 });
 

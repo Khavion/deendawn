@@ -396,3 +396,59 @@ demo video, and export the final screenshot set.
 **One heads-up for October:** from Oct 28, 2026 Google adds a form for ANY app that uses
 location. Ours is the easiest case (on-device only, never sent anywhere, manual city works
 without it) — I'll draft the answers when the form appears.
+
+## Turn on the audio bucket (Cloudflare R2) — needed before recitation streams to real users
+
+**What this is.** The Quran listening feature is now fully built with a real,
+legally-cleared reciter (Mishary Rashid Alafasy — the most popular voice in
+the world, used under the Islamic Network's published terms). I downloaded
+and verified all 114 surah recordings. The last piece is the free online
+storage they stream from — Cloudflare R2 — which only you can switch on,
+because Cloudflare asks for a card (it stays at $0: our usage fits their
+free tier, and they never charge for the streaming bandwidth itself).
+
+**What to do (about 15 minutes):**
+1. Go to dash.cloudflare.com and sign up (or log in) with your email.
+2. In the left menu click **R2 Object Storage**, then **Get started** /
+   **Enable R2**. It will ask for a card — this is the "spending" step I
+   can't do for you. Expected monthly bill: **$0**.
+3. Click **Create bucket**. Name it exactly: `deendawn-audio`. Leave
+   everything else as-is and create it.
+4. Go back to the R2 page → **API** → **Manage API tokens** → **Create API
+   token**. Give it a name like "deendawn-upload", choose **Object Read &
+   Write**, limit it to the `deendawn-audio` bucket, and create it.
+5. Cloudflare shows you four values ONE TIME: Account ID, Access Key ID,
+   Secret Access Key. Create a file called `.env` in the project folder
+   (Desktop/Khavion/deendawn) containing exactly these four lines, pasting
+   your values after each `=`:
+   R2_ACCOUNT_ID=
+   R2_ACCESS_KEY_ID=
+   R2_SECRET_ACCESS_KEY=
+   R2_BUCKET=deendawn-audio
+6. Tell me ".env is in" — I upload all 114 files and verify streaming
+   end-to-end myself.
+7. LATER (before the app goes to real users, not needed for our own
+   testing): the bucket needs a web address on a domain you own, added to
+   the same Cloudflare account (for example audio.khavion.com). If you own
+   a domain already, tell me which; if not, buying one (~$10/year) is a
+   spending decision — my recommendation: **yes, one domain**, it also
+   serves the future website and support email.
+
+**My recommendation:** do steps 1–6 whenever you have 15 minutes; step 7
+can wait until we're near the Play release.
+
+## Reciter sign-off (Human Gate #5 — audio half)
+
+**What this is.** The rule book says you personally approve the shipping
+reciter. I recommend **Mishary Rashid Alafasy (Murattal)**: the world's most
+recognized modern voice, complete 114-surah set, clean license basis (the
+Islamic Network states in writing that the recitations are licensed to them
+for free non-commercial redistribution — full quote shown in the app's About
+screen). The app is built so more reciters can be added later without code
+changes.
+
+**What to do:** reply "approved: Alafasy" (or name another reciter and I'll
+research their licensing). Optional but recommended: I'll draft a short
+permission-confirmation email to the Islamic Network community team that you
+send from your address — one sentence asking them to confirm re-hosting for
+a free app is within their terms. Want it? Say "draft the email".

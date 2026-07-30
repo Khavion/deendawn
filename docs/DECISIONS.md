@@ -712,3 +712,45 @@ pass on the release build.
 - **Tasbih/compass extras**: history dates localize via `formatDayKey`;
   compass card gains E/S/W cardinal words + an explicit no-magnetometer state
   (Magnetometer.isAvailableAsync) instead of a forever-"calibrating" dial.
+
+## 2026-07-30 — Recitation audio source: Islamic Network collection, re-hosted on R2 (Alafasy first)
+
+Zohaib directed full recitation using openly-licensed audio. A 9-agent
+research workflow (4 sweeps + adversarial license verification per candidate)
+established, with live page fetches:
+
+- **QUL / Tarteel** (qul.tarteel.ai): superb catalog, but NO per-recitation
+  license is published anywhere on the site; upstream QuranicAudio.com terms
+  are personal-use-only. Every re-hosting claim was adversarially REFUTED.
+- **QuranicAudio.com**: personal use only, admits mixed chain-of-title. No.
+- **archive.org full-set items**: CC/PD tags are anonymous uploader
+  assertions, plainly invalid for rights-managed recordings. No.
+- **tvQuran**: all rights reserved. **mp3quran/Quran Central**: unverifiable
+  (bot-blocked). **EveryAyah**: per-ayah only + dead license page.
+- **Islamic Network (alquran.cloud / cdn.islamic.network)** — the ONE source
+  with a published permission statement, fetched verbatim 2026-07-30:
+  recitations are "licensed to us by the reciters or their estates for free,
+  non-commercial redistribution at the bitrates we publish", download
+  explicitly permitted, even commercial bundling permitted, with a
+  reciter-takedown caveat we will honor. Full quote pinned in
+  content-pipeline/audio/sources.json and rendered in About.
+
+DECISION: fetch the per-surah 128 kbps sets from cdn.islamic.network,
+verify + hash-lock them (audio.lock, same discipline as content.lock), and
+re-host on OUR R2 bucket — rule 2 requires the only audio domain be ours,
+and re-hosting keeps user IPs away from any third party. Starting reciter:
+**Mishary Rashid Alafasy (Murattal, ~1.6 GB)** — the most widely loved
+voice; the bucket layout ({reciterId}/NNN.mp3) already supports adding more.
+Final reciter sign-off remains Human Gate #5 (BLOCKERS), and emailing
+Islamic Network for a one-line re-hosting confirmation is recommended there.
+
+R2 serving facts (verified): free tier 10 GB + 10M reads/month, egress $0 at
+any volume; r2.dev is dev-only (rate-limited) — production needs a custom
+domain on a Cloudflare zone; Range requests supported (single range — fine
+for expo-audio). Enabling R2 requires a card on file → human gate; the
+click-by-click is in BLOCKERS.
+
+expo-audio: 57.0.3 is the newest SDK-57 patch (verified changelog). The
+Android headphone-unplug pause fix (#48151) is merged upstream but will not
+ship in 57.0.x — logged in TODO as an app-side polish candidate (tiny local
+module listening for ACTION_AUDIO_BECOMING_NOISY).
