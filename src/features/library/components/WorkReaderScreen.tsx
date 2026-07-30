@@ -8,6 +8,7 @@ import { StyleSheet, View } from 'react-native';
 import { openLibraryDb } from '../libraryDb';
 import { getWork, listSections, SectionRow, WorkRow } from '../repo';
 import { AppText, Skeleton } from '@/src/components/ui';
+import { IconSymbol } from '@/components/ui/icon-symbol';
 import { measure, radius, spacing } from '@/src/lib/theme/tokens';
 import { useTokens } from '@/src/lib/theme/useTokens';
 
@@ -75,6 +76,14 @@ export function WorkReaderScreen() {
             }
           }}
           contentContainerStyle={styles.list}
+          ListEmptyComponent={
+            <View style={styles.emptyState}>
+              <IconSymbol name="book.fill" size={36} color={t.icon} />
+              <AppText variant="reading" style={{ color: t.textSecondary }}>
+                {tr('library.noSections')}
+              </AppText>
+            </View>
+          }
           ListHeaderComponent={
             work ? (
               <AppText variant="caption" style={[styles.attribution, { color: t.textSecondary }]}>
@@ -98,6 +107,7 @@ export function WorkReaderScreen() {
 }
 
 const styles = StyleSheet.create({
+  emptyState: { alignItems: 'center', gap: spacing.m, paddingTop: spacing.xxl },
   container: { flex: 1 },
   list: { padding: spacing.xl, paddingBottom: spacing.xxl + spacing.xl },
   attribution: { marginBottom: spacing.l, textAlign: 'center' },

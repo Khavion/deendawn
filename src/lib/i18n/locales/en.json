@@ -260,6 +260,7 @@
     "title": "Thinkers & books",
     "searchPlaceholder": "Search the bundled books…",
     "noMatches": "No matches in the bundled books.",
+    "noSections": "This book could not be loaded — try reopening it.",
     "reviewPending": "Draft summaries — pending scholar review before public release.",
     "keyIdeas": "Key ideas",
     "majorWorks": "Major works",

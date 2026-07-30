@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ScrollView, StyleSheet, View } from 'react-native';
+import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { qiblaBearing, relativeQibla } from '../bearing';
@@ -34,13 +35,35 @@ export function QiblaScreen() {
   const { settings, update } = useSettings();
   const [pickerOpen, setPickerOpen] = useState(false);
   const location = resolveLocation(settings);
-  const { heading, trueNorth, accuracy, permission, requestPermission } = useHeading();
+  // Rotation lives on the UI thread at full sensor rate (Reanimated shared
+  // values) — React state below only updates at the hook's throttled cadence
+  // for logic (alignment styling, chips, haptics). Values are direct
+  // assignments, not springs: the needle TRACKS the sensor (functional
+  // motion), so Reduce Motion needs no special casing here.
+  const roseSv = useSharedValue(0);
+  const needleSv = useSharedValue(0);
+  const bearingRef = useRef<number | null>(null);
+  const { heading, trueNorth, accuracy, permission, requestPermission } = useHeading((deg) => {
+    roseSv.value = -deg;
+    if (bearingRef.current !== null) {
+      needleSv.value = relativeQibla(bearingRef.current, deg).turn;
+    }
+  });
+  const roseStyle = useAnimatedStyle(() => ({
+    transform: [{ rotate: `${roseSv.value}deg` }],
+  }));
+  const needleStyle = useAnimatedStyle(() => ({
+    transform: [{ rotate: `${needleSv.value}deg` }],
+  }));
 
   const bearing = useMemo(
     () => (location ? qiblaBearing(location) : null),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [location?.latitude, location?.longitude]
   );
+  useEffect(() => {
+    bearingRef.current = bearing;
+  }, [bearing]);
 
   const rel = bearing !== null && heading !== null ? relativeQibla(bearing, heading) : null;
 
@@ -124,8 +147,6 @@ export function QiblaScreen() {
     );
   }
 
-  const needleRotation = rel ? rel.turn : 0;
-  const roseRotation = heading !== null ? -heading : 0;
   const statusText = rel
     ? rel.aligned
       ? tr('qibla.aligned')
@@ -167,16 +188,13 @@ export function QiblaScreen() {
             ]}
           >
             {/* Compass rose: N marker rotates opposite the device heading. */}
-            <View style={[styles.rose, { transform: [{ rotate: `${roseRotation}deg` }] }]}>
+            <Animated.View style={[styles.rose, roseStyle]}>
               <AppText variant="caption" style={[styles.north, { color: t.textSecondary }]}>
                 {tr('qibla.northMarker')}
               </AppText>
-            </View>
+            </Animated.View>
             {/* Needle points toward the qibla relative to the device. */}
-            <View
-              testID="needle"
-              style={[styles.needleWrap, { transform: [{ rotate: `${needleRotation}deg` }] }]}
-            >
+            <Animated.View testID="needle" style={[styles.needleWrap, needleStyle]}>
               <View
                 style={[
                   styles.needle,
@@ -187,7 +205,7 @@ export function QiblaScreen() {
                 ]}
               />
               <View style={[styles.needleDot, { backgroundColor: t.ochre }]} />
-            </View>
+            </Animated.View>
           </View>
 
           <AppText

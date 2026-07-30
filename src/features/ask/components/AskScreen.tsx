@@ -10,6 +10,7 @@ import { askLibrary, LibraryAskResponse, sectionSnippet } from '../libraryAsk';
 import { openLibraryDb } from '../../library/libraryDb';
 import { AyahRow, QuranDb } from '../../quran/repo';
 import { AppPressable, AppText, Skeleton } from '@/src/components/ui';
+import { IconSymbol } from '@/components/ui/icon-symbol';
 import { fonts, fontScaleCaps, fontSize, measure, radius, spacing } from '@/src/lib/theme/tokens';
 import { useTokens } from '@/src/lib/theme/useTokens';
 
@@ -200,9 +201,12 @@ export function AskScreen() {
         )}
 
         {libResponse?.kind === 'empty' && (
-          <AppText testID="ask-empty-library" style={[styles.hint, { color: t.textSecondary }]}>
-            {tr('ask.empty')}
-          </AppText>
+          <View testID="ask-empty-library" style={styles.emptyState}>
+            <IconSymbol name="magnifyingglass" size={36} color={t.icon} />
+            <AppText variant="reading" style={[styles.hint, { color: t.textSecondary }]}>
+              {tr('ask.empty')}
+            </AppText>
+          </View>
         )}
 
         {response?.kind === 'count' && (
@@ -228,9 +232,12 @@ export function AskScreen() {
         )}
 
         {response?.kind === 'empty' && (
-          <AppText testID="ask-empty" style={[styles.hint, { color: t.textSecondary }]}>
-            {tr('ask.empty')}
-          </AppText>
+          <View testID="ask-empty" style={styles.emptyState}>
+            <IconSymbol name="magnifyingglass" size={36} color={t.icon} />
+            <AppText variant="reading" style={[styles.hint, { color: t.textSecondary }]}>
+              {tr('ask.empty')}
+            </AppText>
+          </View>
         )}
       </ScrollView>
     </View>
@@ -264,6 +271,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   hint: { textAlign: 'center', marginTop: spacing.xl, opacity: 0.9 },
+  emptyState: { alignItems: 'center', gap: spacing.m, paddingTop: spacing.xl },
   countAnswer: {
     fontFamily: fonts.serifMedium,
     fontSize: fontSize.h2,

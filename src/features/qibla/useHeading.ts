@@ -17,13 +17,21 @@ export interface HeadingState {
 const ALPHA = 0.25; // low-pass responsiveness
 const MIN_INTERVAL_MS = 66; // ~15Hz UI updates
 
-/** Compass heading via expo-location, smoothed and throttled for the UI. */
-export function useHeading(): HeadingState {
+/**
+ * Compass heading via expo-location, smoothed and throttled for React state.
+ * `onRaw` (optional) fires at FULL sensor rate with the smoothed heading —
+ * for driving native-thread rotation (Reanimated) without re-rendering.
+ */
+export function useHeading(onRaw?: (smoothedDeg: number) => void): HeadingState {
   const [permission, setPermission] = useState<HeadingState['permission']>('undetermined');
   const [heading, setHeading] = useState<number | null>(null);
   const [trueNorth, setTrueNorth] = useState(false);
   const [accuracy, setAccuracy] = useState(0);
   const smoothed = useRef<number | null>(null);
+  const onRawRef = useRef(onRaw);
+  useEffect(() => {
+    onRawRef.current = onRaw;
+  }, [onRaw]);
   const lastEmit = useRef(0);
   const [requestNonce, setRequestNonce] = useState(0);
 
@@ -46,6 +54,7 @@ export function useHeading(): HeadingState {
         const raw = useTrue ? h.trueHeading : h.magHeading;
         smoothed.current =
           smoothed.current === null ? raw : lowPassAngle(smoothed.current, raw, ALPHA);
+        onRawRef.current?.(smoothed.current);
         const now = Date.now();
         if (now - lastEmit.current >= MIN_INTERVAL_MS) {
           lastEmit.current = now;
