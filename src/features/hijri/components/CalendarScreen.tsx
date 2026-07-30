@@ -185,7 +185,7 @@ export function CalendarScreen({ initialDate }: { initialDate?: Date }) {
         )}
 
         <View
-          style={[styles.disclaimer, { backgroundColor: t.bgElevated, borderLeftColor: t.ochre }]}
+          style={[styles.disclaimer, { backgroundColor: t.bgElevated, borderStartColor: t.ochre }]}
         >
           <AppText variant="caption" style={{ color: t.textSecondary }}>
             {tr('calendar.disclaimer')}
@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
   disclaimer: {
     marginTop: spacing.xl,
     borderRadius: radius.control,
-    borderLeftWidth: 3,
+    borderStartWidth: 3,
     padding: spacing.m,
   },
 });

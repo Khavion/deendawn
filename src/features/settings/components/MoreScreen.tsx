@@ -653,7 +653,7 @@ const styles = StyleSheet.create({
     gap: 2,
   },
   settingValue: {},
-  rowText: { flex: 1, paddingRight: spacing.m, gap: 2 },
+  rowText: { flex: 1, paddingEnd: spacing.m, gap: 2 },
   stepper: { flexDirection: 'row', alignItems: 'center', gap: spacing.s },
   stepBtn: {
     minWidth: 44,

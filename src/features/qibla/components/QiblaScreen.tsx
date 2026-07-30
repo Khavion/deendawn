@@ -226,7 +226,7 @@ export function QiblaScreen() {
         <View style={styles.chips}>
           {heading !== null && !trueNorth && (
             <View
-              style={[styles.chip, { backgroundColor: t.ochreSoft, borderLeftColor: t.ochre }]}
+              style={[styles.chip, { backgroundColor: t.ochreSoft, borderStartColor: t.ochre }]}
               testID="magnetic-caveat"
             >
               <AppText variant="caption" style={{ color: t.ochre }}>
@@ -236,7 +236,7 @@ export function QiblaScreen() {
           )}
           {heading !== null && accuracy <= 1 && (
             <View
-              style={[styles.chip, { backgroundColor: t.ochreSoft, borderLeftColor: t.ochre }]}
+              style={[styles.chip, { backgroundColor: t.ochreSoft, borderStartColor: t.ochre }]}
               testID="calibration-chip"
             >
               <AppText variant="caption" style={{ color: t.ochre }}>
@@ -304,7 +304,7 @@ const styles = StyleSheet.create({
   chips: { alignItems: 'stretch', gap: spacing.s, marginTop: spacing.xl },
   chip: {
     borderRadius: radius.control,
-    borderLeftWidth: 3,
+    borderStartWidth: 3,
     paddingHorizontal: spacing.l,
     paddingVertical: spacing.s,
   },

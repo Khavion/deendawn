@@ -157,7 +157,7 @@ export function ZakatScreen() {
         <View style={elevatedCard}>{PRICE_FIELDS.map(field)}</View>
 
         <View
-          style={[styles.disclaimer, { backgroundColor: t.ochreSoft, borderLeftColor: t.ochre }]}
+          style={[styles.disclaimer, { backgroundColor: t.ochreSoft, borderStartColor: t.ochre }]}
         >
           <AppText variant="caption" style={{ color: t.ochre }}>
             {tr('zakat.disclaimer')}
@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
   disclaimer: {
     marginTop: spacing.xl,
     borderRadius: radius.control,
-    borderLeftWidth: 3,
+    borderStartWidth: 3,
     padding: spacing.m,
   },
 });

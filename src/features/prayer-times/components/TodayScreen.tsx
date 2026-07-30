@@ -256,8 +256,8 @@ export function TodayScreen() {
                     styles.row,
                     isNext && {
                       backgroundColor: t.accentSoft,
-                      borderLeftColor: t.ochre,
-                      borderLeftWidth: 3,
+                      borderStartColor: t.ochre,
+                      borderStartWidth: 3,
                     },
                   ]}
                 >
