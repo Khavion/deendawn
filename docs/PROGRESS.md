@@ -628,3 +628,15 @@ Done:
 - **Background audio PROVEN on Android**: playback advances backgrounded, mediaPlayback FGS
   + transport notification, lock-screen media card with metadata/controls.
 - 481/481 green throughout.
+
+### Phase 2 excellence COMPLETE (same session)
+- **Home-screen widget SHIPPED & VERIFIED LIVE** (react-native-android-widget): city+date
+  header, five prayer columns, next-prayer highlight — headless handler computes from the KV
+  store + pure engine, refreshes on every reschedule + 30-min tick. In the picker with brand
+  preview; placed at 4×1 on the emulator home screen.
+- App shortcuts (Qibla/Tasbih/Continue-reading→exact ayah) registered (dumpsys-verified);
+  "Silence today" action on every adhan (warm + killed-state task); opt-in pinned next-prayer
+  notification VERIFIED LIVE in the shade (silent LOW channel, branded icon, honest copy);
+  "Adhan not playing?" troubleshooting screen (permission-free battery deep-link, OEM steps).
+- 488/488 green. Next: Phase 3 proof (truth-testing matrix, release build, evidence sweep,
+  16KB+manifest gates) then Phase 4 store prep.
