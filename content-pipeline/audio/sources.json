@@ -1,0 +1,19 @@
+{
+  "comment": "Pinned recitation audio sources. Same NO-AI ZONE discipline as the text pipeline: bytes flow from these URLs into audio/data/ verbatim, are hashed into audio.lock on first fetch, and any later mismatch fails verification. The audio files themselves are NOT committed (see .gitignore) — the lock file is the committed truth. License basis researched + adversarially verified 2026-07-30 (see DECISIONS.md).",
+  "recitations": [
+    {
+      "id": "alafasy",
+      "edition": "ar.alafasy",
+      "reciterName": "Mishary Rashid Alafasy",
+      "style": "Murattal",
+      "riwayah": "Hafs 'an 'Asim",
+      "bitrateKbps": 128,
+      "surahCount": 114,
+      "urlPattern": "https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/{n}.mp3",
+      "license": "Islamic Network Terms & Conditions (alquran.cloud/terms-and-conditions), fetched 2026-07-30: \"Recitations are licensed to us by the reciters or their estates for free, non-commercial redistribution at the bitrates we publish. You may stream, embed and download them for personal and educational use. You may bundle them into a commercial product, but please note that copyrights lie with the reciters and they may ask you to remove the conent.\" [sic] DeenDawn is zero-revenue; files are kept byte-for-byte at the published bitrate; takedown requests will be honored.",
+      "licenseUrl": "https://alquran.cloud/terms-and-conditions",
+      "attribution": "Recitation: Mishary Rashid Alafasy (Murattal, Hafs), from the Islamic Network collection (alquran.cloud), used unmodified under their published terms",
+      "default": true
+    }
+  ]
+}

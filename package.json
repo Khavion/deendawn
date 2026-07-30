@@ -17,7 +17,10 @@
     "content:verify": "node content-pipeline/verify.mjs",
     "content:build": "node content-pipeline/build.mjs",
     "content:pin": "node content-pipeline/pin.mjs",
-    "dev:audio": "node scripts/dev-audio-server.mjs"
+    "dev:audio": "node scripts/dev-audio-server.mjs",
+    "audio:fetch": "node content-pipeline/audio/fetch.mjs",
+    "audio:verify": "node content-pipeline/audio/verify.mjs",
+    "audio:upload": "node content-pipeline/audio/upload.mjs"
   },
   "dependencies": {
     "@expo-google-fonts/newsreader": "^0.4.1",
@@ -71,6 +74,7 @@
     "tweetnacl": "^1.0.3"
   },
   "devDependencies": {
+    "@aws-sdk/client-s3": "^3.1099.0",
     "@testing-library/react-native": "^14.0.1",
     "@types/better-sqlite3": "^7.6.13",
     "@types/jest": "29.5.14",

@@ -185,13 +185,22 @@ export function SurahListScreen() {
                           {item.name_english} · {t('quran.verses', { count: item.ayah_count })}
                         </AppText>
                       </View>
-                      <AppText
-                        accessibilityLanguage="ar"
-                        maxFontSizeMultiplier={fontScaleCaps.label}
-                        style={styles.arabicName}
-                      >
-                        {item.name_arabic}
-                      </AppText>
+                      {/* maxFontSizeMultiplier={1}: Android paints scaled
+                          Amiri with unscaled glyph advances (letters clip or
+                          gap — fs2.0 sweep finding, reproduced three ways).
+                          This trailing name is decorative — the flexible
+                          column carries the readable, scaling text — so it
+                          keeps its proven 1.0 rendering at every scale. */}
+                      <View style={styles.arabicNameBox}>
+                        <AppText
+                          accessibilityLanguage="ar"
+                          maxFontSizeMultiplier={1}
+                          numberOfLines={1}
+                          style={styles.arabicName}
+                        >
+                          {item.name_arabic}
+                        </AppText>
+                      </View>
                     </>
                   )}
                 </AppPressable>
@@ -256,19 +265,20 @@ const styles = StyleSheet.create({
   },
   names: { flex: 1, gap: 2 },
   sub: { fontSize: 13 },
+  /** Owns the row-flex constraints so the Text is never shrink-measured.
+      minWidth pads out Android's few-dp underestimate of RTL text width in
+      an LTR layout (it wrapped "Aal Imraan" and painted only line 1);
+      numberOfLines=1 on the Text is the belt-and-braces guard. */
+  arabicNameBox: { flexShrink: 0, maxWidth: '50%', minWidth: 120 },
   arabicName: {
     fontFamily: fonts.quran,
     fontSize: quranType.surahNameSize,
     lineHeight: quranType.surahNameLineHeight,
     textAlign: 'right',
     writingDirection: 'rtl',
-    // Never squeezed out by the flexible transliteration column: multi-word
-    // names ("Aal-i-Imraan") wrap to a second line instead of clipping
-    // letter-by-letter with no ellipsis (fs2.0 sweep finding).
-    flexShrink: 0,
-    maxWidth: '50%',
   },
-  /** ar/ur rows: the Arabic name leads inside the flexible column. */
+  /** ar/ur rows: the Arabic name leads inside the flexible column, where it
+      has the full width and stays single-line even at the label cap. */
   arabicPrimaryName: {
     fontFamily: fonts.quran,
     fontSize: quranType.surahNameSize,
