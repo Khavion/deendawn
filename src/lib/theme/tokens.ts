@@ -243,8 +243,12 @@ export const quranType = {
   cardAyahLineHeight: 46,
 } as const;
 
-/** Motion durations (ms) — transform/opacity only, ease-in-out. */
-export const duration = { fast: 200, normal: 250, slow: 300 } as const;
+/**
+ * Motion durations (ms) — transform/opacity only, ease-in-out.
+ * Press feedback is asymmetric on purpose: finger-down reads as instant,
+ * release settles a touch slower (Apple-feel, not spec).
+ */
+export const duration = { pressIn: 80, pressOut: 140, fast: 200, normal: 250, slow: 300 } as const;
 
 /**
  * Content measures for wide screens (iPad, landscape). Applied as

@@ -21,11 +21,11 @@ export function usePressScale(to = 0.97) {
   const enabled = !flat && !reduceMotion;
   const [scale] = useState(() => new Animated.Value(1));
 
-  const animate = (value: number) => {
+  const animate = (value: number, ms: number) => {
     if (!enabled) return;
     Animated.timing(scale, {
       toValue: value,
-      duration: duration.fast,
+      duration: ms,
       useNativeDriver: true,
     }).start();
   };
@@ -33,7 +33,8 @@ export function usePressScale(to = 0.97) {
   return {
     enabled,
     style: { transform: [{ scale }] },
-    onPressIn: () => animate(to),
-    onPressOut: () => animate(1),
+    // Down is near-instant (laggy press-in reads as jank); release settles.
+    onPressIn: () => animate(to, duration.pressIn),
+    onPressOut: () => animate(1, duration.pressOut),
   };
 }

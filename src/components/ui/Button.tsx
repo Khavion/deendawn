@@ -1,45 +1,30 @@
 import React from 'react';
-import { Animated, Pressable, type PressableProps, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
+import { AppPressable, type AppPressableProps } from './AppPressable';
 import { AppText } from './AppText';
 import { fonts, radius, spacing } from '@/src/lib/theme/tokens';
 import { useTokens } from '@/src/lib/theme/useTokens';
-import { usePressScale } from '@/src/lib/theme/usePressScale';
 
-export type ButtonProps = Omit<PressableProps, 'style' | 'children'> & {
+export type ButtonProps = Omit<AppPressableProps, 'style' | 'children'> & {
   title: string;
   variant?: 'primary' | 'secondary';
 };
 
 /**
  * Primary = filled with the brand primary; secondary = hairline outline.
- * Web hover becomes a pressed state (opacity). Tap target ≥ 48pt. A subtle
- * press-scale (tier-gated, off under Reduce Motion) gives tactile feedback.
+ * Built on AppPressable: press-scale + a light haptic by default. Tap target
+ * ≥ 48pt; labels wrap (never truncate) at large Dynamic Type.
  */
-export function Button({
-  title,
-  variant = 'primary',
-  disabled,
-  onPressIn,
-  onPressOut,
-  ...rest
-}: ButtonProps) {
+export function Button({ title, variant = 'primary', disabled, ...rest }: ButtonProps) {
   const t = useTokens();
-  const press = usePressScale();
   const primary = variant === 'primary';
   return (
-    <Pressable
+    <AppPressable
       accessibilityRole="button"
       accessibilityState={{ disabled: !!disabled }}
       disabled={disabled}
-      onPressIn={(e) => {
-        press.onPressIn();
-        onPressIn?.(e);
-      }}
-      onPressOut={(e) => {
-        press.onPressOut();
-        onPressOut?.(e);
-      }}
+      haptic="press"
       style={({ pressed }) => [
         styles.base,
         primary
@@ -50,16 +35,10 @@ export function Button({
       ]}
       {...rest}
     >
-      <Animated.View style={press.style}>
-        <AppText
-          variant="body"
-          color={primary ? t.onPrimary : t.textPrimary}
-          style={styles.label}
-        >
-          {title}
-        </AppText>
-      </Animated.View>
-    </Pressable>
+      <AppText variant="body" color={primary ? t.onPrimary : t.textPrimary} style={styles.label}>
+        {title}
+      </AppText>
+    </AppPressable>
   );
 }
 
@@ -72,7 +51,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  // Labels wrap (never truncate) at large Dynamic Type; minHeight lets rows grow.
   label: { fontFamily: fonts.sansSemiBold, textAlign: 'center' },
   pressed: { opacity: 0.85 },
   disabled: { opacity: 0.5 },

@@ -1,3 +1,4 @@
+export { AppPressable, type AppPressableProps } from './AppPressable';
 export { AppText, type AppTextProps, type AppTextVariant } from './AppText';
 export { Button, type ButtonProps } from './Button';
 export { Card } from './Card';

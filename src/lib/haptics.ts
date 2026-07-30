@@ -13,6 +13,7 @@ import { useDeviceTier } from './theme/useDeviceTier';
  * - select:  a subtle selection change (counter increment, entering a window)
  * - success: a positive completion (round complete, qibla aligned)
  * - warning: a cautionary notification (destructive / blocked action)
+ * - error:   a failure notification (an action could not complete)
  *
  * All calls are fire-and-forget; callers use `void h.select()`. Reduce Motion
  * (which also forces the essential device tier) silences them via `useHaptics`.
@@ -23,6 +24,7 @@ const verbs = {
   select: () => Haptics.selectionAsync(),
   success: () => Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success),
   warning: () => Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning),
+  error: () => Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error),
 } as const;
 
 export type HapticVerb = keyof typeof verbs;
@@ -37,6 +39,7 @@ const silent: Haptic = {
   select: () => {},
   success: () => {},
   warning: () => {},
+  error: () => {},
 };
 
 /**

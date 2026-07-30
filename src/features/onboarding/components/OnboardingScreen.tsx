@@ -1,7 +1,7 @@
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { markOnboarded } from '../onboardingState';
@@ -9,13 +9,14 @@ import { ensurePermission, rescheduleAll } from '../../notifications/service';
 import { CityPickerModal } from '../../prayer-times/components/CityPickerModal';
 import { useSettings } from '../../settings/SettingsContext';
 import { resolveLocation } from '../../settings/settingsStore';
-import { AppText } from '@/src/components/ui';
+import { AppText, Button } from '@/src/components/ui';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { measure, radius, spacing } from '@/src/lib/theme/tokens';
 import { useTokens } from '@/src/lib/theme/useTokens';
 
 type Step = 'welcome' | 'city' | 'notifications';
 
+/** First-run CTAs ride the shared Button (press feedback + haptic included). */
 function StepButton({
   label,
   onPress,
@@ -27,21 +28,13 @@ function StepButton({
   subtle?: boolean;
   testID: string;
 }) {
-  const t = useTokens();
   return (
-    <Pressable
-      accessibilityRole="button"
-      testID={testID}
+    <Button
+      title={label}
+      variant={subtle ? 'secondary' : 'primary'}
       onPress={onPress}
-      style={[
-        styles.button,
-        subtle ? { borderColor: t.border, borderWidth: 1 } : { backgroundColor: t.accent },
-      ]}
-    >
-      <AppText variant="bodyStrong" style={{ color: subtle ? t.textSecondary : t.textOnAccent }}>
-        {label}
-      </AppText>
-    </Pressable>
+      testID={testID}
+    />
   );
 }
 
@@ -160,13 +153,4 @@ const styles = StyleSheet.create({
   },
   step: { alignItems: 'center', gap: spacing.l },
   center: { textAlign: 'center' },
-  button: {
-    borderRadius: radius.card,
-    paddingHorizontal: spacing.xl,
-    paddingVertical: spacing.l,
-    minHeight: 48,
-    minWidth: 220,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
 });
