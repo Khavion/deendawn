@@ -1,6 +1,6 @@
 import { act, render } from '@testing-library/react-native';
 import React from 'react';
-import { Text } from 'react-native';
+import { Appearance, Text } from 'react-native';
 
 import { AppThemeProvider, useTheme } from '../ThemeProvider';
 import { palette } from '../tokens';
@@ -73,5 +73,38 @@ describe('AppThemeProvider', () => {
       </AppThemeProvider>
     );
     expect(latest().pref).toBe('system');
+  });
+
+  describe('native appearance pinning (RN 0.86 multi-window hardening)', () => {
+    const setColorScheme = jest.spyOn(Appearance, 'setColorScheme').mockImplementation(() => {});
+    beforeEach(() => setColorScheme.mockClear());
+    afterAll(() => setColorScheme.mockRestore());
+
+    it("'system' clears the native override so live OS tracking survives", async () => {
+      const store = createMemoryKVStore();
+      await render(
+        <AppThemeProvider store={store}>
+          <Probe />
+        </AppThemeProvider>
+      );
+      expect(setColorScheme).toHaveBeenLastCalledWith('unspecified');
+    });
+
+    it('explicit prefs pin the native scheme (nightWarm counts as dark)', async () => {
+      const store = createMemoryKVStore();
+      await render(
+        <AppThemeProvider store={store}>
+          <Probe />
+        </AppThemeProvider>
+      );
+      await act(async () => latest().setPref('light'));
+      expect(setColorScheme).toHaveBeenLastCalledWith('light');
+      await act(async () => latest().setPref('nightWarm'));
+      expect(setColorScheme).toHaveBeenLastCalledWith('dark');
+      await act(async () => latest().setPref('dark'));
+      expect(setColorScheme).toHaveBeenLastCalledWith('dark');
+      await act(async () => latest().setPref('system'));
+      expect(setColorScheme).toHaveBeenLastCalledWith('unspecified');
+    });
   });
 });

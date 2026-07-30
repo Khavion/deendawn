@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useMemo, useState } from 'react';
-import { useColorScheme } from 'react-native';
+import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { Appearance, useColorScheme } from 'react-native';
 
 import { ColorTokens, palette, ThemeMode } from './tokens';
 import { getUserKVStore, KVStore } from '@/src/lib/kvStore';
@@ -44,6 +44,20 @@ export function AppThemeProvider({
   const [pref, setPrefState] = useState<ThemePref>(() => readPref(kv));
 
   const mode: ThemeMode = pref === 'system' ? (system === 'dark' ? 'dark' : 'light') : pref;
+
+  // RN 0.86 recomputes the JS color scheme from whichever window posted the
+  // trait-change notification, so a second (dev-only) window can flip it while
+  // the OS never changes (docs/reports/darkmode-oscillation-research.md).
+  // Explicit prefs are pinned into Appearance — which also sets
+  // overrideUserInterfaceStyle on every window, so native chrome (tab bar,
+  // sheets, alerts) follows the app theme. 'system' must CLEAR the override
+  // ('unspecified' re-reads the real OS scheme): pinning it would suppress the
+  // trait-change events Appearance itself needs, freezing the cold-start look.
+  useEffect(() => {
+    Appearance.setColorScheme(
+      pref === 'system' ? 'unspecified' : pref === 'light' ? 'light' : 'dark'
+    );
+  }, [pref]);
 
   const value = useMemo<ThemeContextValue>(
     () => ({
