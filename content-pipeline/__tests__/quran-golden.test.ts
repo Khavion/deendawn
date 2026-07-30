@@ -144,8 +144,19 @@ describe('attribution manifest', () => {
     expect(ids).toEqual(
       expect.arrayContaining(['quran-uthmani', 'en-pickthall', 'quran-metadata'])
     );
+    const audioLock = JSON.parse(
+      readFileSync(path.join(__dirname, '..', 'audio', 'audio.lock'), 'utf8')
+    );
     for (const a of manifest.artifacts) {
       expect(a.license).toBeTruthy();
+      if (a.kind === 'recitation-audio') {
+        // Recitation entries: license terms page is the pinned URL
+        // (alquran.cloud — DECISIONS 2026-07-30); per-file hashes live in
+        // audio.lock, which must cover the recitation id.
+        expect(a.url).toMatch(/^https:\/\/alquran\.cloud\//);
+        expect(audioLock.recitations[a.id.replace(/^recitation-/, '')]).toBeTruthy();
+        continue;
+      }
       // Only pinned hosts may appear: Tanzil (text) and official font releases.
       expect(a.url).toMatch(
         /^https:\/\/(tanzil\.net\/|www\.gutenberg\.org\/cache\/epub\/|github\.com\/(aliftype\/amiri|googlefonts\/literata|adobe-fonts\/source-sans|notofonts\/nastaliq)\/releases\/download\/)/
