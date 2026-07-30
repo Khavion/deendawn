@@ -14,8 +14,16 @@ import * as Haptics from 'expo-haptics';
  *
  * All calls are fire-and-forget; callers use `void h.select()`. The user's
  * haptics setting (More ▸ default on) silences them at fire time — NOT Reduce
- * Motion: motion is visual, haptics are physical, and Apple treats them as
- * separate accessibility choices (System Haptics has its own switch).
+ * Motion: motion is visual, haptics are physical, and both platforms treat
+ * them as separate accessibility choices (iOS System Haptics / Android
+ * "Touch feedback" each have their own system switch, which expo-haptics
+ * respects beneath ours).
+ *
+ * Android: the same verbs map to VibrationEffect primitives via expo-haptics
+ * (impact styles → primitive ticks/clicks, notification types → composed
+ * patterns, selection → segment tick). Intensity varies by motor — actual
+ * FEEL is a physical-device pass item (docs/TESTPLAN.md); the emulator has
+ * no motor. VIBRATE is already in the shipped permission set.
  */
 const verbs = {
   press: () => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light),

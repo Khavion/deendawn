@@ -31,7 +31,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
+        "backgroundColor": "#274D3D",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
@@ -67,7 +67,12 @@
         }
       ],
       "expo-sqlite",
-      "expo-localization",
+      [
+        "expo-localization",
+        {
+          "supportedLocales": ["en", "ur", "ar"]
+        }
+      ],
       "expo-background-task",
       [
         "expo-notifications",

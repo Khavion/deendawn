@@ -24,6 +24,9 @@ function silentWav(seconds, sampleRate = 8000) {
 }
 
 mkdirSync('assets/sounds', { recursive: true });
-writeFileSync('assets/sounds/adhan-clip-placeholder.wav', silentWav(3));
-writeFileSync('assets/sounds/adhan-full-placeholder.wav', silentWav(5));
+// Underscores, not hyphens: Android res/raw resource names must be
+// [a-z0-9_] (the shipped files were renamed in commit 50fd965; this script
+// had drifted and would have produced a second hyphenated set).
+writeFileSync('assets/sounds/adhan_clip_placeholder.wav', silentWav(3));
+writeFileSync('assets/sounds/adhan_full_placeholder.wav', silentWav(5));
 console.log('placeholder sounds written (3s clip, 5s full)');
