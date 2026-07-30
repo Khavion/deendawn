@@ -617,3 +617,14 @@ Done:
 - Live-found fixes: channel 'default' sound string resolves as a res/raw filename (now
   omitted); LogBox toast confirmed it before any user ever would.
 - TESTPLAN Android matrix doc + Doze/reboot/clock-jump truth-testing = Phase 3 (task #14).
+
+### Phase 1 correctness sweep (same session, continued)
+- Insets: useScrollInsets hook fixed the status-bar collision + bottom-bar overlap at all 11
+  iOS-only contentInsetAdjustmentBehavior sites; verified live (Today top, surah-114 + More
+  bottoms, pushed-screen chrome, Zakat keyboard resize).
+- Brand: Android adaptive icon regenerated from the real brand sources (was pre-brand
+  placeholder + template-blue bg); launcher verified, themed-icon path works.
+- Per-app language: supportedLocales [en,ur,ar] wired + proven live via cmd locale.
+- **Background audio PROVEN on Android**: playback advances backgrounded, mediaPlayback FGS
+  + transport notification, lock-screen media card with metadata/controls.
+- 481/481 green throughout.
