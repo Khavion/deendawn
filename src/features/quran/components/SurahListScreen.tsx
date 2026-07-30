@@ -214,14 +214,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.m,
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
+  // NO aspectRatio here: inside virtualized row cells (FlashList + New
+  // Architecture) an aspectRatio child resolves against an indefinite size
+  // and explodes to fill the cell — verified on release builds. Min-dims
+  // grow into a pill at extreme Dynamic Type instead, which never breaks.
   numberBadge: {
     minWidth: 36,
     minHeight: 36,
-    aspectRatio: 1,
     borderRadius: 999,
     borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    paddingHorizontal: spacing.xs,
   },
   names: { flex: 1, gap: 2 },
   sub: { fontSize: 13 },
