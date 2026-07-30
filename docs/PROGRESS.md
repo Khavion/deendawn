@@ -651,3 +651,14 @@ Done:
   trip. lintVitalRelease metaspace fix in build-release.sh.
 - Evidence-sweep cell matrix running; then perf baseline + destructive truth tests
   (clock-jump firing, Doze, reboot).
+
+### Phase 3 truth-testing COMPLETE (all on the release build, rootable AVD)
+- **Adhan FIRED at the exact minute** via clock-jump (dhuhr-2026-07-30, importance HIGH, its
+  own channel, branded icon, "Silence today" action attached) — window=0 exactAllowReason=permission.
+- **"Silence today" pressed on the live notification**: today's remaining alarms 0, tomorrow's
+  10 intact — exactly the designed scope.
+- **Fajr fired through CONFIRMED deep Doze** (deviceidle force-idle, deep state IDLE).
+- **Reboot: 34 alarms re-registered without opening the app** (BOOT_COMPLETED receiver).
+- Perf trends (emulator): cold start 493ms median, 0.22% janky, p95 22ms (surah scroll).
+- Sweep harness bugs found+fixed (nested-quote seeding, maestro stdin); 76-capture matrix
+  re-run; parallel review in flight.

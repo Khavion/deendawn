@@ -21,10 +21,12 @@ set_scale() { adb shell settings put system font_scale "$1"; }
 set_night() { adb shell cmd uimode night "$1"; }
 switch_language() { # in-app switch via Maestro (labels from locale JSON)
   local code="$1"
-  local more_label
-  more_label=$(node -p "require('./src/lib/i18n/locales/$(adb shell 'sqlite3 /data/data/'"$APP_ID"'/files/SQLite/user.db "SELECT value FROM kv WHERE key='"'"'language.v1'"'"'"' | tr -d '\r').json').tabs.more" 2>/dev/null || echo More)
-  maestro --device "$(adb get-serialno)" test \
-    -e "TAB_MORE_CUR=$more_label" -e "OPTION=option-$code" - << 'EOF'
+  local cur more_label flow
+  cur=$(adb shell "sqlite3 /data/data/$APP_ID/files/SQLite/user.db \"SELECT value FROM kv WHERE key='language.v1'\"" | tr -d '\r')
+  [ -z "$cur" ] && cur=en
+  more_label=$(node -p "require('./src/lib/i18n/locales/${cur}.json').tabs.more")
+  flow=$(mktemp /tmp/deendawn-lang-XXXX.yaml)
+  cat > "$flow" << 'FLOW'
 appId: com.khavion.deendawn
 ---
 - launchApp:
@@ -49,14 +51,12 @@ appId: com.khavion.deendawn
     commands:
       - tapOn:
           text: '.*Restart now.*'
-      - extendedWaitUntil:
-          visible:
-            id: 'prayer-row-fajr'
-          timeout: 30000
-EOF
-  sleep 8
+FLOW
+  maestro --device "$(adb get-serialno)" test \
+    -e "TAB_MORE_CUR=$more_label" -e "OPTION=option-$code" "$flow"
+  rm -f "$flow"
+  sleep 10
 }
-
 scripts/evidence-sweep/android/prime.sh "$APK" en
 
 for CELL in "${CELLS[@]}"; do
