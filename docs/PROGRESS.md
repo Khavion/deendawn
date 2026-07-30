@@ -678,3 +678,27 @@ Phases 0–4 all delivered in one continuous run:
   upload + 12 testers (Zohaib); real recitation for the demo video (gate 5).
 - Polish backlog logged in TODO (fs2.0 input clipping, ar/ur locale refinements, compass-
   unavailable state, surah-name truncation). 488/488 tests green at wrap.
+
+### 2026-07-30 (later) — POLISH BACKLOG CLEARED + FULL RECITATION LANDED
+Zohaib directed: finish the cosmetic backlog and make recitation fully
+functional with openly-licensed audio.
+- Polish: all 5 sweep items fixed and live-verified on the release build at
+  font-scale 2.0 (shortened placeholders en/ur/ar; Arabic surah-name paint
+  bug root-caused to Android's RTL width under-measure in LTR layouts; ar
+  digit unification via i18next post-processor + digitLocale helpers; ur
+  keeps Latin digits; Arabic-primary surah rows in ar/ur; localized tasbih
+  dates/counts; qibla N/E/S/W + no-compass state via expo-sensors; More tab
+  'pending' icon). 500/500 tests green.
+- Audio: 9-agent research workflow with adversarial license verification →
+  Islamic Network (alquran.cloud) is the one source with published
+  redistribution permission; QUL/QuranicAudio/archive-org CC tags all
+  refuted. Alafasy 114-surah 128kbps set fetched (1.79 GB), per-file
+  SHA-256s locked in content-pipeline/audio/audio.lock, verified twice.
+  App wired: reciter catalog (jest-synced to pipeline), no dev badge for
+  bucket audio, lock-screen credits the reciter, attribution in About.
+  Live-proven on emulator through a bucket-layout range server: streaming,
+  background FGS, media-card pause/resume. Play demo video recorded
+  (docs/store/fgs-mediaplayback-demo.mp4).
+- Waiting on Zohaib (BLOCKERS): enable R2 (card) + .env → I upload with the
+  ready audio:upload script; reciter gate-5 sign-off (rec: Alafasy);
+  custom domain decision for production streaming.

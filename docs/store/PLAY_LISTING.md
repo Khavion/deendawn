@@ -102,9 +102,13 @@ a-light/qibla, b-dark/today, f-ar/today (RTL proof), + a home-screen shot
 with the widget. Final curation (badge-free, cropped, possibly device-framed)
 happens at the store pass alongside the demo video.
 
-## Demo video note
+## Demo video — DONE 2026-07-30
 
-The mediaPlayback FGS demo video should show REAL recitation — recording it
-waits for the gate-5 recordings (the release build hides the audio player
-without a configured source; a dev-build video with the placeholder tone is
-the fallback if the declaration is needed sooner).
+`docs/store/fgs-mediaplayback-demo.mp4` (39 s, 1080×2400): real Alafasy
+recitation of Al-Faatiha — play in the surah screen → home (playback
+continues via the foreground service) → notification shade shows the media
+card ("Al-Faatiha — Mishary Rashid Alafasy") → pause/resume from the card →
+back into the app still playing. Recorded on the emulator from the verified
+audio set. A small "DEV translation" banner is visible in the reader (the
+translation gate, unrelated to audio); if a spotless take is wanted later,
+re-record the same script on the release build once R2 serves audio.

@@ -1,10 +1,13 @@
 # Android release-evidence MANIFEST
 
-Captured 2026-07-30 on the RELEASE build (scripts/android/build-release.sh; both hard
-gates passed) via scripts/evidence-sweep/android/cells.sh. Language cells use the REAL
-in-app switch (I18nManager restart path). Reviewed by an 8-agent parallel pass; the one
-blocker found (Qibla status-bar inset) plus gradient seams were fixed and re-captured;
-polish backlog in docs/TODO.md.
+FULLY RE-SWEPT 2026-07-30 (evening) on the RELEASE build at HEAD after the polish
+backlog cleared — all 76 captures below are fresh: shortened placeholders, Arabic
+surah-name paint fix, ar Arabic-Indic digit unification, Arabic-primary surah rows
+in ar/ur, qibla cardinal marks + no-compass state, More-tab 'pending' icon. Both
+hard gates passed on this build; smoke/onboarding/ask/locales/offline Maestro
+suites green on it. Language cells use the REAL in-app switch (I18nManager restart
+path). (First sweep same day was reviewed by an 8-agent pass; its Qibla-inset
+blocker + gradient seams were fixed then, the polish items now.)
 
 | cell | config | captures |
 | ---- | ------ | -------- |
