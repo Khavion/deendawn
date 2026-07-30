@@ -525,3 +525,27 @@ pass on the release build.
 - **New React Compiler lint rules (eslint-config-expo 57) adopted, not silenced.** They flagged five
   real issues (render-scope component in onboarding, ref-during-render ×3, complex memo dep) — all
   fixed properly; one justified inline suppression (expo-audio exposes finish only as a status flag).
+
+## 2026-07-30 — Android perfection phase: constitution corrections + Phase 0 hygiene
+
+- **Android phase activated by direct owner instruction (2026-07-30)** — supersedes CLAUDE.md's
+  "Android deferred until iOS TestFlight". Each previously-deferred Android item is re-decided on
+  the merits with research and logged here as it lands.
+- **CLAUDE.md stack text corrected (owner-authorized)**: SDK 54/RN 0.81 → SDK 57/RN 0.86.0
+  (exact, patch-locked to Expo's precompiled ExpoModulesCore — a 0.86.2 bump aborts at startup;
+  see 2026-07-29 entry). Nothing else in CLAUDE.md changed.
+- **app.json hygiene (research-verified against the SDK 57 schema)**: deleted `newArchEnabled`
+  (New Architecture is mandatory since SDK 55; key removed from schema) and
+  `android.edgeToEdgeEnabled` (edge-to-edge is unconditional at target 36; key removed in SDK 55).
+  Added expo-audio `recordAudioAndroid: false` — belt-and-braces with the existing
+  `blockedPermissions` RECORD_AUDIO entry, keeps the mic permission out at the plugin source.
+- **Predictive back stays OFF** (`predictiveBackGestureEnabled: false`): expo/expo#39092 (back
+  gesture jumps to home with expo-router) is still open as of today; react-native-screens
+  maintainers state fragment-level predictive back will never land in screens v4; the only
+  supported path is the alpha ExperimentalStack (4 screen options, no modals) — not shippable.
+  Re-test at the next SDK upgrade.
+- **JDK pin**: local Android builds use the Android Studio JBR (JDK 21) via
+  `scripts/android/env.sh` (`DEENDAWN_JDK` overrides). Gradle 9.3.1 (SDK 57) supports 17–25, but
+  AGP 8.12/Kotlin 2.1.20 are tested on 17/21 and EAS's sdk-57 image is JDK 17 — system Temurin 25
+  stays off the build path. NDK stays at RN 0.86's pinned 27.1.12297006 (RN injects the 16 KB
+  alignment flag for it; forcing NDK 28.x is a known crash pattern — skia #3392).

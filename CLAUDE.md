@@ -73,7 +73,10 @@ All App Store operations go through App Store Connect API keys + EAS/Fastlane he
 
 ## Stack (pinned — change only with a BLOCKERS.md entry and approval)
 
-- Expo SDK 54, React Native 0.81, TypeScript strict, expo-router.
+- Expo SDK 57, React Native 0.86.0 (EXACT — the RN patch version is locked to Expo's
+  precompiled ExpoModulesCore; never bump it inside an SDK), React 19.2.3, TypeScript strict,
+  expo-router. (Corrected from "SDK 54 / RN 0.81" 2026-07-30 at Zohaib's direction — upgrade
+  commit b556e8c; see DECISIONS 2026-07-29 and 2026-07-30.)
 - Data: expo-sqlite (bundled read-only `quran.db` + user-data db). Prayer engine: `adhan` (npm, MIT).
 - Notifications: expo-notifications. Audio: expo-audio (NOT expo-av). Sensors: expo-sensors + expo-location.
 - IAP: NONE — no billing library is permitted in the dependency tree (rule 3). Errors: none in v1 (privacy) — structured local logging only.

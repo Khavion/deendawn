@@ -567,3 +567,13 @@ Done:
   label/input gap gone; NativeTabs renders the iPadOS top-strip idiom); new resize-safe
   `useLayout()` scales the qibla dial on tablet widths; (d) keyboard: CityPicker KAV,
   dismiss-on-drag on all search surfaces.
+
+## Session 2026-07-30 — ANDROID PERFECTION PHASE begins (owner directive)
+
+Plan (approved): Phase 0 toolchain+prebuild+harness → Phase 1 correctness (channels,
+exact alarms, tab icons, insets, audio, language, brand) → Phase 2 excellence (widget,
+shortcuts, sticky, troubleshooting) → Phase 3 proof (truth-testing, Maestro, ~220-capture
+sweep, 16KB+manifest gates) → Phase 4 Play store prep + READY FOR HUMAN SUBMIT.
+Six research briefs completed (SDK 57 baseline, expo-notifications/audio internals, widget
+libs, Play policy, 16KB) + repo re-audit at HEAD; full plan in the session plan file, key
+facts logged to DECISIONS as they land. Starting: JDK pin, app.json hygiene, fresh prebuild.
