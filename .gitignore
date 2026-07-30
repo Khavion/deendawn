@@ -46,3 +46,4 @@ app-example
 # generated native folders
 /ios
 /android
+docs/reports/android-e2e/
