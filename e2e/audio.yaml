@@ -1,15 +1,18 @@
 appId: com.khavion.deendawn
 ---
 # Streaming player against the dev tone server (scripts/dev-audio-server.mjs
-# must be running on :8083). Verifies play, progress, pause, and the honest
-# placeholder badge.
+# must be running on :8083). DEV BUILDS ONLY — the badge and localhost source
+# exist only there. On Android the emulator cannot reach the host's localhost:
+# the driver must run `adb reverse tcp:8083 tcp:8083` first
+# (scripts/e2e-android.sh does both). Verifies play, progress, pause, and the
+# honest placeholder badge.
 - launchApp:
     stopApp: true
 - extendedWaitUntil:
     visible:
       id: 'prayer-row-fajr'
     timeout: 20000
-- tapOn: 'Quran'
+- tapOn: ${TAB_QURAN}
 - extendedWaitUntil:
     visible:
       id: 'quran-search'
@@ -25,11 +28,12 @@ appId: com.khavion.deendawn
 - tapOn:
     id: 'surah-audio-toggle'
 # Let it stream a few seconds, then the progress readout should show a clock.
+# (App-formatted mm:ss text, not a platform locale string; EN cells only.)
 - extendedWaitUntil:
     visible:
       text: '0:0.*/.*1:00.*'
     timeout: 15000
-- takeScreenshot: docs/screens/audio-playing
+- takeScreenshot: ${SCREENS_DIR}/audio-playing
 - tapOn:
     id: 'surah-audio-toggle'
-- takeScreenshot: docs/screens/audio-paused
+- takeScreenshot: ${SCREENS_DIR}/audio-paused

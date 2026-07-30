@@ -6,6 +6,8 @@ appId: com.khavion.deendawn
 # proves onboarding works offline. Pushed screens hide the tab bar and the
 # header back chevron is not reachable by selector, so the flow relaunches
 # between sections — each relaunch re-proves offline cold start.
+# On Android, run via scripts/e2e-android.sh offline (release build, adb
+# reverses removed, airplane mode on).
 # (True airplane-mode pass on a physical device is in docs/TESTPLAN.md.)
 - launchApp:
     stopApp: true
@@ -33,9 +35,9 @@ appId: com.khavion.deendawn
       id: 'city-houston-us'
     timeout: 5000
 - waitForAnimationToEnd
-# iOS 26 native pageSheet: element taps land offset inside the sheet
-# (Maestro/XCUITest), so select the top match with the return key instead —
-# which is also a real affordance the picker supports.
+# Cross-platform: the return key selects the top match — a real affordance the
+# picker supports (commit 0b27cb1). It also dodges the iOS 26 native-pageSheet
+# tap-offset bug (Maestro/XCUITest taps land offset inside the sheet).
 - pressKey: Enter
 - extendedWaitUntil:
     visible:
@@ -48,9 +50,9 @@ appId: com.khavion.deendawn
     visible:
       id: 'prayer-row-fajr'
     timeout: 20000
-- takeScreenshot: docs/screens/offline-today
+- takeScreenshot: ${SCREENS_DIR}/offline-today
 # Quran text from the bundled database; no audio bar in release (no source)
-- tapOn: 'Quran'
+- tapOn: ${TAB_QURAN}
 - extendedWaitUntil:
     visible:
       id: 'quran-search'
@@ -63,7 +65,7 @@ appId: com.khavion.deendawn
     timeout: 10000
 - assertNotVisible:
     id: 'surah-audio-bar'
-- takeScreenshot: docs/screens/offline-surah
+- takeScreenshot: ${SCREENS_DIR}/offline-surah
 # Relaunch: Ask (Tier A FTS is fully local) and qibla
 - launchApp:
     stopApp: true
@@ -71,7 +73,7 @@ appId: com.khavion.deendawn
     visible:
       id: 'prayer-row-fajr'
     timeout: 20000
-- tapOn: 'Ask'
+- tapOn: ${TAB_ASK}
 - extendedWaitUntil:
     visible:
       id: 'ask-input'
@@ -79,14 +81,14 @@ appId: com.khavion.deendawn
 - tapOn:
     id: 'ask-input'
 - inputText: 'How many verses mention patience?'
-- pressKey: enter
+- pressKey: Enter
 - extendedWaitUntil:
     visible:
       id: 'ask-count'
     timeout: 10000
-- takeScreenshot: docs/screens/offline-ask
+- takeScreenshot: ${SCREENS_DIR}/offline-ask
 # Qibla renders its screen (no live sensors on sim — but no crash, no network)
-- tapOn: 'Qibla'
+- tapOn: ${TAB_QIBLA}
 - extendedWaitUntil:
     visible:
       id: 'compass'
@@ -98,7 +100,7 @@ appId: com.khavion.deendawn
     visible:
       id: 'prayer-row-fajr'
     timeout: 20000
-- tapOn: 'More'
+- tapOn: ${TAB_MORE}
 - scrollUntilVisible:
     element:
       id: 'setting-tasbih'
@@ -119,7 +121,7 @@ appId: com.khavion.deendawn
     visible:
       id: 'prayer-row-fajr'
     timeout: 20000
-- tapOn: 'More'
+- tapOn: ${TAB_MORE}
 - scrollUntilVisible:
     element:
       id: 'setting-zakat'
@@ -138,7 +140,7 @@ appId: com.khavion.deendawn
     visible:
       id: 'prayer-row-fajr'
     timeout: 20000
-- tapOn: 'More'
+- tapOn: ${TAB_MORE}
 - scrollUntilVisible:
     element:
       id: 'setting-calendar'
@@ -150,4 +152,4 @@ appId: com.khavion.deendawn
     visible:
       id: 'calendar-grid'
     timeout: 10000
-- takeScreenshot: docs/screens/offline-calendar
+- takeScreenshot: ${SCREENS_DIR}/offline-calendar

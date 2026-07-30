@@ -9,14 +9,14 @@ appId: com.khavion.deendawn
     visible:
       id: 'ob-begin'
     timeout: 30000
-- takeScreenshot: docs/screens/onboarding-welcome
+- takeScreenshot: ${SCREENS_DIR}/onboarding-welcome
 - tapOn:
     id: 'ob-begin'
 - extendedWaitUntil:
     visible:
       id: 'ob-city'
     timeout: 10000
-- takeScreenshot: docs/screens/onboarding-city
+- takeScreenshot: ${SCREENS_DIR}/onboarding-city
 - tapOn:
     id: 'ob-city'
 - extendedWaitUntil:
@@ -33,22 +33,22 @@ appId: com.khavion.deendawn
       id: 'city-houston-us'
     timeout: 5000
 - waitForAnimationToEnd
-# iOS 26 native pageSheet: element taps land offset inside the sheet
-# (Maestro/XCUITest), so select the top match with the return key instead —
-# which is also a real affordance the picker supports.
+# Cross-platform: the return key selects the top match — a real affordance the
+# picker supports (commit 0b27cb1). It also dodges the iOS 26 native-pageSheet
+# tap-offset bug (Maestro/XCUITest taps land offset inside the sheet).
 - pressKey: Enter
 - extendedWaitUntil:
     visible:
       id: 'ob-reminders'
     timeout: 10000
-- takeScreenshot: docs/screens/onboarding-notifications
+- takeScreenshot: ${SCREENS_DIR}/onboarding-notifications
 - tapOn:
     id: 'ob-skip'
 - extendedWaitUntil:
     visible:
       id: 'prayer-row-fajr'
     timeout: 20000
-- takeScreenshot: docs/screens/onboarding-done-today
+- takeScreenshot: ${SCREENS_DIR}/onboarding-done-today
 # Relaunch (no clearState): onboarding must NOT reappear.
 - launchApp:
     stopApp: true

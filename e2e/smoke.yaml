@@ -6,28 +6,30 @@ appId: com.khavion.deendawn
     visible:
       id: 'prayer-row-fajr'
     timeout: 20000
-- takeScreenshot: docs/screens/smoke-today
-- tapOn: 'More'
+- takeScreenshot: ${SCREENS_DIR}/smoke-today
+# Assert on setting-language: always above the fold on both platforms
+# (setting-method sits below the fold on taller Android screens).
+- tapOn: ${TAB_MORE}
 - extendedWaitUntil:
     visible:
-      id: 'setting-method'
+      id: 'setting-language'
     timeout: 10000
 - scrollUntilVisible:
     element:
       id: 'notif-fajr'
     direction: DOWN
     centerElement: true
-- takeScreenshot: docs/screens/smoke-more
-- tapOn: 'Quran'
+- takeScreenshot: ${SCREENS_DIR}/smoke-more
+- tapOn: ${TAB_QURAN}
 - extendedWaitUntil:
     visible:
       id: 'quran-search'
     timeout: 10000
-- takeScreenshot: docs/screens/smoke-quran-list
+- takeScreenshot: ${SCREENS_DIR}/smoke-quran-list
 - tapOn:
     id: 'surah-1'
 - extendedWaitUntil:
     visible:
       id: 'ayah-1-1'
     timeout: 10000
-- takeScreenshot: docs/screens/smoke-surah
+- takeScreenshot: ${SCREENS_DIR}/smoke-surah

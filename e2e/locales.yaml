@@ -1,13 +1,18 @@
 appId: com.khavion.deendawn
 ---
-# Switch EN -> UR via the picker, verify persisted UI, then AR, then back.
+# Full language round trip: EN -> UR (RTL flip + restart) -> persistence
+# relaunch -> AR (no restart, both RTL) -> EN (restart back). The restart is
+# Updates.reloadAsync — an in-process React reload, so the Maestro session
+# survives it; the restart-confirm Alert button is bilingual and always
+# contains the literal "Restart now" on legs where EN is source or target.
 - launchApp:
     stopApp: true
 - extendedWaitUntil:
     visible:
       id: 'prayer-row-fajr'
     timeout: 20000
-- tapOn: 'More'
+# EN -> UR
+- tapOn: ${TAB_MORE}
 - extendedWaitUntil:
     visible:
       id: 'setting-language'
@@ -16,3 +21,61 @@ appId: com.khavion.deendawn
     id: 'setting-language'
 - tapOn:
     id: 'option-ur'
+- extendedWaitUntil:
+    visible:
+      text: '.*Restart now.*'
+    timeout: 5000
+- tapOn:
+    text: '.*Restart now.*'
+- extendedWaitUntil:
+    visible:
+      text: ${TAB_MORE_UR}
+    timeout: 30000
+- takeScreenshot: ${SCREENS_DIR}/locales-ur
+# Persistence: full relaunch, still UR
+- launchApp:
+    stopApp: true
+- extendedWaitUntil:
+    visible:
+      id: 'prayer-row-fajr'
+    timeout: 20000
+- assertVisible:
+    text: ${TAB_MORE_UR}
+# UR -> AR (both RTL: instant switch, no restart)
+- tapOn: ${TAB_MORE_UR}
+- extendedWaitUntil:
+    visible:
+      id: 'setting-language'
+    timeout: 10000
+- tapOn:
+    id: 'setting-language'
+- tapOn:
+    id: 'option-ar'
+- extendedWaitUntil:
+    visible:
+      text: ${TAB_MORE_AR}
+    timeout: 10000
+- takeScreenshot: ${SCREENS_DIR}/locales-ar
+# AR -> EN (restart back; button contains "Restart now" via the target lang)
+- tapOn: ${TAB_MORE_AR}
+- extendedWaitUntil:
+    visible:
+      id: 'setting-language'
+    timeout: 10000
+- tapOn:
+    id: 'setting-language'
+- tapOn:
+    id: 'option-en'
+- extendedWaitUntil:
+    visible:
+      text: '.*Restart now.*'
+    timeout: 5000
+- tapOn:
+    text: '.*Restart now.*'
+- extendedWaitUntil:
+    visible:
+      text: ${TAB_MORE}
+    timeout: 30000
+- assertVisible:
+    id: 'prayer-row-fajr'
+- takeScreenshot: ${SCREENS_DIR}/locales-en-roundtrip
