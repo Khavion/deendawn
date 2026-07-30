@@ -115,4 +115,14 @@ describe('MoreScreen', () => {
     });
     expect(view.getByText('Karachi')).toBeOnTheScreen();
   });
+
+  test('return key in the city search selects the top match', async () => {
+    const { store, view } = await renderMore();
+    await fireEvent.press(view.getByTestId('setting-city'));
+    await fireEvent.changeText(view.getByTestId('city-search'), 'london');
+    await fireEvent(view.getByTestId('city-search'), 'submitEditing');
+    expect(JSON.parse(store.get('settings.v1')!)).toMatchObject({
+      location: { type: 'manual', cityId: 'london-gb' },
+    });
+  });
 });

@@ -33,8 +33,10 @@ appId: com.khavion.deendawn
       id: 'city-houston-us'
     timeout: 5000
 - waitForAnimationToEnd
-- tapOn:
-    id: 'city-houston-us'
+# iOS 26 native pageSheet: element taps land offset inside the sheet
+# (Maestro/XCUITest), so select the top match with the return key instead —
+# which is also a real affordance the picker supports.
+- pressKey: Enter
 - extendedWaitUntil:
     visible:
       id: 'ob-reminders'

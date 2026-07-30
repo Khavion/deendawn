@@ -59,6 +59,9 @@ export function CityPickerModal({
           placeholderTextColor={tk.icon}
           autoFocus
           autoCorrect={false}
+          returnKeyType="done"
+          // Return picks the top match — type "Houston", hit return, done.
+          onSubmitEditing={() => results[0] && onSelect(results[0])}
           maxFontSizeMultiplier={fontScaleCaps.content}
           style={[styles.input, { color: tk.textPrimary, borderColor: tk.border }]}
         />
