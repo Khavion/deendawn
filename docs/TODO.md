@@ -169,8 +169,9 @@ The polish backlog below is post-wrap work — none of it blocks the closed test
 
 ## AUDIO / POST-WRAP BACKLOG
 
-- [ ] Headphone-unplug pause: expo-audio 57.0.x will not get upstream fix #48151 — add a tiny
-      local module (ACTION_AUDIO_BECOMING_NOISY receiver → pause), same pattern as
-      modules/exact-alarm. Polish-tier; device-pass item until then.
+- [x] Headphone-unplug pause — DONE 2026-07-30: modules/audio-noisy (ACTION_AUDIO_BECOMING_NOISY
+      receiver → JS pause + resume-position save, subscribed only while playing). Live-proven on
+      emulator: PLAYING → root broadcast → PAUSED at 1:38 with position kept. Real-headphone
+      hardware check stays in the TESTPLAN device pass.
 - [ ] Final evidence re-sweep (8 cells) on the release build once R2 audio is live — refreshes
       the store screenshot source with the polish fixes in place.

@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
+import { addBecomingNoisyListener } from '../becomingNoisy';
 import type { AudioSource } from '../config';
 import { getAudioSource } from '../config';
 import { formatClock, progressFraction, resumeSeekTarget } from '../playerLogic';
@@ -79,6 +80,19 @@ function AudioBarInner({
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Headphone/Bluetooth disconnect pauses playback (Android — expo-audio
+  // 57.0.x never will; see becomingNoisy.ts). Subscribed only while playing.
+  useEffect(() => {
+    if (!status.playing) return;
+    const sub = addBecomingNoisyListener(() => {
+      player.pause();
+      if (positionRef.current > 0) {
+        saveResumePosition(store, source.reciterId, surah, positionRef.current);
+      }
+    });
+    return () => sub.remove();
+  }, [status.playing, player, store, source.reciterId, surah]);
 
   useEffect(() => {
     if (!status.didJustFinish) return;

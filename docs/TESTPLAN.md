@@ -75,8 +75,9 @@ google_apis AVD (deendawn_pixel / deendawn_api36), app primed via
       them and a muted MEDIA stream does NOT silence the adhan (and vice versa reads sanely).
 - [ ] Haptic feel: tasbih detents/success and qibla alignment tick feel right on a real motor.
 - [ ] Background audio: ≥15-min screen-off recitation stream (no wake lock is taken — watch
-      for OEM kills); Bluetooth route + headphone-unplug behavior (upstream fix lands
-      post-expo-audio 57.0.3 — re-test after the patch bump).
+      for OEM kills); Bluetooth route + headphone-unplug pause with REAL hardware
+      (modules/audio-noisy handles ACTION_AUDIO_BECOMING_NOISY — emulator-proven via root
+      broadcast 2026-07-30; wired + Bluetooth disconnects need a physical device).
 - [ ] Real-device cold start < 2s (iPhone-12-class equivalent Android hardware) + 60fps surah
       scroll — emulator numbers in docs/reports/android-perf/ are trends only.
 - [ ] TalkBack pass: same checklist as VoiceOver (labels/order asserted in code), spoken on a
