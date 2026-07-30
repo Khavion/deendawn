@@ -519,6 +519,19 @@ Done:
   Thinker already degrades honestly). Jest wiring for reanimated 4 mocks documented in setup.
   418/418 green. a11y lint plugin swapped for react-native-accessibility-engine (eslint-9 peer
   conflict; DECISIONS).
+- **Phase 7 (accessibility) SHIPPED**: every TextInput labeled, 44pt effective targets on the slim
+  header controls, live announcements (qibla aligned / tasbih round / reading-size, i18n ×3),
+  iOS decorative SF Symbols hidden (Android parity), contrast suite extended to featured-card
+  pairs (alpha-composited) + the 7 pronounced tajweed rules — **it caught a real defect**
+  (dark dimOnFeatured ~3.2:1 → fixed to 4.7–5.1:1). Both brief-named a11y tools proved
+  era-incompatible (eslint≤8 / React-19 renderer) — trialed, removed, DECISIONS. 424/424.
+- **Phase 8 (Arabic/RTL) SHIPPED, verified live in ar + ur on the dev build**: the five gold accent
+  bars go logical (borderStart*) and land on the correct edge in Arabic (verified on Zakat);
+  SectionRule's gold fade reverses its stops under RTL (verified hugging the label on Today/Zakat);
+  paddingEnd straggler fixed. Arabic sweep: Today fully mirrored (rows, tabs, dates), reader
+  verified on **2:282 — the longest ayah — with tajweed runs and zero last-word clipping**
+  (the RN #55220 shape), audio card + share rows mirrored, English translation correctly LTR.
+  Urdu: Nastaliq leading intact on More, rows mirrored. Language reset to en after.
 - **Phase 5 (layout correctness) SHIPPED, verified on iPhone 17 + iPad Pro 13"**: (a) native-bar
   insets — `contentInsetAdjustmentBehavior="automatic"` on every tab scroller (surah 114 no longer
   trapped under the floating glass bar; scroll-under blur correct), bottom clearances on pushed
