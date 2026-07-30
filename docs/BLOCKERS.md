@@ -352,3 +352,47 @@ own iPhone.** Everything on my side is ready for it.
 The plan uses **Qwen3** (Apache-2.0 license — free, no strings). You already approved the overall
 direction; speak up only if you want a different model. The on-device AI ships **off** behind a flag
 and only turns on after your + a scholar's sign-off (item 7).
+
+---
+
+## READY FOR HUMAN SUBMIT (Google Play) — Android is built, tested, and waiting on you
+
+Written 2026-07-30, the day the Android perfection phase ran. Everything below is in plain
+English. The app side is DONE: Android now has real tab icons, exact adhan timing (with an
+honest "Allow exact timing" card), per-prayer notification sounds that actually work, background
+Quran audio with lock-screen controls, a home-screen prayer-times widget, app shortcuts, a
+"Pin next prayer" option, an "Adhan not playing?" help screen, Urdu/Arabic with flawless
+right-to-left layout, and the same offline-proof as iOS — all verified on the Android emulator,
+on the real store-style build. The store upload file passes Google's technical checks
+(the new "16 KB" requirement and the permissions audit) on my side.
+
+**What only you can do, in order (about 30 minutes of clicking + a 3-week clock):**
+
+1. **Create the Google Play account** ($25 one-time) at play.google.com/console — Personal
+   account type, your real home address (Google verifies it; it is NOT published because the
+   app takes no money). Full steps are in item 1b above.
+2. **Verify a real Android phone** — Google requires proving you can access a physical Android
+   phone (Android 10 or newer, not rooted) using the Play Console phone app. ⚠️ If you only
+   have an iPhone, borrow a family member's Android for this 5-minute step — it's one-time.
+3. **Create the app entry** ("Deen Dawn", Free — this choice is permanent) and the **service
+   account key** (like Apple's .p8 — I'll walk you through the ~6 clicks when you're there).
+4. **Upload the first build manually once** (Google's rule) — I hand you one file
+   (the .aab) and point at the exact upload button. After that, my uploads are headless.
+5. **Start the closed test + recruit 15–16 testers** — the 12-tester/14-day rule (item 1b has
+   the script to send people). This is the 3-week clock; start it the same day as step 1.
+6. While the clock runs, I fill the whole listing from what's already prepared: description,
+   screenshots (Android-native, from the emulator evidence run), the feature graphic, the
+   "Data safety: No data collected" answers, content rating questionnaire, "no financial
+   features", the non-trader (DSA) declaration, and the one video Google wants showing
+   background audio (I record it).
+7. **After 14 continuous days with 12+ testers: "Apply for production"** (a 3-question form —
+   I draft the answers, you click submit). Google reviews in about a week.
+8. **You click the final "publish"** — always your call (constitution gate).
+
+**What I still do before step 6 finishes** (no waiting on you): finish the Android evidence
+sweep review, run the destructive notification tests (clock-jump/Doze/reboot), record the
+demo video, and export the final screenshot set.
+
+**One heads-up for October:** from Oct 28, 2026 Google adds a form for ANY app that uses
+location. Ours is the easiest case (on-device only, never sent anywhere, manual city works
+without it) — I'll draft the answers when the form appears.
