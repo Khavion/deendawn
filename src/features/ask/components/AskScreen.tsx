@@ -12,6 +12,7 @@ import { AyahRow, QuranDb } from '../../quran/repo';
 import { AppPressable, AppText, Skeleton } from '@/src/components/ui';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { fonts, fontScaleCaps, fontSize, measure, radius, spacing } from '@/src/lib/theme/tokens';
+import { useScrollInsets } from '@/src/lib/theme/useScrollInsets';
 import { useTokens } from '@/src/lib/theme/useTokens';
 
 type AskSource = 'quran' | 'library';
@@ -19,6 +20,7 @@ type AskSource = 'quran' | 'library';
 export function AskScreen() {
   const insets = useSafeAreaInsets();
   const t = useTokens();
+  const androidInsets = useScrollInsets({ top: false, bottom: 'tabs', baseBottom: spacing.l });
   const { t: tr } = useTranslation();
   const router = useRouter();
   const db = useSQLiteContext();
@@ -151,7 +153,7 @@ export function AskScreen() {
 
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
-        contentContainerStyle={styles.scroll}
+        contentContainerStyle={[styles.scroll, androidInsets]}
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
       >

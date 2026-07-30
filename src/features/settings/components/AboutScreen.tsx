@@ -6,6 +6,7 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/src/components/ui';
 import { measure, radius, spacing } from '@/src/lib/theme/tokens';
+import { useScrollInsets } from '@/src/lib/theme/useScrollInsets';
 import { useTokens } from '@/src/lib/theme/useTokens';
 import attribution from '@/assets/attribution.json';
 
@@ -24,6 +25,7 @@ interface Artifact {
  */
 export function AboutScreen() {
   const t = useTokens();
+  const androidInsets = useScrollInsets({ top: false, bottom: 'nav', baseBottom: spacing.l });
   const { t: tr } = useTranslation();
   const artifacts = attribution.artifacts as Artifact[];
   const version = Constants.expoConfig?.version ?? '1.0.0';
@@ -31,7 +33,7 @@ export function AboutScreen() {
   return (
     <View style={[styles.container, { backgroundColor: t.bgCanvas }]}>
       <Stack.Screen options={{ title: tr('about.title') }} />
-      <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={styles.scroll}>
+      <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={[styles.scroll, androidInsets]}>
         <AppText variant="title">Deen Dawn</AppText>
         <AppText variant="caption" style={{ color: t.textSecondary }}>
           {tr('about.version', { version })}

@@ -25,11 +25,13 @@ import {
   spacing,
 } from '@/src/lib/theme/tokens';
 import { useThemeMode } from '@/src/lib/theme/ThemeProvider';
+import { useScrollInsets } from '@/src/lib/theme/useScrollInsets';
 import { useTokens } from '@/src/lib/theme/useTokens';
 import { useDeviceTier } from '@/src/lib/theme/useDeviceTier';
 
 export function TasbihScreen() {
   const t = useTokens();
+  const androidInsets = useScrollInsets({ top: false, bottom: 'nav', baseBottom: spacing.xl });
   const mode = useThemeMode();
   const rm = richMode(mode);
   const { flat } = useDeviceTier();
@@ -85,7 +87,7 @@ export function TasbihScreen() {
           indicator on this pushed screen. */}
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
-        contentContainerStyle={styles.scrollContent}
+        contentContainerStyle={[styles.scrollContent, androidInsets]}
         keyboardShouldPersistTaps="handled"
         // Scroll ONLY when content genuinely overflows (large Dynamic Type):
         // an always-armed pan recognizer cancels in-flight ring presses after

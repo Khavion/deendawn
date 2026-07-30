@@ -35,6 +35,7 @@ import {
   textOnFeatured,
 } from '@/src/lib/theme/tokens';
 import { useThemeMode } from '@/src/lib/theme/ThemeProvider';
+import { useScrollInsets } from '@/src/lib/theme/useScrollInsets';
 import { useTokens } from '@/src/lib/theme/useTokens';
 import { useDeviceTier } from '@/src/lib/theme/useDeviceTier';
 
@@ -93,6 +94,7 @@ function Countdown({ target, color }: { target: Date; color: string }) {
 
 export function TodayScreen() {
   const insets = useSafeAreaInsets();
+  const androidInsets = useScrollInsets({ baseTop: spacing.m, baseBottom: spacing.l });
   const t = useTokens();
   const mode = useThemeMode();
   const rm = richMode(mode);
@@ -165,9 +167,14 @@ export function TodayScreen() {
         flatColor={t.bgCanvas}
         style={[styles.ambient, { height: insets.top + 340 }]}
       />
-      {/* `automatic` insets the content below the status bar and above the
-          floating native tab bar (whose height is unmeasurable by design). */}
-      <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={styles.scroll}>
+      {/* iOS: `automatic` insets the content below the status bar and above
+          the floating native tab bar (whose height is unmeasurable by
+          design). Android: the prop is a no-op — androidInsets supplies the
+          status-bar + Material-bottom-bar clearance instead. */}
+      <ScrollView
+        contentInsetAdjustmentBehavior="automatic"
+        contentContainerStyle={[styles.scroll, androidInsets]}
+      >
         <PeriodEyebrow label={eyebrowLabel} style={styles.periodEyebrow} />
 
         <View style={styles.header}>

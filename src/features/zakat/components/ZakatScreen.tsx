@@ -32,6 +32,7 @@ import {
   textOnFeatured,
 } from '@/src/lib/theme/tokens';
 import { useThemeMode } from '@/src/lib/theme/ThemeProvider';
+import { useScrollInsets } from '@/src/lib/theme/useScrollInsets';
 import { useTokens } from '@/src/lib/theme/useTokens';
 import { useDeviceTier } from '@/src/lib/theme/useDeviceTier';
 
@@ -60,6 +61,7 @@ export function parseAmount(text: string): number {
 
 export function ZakatScreen() {
   const t = useTokens();
+  const androidInsets = useScrollInsets({ top: false, bottom: 'nav', baseBottom: spacing.l });
   const mode = useThemeMode();
   const rm = richMode(mode);
   const { flat } = useDeviceTier();
@@ -112,7 +114,7 @@ export function ZakatScreen() {
       <Stack.Screen options={{ title: tr('zakat.title') }} />
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
-        contentContainerStyle={styles.scroll}
+        contentContainerStyle={[styles.scroll, androidInsets]}
         keyboardShouldPersistTaps="handled"
       >
         <GoldFrameCard

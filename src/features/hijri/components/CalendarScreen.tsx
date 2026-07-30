@@ -8,6 +8,7 @@ import { AppPressable, AppText } from '@/src/components/ui';
 import { useSettings } from '@/src/features/settings/SettingsContext';
 import { elevation, measure, radius, richMode, spacing } from '@/src/lib/theme/tokens';
 import { useThemeMode } from '@/src/lib/theme/ThemeProvider';
+import { useScrollInsets } from '@/src/lib/theme/useScrollInsets';
 import { useTokens } from '@/src/lib/theme/useTokens';
 import { useDeviceTier } from '@/src/lib/theme/useDeviceTier';
 
@@ -47,6 +48,7 @@ function buildMonth(year: number, month: number, hijriOffset: -1 | 0 | 1, todayK
 
 export function CalendarScreen({ initialDate }: { initialDate?: Date }) {
   const t = useTokens();
+  const androidInsets = useScrollInsets({ top: false, bottom: 'nav', baseBottom: spacing.l });
   const mode = useThemeMode();
   const rm = richMode(mode);
   const { flat } = useDeviceTier();
@@ -89,7 +91,7 @@ export function CalendarScreen({ initialDate }: { initialDate?: Date }) {
   return (
     <View style={[styles.container, { backgroundColor: t.bgCanvas }]}>
       <Stack.Screen options={{ title: tr('calendar.title') }} />
-      <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={styles.scroll}>
+      <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={[styles.scroll, androidInsets]}>
         <View style={styles.header}>
           <AppPressable
             accessibilityRole="button"

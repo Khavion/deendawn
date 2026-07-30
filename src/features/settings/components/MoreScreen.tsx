@@ -66,6 +66,7 @@ import {
   spacing,
 } from '@/src/lib/theme/tokens';
 import { ThemeContext, useThemeMode } from '@/src/lib/theme/ThemeProvider';
+import { useScrollInsets } from '@/src/lib/theme/useScrollInsets';
 import { useTokens } from '@/src/lib/theme/useTokens';
 import { useDeviceTier } from '@/src/lib/theme/useDeviceTier';
 
@@ -147,6 +148,7 @@ function PickerModal<T extends string>({
 export function MoreScreen() {
   const insets = useSafeAreaInsets();
   const tk = useTokens();
+  const androidInsets = useScrollInsets({ top: false, bottom: 'tabs', baseBottom: spacing.l });
   const mode = useThemeMode();
   const rm = richMode(mode);
   const { flat } = useDeviceTier();
@@ -316,7 +318,7 @@ export function MoreScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: tk.bgCanvas, paddingTop: insets.top + 12 }]}>
-      <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={styles.scroll}>
+      <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={[styles.scroll, androidInsets]}>
         <AppText variant="title" style={styles.title}>
           {t('more.title')}
         </AppText>

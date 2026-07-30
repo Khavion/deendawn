@@ -14,6 +14,7 @@ import { IconSymbol } from '@/components/ui/icon-symbol';
 import { useHaptics } from '@/src/lib/haptics';
 import { elevation, fonts, fontSize, radius, richMode, spacing } from '@/src/lib/theme/tokens';
 import { useThemeMode } from '@/src/lib/theme/ThemeProvider';
+import { useScrollInsets } from '@/src/lib/theme/useScrollInsets';
 import { useTokens } from '@/src/lib/theme/useTokens';
 import { useLayout } from '@/src/lib/theme/useLayout';
 import { useDeviceTier } from '@/src/lib/theme/useDeviceTier';
@@ -27,6 +28,7 @@ export function QiblaScreen() {
   // live across iPad window resizes.
   const ringSize = wide ? 360 : RING_SIZE;
   const t = useTokens();
+  const androidInsets = useScrollInsets({ top: false, bottom: 'tabs', baseBottom: spacing.l });
   const mode = useThemeMode();
   const rm = richMode(mode);
   const { flat } = useDeviceTier();
@@ -163,7 +165,7 @@ export function QiblaScreen() {
           status-bar top and the floating tab bar bottom. */}
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
-        contentContainerStyle={styles.scrollContent}
+        contentContainerStyle={[styles.scrollContent, androidInsets]}
       >
         <AppText variant="title" style={styles.header}>
           {tr('qibla.title')}

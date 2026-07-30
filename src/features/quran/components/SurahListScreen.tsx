@@ -24,12 +24,14 @@ import {
 } from '@/src/lib/theme/tokens';
 import { listCellDirection } from '@/src/lib/theme/direction';
 import { useThemeMode } from '@/src/lib/theme/ThemeProvider';
+import { useScrollInsets } from '@/src/lib/theme/useScrollInsets';
 import { useTokens } from '@/src/lib/theme/useTokens';
 import { useDeviceTier } from '@/src/lib/theme/useDeviceTier';
 
 export function SurahListScreen() {
   const insets = useSafeAreaInsets();
   const tk = useTokens();
+  const androidInsets = useScrollInsets({ top: false, bottom: 'tabs', baseBottom: spacing.m });
   const mode = useThemeMode();
   const rm = richMode(mode);
   const { flat } = useDeviceTier();
@@ -99,7 +101,7 @@ export function SurahListScreen() {
             keyboardShouldPersistTaps="handled"
             keyboardDismissMode="on-drag"
             contentInsetAdjustmentBehavior="automatic"
-            contentContainerStyle={styles.listContent}
+            contentContainerStyle={[styles.listContent, androidInsets]}
             ListEmptyComponent={<AppText style={styles.hint}>{t('quran.noMatches')}</AppText>}
             renderItem={({ item }) => (
               <AppPressable
@@ -139,7 +141,7 @@ export function SurahListScreen() {
               data={surahs}
               keyExtractor={(s) => String(s.number)}
               contentInsetAdjustmentBehavior="automatic"
-              contentContainerStyle={styles.listContent}
+              contentContainerStyle={[styles.listContent, androidInsets]}
               renderItem={({ item }) => (
                 <AppPressable
                   accessibilityRole="button"

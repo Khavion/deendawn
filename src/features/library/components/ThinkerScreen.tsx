@@ -9,10 +9,12 @@ import { WorkRow, worksByAuthor } from '../repo';
 import { THINKERS } from '../thinkers';
 import { AppPressable, AppText } from '@/src/components/ui';
 import { measure, radius, spacing } from '@/src/lib/theme/tokens';
+import { useScrollInsets } from '@/src/lib/theme/useScrollInsets';
 import { useTokens } from '@/src/lib/theme/useTokens';
 
 export function ThinkerScreen() {
   const t = useTokens();
+  const androidInsets = useScrollInsets({ top: false, bottom: 'nav', baseBottom: spacing.l });
   const { t: tr } = useTranslation();
   const router = useRouter();
   const { key } = useLocalSearchParams<{ key: string }>();
@@ -42,7 +44,7 @@ export function ThinkerScreen() {
   return (
     <View style={[styles.container, { backgroundColor: t.bgCanvas }]}>
       <Stack.Screen options={{ title: thinker.name }} />
-      <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={styles.scroll}>
+      <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={[styles.scroll, androidInsets]}>
         <AppText variant="title">{thinker.name}</AppText>
         <AppText variant="caption" style={{ color: t.textSecondary }}>
           {thinker.era}
