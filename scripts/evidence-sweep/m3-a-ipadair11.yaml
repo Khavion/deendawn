@@ -1,0 +1,160 @@
+appId: com.khavion.deendawn
+---
+- launchApp:
+    stopApp: true
+- waitForAnimationToEnd
+- takeScreenshot: docs/screens/final/a-ipadair11/today
+- openLink: deendawn://quran
+- runFlow:
+    when:
+      visible: "Open in “Deen Dawn”?"
+    commands:
+      - tapOn: "Open"
+      - extendedWaitUntil:
+          notVisible: "Open in “Deen Dawn”?"
+          timeout: 4000
+- waitForAnimationToEnd
+- takeScreenshot: docs/screens/final/a-ipadair11/quran
+- openLink: deendawn://ask
+- runFlow:
+    when:
+      visible: "Open in “Deen Dawn”?"
+    commands:
+      - tapOn: "Open"
+      - extendedWaitUntil:
+          notVisible: "Open in “Deen Dawn”?"
+          timeout: 4000
+- waitForAnimationToEnd
+- takeScreenshot: docs/screens/final/a-ipadair11/ask
+- openLink: deendawn://qibla
+- runFlow:
+    when:
+      visible: "Open in “Deen Dawn”?"
+    commands:
+      - tapOn: "Open"
+      - extendedWaitUntil:
+          notVisible: "Open in “Deen Dawn”?"
+          timeout: 4000
+- waitForAnimationToEnd
+- takeScreenshot: docs/screens/final/a-ipadair11/qibla
+- openLink: deendawn://more
+- runFlow:
+    when:
+      visible: "Open in “Deen Dawn”?"
+    commands:
+      - tapOn: "Open"
+      - extendedWaitUntil:
+          notVisible: "Open in “Deen Dawn”?"
+          timeout: 4000
+- waitForAnimationToEnd
+- takeScreenshot: docs/screens/final/a-ipadair11/more
+- openLink: deendawn://surah/1
+- runFlow:
+    when:
+      visible: "Open in “Deen Dawn”?"
+    commands:
+      - tapOn: "Open"
+      - extendedWaitUntil:
+          notVisible: "Open in “Deen Dawn”?"
+          timeout: 4000
+- waitForAnimationToEnd
+- takeScreenshot: docs/screens/final/a-ipadair11/surah-1
+- openLink: deendawn://surah/2?ayah=255
+- runFlow:
+    when:
+      visible: "Open in “Deen Dawn”?"
+    commands:
+      - tapOn: "Open"
+      - extendedWaitUntil:
+          notVisible: "Open in “Deen Dawn”?"
+          timeout: 4000
+- waitForAnimationToEnd
+- takeScreenshot: docs/screens/final/a-ipadair11/surah-2-ayah-255
+- openLink: deendawn://bookmarks
+- runFlow:
+    when:
+      visible: "Open in “Deen Dawn”?"
+    commands:
+      - tapOn: "Open"
+      - extendedWaitUntil:
+          notVisible: "Open in “Deen Dawn”?"
+          timeout: 4000
+- waitForAnimationToEnd
+- takeScreenshot: docs/screens/final/a-ipadair11/bookmarks
+- openLink: deendawn://calendar
+- runFlow:
+    when:
+      visible: "Open in “Deen Dawn”?"
+    commands:
+      - tapOn: "Open"
+      - extendedWaitUntil:
+          notVisible: "Open in “Deen Dawn”?"
+          timeout: 4000
+- waitForAnimationToEnd
+- takeScreenshot: docs/screens/final/a-ipadair11/calendar
+- openLink: deendawn://tasbih
+- runFlow:
+    when:
+      visible: "Open in “Deen Dawn”?"
+    commands:
+      - tapOn: "Open"
+      - extendedWaitUntil:
+          notVisible: "Open in “Deen Dawn”?"
+          timeout: 4000
+- waitForAnimationToEnd
+- takeScreenshot: docs/screens/final/a-ipadair11/tasbih
+- openLink: deendawn://zakat
+- runFlow:
+    when:
+      visible: "Open in “Deen Dawn”?"
+    commands:
+      - tapOn: "Open"
+      - extendedWaitUntil:
+          notVisible: "Open in “Deen Dawn”?"
+          timeout: 4000
+- waitForAnimationToEnd
+- takeScreenshot: docs/screens/final/a-ipadair11/zakat
+- openLink: deendawn://library
+- runFlow:
+    when:
+      visible: "Open in “Deen Dawn”?"
+    commands:
+      - tapOn: "Open"
+      - extendedWaitUntil:
+          notVisible: "Open in “Deen Dawn”?"
+          timeout: 4000
+- waitForAnimationToEnd
+- takeScreenshot: docs/screens/final/a-ipadair11/library
+- openLink: deendawn://thinker/ghazali
+- runFlow:
+    when:
+      visible: "Open in “Deen Dawn”?"
+    commands:
+      - tapOn: "Open"
+      - extendedWaitUntil:
+          notVisible: "Open in “Deen Dawn”?"
+          timeout: 4000
+- waitForAnimationToEnd
+- takeScreenshot: docs/screens/final/a-ipadair11/thinker-ghazali
+- openLink: deendawn://work/1
+- runFlow:
+    when:
+      visible: "Open in “Deen Dawn”?"
+    commands:
+      - tapOn: "Open"
+      - extendedWaitUntil:
+          notVisible: "Open in “Deen Dawn”?"
+          timeout: 4000
+- waitForAnimationToEnd
+- takeScreenshot: docs/screens/final/a-ipadair11/work-1
+- openLink: deendawn://about
+- runFlow:
+    when:
+      visible: "Open in “Deen Dawn”?"
+    commands:
+      - tapOn: "Open"
+      - extendedWaitUntil:
+          notVisible: "Open in “Deen Dawn”?"
+          timeout: 4000
+- waitForAnimationToEnd
+- takeScreenshot: docs/screens/final/a-ipadair11/about

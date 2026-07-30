@@ -1,0 +1,61 @@
+appId: com.khavion.deendawn
+---
+- launchApp:
+    stopApp: true
+- waitForAnimationToEnd
+- takeScreenshot: docs/screens/final/d-dark-ipad13/today
+- openLink: deendawn://quran
+- runFlow:
+    when:
+      visible: "Open in “Deen Dawn”?"
+    commands:
+      - tapOn: "Open"
+      - extendedWaitUntil:
+          notVisible: "Open in “Deen Dawn”?"
+          timeout: 4000
+- waitForAnimationToEnd
+- takeScreenshot: docs/screens/final/d-dark-ipad13/quran
+- openLink: deendawn://surah/2?ayah=255
+- runFlow:
+    when:
+      visible: "Open in “Deen Dawn”?"
+    commands:
+      - tapOn: "Open"
+      - extendedWaitUntil:
+          notVisible: "Open in “Deen Dawn”?"
+          timeout: 4000
+- waitForAnimationToEnd
+- takeScreenshot: docs/screens/final/d-dark-ipad13/surah-2-ayah-255
+- openLink: deendawn://more
+- runFlow:
+    when:
+      visible: "Open in “Deen Dawn”?"
+    commands:
+      - tapOn: "Open"
+      - extendedWaitUntil:
+          notVisible: "Open in “Deen Dawn”?"
+          timeout: 4000
+- waitForAnimationToEnd
+- takeScreenshot: docs/screens/final/d-dark-ipad13/more
+- openLink: deendawn://zakat
+- runFlow:
+    when:
+      visible: "Open in “Deen Dawn”?"
+    commands:
+      - tapOn: "Open"
+      - extendedWaitUntil:
+          notVisible: "Open in “Deen Dawn”?"
+          timeout: 4000
+- waitForAnimationToEnd
+- takeScreenshot: docs/screens/final/d-dark-ipad13/zakat
+- openLink: deendawn://tasbih
+- runFlow:
+    when:
+      visible: "Open in “Deen Dawn”?"
+    commands:
+      - tapOn: "Open"
+      - extendedWaitUntil:
+          notVisible: "Open in “Deen Dawn”?"
+          timeout: 4000
+- waitForAnimationToEnd
+- takeScreenshot: docs/screens/final/d-dark-ipad13/tasbih

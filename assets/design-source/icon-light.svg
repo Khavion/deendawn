@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2E5847"/>
+      <stop offset="0.62" stop-color="#274D3D"/>
+      <stop offset="1" stop-color="#1C3A2D"/>
+    </linearGradient>
+    <linearGradient id="sun" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#E3C08A"/>
+      <stop offset="1" stop-color="#B98A4E"/>
+    </linearGradient>
+    <clipPath id="sky-clip"><rect x="0" y="0" width="1024" height="668"/></clipPath>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#sky)"/>
+  <g clip-path="url(#sky-clip)">
+    <circle cx="512" cy="668" r="348" fill="none" stroke="#C69B5F" stroke-opacity="0.16" stroke-width="10"/>
+    <circle cx="512" cy="668" r="264" fill="none" stroke="#C69B5F" stroke-opacity="0.24" stroke-width="10"/>
+  </g>
+  <path d="M 326 668 A 186 186 0 0 1 698 668 Z" fill="url(#sun)"/>
+  <rect x="140" y="662" width="744" height="12" rx="6" fill="#C69B5F"/>
+  <rect x="140" y="662" width="744" height="12" rx="6" fill="#F1E4CC" opacity="0.25"/>
+</svg>

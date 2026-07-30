@@ -1,0 +1,61 @@
+appId: com.khavion.deendawn
+---
+- launchApp:
+    stopApp: true
+- waitForAnimationToEnd
+- takeScreenshot: docs/screens/final/f-ar-ipadmini/today
+- openLink: deendawn://quran
+- runFlow:
+    when:
+      visible: "Open in “Deen Dawn”?"
+    commands:
+      - tapOn: "Open"
+      - extendedWaitUntil:
+          notVisible: "Open in “Deen Dawn”?"
+          timeout: 4000
+- waitForAnimationToEnd
+- takeScreenshot: docs/screens/final/f-ar-ipadmini/quran
+- openLink: deendawn://surah/2?ayah=282
+- runFlow:
+    when:
+      visible: "Open in “Deen Dawn”?"
+    commands:
+      - tapOn: "Open"
+      - extendedWaitUntil:
+          notVisible: "Open in “Deen Dawn”?"
+          timeout: 4000
+- waitForAnimationToEnd
+- takeScreenshot: docs/screens/final/f-ar-ipadmini/surah-2-ayah-282
+- openLink: deendawn://more
+- runFlow:
+    when:
+      visible: "Open in “Deen Dawn”?"
+    commands:
+      - tapOn: "Open"
+      - extendedWaitUntil:
+          notVisible: "Open in “Deen Dawn”?"
+          timeout: 4000
+- waitForAnimationToEnd
+- takeScreenshot: docs/screens/final/f-ar-ipadmini/more
+- openLink: deendawn://zakat
+- runFlow:
+    when:
+      visible: "Open in “Deen Dawn”?"
+    commands:
+      - tapOn: "Open"
+      - extendedWaitUntil:
+          notVisible: "Open in “Deen Dawn”?"
+          timeout: 4000
+- waitForAnimationToEnd
+- takeScreenshot: docs/screens/final/f-ar-ipadmini/zakat
+- openLink: deendawn://about
+- runFlow:
+    when:
+      visible: "Open in “Deen Dawn”?"
+    commands:
+      - tapOn: "Open"
+      - extendedWaitUntil:
+          notVisible: "Open in “Deen Dawn”?"
+          timeout: 4000
+- waitForAnimationToEnd
+- takeScreenshot: docs/screens/final/f-ar-ipadmini/about
