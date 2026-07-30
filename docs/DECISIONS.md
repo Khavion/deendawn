@@ -754,3 +754,10 @@ expo-audio: 57.0.3 is the newest SDK-57 patch (verified changelog). The
 Android headphone-unplug pause fix (#48151) is merged upstream but will not
 ship in 57.0.x — logged in TODO as an app-side polish candidate (tiny local
 module listening for ACTION_AUDIO_BECOMING_NOISY).
+
+## 2026-07-30 — Human Gate #5 (audio half) CLOSED: Alafasy approved
+
+Zohaib approved in-session: "Approved: Alafasy". The shipping reciter set is
+Mishary Rashid Alafasy (Murattal, Hafs), Islamic Network collection, as
+pinned in content-pipeline/audio/sources.json + audio.lock. The translation
+half of gate #5 remains open.

@@ -437,7 +437,7 @@ free tier, and they never charge for the streaming bandwidth itself).
 **My recommendation:** do steps 1–6 whenever you have 15 minutes; step 7
 can wait until we're near the Play release.
 
-## Reciter sign-off (Human Gate #5 — audio half)
+## Reciter sign-off (Human Gate #5 — audio half) — APPROVED 2026-07-30 ("Approved: Alafasy")
 
 **What this is.** The rule book says you personally approve the shipping
 reciter. I recommend **Mishary Rashid Alafasy (Murattal)**: the world's most
