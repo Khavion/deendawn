@@ -38,6 +38,9 @@
       },
       "predictiveBackGestureEnabled": false,
       "package": "com.khavion.deendawn",
+      "permissions": [
+        "android.permission.SCHEDULE_EXACT_ALARM"
+      ],
       "blockedPermissions": [
         "android.permission.RECORD_AUDIO",
         "android.permission.SYSTEM_ALERT_WINDOW",
@@ -71,7 +74,9 @@
         {
           "sounds": [
             "./assets/sounds/adhan_clip_placeholder.wav"
-          ]
+          ],
+          "icon": "./assets/images/notification-icon.png",
+          "color": "#274D3D"
         }
       ],
       [
