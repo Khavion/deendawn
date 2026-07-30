@@ -148,6 +148,15 @@ Epics in build order. Top unblocked item is always the current task.
 - [ ] Screenshots via simctl into docs/screens/
 - [ ] `READY FOR HUMAN SUBMIT` checklist in BLOCKERS.md
 
+## ANDROID PERFECTION PHASE — COMPLETE 2026-07-30
+
+Phases 0–4 delivered and verified on the emulator (release build). Truth-tests passed: exact
+adhan firing, Doze, reboot, Silence-today. 16KB + manifest gates green on the Play AAB. Five
+Maestro suites + the offline constitutional proof green on release. 76-capture 8-cell evidence
+set reviewed (docs/screens/android/final/MANIFEST.md). What remains is HUMAN: the READY FOR
+HUMAN SUBMIT (Google Play) checklist in BLOCKERS.md, plus gate-5 recitation for the demo video.
+The polish backlog below is post-wrap work — none of it blocks the closed test.
+
 ## ANDROID POLISH BACKLOG (from the 8-cell sweep review, 2026-07-30 — all polish-tier, shippable)
 
 - [ ] Font-scale 2.0: search-input placeholders wrap & clip (Quran/Ask/Library) and the tasbih
