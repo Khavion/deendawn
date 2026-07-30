@@ -479,3 +479,18 @@ and chose to drop the tip jar instead. Decision recorded in DECISIONS 2026-07-29
   after surah taps, verified live on al-Baqara), bookmark Set replaces per-row KV reads, 150ms
   debounced FTS (Quran + Library), single DeviceTierProvider (was: one AccessibilityInfo listener
   per hook call site). 412/412 green throughout.
+
+## Session 2026-07-29 (cont. 2) — iOS perfection resume: Phases 4–11 (plan: deendawn-ios-swift-ullman)
+
+Plan:
+
+1. Finish Phase 4 (Dynamic Type): commit the in-flight per-role caps slice (verified green), route the
+   three remaining Arabic surfaces through tokens + scale prefs, reflow the fixed-box 200% offenders.
+2. Phase 4.5: kill the dark-mode oscillation — deep-research traced it to RN 0.86's multi-window
+   appearance poisoning (unreported upstream; report in docs/reports/). Pref-split Appearance pinning
+   + RCTUseKeyWindowForSystemStyle config plugin; expo-router 57.0.9 + RN 0.86.2 bumps.
+3. Phases 5–8: native-bar insets + iPad/keyboard layout; AppPressable across the 41 dead Pressables +
+   haptics toggle + user-facing theme picker + Reanimated qibla needle + designed empty states; a11y
+   labels/announcements/focus order/tap targets; RTL logical props + ar/ur dev-build QA.
+4. Phases 9–11: ~20-sweep simulator evidence pass, perf measurement vs budgets, icon appearance
+   variants + 6.9"/iPad-13" store screenshots, plain-English owner report.
