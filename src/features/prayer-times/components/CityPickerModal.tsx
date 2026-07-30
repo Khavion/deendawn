@@ -8,6 +8,7 @@ import { AppPressable, AppText } from '@/src/components/ui';
 import { City } from '@/src/features/settings/cities';
 import { searchCities } from '@/src/features/settings/citySearch';
 import { fontScaleCaps, radius, spacing } from '@/src/lib/theme/tokens';
+import { listCellDirection } from '@/src/lib/theme/direction';
 import { useTokens } from '@/src/lib/theme/useTokens';
 
 export function CityPickerModal({
@@ -82,7 +83,7 @@ export function CityPickerModal({
               testID={`city-${item.id}`}
               haptic="select"
               onPress={() => onSelect(item)}
-              style={[styles.row, { borderBottomColor: tk.border }]}
+              style={[styles.row, listCellDirection(), { borderBottomColor: tk.border }]}
             >
               <AppText>{item.name}</AppText>
               <AppText style={[styles.country, { color: tk.textSecondary }]}>

@@ -22,6 +22,7 @@ import {
   spacing,
   textOnFeatured,
 } from '@/src/lib/theme/tokens';
+import { listCellDirection } from '@/src/lib/theme/direction';
 import { useThemeMode } from '@/src/lib/theme/ThemeProvider';
 import { useTokens } from '@/src/lib/theme/useTokens';
 import { useDeviceTier } from '@/src/lib/theme/useDeviceTier';
@@ -105,7 +106,7 @@ export function SurahListScreen() {
                 accessibilityRole="button"
                 testID={`result-${item.surah}-${item.ayah}`}
                 onPress={() => router.push(`/surah/${item.surah}?ayah=${item.ayah}`)}
-                style={styles.resultRow}
+                style={[styles.resultRow, listCellDirection()]}
               >
                 <AppText variant="bodyStrong">
                   {item.surah}:{item.ayah}
@@ -144,7 +145,7 @@ export function SurahListScreen() {
                   accessibilityRole="button"
                   testID={`surah-${item.number}`}
                   onPress={() => router.push(`/surah/${item.number}`)}
-                  style={[styles.row, { borderBottomColor: tk.border }]}
+                  style={[styles.row, listCellDirection(), { borderBottomColor: tk.border }]}
                 >
                   <View style={[styles.numberBadge, { borderColor: tk.accent }]}>
                     <AppText

@@ -11,6 +11,7 @@ import { useDebouncedValue } from '@/src/lib/useDebouncedValue';
 import { THINKERS } from '../thinkers';
 import { AppPressable, AppText, Skeleton } from '@/src/components/ui';
 import { fontScaleCaps, measure, radius, spacing } from '@/src/lib/theme/tokens';
+import { listCellDirection } from '@/src/lib/theme/direction';
 import { useTokens } from '@/src/lib/theme/useTokens';
 
 export function LibraryScreen() {
@@ -52,7 +53,7 @@ export function LibraryScreen() {
       {searching && !db ? (
         <View testID="library-loading">
           {[0, 1, 2, 3].map((row) => (
-            <View key={row} style={[styles.row, { borderBottomColor: t.border }]}>
+            <View key={row} style={[styles.row, listCellDirection(), { borderBottomColor: t.border }]}>
               <Skeleton width="55%" height={16} />
               <Skeleton width="100%" height={13} style={styles.skelGap} />
               <Skeleton width="85%" height={13} style={styles.skelGap} />
@@ -76,7 +77,7 @@ export function LibraryScreen() {
               accessibilityRole="button"
               testID={`hit-${item.id}`}
               onPress={() => router.push(`/work/${item.work_id}?section=${item.section_index}`)}
-              style={[styles.row, { borderBottomColor: t.border }]}
+              style={[styles.row, listCellDirection(), { borderBottomColor: t.border }]}
             >
               <AppText variant="bodyStrong" style={{ color: t.accent }}>
                 {item.title} · {item.section_index}
@@ -104,7 +105,7 @@ export function LibraryScreen() {
               accessibilityRole="button"
               testID={`thinker-${item.key}`}
               onPress={() => router.push(`/thinker/${item.key}`)}
-              style={[styles.row, { borderBottomColor: t.border }]}
+              style={[styles.row, listCellDirection(), { borderBottomColor: t.border }]}
             >
               <AppText variant="bodyStrong">{item.name}</AppText>
               <AppText variant="caption" style={{ color: t.textSecondary }}>

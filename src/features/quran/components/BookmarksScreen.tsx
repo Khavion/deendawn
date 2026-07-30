@@ -19,6 +19,7 @@ import {
   quranType,
   spacing,
 } from '@/src/lib/theme/tokens';
+import { listCellDirection } from '@/src/lib/theme/direction';
 import { useTokens } from '@/src/lib/theme/useTokens';
 
 export function BookmarksScreen() {
@@ -72,7 +73,7 @@ export function BookmarksScreen() {
               accessibilityRole="button"
               testID={`bookmark-open-${item.surah}-${item.ayah}`}
               onPress={() => router.push(`/surah/${item.surah}?ayah=${item.ayah}`)}
-              style={[styles.row, { borderBottomColor: t.border }]}
+              style={[styles.row, listCellDirection(), { borderBottomColor: t.border }]}
             >
               <View style={styles.rowHeader}>
                 <AppText variant="bodyStrong" style={{ color: t.accent }}>

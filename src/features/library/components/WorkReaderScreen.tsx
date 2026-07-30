@@ -10,6 +10,7 @@ import { getWork, listSections, SectionRow, WorkRow } from '../repo';
 import { AppText, Skeleton } from '@/src/components/ui';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { measure, radius, spacing } from '@/src/lib/theme/tokens';
+import { listCellDirection } from '@/src/lib/theme/direction';
 import { useTokens } from '@/src/lib/theme/useTokens';
 
 export function WorkReaderScreen() {
@@ -93,7 +94,7 @@ export function WorkReaderScreen() {
             ) : null
           }
           renderItem={({ item }) => (
-            <View style={styles.sectionBlock} testID={`section-${item.section_index}`}>
+            <View style={[styles.sectionBlock, listCellDirection()]} testID={`section-${item.section_index}`}>
               <AppText variant="caption" style={{ color: t.accent }}>
                 {item.section_index}
               </AppText>
