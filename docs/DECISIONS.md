@@ -369,6 +369,32 @@ Result: eslint 0 errors / 6 warnings (the 6 are pre-existing and unchanged), tsc
   moved off pure white/black to the canvas tokens (`#F7F6F2` / `#15181D`) — pure black violated the
   app's own halation rule.
 
+## 2026-07-30 — What the release-build evidence sweep caught (and dev spot-checks never would)
+
+The Phase-9 sweep ran every screen on a RELEASE build across 8 devices × theme/type/locale cells
+(205 archived captures, docs/screens/final/ + MANIFEST.md). Three real defects surfaced, all
+invisible on dev builds:
+
+1. **Animated Pressable wrappers drop caller layout styles on release.**
+   `Animated.createAnimatedComponent(Pressable)` + an animated transform merged into a
+   function-style lost `flexDirection` on every converted row. AppPressable is now a PLAIN
+   Pressable with instant pressed-state feedback (native list-highlight idiom; state not motion,
+   survives Reduce Motion); Button keeps its animated flourish on an inner Animated.View.
+   **Rule: never wrap Pressable in createAnimatedComponent for shared primitives.**
+2. **`aspectRatio` inside virtualized list cells explodes** (resolves against an indefinite size,
+   fills the cell). Min-dims only inside FlashList rows; the tasbih ring (column context) keeps it.
+3. **FlashList v2 cells do not inherit RTL.** Every virtualized row rendered LTR under ar/ur —
+   and the historical RTL verification predated the FlatList→FlashList migration, so it was never
+   caught. Fixed with an explicit `direction` on each renderItem root, derived from the app
+   LANGUAGE (`src/lib/theme/direction.ts`) — the JS-side `I18nManager.isRTL` constant proved
+   stale on the New Architecture while the native tree was already mirrored.
+
+Also hardened the e2e layer for the current stack: NativeTabs selectors (plain labels, not the old
+"X, tab, N of 5" regexes), a debounce-wait before city-row taps, and city selection via the return
+key — which shipped as a real affordance (return picks the top match) because Maestro element taps
+land offset inside iOS 26 native pageSheets. All five suites (smoke/ask/locales/offline/onboarding)
+pass on the release build.
+
 ## 2026-07-29 — Feel: AppPressable everywhere, haptics as a user setting, theme picker
 
 - **AppPressable** is the one interactive primitive (press-scale on the node itself so caller
