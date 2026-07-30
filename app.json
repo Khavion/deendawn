@@ -109,6 +109,9 @@
         {
           "ios": {
             "deploymentTarget": "16.4"
+          },
+          "android": {
+            "extraProguardRules": "-keep class com.rnllama.** { *; }"
           }
         }
       ],

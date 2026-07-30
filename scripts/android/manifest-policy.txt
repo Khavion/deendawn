@@ -1,0 +1,22 @@
+# Merged-manifest permission policy, asserted on the BUILT artifact (Play
+# truth — library merges only exist post-build). Lines: forbid|require|allow.
+# forbid = must NOT appear (constitution privacy posture + Play policy)
+# require = must appear (feature contracts)
+# allow is documentation-only; anything else unexpected prints a warning.
+forbid:android.permission.RECORD_AUDIO
+forbid:android.permission.SYSTEM_ALERT_WINDOW
+forbid:android.permission.READ_EXTERNAL_STORAGE
+forbid:android.permission.WRITE_EXTERNAL_STORAGE
+forbid:android.permission.USE_EXACT_ALARM
+forbid:com.google.android.gms.permission.AD_ID
+forbid:android.permission.ACCESS_BACKGROUND_LOCATION
+require:android.permission.INTERNET
+require:android.permission.ACCESS_FINE_LOCATION
+require:android.permission.ACCESS_COARSE_LOCATION
+require:android.permission.VIBRATE
+require:android.permission.MODIFY_AUDIO_SETTINGS
+require:android.permission.SCHEDULE_EXACT_ALARM
+require:android.permission.POST_NOTIFICATIONS
+require:android.permission.RECEIVE_BOOT_COMPLETED
+require:android.permission.FOREGROUND_SERVICE
+require:android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK
