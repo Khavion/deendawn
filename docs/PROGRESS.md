@@ -593,3 +593,16 @@ Done:
 - 3 deep-research reports landed (Islamic design norms + competitor teardown; 2026 iOS-26/M3-Expressive motion+platform numbers; worship-screen patterns + Arabic/Urdu typography). Notables: Pillars-ADA claim debunked; scripture-off-widgets adab; no-chimes ruling; calm-countdown research; 16 Safar 1448 verified ×3.
 - `docs/CLAUDE_DESIGN_PROMPT.md` written (12 sections + verbatim sample appendix + kickoff prompt). Arabic samples injected mechanically from quran.db (guard hook correctly blocked hand-typing — placeholders in repo copy, filled copy delivered to Zohaib). DECISIONS logged.
 - Docs-only commit; Android-phase working tree untouched.
+
+### Phase 0 checkpoint (same session, ~2h in)
+- Toolchain green: fresh SDK 57 prebuild, assembleDebug 6m28s, app boots on deendawn_pixel
+  (minSdk 24 verified on artifact). AVD matrix now 6 (tablet/resizable/api36 added).
+- **Four e2e suites green on Android** (onboarding/smoke/ask/locales) via new
+  scripts/e2e-android.sh; locales does the full EN→UR→AR→EN round trip with both RTL
+  restarts — Nastaliq + full mirroring verified in captures (docs/screens/android/e2e).
+  iOS smoke re-verified via new scripts/e2e-ios.sh (no regression).
+- **Real bugs found & fixed on day one**: library.db async-copy race (latent on iOS too;
+  5 regression tests); tab bar had zero Android icons → VectorIcon channel shipped;
+  FlashList bumped for a known Android crash. Open investigation: NativeTabs dead under
+  transition-scale 0 (accessibility "Remove animations" — retest on release build).
+- Notification arch commit 1/9 landed (pure channel model, 16 tests). 453/453 green.
