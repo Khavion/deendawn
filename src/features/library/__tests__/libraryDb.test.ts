@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-require-imports --
+ * jest.resetModules() + fresh require() per test is the point: each case
+ * exercises the module-level cache from a clean slate. */
 /**
  * Regression tests for the Android wiped-container race found 2026-07-30:
  * expo-file-system's File.copy() is ASYNC in SDK 57, but openLibraryDb fired

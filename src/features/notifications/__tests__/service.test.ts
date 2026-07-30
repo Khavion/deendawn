@@ -37,6 +37,11 @@ jest.mock('expo-notifications', () => ({
     state.cancelCalls++;
     state.pending = state.pending.filter((p) => p.identifier !== id);
   }),
+  // Channel APIs exist on the mock ONLY to assert the iOS path never touches
+  // them (Android coverage lives in service.android.test.ts).
+  setNotificationChannelAsync: jest.fn(),
+  getNotificationChannelsAsync: jest.fn(async () => []),
+  deleteNotificationChannelAsync: jest.fn(),
 }));
 
 // Import after the mock so the service binds to it.
@@ -130,6 +135,35 @@ describe('rescheduleAll', () => {
     expect(fajr.content.data?.fullAdhan).toBe(false);
     expect(dhuhr.content.sound).toBe('adhan_clip_placeholder.wav');
     expect(dhuhr.content.data?.fullAdhan).toBe(true);
+  });
+
+  test('ios path never touches the Android channel APIs', async () => {
+    const store = createMemoryKVStore({ 'settings.v1': HOUSTON_SETTINGS });
+    await rescheduleAll(NOW, store, 'ios');
+    const Notifications = jest.requireMock('expo-notifications');
+    expect(Notifications.setNotificationChannelAsync).not.toHaveBeenCalled();
+    expect(Notifications.getNotificationChannelsAsync).not.toHaveBeenCalled();
+    expect(Notifications.deleteNotificationChannelAsync).not.toHaveBeenCalled();
+  });
+
+  test('sound change propagates to already-pending entries (the old diff missed it)', async () => {
+    const store = createMemoryKVStore({ 'settings.v1': HOUSTON_SETTINGS });
+    await rescheduleAll(NOW, store, 'ios');
+    expect(state.pending[0].content.data?.soundKey).toBe('default');
+    state.cancelCalls = 0;
+    store.set(
+      'notificationPrefs.v1',
+      JSON.stringify({
+        enabled: { fajr: true, dhuhr: true, asr: true, maghrib: true, isha: true },
+        sound: { fajr: 'clip', dhuhr: 'default', asr: 'default', maghrib: 'default', isha: 'default' },
+      })
+    );
+    await rescheduleAll(NOW, store, 'ios');
+    // All 8 pending fajr entries were rescheduled with the new sound.
+    expect(state.cancelCalls).toBe(8);
+    const fajr = state.pending.filter((p) => p.identifier.startsWith('fajr-'));
+    expect(fajr).toHaveLength(8);
+    for (const p of fajr) expect(p.content.data?.soundKey).toBe('clip');
   });
 
   test('disabled prayer prefs are honored', async () => {

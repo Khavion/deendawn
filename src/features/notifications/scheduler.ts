@@ -102,12 +102,19 @@ export interface RescheduleActions {
 }
 
 /**
- * Minimal diff between what's pending in the OS and the fresh plan. Sound or
- * time changes reschedule the id (cancel + schedule).
+ * Minimal diff between what's pending in the OS and the fresh plan. Sound,
+ * time, or Android-channel changes reschedule the id (cancel + schedule).
+ *
+ * channelId semantics: plan entries carry one only on Android (attached by
+ * the service at diff time). When the plan expects a channel, a pending
+ * entry must match it exactly — a pending entry WITHOUT one (scheduled
+ * before the channel rollout, or after a channel-version bump) is
+ * rescheduled, which is what makes version bumps self-healing. On iOS both
+ * sides are undefined and the clause is inert.
  */
 export function diffPlans(
-  pending: { id: string; fireDate: Date; sound?: string }[],
-  plan: PlannedNotification[]
+  pending: { id: string; fireDate: Date; sound?: string; channelId?: string }[],
+  plan: (PlannedNotification & { channelId?: string })[]
 ): RescheduleActions {
   const planById = new Map(plan.map((p) => [p.id, p]));
 
@@ -118,7 +125,8 @@ export function diffPlans(
     if (
       match &&
       match.fireDate.getTime() === p.fireDate.getTime() &&
-      (p.sound === undefined || p.sound === match.sound)
+      (p.sound === undefined || p.sound === match.sound) &&
+      (match.channelId === undefined || p.channelId === match.channelId)
     ) {
       keepIds.push(p.id);
     } else {
