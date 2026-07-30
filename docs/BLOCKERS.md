@@ -283,6 +283,24 @@ links and upload steps then.
 **My recommendation: NOTHING NOW.** The model choice (Qwen3, free Apache-2.0 license) is already
 approved — flag it only if you object.
 
+### 9. (Entirely optional) Report a bug we found to the React Native project
+
+**What this is:** While polishing dark mode I found a genuine bug in React Native itself (the
+framework the app is built on): in development versions, the app can flip between light and dark
+by mistake. I researched it, confirmed nobody has reported it yet, fixed our app so it doesn't
+affect us anymore, and wrote up a report that would help the framework's maintainers fix it for
+everyone. Publishing anything publicly is your call, so the report sits unposted at
+`docs/reports/rn-appearance-oscillation-issue-draft.md`.
+
+**What you'd do if you say yes:** nothing technical — just say "yes, post the bug report" and I'll
+give you the exact text to paste on the React Native website (it takes about 2 minutes, needs a
+free GitHub account), or you can tell me to skip it entirely.
+
+**When it's needed:** never — DeenDawn is already fixed either way. This is purely a good-citizen
+gesture to the open-source project the app is built on.
+
+**My recommendation: YES when you have a spare 5 minutes, but genuinely zero urgency.**
+
 ---
 
 ## READY FOR HUMAN SUBMIT — the path from here to the App Store

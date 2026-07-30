@@ -369,6 +369,28 @@ Result: eslint 0 errors / 6 warnings (the 6 are pre-existing and unchanged), tsc
   moved off pure white/black to the canvas tokens (`#F7F6F2` / `#15181D`) — pure black violated the
   app's own halation rule.
 
+## 2026-07-29 — Dark-mode oscillation: root cause + fix (and an RN version-pin lesson)
+
+- **Root cause (research, source-verified):** RN 0.86 recomputes the JS color scheme from whichever
+  RN surface posted the trait-change notification (no key-window filtering, no changed-style check),
+  so a second window in a different trait environment — the dev-only LogBox window qualifies —
+  flips `useColorScheme()` between light/dark while the OS never changes. Unreported upstream; no
+  fix in any 0.86.x. Full report: docs/reports/darkmode-oscillation-research.md; unposted upstream
+  issue draft (Human Gate 2): docs/reports/rn-appearance-oscillation-issue-draft.md, BLOCKERS #9.
+- **Fix, split by preference** (plan-review catch — blanket pinning would freeze system tracking):
+  explicit prefs call `Appearance.setColorScheme('light'|'dark')` (nightWarm→dark), which in RN 0.86
+  also sets `overrideUserInterfaceStyle` on every window so NATIVE chrome (tab bar/sheets/alerts)
+  follows the app theme — fixing the latent "manual theme never moved native chrome" wart;
+  `'system'` sets `'unspecified'` (RN 0.86's clear value; its old state-update bug was fixed
+  upstream Feb 2026, pre-0.86-branch) so live OS tracking survives. Plus
+  `plugins/withAppearanceHardening.js`: an ObjC `+load` calling the public
+  `RCTUseKeyWindowForSystemStyle(YES)` so system-mode always derives from the key window.
+- **RN patch versions are LOCKED on SDK 57's precompiled stack.** Bumping react-native 0.86.0→0.86.2
+  ("hygiene") aborted at startup with a Fabric `ConcreteComponentDescriptor<ExpoViewShadowNode>::
+  adopt()` assert inside the precompiled ExpoModulesCore XCFramework — built against 0.86.0
+  headers. Reverted to 0.86.0. Rule: never bump the RN patch inside an SDK unless Expo ships
+  matching prebuilts. (expo-router 57.0.8→57.0.9 kept — pure JS, carries the swipe-back flash fix.)
+
 ## 2026-07-29 — Dynamic Type: per-role caps + the deliberate exceptions
 
 - `fontScaleCaps` (content 2.0 / heading 1.6 / label 1.4) replaces the global 1.4 cap. Content

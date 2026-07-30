@@ -494,3 +494,18 @@ Plan:
    labels/announcements/focus order/tap targets; RTL logical props + ar/ur dev-build QA.
 4. Phases 9–11: ~20-sweep simulator evidence pass, perf measurement vs budgets, icon appearance
    variants + 6.9"/iPad-13" store screenshots, plain-English owner report.
+
+Done:
+
+- **Phase 4 (Dynamic Type) SHIPPED, verified live at max accessibility size on iPhone 17** (light
+  mode, six screens): per-role caps (3 commits), every Arabic surface tokenized (VerseOfDay card
+  tokens, Bookmarks reader-scale + clamp + test, surah-list names w/ direction props + shrink),
+  fixed-box reflow (ring/badges/steppers → min-dims, Buttons wrap, reader headerRight shrinks).
+  Screens reflow cleanly; remaining defects at 200% are exactly the known Phase-5 items.
+- **Phase 4.5 (dark-mode oscillation) SHIPPED and verified in all five scenarios**: pref-split
+  Appearance pinning (explicit prefs pin + re-align native chrome; system clears via 'unspecified'),
+  key-window hardening plugin (ObjC +load → RCTUseKeyWindowForSystemStyle(YES)), expo-router
+  57.0.9. Live checks: light-pin holds under dark OS; system re-reads instantly on select; system
+  tracks OS flips both directions; dark-pin holds under light OS incl. native header; no flip on
+  background/foreground. **RN 0.86.2 bump attempted and REVERTED** — precompiled ExpoModulesCore
+  aborts at startup (Fabric adopt() assert): RN patch is locked to Expo's prebuilts (DECISIONS).
