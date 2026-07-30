@@ -5,9 +5,12 @@
  */
 export function formatTimeInZone(
   date: Date,
-  options: { timeZone?: string; hour12?: boolean } = {}
+  options: { timeZone?: string; hour12?: boolean; locale?: string } = {}
 ): string {
-  return new Intl.DateTimeFormat('en-US', {
+  // Default stays 'en-US': fixtures and scheduler tests treat it as
+  // canonical. UI passes digitLocale(i18n.language) for localized digits
+  // and day-period marks (Arabic renders its own AM/PM equivalents).
+  return new Intl.DateTimeFormat(options.locale ?? 'en-US', {
     hour: '2-digit',
     minute: '2-digit',
     hourCycle: options.hour12 === false ? 'h23' : 'h12',

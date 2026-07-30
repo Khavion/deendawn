@@ -53,7 +53,7 @@
   "quran": {
     "title": "Quran",
     "surahsSection": "Surahs",
-    "searchPlaceholder": "Search the Quran (Arabic or English)",
+    "searchPlaceholder": "Search the Quran",
     "noMatches": "No matches.",
     "continueReading": "Continue reading — {{surah}}:{{ayah}}",
     "verses_one": "{{count}} verse",
@@ -93,7 +93,11 @@
     "alignedAnnounce": "Facing the qibla",
     "permissionNeeded": "The compass needs location permission to work. Your location never leaves your phone.",
     "grantPermission": "Enable compass",
-    "northMarker": "N"
+    "northMarker": "N",
+    "eastMarker": "E",
+    "southMarker": "S",
+    "westMarker": "W",
+    "noCompass": "No compass sensor on this device — face the bearing below using a map or a physical compass"
   },
   "more": {
     "title": "Settings",
@@ -220,7 +224,7 @@
     "tapAnywhere": "Tap anywhere in the circle to count",
     "tapArea": "Tasbih counter. Tap to count.",
     "reset": "Reset",
-    "labelPlaceholder": "Add your own label (optional)",
+    "labelPlaceholder": "Label (optional)",
     "roundAnnounce": "Round complete"
   },
   "zakat": {
@@ -247,7 +251,7 @@
   },
   "ask": {
     "title": "Ask",
-    "placeholder": "Ask about a topic, word, or count…",
+    "placeholder": "Ask about a topic or word…",
     "hint": "Search-powered answers from the Quran text itself — counts, verses, and topics. Tap any reference to read it in context.",
     "countAnswer_one": "{{count}} verse matches “{{term}}” in the bundled translation",
     "countAnswer_other": "{{count}} verses match “{{term}}” in the bundled translation",
@@ -274,7 +278,7 @@
   },
   "library": {
     "title": "Thinkers & books",
-    "searchPlaceholder": "Search the bundled books…",
+    "searchPlaceholder": "Search the books…",
     "noMatches": "No matches in the bundled books.",
     "noSections": "This book could not be loaded — try reopening it.",
     "reviewPending": "Draft summaries — pending scholar review before public release.",

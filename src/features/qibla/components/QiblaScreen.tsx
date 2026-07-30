@@ -53,7 +53,7 @@ export function QiblaScreen() {
   const roseSv = useSharedValue(0);
   const needleSv = useSharedValue(0);
   const bearingRef = useRef<number | null>(null);
-  const { heading, trueNorth, accuracy, permission, requestPermission } = useHeading((deg) => {
+  const { heading, trueNorth, accuracy, permission, available, requestPermission } = useHeading((deg) => {
     roseSv.value = -deg;
     if (bearingRef.current !== null) {
       needleSv.value = relativeQibla(bearingRef.current, deg).turn;
@@ -198,25 +198,47 @@ export function QiblaScreen() {
               flat ? undefined : elevation[rm].e2,
             ]}
           >
-            {/* Compass rose: N marker rotates opposite the device heading. */}
+            {/* Compass rose: cardinal marks rotate opposite the device
+                heading, like a physical compass card. E/W are PHYSICAL
+                directions — absolute left/right on purpose, never flipped
+                by UI direction. */}
             <Animated.View style={[styles.rose, roseStyle]}>
               <AppText variant="caption" style={[styles.north, { color: t.textSecondary }]}>
                 {tr('qibla.northMarker')}
               </AppText>
+              <View style={styles.eastWrap}>
+                <AppText variant="caption" style={{ color: t.icon }}>
+                  {tr('qibla.eastMarker')}
+                </AppText>
+              </View>
+              <View style={styles.southWrap}>
+                <AppText variant="caption" style={{ color: t.icon }}>
+                  {tr('qibla.southMarker')}
+                </AppText>
+              </View>
+              <View style={styles.westWrap}>
+                <AppText variant="caption" style={{ color: t.icon }}>
+                  {tr('qibla.westMarker')}
+                </AppText>
+              </View>
             </Animated.View>
-            {/* Needle points toward the qibla relative to the device. */}
-            <Animated.View testID="needle" style={[styles.needleWrap, needleStyle]}>
-              <View
-                style={[
-                  styles.needle,
-                  {
-                    backgroundColor: rel?.aligned ? t.success : t.accent,
-                    height: ringSize / 2 - spacing.xl,
-                  },
-                ]}
-              />
-              <View style={[styles.needleDot, { backgroundColor: t.ochre }]} />
-            </Animated.View>
+            {/* Needle points toward the qibla relative to the device. Hidden
+                when there is no magnetometer — a needle that cannot move
+                contradicts the guidance text (sweep finding). */}
+            {available !== false && (
+              <Animated.View testID="needle" style={[styles.needleWrap, needleStyle]}>
+                <View
+                  style={[
+                    styles.needle,
+                    {
+                      backgroundColor: rel?.aligned ? t.success : t.accent,
+                      height: ringSize / 2 - spacing.xl,
+                    },
+                  ]}
+                />
+                <View style={[styles.needleDot, { backgroundColor: t.ochre }]} />
+              </Animated.View>
+            )}
           </View>
 
           <AppText
@@ -224,10 +246,10 @@ export function QiblaScreen() {
             testID="qibla-status"
             style={[styles.status, rel?.aligned && { color: t.success }]}
           >
-            {/* No heading events yet (sensor warm-up, or an emulator with no
-                magnetometer): show the calibration guidance, never a bare
-                dash (sweep finding). */}
-            {statusText ?? tr('qibla.calibrate')}
+            {/* No heading events yet: calibration guidance while the sensor
+                warms up, or the explicit no-compass state when the hardware
+                is absent — never a bare dash (sweep findings). */}
+            {statusText ?? (available === false ? tr('qibla.noCompass') : tr('qibla.calibrate'))}
           </AppText>
           {bearing !== null && (
             <AppText variant="caption" style={{ color: t.textSecondary }}>
@@ -292,6 +314,27 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   north: { marginTop: spacing.s, fontFamily: fonts.sansSemiBold },
+  eastWrap: {
+    position: 'absolute',
+    right: spacing.s,
+    top: 0,
+    bottom: 0,
+    justifyContent: 'center',
+  },
+  southWrap: {
+    position: 'absolute',
+    bottom: spacing.s,
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+  },
+  westWrap: {
+    position: 'absolute',
+    left: spacing.s,
+    top: 0,
+    bottom: 0,
+    justifyContent: 'center',
+  },
   needleWrap: {
     position: 'absolute',
     top: 0,

@@ -690,3 +690,25 @@ pass on the release build.
 - **Release builds need MaxMetaspaceSize=1536m** (lintVitalAnalyzeRelease exhausts the
   generated 512m cap) — set per-invocation via GRADLE_OPTS in scripts/android/build-release.sh
   so it survives prebuild and never touches machine-global config.
+
+## 2026-07-30 — Locale digit policy + surah-row hierarchy (polish pass)
+
+- **Digits**: Arabic UI renders Eastern Arabic-Indic digits everywhere
+  (`ar-u-nu-arab` via `src/lib/i18n/format.ts` + an i18next interpolation
+  formatter that localizes every interpolated number). Urdu pins Latin digits
+  (`ur-u-nu-latn`) — the dominant convention in Pakistani apps; the pre-fix
+  screens mixed digit systems inside a single line (sweep finding). Time
+  strings pass a display locale to `formatTimeInZone`; its default stays
+  `en-US` because fixtures treat that form as canonical.
+- **Surah rows**: in ar/ur the calligraphic Arabic surah name is the primary
+  title (transliteration + verse count as the sub-line, English translation
+  name dropped — we have no reviewed ur/ar translations of the meaning-names
+  and will not machine-generate any, rule 1). English keeps
+  transliteration-primary with the Arabic name trailing; that trailing name
+  no longer flex-shrinks (fs2.0 clipped it letter-by-letter) — it wraps.
+- **About/attribution screens stay English in all locales**: license and
+  attribution notices are quoted legal text; translating them is riskier than
+  the mixed-language seam (also gate-8 cost for zero user value).
+- **Tasbih/compass extras**: history dates localize via `formatDayKey`;
+  compass card gains E/S/W cardinal words + an explicit no-magnetometer state
+  (Magnetometer.isAvailableAsync) instead of a forever-"calibrating" dial.

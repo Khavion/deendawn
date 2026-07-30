@@ -54,7 +54,7 @@
   "quran": {
     "title": "القرآن",
     "surahsSection": "السور",
-    "searchPlaceholder": "ابحث في القرآن (عربي أو إنجليزي)",
+    "searchPlaceholder": "ابحث في القرآن",
     "noMatches": "لا نتائج.",
     "continueReading": "تابع القراءة — {{surah}}:{{ayah}}",
     "verses_zero": "{{count}} آية",
@@ -98,7 +98,11 @@
     "alignedAnnounce": "أنت باتجاه القبلة",
     "permissionNeeded": "تحتاج البوصلة إلى إذن الموقع. موقعك لا يغادر هاتفك أبدًا.",
     "grantPermission": "تفعيل البوصلة",
-    "northMarker": "ش"
+    "northMarker": "ش",
+    "eastMarker": "شرق",
+    "southMarker": "جنوب",
+    "westMarker": "غرب",
+    "noCompass": "لا يوجد مستشعر بوصلة في هذا الجهاز — اتجه نحو الزاوية أدناه باستخدام خريطة أو بوصلة فعلية"
   },
   "more": {
     "title": "الإعدادات",
@@ -225,7 +229,7 @@
     "tapAnywhere": "اضغط في أي مكان داخل الدائرة للعد",
     "tapArea": "عداد التسبيح. اضغط للعد.",
     "reset": "إعادة",
-    "labelPlaceholder": "أضف تسمية خاصة بك (اختياري)",
+    "labelPlaceholder": "تسمية (اختياري)",
     "roundAnnounce": "اكتملت الجولة"
   },
   "zakat": {
@@ -252,7 +256,7 @@
   },
   "ask": {
     "title": "اسأل",
-    "placeholder": "اسأل عن موضوع أو كلمة أو عدد…",
+    "placeholder": "اسأل عن موضوع أو كلمة…",
     "hint": "إجابات مبنية على البحث في نص القرآن نفسه — أعداد وآيات ومواضيع. اضغط أي مرجع لقراءته في سياقه.",
     "countAnswer_zero": "لا آيات تطابق «{{term}}» في الترجمة المرفقة",
     "countAnswer_one": "آية واحدة تطابق «{{term}}» في الترجمة المرفقة",
@@ -283,7 +287,7 @@
   },
   "library": {
     "title": "المفكرون والكتب",
-    "searchPlaceholder": "ابحث في الكتب المرفقة…",
+    "searchPlaceholder": "ابحث في الكتب…",
     "noMatches": "لا نتائج في الكتب المرفقة.",
     "noSections": "تعذّر تحميل هذا الكتاب — حاول فتحه مجددًا.",
     "reviewPending": "ملخصات مسودة — بانتظار مراجعة علمية قبل النشر العام.",

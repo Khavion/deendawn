@@ -54,7 +54,7 @@
   "quran": {
     "title": "قرآن",
     "surahsSection": "سورتیں",
-    "searchPlaceholder": "قرآن میں تلاش کریں (عربی یا انگریزی)",
+    "searchPlaceholder": "قرآن میں تلاش کریں",
     "noMatches": "کوئی نتیجہ نہیں۔",
     "continueReading": "پڑھنا جاری رکھیں — {{surah}}:{{ayah}}",
     "verses_one": "{{count}} آیت",
@@ -94,7 +94,11 @@
     "alignedAnnounce": "آپ قبلہ رخ ہیں",
     "permissionNeeded": "کمپاس کے لیے مقام کی اجازت درکار ہے۔ آپ کا مقام فون سے باہر نہیں جاتا۔",
     "grantPermission": "کمپاس فعال کریں",
-    "northMarker": "ش"
+    "northMarker": "ش",
+    "eastMarker": "مشرق",
+    "southMarker": "جنوب",
+    "westMarker": "مغرب",
+    "noCompass": "اس فون میں کمپاس سینسر نہیں ہے — نیچے دیے گئے زاویے کی سمت نقشے یا اصل کمپاس سے رخ کریں"
   },
   "more": {
     "title": "ترتیبات",
@@ -221,7 +225,7 @@
     "tapAnywhere": "گننے کے لیے دائرے میں کہیں بھی دبائیں",
     "tapArea": "تسبیح کاؤنٹر۔ گننے کے لیے دبائیں۔",
     "reset": "دوبارہ شروع",
-    "labelPlaceholder": "اپنا لیبل لکھیں (اختیاری)",
+    "labelPlaceholder": "لیبل (اختیاری)",
     "roundAnnounce": "دور مکمل ہوا"
   },
   "zakat": {
@@ -248,7 +252,7 @@
   },
   "ask": {
     "title": "پوچھیں",
-    "placeholder": "کوئی موضوع، لفظ یا تعداد پوچھیں…",
+    "placeholder": "موضوع یا لفظ پوچھیں…",
     "hint": "قرآنی متن ہی سے تلاش پر مبنی جواب — تعداد، آیات اور موضوعات۔ سیاق میں پڑھنے کے لیے حوالے پر دبائیں۔",
     "countAnswer_one": "شامل ترجمے میں «{{term}}» سے {{count}} آیت ملتی ہے",
     "countAnswer_other": "شامل ترجمے میں «{{term}}» سے {{count}} آیات ملتی ہیں",
@@ -275,7 +279,7 @@
   },
   "library": {
     "title": "مفکرین اور کتب",
-    "searchPlaceholder": "شامل کتب میں تلاش کریں…",
+    "searchPlaceholder": "کتب میں تلاش کریں…",
     "noMatches": "شامل کتب میں کچھ نہیں ملا۔",
     "noSections": "یہ کتاب لوڈ نہ ہو سکی — دوبارہ کھول کر دیکھیں۔",
     "reviewPending": "مسودہ خلاصے — عوامی اجراء سے پہلے علمی نظرثانی درکار۔",

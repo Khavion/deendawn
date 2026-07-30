@@ -6,6 +6,7 @@ import { PrayerTimesWidget, PrayerTimesWidgetEmpty, WidgetPrayerRow } from './Pr
 import { buildWidgetSnapshot, nextFromSnapshot, WIDGET_PRAYER_KEYS } from './widgetData';
 import { computeDayTimes, isValidTime } from '../prayer-times/engine';
 import { formatTimeInZone } from '../prayer-times/format';
+import { digitLocale } from '@/src/lib/i18n/format';
 import i18n, { initI18n, isRtl, LanguageCode, loadLanguage } from '../../lib/i18n';
 import { getUserKVStore } from '../../lib/kvStore';
 import { log } from '../../lib/log';
@@ -55,12 +56,15 @@ export function buildPrayerWidgetTree(now: Date = new Date()): React.ReactElemen
     return {
       key,
       name: i18n.t(`prayers.${key}`),
-      time: isValidTime(t) ? formatTimeInZone(t) : '—',
+      time: isValidTime(t) ? formatTimeInZone(t, { locale: digitLocale(language) }) : '—',
       isNext: next?.key === key,
     };
   });
 
-  const dateLabel = now.toLocaleDateString(language, { month: 'short', day: 'numeric' });
+  const dateLabel = now.toLocaleDateString(digitLocale(language), {
+    month: 'short',
+    day: 'numeric',
+  });
 
   return (
     <PrayerTimesWidget

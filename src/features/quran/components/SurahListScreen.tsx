@@ -23,6 +23,7 @@ import {
   textOnFeatured,
 } from '@/src/lib/theme/tokens';
 import { listCellDirection } from '@/src/lib/theme/direction';
+import { localizeNumber } from '@/src/lib/i18n/format';
 import { useThemeMode } from '@/src/lib/theme/ThemeProvider';
 import { useScrollInsets } from '@/src/lib/theme/useScrollInsets';
 import { useTokens } from '@/src/lib/theme/useTokens';
@@ -38,7 +39,12 @@ export function SurahListScreen() {
   const router = useRouter();
   const db = useSQLiteContext();
   const { store } = useSettings();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  // In Arabic and Urdu the calligraphic Arabic name IS the primary title —
+  // leading with an English transliteration in an RTL UI was the sweep's
+  // locale finding. English keeps the transliteration-primary layout with
+  // the Arabic name trailing.
+  const arabicPrimary = i18n.language === 'ar' || i18n.language === 'ur';
   const [query, setQuery] = useState('');
   // Force a re-render each time the tab regains focus so `lastRead` (read below)
   // reflects where you actually stopped reading, not a stale memoized value.
@@ -111,7 +117,8 @@ export function SurahListScreen() {
                 style={[styles.resultRow, listCellDirection()]}
               >
                 <AppText variant="bodyStrong">
-                  {item.surah}:{item.ayah}
+                  {localizeNumber(item.surah, i18n.language)}:
+                  {localizeNumber(item.ayah, i18n.language)}
                 </AppText>
                 <AppText numberOfLines={2} style={styles.resultText}>
                   {item.text_translation}
@@ -154,22 +161,39 @@ export function SurahListScreen() {
                       maxFontSizeMultiplier={fontScaleCaps.label}
                       style={{ color: tk.accent }}
                     >
-                      {item.number}
+                      {localizeNumber(item.number, i18n.language)}
                     </AppText>
                   </View>
-                  <View style={styles.names}>
-                    <AppText variant="bodyStrong">{item.name_transliteration}</AppText>
-                    <AppText style={[styles.sub, { color: tk.textSecondary }]}>
-                      {item.name_english} · {t('quran.verses', { count: item.ayah_count })}
-                    </AppText>
-                  </View>
-                  <AppText
-                    accessibilityLanguage="ar"
-                    maxFontSizeMultiplier={fontScaleCaps.label}
-                    style={styles.arabicName}
-                  >
-                    {item.name_arabic}
-                  </AppText>
+                  {arabicPrimary ? (
+                    <View style={styles.names}>
+                      <AppText
+                        accessibilityLanguage="ar"
+                        maxFontSizeMultiplier={fontScaleCaps.label}
+                        style={styles.arabicPrimaryName}
+                      >
+                        {item.name_arabic}
+                      </AppText>
+                      <AppText style={[styles.sub, { color: tk.textSecondary }]}>
+                        {item.name_transliteration} · {t('quran.verses', { count: item.ayah_count })}
+                      </AppText>
+                    </View>
+                  ) : (
+                    <>
+                      <View style={styles.names}>
+                        <AppText variant="bodyStrong">{item.name_transliteration}</AppText>
+                        <AppText style={[styles.sub, { color: tk.textSecondary }]}>
+                          {item.name_english} · {t('quran.verses', { count: item.ayah_count })}
+                        </AppText>
+                      </View>
+                      <AppText
+                        accessibilityLanguage="ar"
+                        maxFontSizeMultiplier={fontScaleCaps.label}
+                        style={styles.arabicName}
+                      >
+                        {item.name_arabic}
+                      </AppText>
+                    </>
+                  )}
                 </AppPressable>
               )}
             />
@@ -238,7 +262,18 @@ const styles = StyleSheet.create({
     lineHeight: quranType.surahNameLineHeight,
     textAlign: 'right',
     writingDirection: 'rtl',
-    flexShrink: 1,
+    // Never squeezed out by the flexible transliteration column: multi-word
+    // names ("Aal-i-Imraan") wrap to a second line instead of clipping
+    // letter-by-letter with no ellipsis (fs2.0 sweep finding).
+    flexShrink: 0,
+    maxWidth: '50%',
+  },
+  /** ar/ur rows: the Arabic name leads inside the flexible column. */
+  arabicPrimaryName: {
+    fontFamily: fonts.quran,
+    fontSize: quranType.surahNameSize,
+    lineHeight: quranType.surahNameLineHeight,
+    writingDirection: 'rtl',
   },
   continueChip: {
     padding: spacing.l,

@@ -1,4 +1,5 @@
 import * as Location from 'expo-location';
+import { Magnetometer } from 'expo-sensors';
 import { useEffect, useRef, useState } from 'react';
 
 import { lowPassAngle } from './bearing';
@@ -11,6 +12,12 @@ export interface HeadingState {
   /** expo-location calibration level: 0 (none) … 3 (high). */
   accuracy: number;
   permission: 'undetermined' | 'granted' | 'denied';
+  /**
+   * Magnetometer hardware presence: false = no compass on this device (show
+   * the explicit unavailable state, never a forever-"calibrating" dial);
+   * null = still probing (treated as available).
+   */
+  available: boolean | null;
   requestPermission: () => void;
 }
 
@@ -34,6 +41,21 @@ export function useHeading(onRaw?: (smoothedDeg: number) => void): HeadingState 
   }, [onRaw]);
   const lastEmit = useRef(0);
   const [requestNonce, setRequestNonce] = useState(0);
+  const [available, setAvailable] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    Magnetometer.isAvailableAsync().then(
+      (ok) => {
+        if (!cancelled) setAvailable(ok);
+      },
+      // Probe failure ≠ missing hardware — stay optimistic (null).
+      () => undefined
+    );
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     let sub: Location.LocationSubscription | null = null;
@@ -76,6 +98,7 @@ export function useHeading(onRaw?: (smoothedDeg: number) => void): HeadingState 
     trueNorth,
     accuracy,
     permission,
+    available,
     requestPermission: () => setRequestNonce((n) => n + 1),
   };
 }

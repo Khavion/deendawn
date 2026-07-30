@@ -35,7 +35,8 @@ describe('TasbihScreen', () => {
     const { view } = await renderTasbih();
     await fireEvent.press(view.getByTestId('tasbih-tap'));
     await fireEvent.press(view.getByTestId('tasbih-tap'));
-    expect(view.getByTestId('tasbih-count').props.children).toBe(2);
+    // Counts render as locale-formatted strings (digit policy, format.ts).
+    expect(view.getByTestId('tasbih-count').props.children).toBe('2');
     expect(Haptics.selectionAsync).toHaveBeenCalledTimes(2);
   });
 
@@ -45,7 +46,7 @@ describe('TasbihScreen', () => {
     for (let i = 0; i < 33; i++) await fireEvent.press(view.getByTestId('tasbih-tap'));
     expect(Haptics.notificationAsync).toHaveBeenCalledTimes(1);
     // Milestone flash shows the full round momentarily.
-    expect(view.getByTestId('tasbih-count').props.children).toBe(33);
+    expect(view.getByTestId('tasbih-count').props.children).toBe('33');
   });
 
   test('99-target hits the Medium detent at 33 and 66', async () => {
@@ -61,7 +62,7 @@ describe('TasbihScreen', () => {
     const { store, view } = await renderTasbih();
     await fireEvent.press(view.getByTestId('tasbih-tap'));
     await fireEvent.press(view.getByTestId('tasbih-reset'));
-    expect(view.getByTestId('tasbih-count').props.children).toBe(0);
+    expect(view.getByTestId('tasbih-count').props.children).toBe('0');
     await fireEvent.changeText(view.getByTestId('tasbih-label'), 'Morning dhikr');
     expect(JSON.parse(store.get('tasbih.v1')!)).toMatchObject({ label: 'Morning dhikr' });
   });
@@ -91,10 +92,10 @@ describe('TasbihScreen', () => {
     await fireEvent.press(view.getByTestId('tasbih-tap'));
     await fireEvent.press(view.getByTestId('tasbih-tap'));
     await fireEvent.press(view.getByTestId('tasbih-tap'));
-    // Today's row shows 3.
+    // Today's row shows 3, dated with the localized short label ("Jul 30").
     const today = new Date();
-    const key = `${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-    expect(view.getByText(key)).toBeOnTheScreen();
+    const label = new Intl.DateTimeFormat('en', { month: 'short', day: 'numeric' }).format(today);
+    expect(view.getByText(label)).toBeOnTheScreen();
     expect(view.getAllByText('3').length).toBeGreaterThanOrEqual(1);
   });
 });

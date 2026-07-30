@@ -8,6 +8,7 @@ import { VerseOfDayCard } from '../../quran/components/VerseOfDayCard';
 import { isRamadan, toHijri } from '../../hijri/hijri';
 import { computeDayTimes, isValidTime, nextPrayer } from '../engine';
 import { formatTimeInZone } from '../format';
+import { digitLocale, localizeNumber } from '@/src/lib/i18n/format';
 import { currentPeriod, periodPrayer, periodWord } from '../period';
 import { PRAYER_NAMES } from '../types';
 import {
@@ -100,6 +101,7 @@ export function TodayScreen() {
   const rm = richMode(mode);
   const { flat } = useDeviceTier();
   const { t: tr, i18n } = useTranslation();
+  const timeLocale = digitLocale(i18n.language);
   const { settings, update } = useSettings();
   const [pickerOpen, setPickerOpen] = useState(false);
   const now = useMinuteNow();
@@ -188,7 +190,7 @@ export function TodayScreen() {
             <AppText variant="bodyStrong">{location.label}</AppText>
           </AppPressable>
           <AppText variant="caption" style={{ color: t.textSecondary }}>
-            {now.toLocaleDateString(i18n.language, {
+            {now.toLocaleDateString(timeLocale, {
               weekday: 'long',
               month: 'long',
               day: 'numeric',
@@ -196,7 +198,7 @@ export function TodayScreen() {
             {' · '}
             {(() => {
               const h = toHijri(now, settings.hijriOffset);
-              return `${h.day} ${tr(h.monthKey)} ${h.year}`;
+              return `${localizeNumber(h.day, i18n.language)} ${tr(h.monthKey)} ${localizeNumber(h.year, i18n.language)}`;
             })()}
           </AppText>
         </View>
@@ -211,7 +213,7 @@ export function TodayScreen() {
                 {tr('today.suhoorEnds')}
               </AppText>
               <AppText variant="bodyStrong" style={{ color: t.ochre }}>
-                {isValidTime(times.fajr) ? formatTimeInZone(times.fajr) : '—'}
+                {isValidTime(times.fajr) ? formatTimeInZone(times.fajr, { locale: timeLocale }) : '—'}
               </AppText>
             </View>
             <View style={styles.ramadanRow}>
@@ -219,7 +221,7 @@ export function TodayScreen() {
                 {tr('today.iftar')}
               </AppText>
               <AppText variant="bodyStrong" style={{ color: t.ochre }}>
-                {isValidTime(times.maghrib) ? formatTimeInZone(times.maghrib) : '—'}
+                {isValidTime(times.maghrib) ? formatTimeInZone(times.maghrib, { locale: timeLocale }) : '—'}
               </AppText>
             </View>
           </View>
@@ -236,7 +238,7 @@ export function TodayScreen() {
                 : tr(`prayers.${next.prayer}`)}
             </AppText>
             <AppText style={[styles.nextTime, { color: textOnFeatured[rm] }]}>
-              {formatTimeInZone(next.time)}
+              {formatTimeInZone(next.time, { locale: timeLocale })}
             </AppText>
             <Countdown target={next.time} color={dimOnFeatured[rm]} />
           </GoldFrameCard>
@@ -278,7 +280,7 @@ export function TodayScreen() {
                     variant={isNext ? 'bodyStrong' : 'body'}
                     style={isNext ? { color: t.textOnAccentSoft } : { color: t.textSecondary }}
                   >
-                    {isValidTime(time) ? formatTimeInZone(time) : '—'}
+                    {isValidTime(time) ? formatTimeInZone(time, { locale: timeLocale }) : '—'}
                   </AppText>
                 </View>
               );

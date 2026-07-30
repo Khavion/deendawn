@@ -14,6 +14,7 @@ import {
 } from '../tasbihState';
 import { useSettings } from '../../settings/SettingsContext';
 import { AppPressable, AppText, Gradient } from '@/src/components/ui';
+import { formatDayKey, localizeNumber } from '@/src/lib/i18n/format';
 import { useHaptics } from '@/src/lib/haptics';
 import {
   ambientGradient,
@@ -36,7 +37,7 @@ export function TasbihScreen() {
   const rm = richMode(mode);
   const { flat } = useDeviceTier();
   const h = useHaptics();
-  const { t: tr } = useTranslation();
+  const { t: tr, i18n } = useTranslation();
   const { store } = useSettings();
   const [state, setState] = useState(() => loadTasbih(store));
   const [history, setHistory] = useState(() => recentHistory(store, 7));
@@ -136,12 +137,12 @@ export function TasbihScreen() {
               style={[styles.count, { color: t.textPrimary }]}
               testID="tasbih-count"
             >
-              {displayCount}
+              {localizeNumber(displayCount, i18n.language)}
             </AppText>
             <AppText variant="caption" style={{ color: t.textSecondary }}>
-              {displayCount}
+              {localizeNumber(displayCount, i18n.language)}
               {' / '}
-              {state.target}
+              {localizeNumber(state.target, i18n.language)}
             </AppText>
           </View>
           <AppText variant="caption" style={[styles.hint, { color: t.textSecondary }]}>
@@ -168,7 +169,7 @@ export function TasbihScreen() {
                 variant={state.target === target ? 'bodyStrong' : 'body'}
                 style={state.target === target ? { color: t.textOnAccentSoft } : undefined}
               >
-                {target}
+                {localizeNumber(target, i18n.language)}
               </AppText>
             </AppPressable>
           ))}
@@ -193,10 +194,10 @@ export function TasbihScreen() {
           {history.map((day) => (
             <View key={day.date} style={styles.historyRow}>
               <AppText variant="caption" style={{ color: t.textSecondary }}>
-                {day.date.slice(5)}
+                {formatDayKey(day.date, i18n.language)}
               </AppText>
               <AppText variant="caption" style={{ color: day.count > 0 ? t.ochre : t.icon }}>
-                {day.count}
+                {localizeNumber(day.count, i18n.language)}
               </AppText>
             </View>
           ))}

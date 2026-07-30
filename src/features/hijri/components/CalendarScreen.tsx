@@ -5,6 +5,7 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 
 import { keyDatesFor, toHijri } from '../hijri';
 import { AppPressable, AppText } from '@/src/components/ui';
+import { digitLocale, localizeNumber } from '@/src/lib/i18n/format';
 import { useSettings } from '@/src/features/settings/SettingsContext';
 import { elevation, measure, radius, richMode, spacing } from '@/src/lib/theme/tokens';
 import { useThemeMode } from '@/src/lib/theme/ThemeProvider';
@@ -63,12 +64,12 @@ export function CalendarScreen({ initialDate }: { initialDate?: Date }) {
     [view, settings.hijriOffset, todayKey]
   );
 
-  const gregorianTitle = new Date(view.year, view.month, 1).toLocaleDateString(i18n.language, {
-    month: 'long',
-    year: 'numeric',
-  });
+  const gregorianTitle = new Date(view.year, view.month, 1).toLocaleDateString(
+    digitLocale(i18n.language),
+    { month: 'long', year: 'numeric' }
+  );
   const hijriTitle = hijriMonths
-    .map((m) => `${tr(`hijriMonths.${m.month}`)} ${m.year}`)
+    .map((m) => `${tr(`hijriMonths.${m.month}`)} ${localizeNumber(m.year, i18n.language)}`)
     .join(' – ');
   const todayHijri = toHijri(today, settings.hijriOffset);
 
@@ -128,8 +129,8 @@ export function CalendarScreen({ initialDate }: { initialDate?: Date }) {
         </View>
 
         <AppText variant="caption" style={[styles.todayLine, { color: t.textSecondary }]}>
-          {tr('calendar.today')}: {todayHijri.day} {tr(`hijriMonths.${todayHijri.month}`)}{' '}
-          {todayHijri.year}
+          {tr('calendar.today')}: {localizeNumber(todayHijri.day, i18n.language)}{' '}
+          {tr(`hijriMonths.${todayHijri.month}`)} {localizeNumber(todayHijri.year, i18n.language)}
         </AppText>
 
         <View
@@ -155,10 +156,10 @@ export function CalendarScreen({ initialDate }: { initialDate?: Date }) {
                       variant={cell.isToday ? 'bodyStrong' : 'body'}
                       style={cell.isToday ? { color: t.textOnAccentSoft } : undefined}
                     >
-                      {cell.gregorianDay}
+                      {localizeNumber(cell.gregorianDay, i18n.language)}
                     </AppText>
                     <AppText variant="caption" style={{ color: t.textSecondary }}>
-                      {cell.hijriDay}
+                      {localizeNumber(cell.hijriDay, i18n.language)}
                     </AppText>
                     {cell.isKeyDate && (
                       <View

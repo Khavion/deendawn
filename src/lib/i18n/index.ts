@@ -4,6 +4,8 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { I18nManager } from 'react-native';
 
+import type { PostProcessorModule } from 'i18next';
+
 import ar from './locales/ar.json';
 import en from './locales/en.json';
 import ur from './locales/ur.json';
@@ -54,11 +56,29 @@ export function detectDeviceLanguage(): LanguageCode {
 // Initialize at MODULE LOAD with the device language so no component can
 // render before resources exist (init-in-render races with useTranslation).
 // The persisted override is applied by initI18n once the store is available.
-void i18n.use(initReactI18next).init({
+/**
+ * Arabic UI renders Eastern Arabic-Indic digits everywhere (digit policy in
+ * ./format.ts). Interpolated values arrive as ASCII digits, so a
+ * post-processor maps them in every translated string when the language is
+ * Arabic — no per-key format annotations, no screen-by-screen conversion.
+ * Urdu and English keep Latin digits, so the processor is a pass-through.
+ */
+const arabicIndicDigits: PostProcessorModule = {
+  type: 'postProcessor',
+  name: 'arabicIndicDigits',
+  process(value: string, _key, options) {
+    const lng = (options as { lng?: string }).lng ?? i18n.language;
+    if (lng !== 'ar' && !lng?.startsWith('ar-')) return value;
+    return value.replace(/[0-9]/g, (d) => String.fromCharCode(0x0660 + d.charCodeAt(0) - 48));
+  },
+};
+
+void i18n.use(arabicIndicDigits).use(initReactI18next).init({
   resources,
   lng: detectDeviceLanguage(),
   fallbackLng: 'en',
   interpolation: { escapeValue: false },
+  postProcess: ['arabicIndicDigits'],
   returnNull: false,
   initAsync: false, // synchronous init — resources are bundled
 });

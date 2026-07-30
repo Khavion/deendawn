@@ -69,7 +69,10 @@ export default function TabLayout() {
         <NativeTabs.Trigger.Label>{tr('tabs.qibla')}</NativeTabs.Trigger.Label>
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="more">
-        <NativeTabs.Trigger.Icon sf="ellipsis.circle.fill" src={androidIcon('more-horiz')} />
+        {/* 'pending' = three dots in a filled disc — the optical twin of the
+            iOS ellipsis.circle.fill; bare 'more-horiz' rendered visibly
+            lighter than every other tab icon (sweep nit). */}
+        <NativeTabs.Trigger.Icon sf="ellipsis.circle.fill" src={androidIcon('pending')} />
         <NativeTabs.Trigger.Label>{tr('tabs.more')}</NativeTabs.Trigger.Label>
       </NativeTabs.Trigger>
     </NativeTabs>
