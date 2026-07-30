@@ -147,3 +147,17 @@ Epics in build order. Top unblocked item is always the current task.
 - [ ] fastlane/metadata drafts; privacy = Data Not Collected; 4.3(b) review notes
 - [ ] Screenshots via simctl into docs/screens/
 - [ ] `READY FOR HUMAN SUBMIT` checklist in BLOCKERS.md
+
+## ANDROID POLISH BACKLOG (from the 8-cell sweep review, 2026-07-30 — all polish-tier, shippable)
+
+- [ ] Font-scale 2.0: search-input placeholders wrap & clip (Quran/Ask/Library) and the tasbih
+      label field clips behind the counter ring — allow input growth or shorten placeholders.
+- [ ] Font-scale 2.0: multi-word Arabic surah names truncate without ellipsis in the list
+      (e.g. surah 3) — flexible name column.
+- [ ] ar/ur locale pass: surah rows lead with English transliteration (decide Arabic-primary
+      per locale); AM/PM + mixed digit systems in times/dates; tasbih history MM-DD; About
+      attributions stay English (probably fine — decide).
+- [ ] Qibla dial: cardinal markings absent in some cells; needle-vs-caption contradiction on
+      no-magnetometer devices (emulator) — consider an explicit compass-unavailable state
+      (the '—' placeholder is already fixed → calibrate guidance).
+- [ ] h-compound nit: More tab's ellipsis icon renders smaller/lower-contrast in its pill.

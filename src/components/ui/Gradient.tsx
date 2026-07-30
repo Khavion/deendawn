@@ -50,6 +50,13 @@ export function Gradient({
 
   const horizontal = direction === 'horizontal';
 
+  // Android rounds flexed band sizes to device pixels, leaving sub-pixel
+  // seams where the background bleeds through as hairlines (sweep finding on
+  // the featured cards). Fully-opaque gradients overlap each band 1px into
+  // the previous one to cover the seams; alpha gradients must stay flush
+  // (overlap would double-composite into darker seam lines instead).
+  const opaque = useMemo(() => stops.every((s) => s.a >= 1), [stops]);
+
   return (
     <View style={style} {...rest}>
       <View
@@ -57,7 +64,14 @@ export function Gradient({
         style={[StyleSheet.absoluteFill, { flexDirection: horizontal ? 'row' : 'column' }]}
       >
         {bandColors.map((c, i) => (
-          <View key={i} style={[styles.band, { backgroundColor: c }]} />
+          <View
+            key={i}
+            style={[
+              styles.band,
+              { backgroundColor: c },
+              opaque && i > 0 && (horizontal ? styles.overlapH : styles.overlapV),
+            ]}
+          />
         ))}
       </View>
       {children}
@@ -67,4 +81,6 @@ export function Gradient({
 
 const styles = StyleSheet.create({
   band: { flex: 1 },
+  overlapV: { marginTop: -1 },
+  overlapH: { marginLeft: -1 },
 });

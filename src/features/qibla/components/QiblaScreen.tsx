@@ -28,7 +28,15 @@ export function QiblaScreen() {
   // live across iPad window resizes.
   const ringSize = wide ? 360 : RING_SIZE;
   const t = useTokens();
-  const androidInsets = useScrollInsets({ top: false, bottom: 'tabs', baseBottom: spacing.l });
+  // top:true — unlike the other tab screens, Qibla's MAIN state has no
+  // insets.top container padding (only its empty/permission branches do);
+  // the sweep caught the title under the status bar in all 8 cells.
+  const androidInsets = useScrollInsets({
+    top: true,
+    bottom: 'tabs',
+    baseTop: spacing.m,
+    baseBottom: spacing.l,
+  });
   const mode = useThemeMode();
   const rm = richMode(mode);
   const { flat } = useDeviceTier();
@@ -216,7 +224,10 @@ export function QiblaScreen() {
             testID="qibla-status"
             style={[styles.status, rel?.aligned && { color: t.success }]}
           >
-            {statusText ?? '—'}
+            {/* No heading events yet (sensor warm-up, or an emulator with no
+                magnetometer): show the calibration guidance, never a bare
+                dash (sweep finding). */}
+            {statusText ?? tr('qibla.calibrate')}
           </AppText>
           {bearing !== null && (
             <AppText variant="caption" style={{ color: t.textSecondary }}>
