@@ -3,12 +3,12 @@ import { Stack, useRouter } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { loadBookmarks, loadReadingScale, toggleBookmark } from '../readerState';
 import { AyahRow, getAyahsByRefs, listSurahs } from '../repo';
-import { AppText } from '@/src/components/ui';
+import { AppPressable, AppText } from '@/src/components/ui';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { useSettings } from '@/src/features/settings/SettingsContext';
 import {
@@ -68,7 +68,7 @@ export function BookmarksScreen() {
           keyExtractor={(a) => `${a.surah}:${a.ayah}`}
           contentContainerStyle={[styles.list, { paddingBottom: insets.bottom + spacing.xl }]}
           renderItem={({ item }) => (
-            <Pressable
+            <AppPressable
               accessibilityRole="button"
               testID={`bookmark-open-${item.surah}-${item.ayah}`}
               onPress={() => router.push(`/surah/${item.surah}?ayah=${item.ayah}`)}
@@ -78,15 +78,16 @@ export function BookmarksScreen() {
                 <AppText variant="bodyStrong" style={{ color: t.accent }}>
                   {surahNames.get(item.surah) ?? ''} {item.surah}:{item.ayah}
                 </AppText>
-                <Pressable
+                <AppPressable
                   accessibilityRole="button"
                   accessibilityLabel={tr('quran.bookmarkRemove')}
+                  haptic="select"
                   testID={`bookmark-remove-${item.surah}-${item.ayah}`}
                   hitSlop={12}
                   onPress={() => remove(item)}
                 >
                   <AppText style={{ color: t.ochre }}>★</AppText>
-                </Pressable>
+                </AppPressable>
               </View>
               <AppText
                 accessibilityLanguage="ar"
@@ -109,7 +110,7 @@ export function BookmarksScreen() {
               >
                 {item.text_translation}
               </AppText>
-            </Pressable>
+            </AppPressable>
           )}
         />
       )}

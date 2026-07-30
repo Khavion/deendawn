@@ -3,13 +3,13 @@ import { SQLiteDatabase } from 'expo-sqlite';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FlashList } from '@shopify/flash-list';
-import { Pressable, StyleSheet, TextInput, View } from 'react-native';
+import { StyleSheet, TextInput, View } from 'react-native';
 
 import { openLibraryDb } from '../libraryDb';
 import { searchSections } from '../repo';
 import { useDebouncedValue } from '@/src/lib/useDebouncedValue';
 import { THINKERS } from '../thinkers';
-import { AppText, Skeleton } from '@/src/components/ui';
+import { AppPressable, AppText, Skeleton } from '@/src/components/ui';
 import { fontScaleCaps, measure, radius, spacing } from '@/src/lib/theme/tokens';
 import { useTokens } from '@/src/lib/theme/useTokens';
 
@@ -71,7 +71,7 @@ export function LibraryScreen() {
             </AppText>
           }
           renderItem={({ item }) => (
-            <Pressable
+            <AppPressable
               accessibilityRole="button"
               testID={`hit-${item.id}`}
               onPress={() => router.push(`/work/${item.work_id}?section=${item.section_index}`)}
@@ -83,7 +83,7 @@ export function LibraryScreen() {
               <AppText variant="reading" numberOfLines={2} style={{ color: t.textSecondary }}>
                 {item.body}
               </AppText>
-            </Pressable>
+            </AppPressable>
           )}
         />
       ) : (
@@ -99,7 +99,7 @@ export function LibraryScreen() {
             </View>
           }
           renderItem={({ item }) => (
-            <Pressable
+            <AppPressable
               accessibilityRole="button"
               testID={`thinker-${item.key}`}
               onPress={() => router.push(`/thinker/${item.key}`)}
@@ -109,7 +109,7 @@ export function LibraryScreen() {
               <AppText variant="caption" style={{ color: t.textSecondary }}>
                 {item.era} · {item.school}
               </AppText>
-            </Pressable>
+            </AppPressable>
           )}
         />
       )}

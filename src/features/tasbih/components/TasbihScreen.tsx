@@ -1,7 +1,7 @@
 import { Stack } from 'expo-router';
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import { ScrollView, StyleSheet, TextInput, View } from 'react-native';
 
 import {
   loadTasbih,
@@ -13,7 +13,7 @@ import {
   TASBIH_TARGETS,
 } from '../tasbihState';
 import { useSettings } from '../../settings/SettingsContext';
-import { AppText, Gradient } from '@/src/components/ui';
+import { AppPressable, AppText, Gradient } from '@/src/components/ui';
 import { useHaptics } from '@/src/lib/haptics';
 import {
   ambientGradient,
@@ -95,7 +95,7 @@ export function TasbihScreen() {
           maxFontSizeMultiplier={fontScaleCaps.content}
         />
 
-        <Pressable
+        <AppPressable
           accessibilityRole="button"
           accessibilityLabel={tr('tasbih.tapArea')}
           accessibilityValue={{ now: state.count, min: 0, max: state.target }}
@@ -126,15 +126,16 @@ export function TasbihScreen() {
           <AppText variant="caption" style={[styles.hint, { color: t.textSecondary }]}>
             {tr('tasbih.tapAnywhere')}
           </AppText>
-        </Pressable>
+        </AppPressable>
 
         <View style={styles.controls}>
           {TASBIH_TARGETS.map((target) => (
-            <Pressable
+            <AppPressable
               key={target}
               accessibilityRole="button"
               accessibilityState={{ selected: state.target === target }}
               testID={`target-${target}`}
+              haptic="select"
               onPress={() => setState(setTarget(store, target))}
               style={[
                 styles.chip,
@@ -148,16 +149,17 @@ export function TasbihScreen() {
               >
                 {target}
               </AppText>
-            </Pressable>
+            </AppPressable>
           ))}
-          <Pressable
+          <AppPressable
             accessibilityRole="button"
             testID="tasbih-reset"
+            haptic="warning"
             onPress={() => setState(resetCount(store))}
             style={[styles.chip, { borderColor: t.border }]}
           >
             <AppText style={{ color: t.textSecondary }}>{tr('tasbih.reset')}</AppText>
-          </Pressable>
+          </AppPressable>
         </View>
 
         <View

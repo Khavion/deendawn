@@ -4,7 +4,7 @@ import { useSQLiteContext } from 'expo-sqlite';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Pressable, Share, StyleSheet, Text, useColorScheme, View, ViewToken } from 'react-native';
+import { Share, StyleSheet, Text, useColorScheme, View, ViewToken } from 'react-native';
 
 import {
   loadBookmarks,
@@ -22,7 +22,7 @@ import {
 import { AyahRow, buildShareText, getSurah, listAyahs } from '../repo';
 import { getAyahRuns, TAJWEED_LEGEND } from '../tajweed';
 import { TAJWEED_ENABLED } from '../tajweedFlag';
-import { AppText } from '@/src/components/ui';
+import { AppPressable, AppText } from '@/src/components/ui';
 import { SurahAudioBar } from '@/src/features/audio/components/SurahAudioBar';
 import { useSettings } from '@/src/features/settings/SettingsContext';
 import {
@@ -130,10 +130,11 @@ export function SurahScreen() {
           title: `${surah.number}. ${surah.name_transliteration}`,
           headerRight: () => (
             <View style={styles.headerControls}>
-              <Pressable
+              <AppPressable
                 accessibilityRole="button"
                 accessibilityLabel={tr('more.readingSizeSmaller')}
                 testID="reader-size-dec"
+                haptic="select"
                 disabled={readingScale <= READING_SCALES[0]}
                 onPress={() => changeReadingScale(-1)}
                 hitSlop={8}
@@ -142,11 +143,12 @@ export function SurahScreen() {
                 <AppText variant="link" style={styles.sizeSmall}>
                   {sizeGlyph}
                 </AppText>
-              </Pressable>
-              <Pressable
+              </AppPressable>
+              <AppPressable
                 accessibilityRole="button"
                 accessibilityLabel={tr('more.readingSizeLarger')}
                 testID="reader-size-inc"
+                haptic="select"
                 disabled={readingScale >= READING_SCALES[READING_SCALES.length - 1]}
                 onPress={() => changeReadingScale(1)}
                 hitSlop={8}
@@ -159,10 +161,11 @@ export function SurahScreen() {
                 <AppText variant="link" style={styles.sizeLarge}>
                   {sizeGlyph}
                 </AppText>
-              </Pressable>
-              <Pressable
+              </AppPressable>
+              <AppPressable
                 accessibilityRole="button"
                 testID="toggle-translation"
+                haptic="select"
                 onPress={onToggleTranslation}
                 hitSlop={8}
                 style={styles.headerToggle}
@@ -170,7 +173,7 @@ export function SurahScreen() {
                 <AppText variant="link" numberOfLines={1}>
                   {showTranslation ? tr('quran.arabicOnly') : tr('quran.translation')}
                 </AppText>
-              </Pressable>
+              </AppPressable>
             </View>
           ),
         }}
@@ -300,7 +303,7 @@ export function SurahScreen() {
                   {item.surah}:{item.ayah}
                 </AppText>
                 <View style={styles.actions}>
-                  <Pressable
+                  <AppPressable
                     accessibilityRole="button"
                     accessibilityLabel={
                       bookmarked ? tr('quran.bookmarkRemove') : tr('quran.bookmarkAdd')
@@ -313,8 +316,8 @@ export function SurahScreen() {
                     }}
                   >
                     <AppText style={{ color: t.ochre }}>{bookmarked ? '★' : '☆'}</AppText>
-                  </Pressable>
-                  <Pressable
+                  </AppPressable>
+                  <AppPressable
                     accessibilityRole="button"
                     testID={`share-${item.ayah}`}
                     hitSlop={12}
@@ -327,7 +330,7 @@ export function SurahScreen() {
                     }
                   >
                     <AppText style={{ color: t.accent }}>{tr('quran.share')}</AppText>
-                  </Pressable>
+                  </AppPressable>
                 </View>
               </View>
             </View>

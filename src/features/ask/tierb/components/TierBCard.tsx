@@ -1,10 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import type { DownloadState } from '../downloadManager';
 import { TIER_B_ENABLED } from '../flags';
-import { AppText } from '@/src/components/ui';
+import { AppPressable, AppText } from '@/src/components/ui';
 import { radius, spacing } from '@/src/lib/theme/tokens';
 import { useTokens } from '@/src/lib/theme/useTokens';
 
@@ -60,7 +60,7 @@ export function TierBCardInner({ state, sizeLabel, onDownload, onDelete }: TierB
       )}
 
       {state.phase === 'idle' && (
-        <Pressable
+        <AppPressable
           accessibilityRole="button"
           testID="tierb-download"
           onPress={onDownload}
@@ -69,7 +69,7 @@ export function TierBCardInner({ state, sizeLabel, onDownload, onDelete }: TierB
           <AppText variant="bodyStrong" style={{ color: t.textOnAccent }}>
             {tr('ask.tierb.download', { size: sizeLabel })}
           </AppText>
-        </Pressable>
+        </AppPressable>
       )}
 
       {state.phase === 'downloading' && (
@@ -112,14 +112,14 @@ export function TierBCardInner({ state, sizeLabel, onDownload, onDelete }: TierB
           <AppText variant="caption" style={{ color: t.success }}>
             {tr('ask.tierb.ready')}
           </AppText>
-          <Pressable
+          <AppPressable
             accessibilityRole="button"
             testID="tierb-delete"
             onPress={onDelete}
             hitSlop={8}
           >
             <AppText variant="link">{tr('ask.tierb.delete')}</AppText>
-          </Pressable>
+          </AppPressable>
         </View>
       )}
     </View>

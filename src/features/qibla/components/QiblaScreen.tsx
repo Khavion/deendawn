@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { qiblaBearing, relativeQibla } from '../bearing';
@@ -8,7 +8,7 @@ import { useHeading } from '../useHeading';
 import { CityPickerModal } from '../../prayer-times/components/CityPickerModal';
 import { useSettings } from '../../settings/SettingsContext';
 import { resolveLocation } from '../../settings/settingsStore';
-import { AppText } from '@/src/components/ui';
+import { AppPressable, AppText } from '@/src/components/ui';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { useHaptics } from '@/src/lib/haptics';
 import { elevation, fonts, fontSize, radius, richMode, spacing } from '@/src/lib/theme/tokens';
@@ -75,7 +75,7 @@ export function QiblaScreen() {
         <AppText variant="reading" style={[styles.centerText, { color: t.textSecondary }]}>
           {tr('qibla.chooseCityFirst')}
         </AppText>
-        <Pressable
+        <AppPressable
           accessibilityRole="button"
           testID="qibla-choose-city"
           onPress={() => setPickerOpen(true)}
@@ -84,7 +84,7 @@ export function QiblaScreen() {
           <AppText variant="bodyStrong" style={{ color: t.textOnAccent }}>
             {tr('today.chooseCity')}
           </AppText>
-        </Pressable>
+        </AppPressable>
         <CityPickerModal
           visible={pickerOpen}
           onClose={() => setPickerOpen(false)}
@@ -110,7 +110,7 @@ export function QiblaScreen() {
         <AppText variant="reading" style={[styles.centerText, { color: t.textSecondary }]}>
           {tr('qibla.permissionNeeded')}
         </AppText>
-        <Pressable
+        <AppPressable
           accessibilityRole="button"
           testID="qibla-grant"
           onPress={requestPermission}
@@ -119,7 +119,7 @@ export function QiblaScreen() {
           <AppText variant="bodyStrong" style={{ color: t.textOnAccent }}>
             {tr('qibla.grantPermission')}
           </AppText>
-        </Pressable>
+        </AppPressable>
       </View>
     );
   }

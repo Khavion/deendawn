@@ -2,16 +2,7 @@ import { useRouter } from 'expo-router';
 import * as Updates from 'expo-updates';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Alert,
-  DevSettings,
-  Modal,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Switch,
-  View,
-} from 'react-native';
+import { Alert, DevSettings, Modal, ScrollView, StyleSheet, Switch, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
@@ -44,7 +35,7 @@ import { useSettings } from '../SettingsContext';
 import { resolveLocation } from '../settingsStore';
 import { CityPickerModal } from '../../prayer-times/components/CityPickerModal';
 import { HighLatRuleKey, MadhabKey, METHOD_KEYS, MethodKey } from '../../prayer-times/types';
-import { AppText, GoldFrameCard, SectionRule } from '@/src/components/ui';
+import { AppPressable, AppText, GoldFrameCard, SectionRule } from '@/src/components/ui';
 import i18n, {
   applyRtlForNextStart,
   LanguageCode,
@@ -107,18 +98,19 @@ function PickerModal<T extends string>({
       >
         <View style={styles.modalHeader}>
           <AppText variant="subtitle">{title}</AppText>
-          <Pressable accessibilityRole="button" testID="close-option-picker" onPress={onClose}>
+          <AppPressable accessibilityRole="button" testID="close-option-picker" onPress={onClose}>
             <AppText variant="link">{closeLabel}</AppText>
-          </Pressable>
+          </AppPressable>
         </View>
         {hint ? <AppText style={styles.sectionHint}>{hint}</AppText> : null}
         <ScrollView contentContainerStyle={{ paddingBottom: insets.bottom + spacing.l }}>
           {options.map((o) => (
-            <Pressable
+            <AppPressable
               key={o.key}
               accessibilityRole="button"
               accessibilityState={{ selected: o.key === selected }}
               testID={`option-${o.key}`}
+              haptic="select"
               onPress={() => {
                 onSelect(o.key);
                 onClose();
@@ -132,7 +124,7 @@ function PickerModal<T extends string>({
                 {o.label}
                 {o.key === selected ? '  ✓' : ''}
               </AppText>
-            </Pressable>
+            </AppPressable>
           ))}
         </ScrollView>
       </View>
@@ -315,7 +307,7 @@ export function MoreScreen() {
         </AppText>
         <View style={groupCard}>
           {rows.map((row) => (
-            <Pressable
+            <AppPressable
               key={row.id}
               accessibilityRole="button"
               testID={`setting-${row.id}`}
@@ -326,7 +318,7 @@ export function MoreScreen() {
               <AppText style={[styles.settingValue, { color: tk.textSecondary }]}>
                 {row.value}
               </AppText>
-            </Pressable>
+            </AppPressable>
           ))}
         </View>
         <SectionRule label={t('more.notifications')} style={styles.sectionRule} />
@@ -336,7 +328,7 @@ export function MoreScreen() {
         <View style={groupCard}>
           {ADHAN_PRAYERS.map((prayer) => (
             <View key={prayer} style={[styles.settingRowInline, { borderBottomColor: tk.border }]}>
-              <Pressable
+              <AppPressable
                 accessibilityRole="button"
                 testID={`sound-${prayer}`}
                 style={styles.rowText}
@@ -346,7 +338,7 @@ export function MoreScreen() {
                 <AppText style={[styles.settingValue, { color: tk.textSecondary }]}>
                   {t(`more.sound_${prefs.sound[prayer]}`)}
                 </AppText>
-              </Pressable>
+              </AppPressable>
               <Switch
                 testID={`notif-${prayer}`}
                 value={prefs.enabled[prayer]}
@@ -365,10 +357,11 @@ export function MoreScreen() {
               </AppText>
             </View>
             <View style={styles.stepper}>
-              <Pressable
+              <AppPressable
                 accessibilityRole="button"
                 accessibilityLabel={t('more.readingSizeSmaller')}
                 testID="reading-size-dec"
+                haptic="select"
                 disabled={readingScale <= minScale}
                 onPress={() => changeReadingScale(-1)}
                 style={[
@@ -380,7 +373,7 @@ export function MoreScreen() {
                 <AppText maxFontSizeMultiplier={fontScaleCaps.label} style={styles.stepSmall}>
                   {sizeGlyph}
                 </AppText>
-              </Pressable>
+              </AppPressable>
               <AppText
                 variant="caption"
                 testID="reading-size-value"
@@ -388,10 +381,11 @@ export function MoreScreen() {
               >
                 {scalePercent}
               </AppText>
-              <Pressable
+              <AppPressable
                 accessibilityRole="button"
                 accessibilityLabel={t('more.readingSizeLarger')}
                 testID="reading-size-inc"
+                haptic="select"
                 disabled={readingScale >= maxScale}
                 onPress={() => changeReadingScale(1)}
                 style={[
@@ -403,7 +397,7 @@ export function MoreScreen() {
                 <AppText maxFontSizeMultiplier={fontScaleCaps.label} style={styles.stepLarge}>
                   {sizeGlyph}
                 </AppText>
-              </Pressable>
+              </AppPressable>
             </View>
           </View>
           <View style={[styles.settingRowInline, { borderBottomColor: tk.border }]}>

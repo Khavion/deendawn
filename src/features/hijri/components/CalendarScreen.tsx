@@ -1,10 +1,10 @@
 import { Stack } from 'expo-router';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 
 import { keyDatesFor, toHijri } from '../hijri';
-import { AppText } from '@/src/components/ui';
+import { AppPressable, AppText } from '@/src/components/ui';
 import { useSettings } from '@/src/features/settings/SettingsContext';
 import { elevation, measure, radius, richMode, spacing } from '@/src/lib/theme/tokens';
 import { useThemeMode } from '@/src/lib/theme/ThemeProvider';
@@ -91,17 +91,18 @@ export function CalendarScreen({ initialDate }: { initialDate?: Date }) {
       <Stack.Screen options={{ title: tr('calendar.title') }} />
       <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={styles.scroll}>
         <View style={styles.header}>
-          <Pressable
+          <AppPressable
             accessibilityRole="button"
             accessibilityLabel={tr('calendar.prevMonth')}
             testID="prev-month"
+            haptic="select"
             onPress={() => move(-1)}
             hitSlop={12}
           >
             <AppText variant="title" style={{ color: t.accent }}>
               ‹
             </AppText>
-          </Pressable>
+          </AppPressable>
           <View style={styles.headerTitles}>
             <AppText variant="subtitle" style={styles.centerText}>
               {gregorianTitle}
@@ -110,17 +111,18 @@ export function CalendarScreen({ initialDate }: { initialDate?: Date }) {
               {hijriTitle}
             </AppText>
           </View>
-          <Pressable
+          <AppPressable
             accessibilityRole="button"
             accessibilityLabel={tr('calendar.nextMonth')}
             testID="next-month"
+            haptic="select"
             onPress={() => move(1)}
             hitSlop={12}
           >
             <AppText variant="title" style={{ color: t.accent }}>
               ›
             </AppText>
-          </Pressable>
+          </AppPressable>
         </View>
 
         <AppText variant="caption" style={[styles.todayLine, { color: t.textSecondary }]}>

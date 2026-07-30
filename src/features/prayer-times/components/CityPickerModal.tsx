@@ -1,18 +1,10 @@
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FlashList } from '@shopify/flash-list';
-import {
-  KeyboardAvoidingView,
-  Modal,
-  Platform,
-  Pressable,
-  StyleSheet,
-  TextInput,
-  View,
-} from 'react-native';
+import { KeyboardAvoidingView, Modal, Platform, StyleSheet, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { AppText } from '@/src/components/ui';
+import { AppPressable, AppText } from '@/src/components/ui';
 import { City } from '@/src/features/settings/cities';
 import { searchCities } from '@/src/features/settings/citySearch';
 import { fontScaleCaps, radius, spacing } from '@/src/lib/theme/tokens';
@@ -49,9 +41,9 @@ export function CityPickerModal({
       >
         <View style={styles.header}>
           <AppText variant="subtitle">{t('cityPicker.title')}</AppText>
-          <Pressable accessibilityRole="button" testID="close-picker" onPress={onClose}>
+          <AppPressable accessibilityRole="button" testID="close-picker" onPress={onClose}>
             <AppText variant="link">{t('common.close')}</AppText>
-          </Pressable>
+          </AppPressable>
         </View>
         <TextInput
           testID="city-search"
@@ -76,9 +68,10 @@ export function CityPickerModal({
             </AppText>
           }
           renderItem={({ item }) => (
-            <Pressable
+            <AppPressable
               accessibilityRole="button"
               testID={`city-${item.id}`}
+              haptic="select"
               onPress={() => onSelect(item)}
               style={[styles.row, { borderBottomColor: tk.border }]}
             >
@@ -86,7 +79,7 @@ export function CityPickerModal({
               <AppText style={[styles.country, { color: tk.textSecondary }]}>
                 {item.country}
               </AppText>
-            </Pressable>
+            </AppPressable>
           )}
         />
       </KeyboardAvoidingView>

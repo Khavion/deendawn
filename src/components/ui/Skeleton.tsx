@@ -18,7 +18,12 @@ export type SkeletonProps = {
  * essential tier / Reduce Motion it holds a static muted fill. Compose several
  * to mirror the shape of the content that's loading.
  */
-export function Skeleton({ width = '100%', height = 16, radius = radii.control, style }: SkeletonProps) {
+export function Skeleton({
+  width = '100%',
+  height = 16,
+  radius = radii.control,
+  style,
+}: SkeletonProps) {
   const t = useTokens();
   const { flat, reduceMotion } = useDeviceTier();
   const animate = !flat && !reduceMotion;
@@ -41,10 +46,7 @@ export function Skeleton({ width = '100%', height = 16, radius = radii.control, 
     <Animated.View
       accessibilityElementsHidden
       importantForAccessibility="no-hide-descendants"
-      style={[
-        { width, height, borderRadius: radius, backgroundColor: t.border, opacity },
-        style,
-      ]}
+      style={[{ width, height, borderRadius: radius, backgroundColor: t.border, opacity }, style]}
     />
   );
 }

@@ -2,14 +2,14 @@ import { useRouter } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import { ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ask, AskResponse, extractTerms } from '../router';
 import { askLibrary, LibraryAskResponse, sectionSnippet } from '../libraryAsk';
 import { openLibraryDb } from '../../library/libraryDb';
 import { AyahRow, QuranDb } from '../../quran/repo';
-import { AppText, Skeleton } from '@/src/components/ui';
+import { AppPressable, AppText, Skeleton } from '@/src/components/ui';
 import { fonts, fontScaleCaps, fontSize, measure, radius, spacing } from '@/src/lib/theme/tokens';
 import { useTokens } from '@/src/lib/theme/useTokens';
 
@@ -59,7 +59,7 @@ export function AskScreen() {
   const refChips = (rows: AyahRow[]) => (
     <View style={styles.chips}>
       {rows.map((row) => (
-        <Pressable
+        <AppPressable
           key={row.id}
           accessibilityRole="button"
           testID={`ref-${row.surah}-${row.ayah}`}
@@ -69,7 +69,7 @@ export function AskScreen() {
           <AppText variant="bodyStrong" style={{ color: t.textOnAccentSoft }}>
             {row.surah}:{row.ayah}
           </AppText>
-        </Pressable>
+        </AppPressable>
       ))}
     </View>
   );
@@ -77,7 +77,7 @@ export function AskScreen() {
   const verseRows = (rows: AyahRow[]) => (
     <View style={styles.verseList}>
       {rows.map((row) => (
-        <Pressable
+        <AppPressable
           key={row.id}
           accessibilityRole="button"
           testID={`verse-${row.surah}-${row.ayah}`}
@@ -90,7 +90,7 @@ export function AskScreen() {
           <AppText variant="reading" numberOfLines={2} style={{ color: t.textSecondary }}>
             {row.text_translation}
           </AppText>
-        </Pressable>
+        </AppPressable>
       ))}
     </View>
   );
@@ -120,10 +120,11 @@ export function AskScreen() {
 
       <View style={styles.sourceRow}>
         {(['quran', 'library'] as const).map((s) => (
-          <Pressable
+          <AppPressable
             key={s}
             accessibilityRole="button"
             testID={`ask-source-${s}`}
+            haptic="select"
             onPress={() => switchSource(s)}
             style={[
               styles.sourceChip,
@@ -138,7 +139,7 @@ export function AskScreen() {
             >
               {tr(s === 'quran' ? 'ask.sourceQuran' : 'ask.sourceLibrary')}
             </AppText>
-          </Pressable>
+          </AppPressable>
         ))}
       </View>
 
@@ -169,7 +170,7 @@ export function AskScreen() {
         {libResponse?.kind === 'sections' && (
           <View testID="ask-sections" style={styles.verseList}>
             {libResponse.refs.map((ref) => (
-              <Pressable
+              <AppPressable
                 key={ref.id}
                 accessibilityRole="button"
                 testID={`book-section-${ref.id}`}
@@ -182,7 +183,7 @@ export function AskScreen() {
                 <AppText variant="reading" numberOfLines={3} style={{ color: t.textSecondary }}>
                   {sectionSnippet(ref.body, extractTerms(input))}
                 </AppText>
-              </Pressable>
+              </AppPressable>
             ))}
           </View>
         )}

@@ -2,11 +2,11 @@ import { useRouter } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import { getAyahByOrdinal, getSurah } from '../repo';
 import { verseOfDayOrdinal } from '../verseOfDay';
-import { AppText, SectionRule } from '@/src/components/ui';
+import { AppPressable, AppText, SectionRule } from '@/src/components/ui';
 import {
   elevation,
   fonts,
@@ -47,7 +47,7 @@ export function VerseOfDayCard({ date }: { date: Date }) {
   return (
     <>
       <SectionRule label={tr('today.verseOfDay')} style={styles.rule} />
-      <Pressable
+      <AppPressable
         accessibilityRole="button"
         testID="verse-of-day"
         onPress={() => router.push(`/surah/${ayah.surah}?ayah=${ayah.ayah}`)}
@@ -74,7 +74,7 @@ export function VerseOfDayCard({ date }: { date: Date }) {
         <AppText variant="caption" style={{ color: t.accent }}>
           {citation}
         </AppText>
-      </Pressable>
+      </AppPressable>
     </>
   );
 }

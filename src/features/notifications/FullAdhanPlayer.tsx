@@ -2,11 +2,11 @@ import { AudioPlayer, createAudioPlayer, setAudioModeAsync } from 'expo-audio';
 import * as Notifications from 'expo-notifications';
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AdhanPrayer } from './scheduler';
-import { AppText } from '@/src/components/ui';
+import { AppPressable, AppText } from '@/src/components/ui';
 import { radius, spacing } from '@/src/lib/theme/tokens';
 import { useTokens } from '@/src/lib/theme/useTokens';
 
@@ -67,11 +67,17 @@ export function FullAdhanPlayer() {
       <AppText variant="bodyStrong" style={{ color: t.textOnAccent }}>
         {tr('notifications.playingFullAdhan', { prayer: tr(`prayers.${playing}`) })}
       </AppText>
-      <Pressable accessibilityRole="button" testID="stop-adhan" onPress={stop} hitSlop={12}>
+      <AppPressable
+        accessibilityRole="button"
+        testID="stop-adhan"
+        haptic="press"
+        onPress={stop}
+        hitSlop={12}
+      >
         <AppText variant="bodyStrong" style={{ color: t.textOnAccent }}>
           {tr('common.stop')}
         </AppText>
-      </Pressable>
+      </AppPressable>
     </View>
   );
 }

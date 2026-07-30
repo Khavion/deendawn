@@ -2,12 +2,12 @@ import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { SQLiteDatabase } from 'expo-sqlite';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 
 import { openLibraryDb } from '../libraryDb';
 import { WorkRow, worksByAuthor } from '../repo';
 import { THINKERS } from '../thinkers';
-import { AppText } from '@/src/components/ui';
+import { AppPressable, AppText } from '@/src/components/ui';
 import { measure, radius, spacing } from '@/src/lib/theme/tokens';
 import { useTokens } from '@/src/lib/theme/useTokens';
 
@@ -84,7 +84,7 @@ export function ThinkerScreen() {
               {tr('library.readInApp')}
             </AppText>
             {works.map((w) => (
-              <Pressable
+              <AppPressable
                 key={w.id}
                 accessibilityRole="button"
                 testID={`work-${w.id}`}
@@ -97,7 +97,7 @@ export function ThinkerScreen() {
                 <AppText variant="caption" style={{ color: t.textOnAccentSoft }}>
                   {tr('library.translatedBy', { translator: w.translator, year: w.year })}
                 </AppText>
-              </Pressable>
+              </AppPressable>
             ))}
           </>
         )}

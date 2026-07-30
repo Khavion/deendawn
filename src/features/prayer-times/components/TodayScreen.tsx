@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { CityPickerModal } from './CityPickerModal';
@@ -10,7 +10,14 @@ import { computeDayTimes, isValidTime, nextPrayer } from '../engine';
 import { formatTimeInZone } from '../format';
 import { currentPeriod, periodPrayer, periodWord } from '../period';
 import { PRAYER_NAMES } from '../types';
-import { AppText, GoldFrameCard, Gradient, PeriodEyebrow, SectionRule } from '@/src/components/ui';
+import {
+  AppPressable,
+  AppText,
+  GoldFrameCard,
+  Gradient,
+  PeriodEyebrow,
+  SectionRule,
+} from '@/src/components/ui';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { useSettings } from '@/src/features/settings/SettingsContext';
 import { resolveLocation, resolvePrayerConfig } from '@/src/features/settings/settingsStore';
@@ -124,7 +131,7 @@ export function TodayScreen() {
         <AppText variant="reading" style={[styles.emptyBody, { color: t.textSecondary }]}>
           {tr('today.emptyBody')}
         </AppText>
-        <Pressable
+        <AppPressable
           accessibilityRole="button"
           testID="choose-city"
           onPress={() => setPickerOpen(true)}
@@ -133,7 +140,7 @@ export function TodayScreen() {
           <AppText variant="bodyStrong" style={{ color: t.textOnAccent }}>
             {tr('today.chooseCity')}
           </AppText>
-        </Pressable>
+        </AppPressable>
         <CityPickerModal
           visible={pickerOpen}
           onClose={() => setPickerOpen(false)}
@@ -164,7 +171,7 @@ export function TodayScreen() {
         <PeriodEyebrow label={eyebrowLabel} style={styles.periodEyebrow} />
 
         <View style={styles.header}>
-          <Pressable
+          <AppPressable
             accessibilityRole="button"
             testID="change-city"
             onPress={() => setPickerOpen(true)}
@@ -172,7 +179,7 @@ export function TodayScreen() {
           >
             <IconSymbol name="location.fill" size={14} color={t.accent} />
             <AppText variant="bodyStrong">{location.label}</AppText>
-          </Pressable>
+          </AppPressable>
           <AppText variant="caption" style={{ color: t.textSecondary }}>
             {now.toLocaleDateString(i18n.language, {
               weekday: 'long',

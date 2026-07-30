@@ -3,12 +3,12 @@ import { useSQLiteContext } from 'expo-sqlite';
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FlashList } from '@shopify/flash-list';
-import { Pressable, StyleSheet, TextInput, View } from 'react-native';
+import { StyleSheet, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { loadLastRead } from '../readerState';
 import { AyahRow, listSurahs, searchAyahs } from '../repo';
-import { AppText, GoldFrameCard, SectionRule } from '@/src/components/ui';
+import { AppPressable, AppText, GoldFrameCard, SectionRule } from '@/src/components/ui';
 import { useSettings } from '@/src/features/settings/SettingsContext';
 import { useDebouncedValue } from '@/src/lib/useDebouncedValue';
 import {
@@ -67,7 +67,7 @@ export function SurahListScreen() {
         <AppText variant="title" style={styles.title}>
           {t('quran.title')}
         </AppText>
-        <Pressable
+        <AppPressable
           accessibilityRole="button"
           testID="quran-bookmarks"
           onPress={() => router.push('/bookmarks')}
@@ -76,7 +76,7 @@ export function SurahListScreen() {
         >
           <AppText style={{ color: tk.ochre }}>★</AppText>
           <AppText variant="link">{t('quran.bookmarksTitle')}</AppText>
-        </Pressable>
+        </AppPressable>
       </View>
       <TextInput
         testID="quran-search"
@@ -100,7 +100,7 @@ export function SurahListScreen() {
             contentContainerStyle={styles.listContent}
             ListEmptyComponent={<AppText style={styles.hint}>{t('quran.noMatches')}</AppText>}
             renderItem={({ item }) => (
-              <Pressable
+              <AppPressable
                 accessibilityRole="button"
                 testID={`result-${item.surah}-${item.ayah}`}
                 onPress={() => router.push(`/surah/${item.surah}?ayah=${item.ayah}`)}
@@ -112,14 +112,14 @@ export function SurahListScreen() {
                 <AppText numberOfLines={2} style={styles.resultText}>
                   {item.text_translation}
                 </AppText>
-              </Pressable>
+              </AppPressable>
             )}
           />
         </View>
       ) : (
         <>
           {lastRead && (
-            <Pressable
+            <AppPressable
               accessibilityRole="button"
               testID="continue-reading"
               onPress={() => router.push(`/surah/${lastRead.surah}?ayah=${lastRead.ayah}`)}
@@ -129,7 +129,7 @@ export function SurahListScreen() {
                   {t('quran.continueReading', { surah: lastRead.surah, ayah: lastRead.ayah })}
                 </AppText>
               </GoldFrameCard>
-            </Pressable>
+            </AppPressable>
           )}
           <SectionRule label={t('quran.surahsSection')} style={styles.sectionRule} />
           <View style={listCard}>
@@ -139,7 +139,7 @@ export function SurahListScreen() {
               contentInsetAdjustmentBehavior="automatic"
               contentContainerStyle={styles.listContent}
               renderItem={({ item }) => (
-                <Pressable
+                <AppPressable
                   accessibilityRole="button"
                   testID={`surah-${item.number}`}
                   onPress={() => router.push(`/surah/${item.number}`)}
@@ -166,7 +166,7 @@ export function SurahListScreen() {
                   >
                     {item.name_arabic}
                   </AppText>
-                </Pressable>
+                </AppPressable>
               )}
             />
           </View>

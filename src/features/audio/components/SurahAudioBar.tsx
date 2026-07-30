@@ -1,14 +1,14 @@
 import { setAudioModeAsync, useAudioPlayer, useAudioPlayerStatus } from 'expo-audio';
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
 import type { AudioSource } from '../config';
 import { getAudioSource } from '../config';
 import { formatClock, progressFraction, resumeSeekTarget } from '../playerLogic';
 import { clearResumePosition, getResumePosition, saveResumePosition } from '../resumeStore';
 import { surahAudioUrl } from '../urls';
-import { AppText, GoldFrameCard } from '@/src/components/ui';
+import { AppPressable, AppText, GoldFrameCard } from '@/src/components/ui';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { useSettings } from '@/src/features/settings/SettingsContext';
 import { spacing } from '@/src/lib/theme/tokens';
@@ -126,12 +126,13 @@ function AudioBarInner({
       testID="surah-audio-bar"
     >
       <View style={styles.row}>
-        <Pressable
+        <AppPressable
           accessibilityRole="button"
           accessibilityLabel={status.playing ? tr('audio.pause') : tr('audio.play')}
           testID="surah-audio-toggle"
           onPress={toggle}
           hitSlop={12}
+          haptic="press"
           style={[styles.playButton, { backgroundColor: t.accent }]}
         >
           {busy ? (
@@ -143,7 +144,7 @@ function AudioBarInner({
               color={t.textOnAccent}
             />
           )}
-        </Pressable>
+        </AppPressable>
         <View style={styles.meta}>
           <AppText variant="bodyStrong" numberOfLines={1}>
             {tr('audio.listen')}
