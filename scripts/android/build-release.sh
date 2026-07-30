@@ -24,10 +24,10 @@ APK=android/app/build/outputs/apk/release/app-release.apk
 AAB=android/app/build/outputs/bundle/release/app-release.aab
 ls -la "$APK" "$AAB"
 
-echo "== download-size estimate (Play splits) =="
-bundletool get-size total --bundle="$AAB" --dimensions=SDK || true
-
 WORK=$(mktemp -d); trap 'rm -rf "$WORK"' EXIT
+echo "== download-size estimate (Play split APKs) =="
+bundletool build-apks --bundle="$AAB" --output="$WORK/split.apks" >/dev/null
+bundletool get-size total --apks="$WORK/split.apks" || true
 bundletool build-apks --bundle="$AAB" --output="$WORK/u.apks" --mode=universal >/dev/null
 unzip -o -q "$WORK/u.apks" universal.apk -d "$WORK"
 

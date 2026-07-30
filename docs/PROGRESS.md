@@ -640,3 +640,14 @@ Done:
   "Adhan not playing?" troubleshooting screen (permission-free battery deep-link, OEM steps).
 - 488/488 green. Next: Phase 3 proof (truth-testing matrix, release build, evidence sweep,
   16KB+manifest gates) then Phase 4 store prep.
+
+### Phase 3 proof (in progress, same session)
+- **RELEASE build green with both hard gates**: 16KB gate PASSED (bundle PAGE_ALIGNMENT_16K +
+  zipalign -P16 + every 64-bit ELF LOAD ≥ 2^14) and manifest gate PASSED (no USE_EXACT_ALARM,
+  no AD_ID, blocked set held, full required contract present). Play download size 38.5–68.9MB
+  per device (splits) — well under the 100MB budget.
+- **All five Maestro suites PASS on the Android release build**, including the offline
+  constitutional proof (wiped container + airplane mode, 1m05s) and the full language round
+  trip. lintVitalRelease metaspace fix in build-release.sh.
+- Evidence-sweep cell matrix running; then perf baseline + destructive truth tests
+  (clock-jump firing, Doze, reboot).

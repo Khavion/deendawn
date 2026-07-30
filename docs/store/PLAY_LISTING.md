@@ -55,3 +55,39 @@ The store build requests only: INTERNET (audio), ACCESS_FINE/COARSE_LOCATION (qi
 MODIFY_AUDIO_SETTINGS, VIBRATE. We explicitly BLOCK the microphone (RECORD_AUDIO), draw-over-apps
 (SYSTEM_ALERT_WINDOW), and external storage — see `app.json` → `android.blockedPermissions`. This
 keeps the Data Safety story clean and avoids review scrutiny.
+
+## Foreground-service declaration (Play Console → App content, required for target API 34+)
+
+Type declared in the manifest: **mediaPlayback** (from expo-audio's
+AudioControlsService — Quran recitation streaming with lock-screen controls).
+
+- **What it does:** continues Quran audio playback the user started when the
+  app is backgrounded or the screen locks, with lock-screen/notification
+  media controls.
+- **User impact if deferred/interrupted:** recitation stops mid-surah the
+  moment the screen locks — the core listening experience breaks.
+- **Use case selection:** "Continue audio or video playback from the
+  background, including streaming."
+- **Demo video:** screen recording showing: open a surah → play → press
+  home → audio continues → lock screen → media card with controls. (Record
+  from the release build during store prep; attach the unlisted link.)
+
+## Feature graphic
+
+`docs/store/feature-graphic-1024x500.png` — brand gradient + dawn mark,
+center-safe (Play crops promo surfaces to 16:9). Final pass adds the
+"Deen Dawn" wordmark + one-line tagline before submission.
+
+## Exact alarms (reviewer note, no declaration form needed)
+
+The app declares SCHEDULE_EXACT_ALARM (user-granted "Alarms & reminders"
+special access) for on-time adhan reminders. USE_EXACT_ALARM is NOT declared.
+No sensitive-permission declaration applies.
+
+## Upcoming (Oct 28, 2026): location-permissions declaration
+
+Google's updated Location Permissions policy adds a Console declaration +
+review for any app requesting location. Deen Dawn's case: when-in-use
+foreground location, processed entirely on-device for prayer times + qibla
+(core functionality), never transmitted; manual city entry is a full
+alternative. File the declaration when the Console form appears.
