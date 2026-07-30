@@ -397,7 +397,17 @@ demo video, and export the final screenshot set.
 location. Ours is the easiest case (on-device only, never sent anywhere, manual city works
 without it) — I'll draft the answers when the form appears.
 
-## Turn on the audio bucket (Cloudflare R2) — needed before recitation streams to real users
+## Turn on the audio bucket (Cloudflare R2) — DONE 2026-07-30 except step 7 (domain)
+
+**Steps 1-6 are complete** (you did the card + bucket + `allow`; I did the
+token, upload of all 114 recitations, and verified streaming end-to-end).
+The test web address works for us and for the closed test. **Step 7 — a
+custom domain — is still the one thing needed before the PUBLIC release**,
+because the test address is rate-limited by Cloudflare. My recommendation
+stands: one domain (~$10/year), tell me which name you like and I prepare
+everything for you to click.
+
+### (original instructions, kept for reference)
 
 **What this is.** The Quran listening feature is now fully built with a real,
 legally-cleared reciter (Mishary Rashid Alafasy — the most popular voice in

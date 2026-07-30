@@ -761,3 +761,21 @@ Zohaib approved in-session: "Approved: Alafasy". The shipping reciter set is
 Mishary Rashid Alafasy (Murattal, Hafs), Islamic Network collection, as
 pinned in content-pipeline/audio/sources.json + audio.lock. The translation
 half of gate #5 remains open.
+
+## 2026-07-30 — R2 bucket LIVE: full Alafasy set uploaded and streaming
+
+Zohaib enabled R2 on his personal Cloudflare account (card on file, expected
+$0/mo), bucket `deendawn-upload` (WNAM). I created the scoped API token
+(deendawn-upload, Object Read & Write, that bucket only, no expiry) via the
+dashboard; credentials went straight into .env via scripts/setup-r2-env.command
+(never through chat/agent context). All 114 Alafasy files uploaded via
+audio:upload and head-verified (second run: 0 uploaded / 114 present).
+Zohaib typed the `allow` consent for the Public Development URL:
+https://pub-6fc7a1cfcf304ac9864b4e2eb4a4012d.r2.dev — rate-limited, fine for
+dev + the 12-tester closed test; PRODUCTION still requires the custom-domain
+step (BLOCKERS). Verified end-to-end from the emulator: surah 2 (2h06m file)
+streams with sub-second start, HTTP 206 range requests confirmed. eas.json
+`preview` profile now bakes this URL in, so internal-testing builds ship
+with audio ON; `production` deliberately stays unset until the custom
+domain exists (rule 2: our domain only). The account also holds an older
+`ummah-content-packs` bucket — untouched, flagged to Zohaib.
