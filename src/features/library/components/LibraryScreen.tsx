@@ -43,6 +43,7 @@ export function LibraryScreen() {
         value={query}
         onChangeText={setQuery}
         placeholder={tr('library.searchPlaceholder')}
+        accessibilityLabel={tr('library.searchPlaceholder')}
         placeholderTextColor={t.icon}
         autoCorrect={false}
         maxFontSizeMultiplier={fontScaleCaps.content}

@@ -4,7 +4,15 @@ import { useSQLiteContext } from 'expo-sqlite';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Share, StyleSheet, Text, useColorScheme, View, ViewToken } from 'react-native';
+import {
+  AccessibilityInfo,
+  Share,
+  StyleSheet,
+  Text,
+  useColorScheme,
+  View,
+  ViewToken,
+} from 'react-native';
 
 import {
   loadBookmarks,
@@ -99,6 +107,9 @@ export function SurahScreen() {
     setReadingScale((current) => {
       const next = stepReadingScale(current, dir);
       saveReadingScale(store, next);
+      AccessibilityInfo.announceForAccessibility(
+        `${tr('more.readingSize')} ${Math.round(next * 100)}%`
+      );
       return next;
     });
   };
@@ -137,7 +148,7 @@ export function SurahScreen() {
                 haptic="select"
                 disabled={readingScale <= READING_SCALES[0]}
                 onPress={() => changeReadingScale(-1)}
-                hitSlop={8}
+                hitSlop={12}
                 style={readingScale <= READING_SCALES[0] ? styles.sizeDisabled : undefined}
               >
                 <AppText variant="link" style={styles.sizeSmall}>
@@ -151,7 +162,7 @@ export function SurahScreen() {
                 haptic="select"
                 disabled={readingScale >= READING_SCALES[READING_SCALES.length - 1]}
                 onPress={() => changeReadingScale(1)}
-                hitSlop={8}
+                hitSlop={12}
                 style={
                   readingScale >= READING_SCALES[READING_SCALES.length - 1]
                     ? styles.sizeDisabled
@@ -167,7 +178,7 @@ export function SurahScreen() {
                 testID="toggle-translation"
                 haptic="select"
                 onPress={onToggleTranslation}
-                hitSlop={8}
+                hitSlop={12}
                 style={styles.headerToggle}
               >
                 <AppText variant="link" numberOfLines={1}>

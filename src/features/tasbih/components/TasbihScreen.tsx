@@ -1,7 +1,7 @@
 import { Stack } from 'expo-router';
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import { AccessibilityInfo, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 
 import {
   loadTasbih,
@@ -53,6 +53,7 @@ export function TasbihScreen() {
     setHistory(recentHistory(store, 7));
     if (result.completedRound) {
       h.success();
+      AccessibilityInfo.announceForAccessibility(tr('tasbih.roundAnnounce'));
       flash('round');
     } else if (result.hitThirtyThree) {
       h.detent();
@@ -89,6 +90,7 @@ export function TasbihScreen() {
           value={state.label}
           onChangeText={(text) => setState(setLabel(store, text))}
           placeholder={tr('tasbih.labelPlaceholder')}
+          accessibilityLabel={tr('tasbih.labelPlaceholder')}
           placeholderTextColor={t.icon}
           maxLength={60}
           style={[styles.label, { color: t.textSecondary }]}

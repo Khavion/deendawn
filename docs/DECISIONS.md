@@ -386,10 +386,14 @@ Result: eslint 0 errors / 6 warnings (the 6 are pre-existing and unchanged), tsc
   its own reader-scoped toggle (two competing "night" switches would confuse; the global nightWarm
   pref value remains dev-only). Nullable ThemeContext in MoreScreen keeps provider-less screen
   tests valid.
-- **a11y tooling substitution:** eslint-plugin-react-native-a11y pins eslint ≤8 (repo runs 9;
-  adopting it would force repo-wide legacy-peer-deps). Installed react-native-accessibility-engine
-  (clean peers, jest-time render assertions — the brief's named alternative) instead; wired in
-  Phase 7.
+- **a11y tooling: BOTH named tools are era-incompatible; enforcement is handwritten.**
+  eslint-plugin-react-native-a11y pins eslint ≤8 (repo runs 9 — adopting would force repo-wide
+  legacy-peer-deps). react-native-accessibility-engine 3.2.0 was then trialed and REMOVED: it
+  renders probes through react-test-renderer in ways React 19.2 rejects ("Can't access .root on
+  unmounted test renderer") even after mocking its module-scope probe. The automated gate is
+  instead: (a) the extended jest contrast suite (which caught a real dark-mode featured-card
+  defect), (b) per-component label/role/state assertions across the suites, (c) the device
+  VoiceOver pass in TESTPLAN. Re-evaluate both packages when they ship eslint-9 / React-19 support.
 - New i18n keys (appearance/theme×4/haptics×2): en ships; ur/ar machine-drafted under the blanket
   gate-8 @draft status in TRANSLATION_REVIEW.md.
 

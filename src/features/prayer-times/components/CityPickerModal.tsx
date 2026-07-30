@@ -41,7 +41,12 @@ export function CityPickerModal({
       >
         <View style={styles.header}>
           <AppText variant="subtitle">{t('cityPicker.title')}</AppText>
-          <AppPressable accessibilityRole="button" testID="close-picker" onPress={onClose}>
+          <AppPressable
+            accessibilityRole="button"
+            testID="close-picker"
+            hitSlop={12}
+            onPress={onClose}
+          >
             <AppText variant="link">{t('common.close')}</AppText>
           </AppPressable>
         </View>
@@ -50,6 +55,7 @@ export function CityPickerModal({
           value={query}
           onChangeText={setQuery}
           placeholder={t('cityPicker.placeholder')}
+          accessibilityLabel={t('cityPicker.placeholder')}
           placeholderTextColor={tk.icon}
           autoFocus
           autoCorrect={false}

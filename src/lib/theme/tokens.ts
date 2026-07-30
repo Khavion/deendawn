@@ -391,7 +391,10 @@ export const textOnFeatured: Record<'light' | 'dark', string> = {
 };
 export const dimOnFeatured: Record<'light' | 'dark', string> = {
   light: 'rgba(247,246,242,0.75)',
-  dark: 'rgba(21,24,29,0.66)',
+  // 0.66 composited to ~3.2:1 on the dark gradient stops — below AA for the
+  // small featured-card captions. 0.88 clears 4.5:1 on both stops (contrast
+  // test enforces it) while still reading as secondary.
+  dark: 'rgba(21,24,29,0.88)',
 };
 
 /** Illuminated gold hairline rule (transparent → gold → transparent). */

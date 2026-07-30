@@ -92,6 +92,7 @@ export function ZakatScreen() {
       </AppText>
       <TextInput
         testID={`zakat-${key}`}
+        accessibilityLabel={tr(`zakat.fields.${key}`)}
         value={raw[key]}
         onChangeText={(text) => setRaw((prev) => ({ ...prev, [key]: text }))}
         keyboardType="decimal-pad"

@@ -89,6 +89,7 @@
     "bearingLabel": "{{degrees}}° from north",
     "magneticCaveat": "Using magnetic north — your device could not provide true north",
     "calibrate": "Compass needs calibration — move your phone in a figure-8 motion",
+    "alignedAnnounce": "Facing the qibla",
     "permissionNeeded": "The compass needs location permission to work. Your location never leaves your phone.",
     "grantPermission": "Enable compass",
     "northMarker": "N"
@@ -205,7 +206,8 @@
     "tapAnywhere": "Tap anywhere in the circle to count",
     "tapArea": "Tasbih counter. Tap to count.",
     "reset": "Reset",
-    "labelPlaceholder": "Add your own label (optional)"
+    "labelPlaceholder": "Add your own label (optional)",
+    "roundAnnounce": "Round complete"
   },
   "zakat": {
     "title": "Zakat calculator",

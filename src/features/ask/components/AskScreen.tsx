@@ -113,6 +113,7 @@ export function AskScreen() {
         onSubmitEditing={submit}
         returnKeyType="search"
         placeholder={tr('ask.placeholder')}
+        accessibilityLabel={tr('ask.placeholder')}
         placeholderTextColor={t.icon}
         autoCorrect={false}
         maxFontSizeMultiplier={fontScaleCaps.content}

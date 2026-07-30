@@ -83,6 +83,7 @@ export function SurahListScreen() {
         value={query}
         onChangeText={setQuery}
         placeholder={t('quran.searchPlaceholder')}
+        accessibilityLabel={t('quran.searchPlaceholder')}
         placeholderTextColor={tk.icon}
         autoCorrect={false}
         maxFontSizeMultiplier={fontScaleCaps.content}

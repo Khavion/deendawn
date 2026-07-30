@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { AccessibilityInfo, ScrollView, StyleSheet, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -74,6 +74,7 @@ export function QiblaScreen() {
     if (!rel) return;
     if (rel.aligned && !wasAligned.current) {
       h.select();
+      AccessibilityInfo.announceForAccessibility(tr('qibla.alignedAnnounce'));
       if (!celebrated.current) {
         celebrated.current = true;
         h.success();

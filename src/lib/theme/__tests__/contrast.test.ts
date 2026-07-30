@@ -4,7 +4,14 @@
  * WCAG 2.2 contrast enforcement for the token palettes (docs/DESIGN.md).
  * A palette edit that breaks readability fails this suite.
  */
-import { palette, ThemeMode } from '../tokens';
+import {
+  dimOnFeatured,
+  featuredGradient,
+  palette,
+  tajweedColors,
+  textOnFeatured,
+  ThemeMode,
+} from '../tokens';
 
 function srgbChannel(v: number): number {
   const c = v / 255;
@@ -72,5 +79,54 @@ describe.each(MODES)('%s palette contrast', (mode) => {
   test('never pure black canvas or pure white body text (halation rule)', () => {
     expect(c.bgCanvas.toLowerCase()).not.toBe('#000000');
     expect(c.textPrimary.toLowerCase()).not.toBe('#ffffff');
+  });
+});
+
+/** Alpha-composite an rgba() color over a hex background → hex. */
+function compositeOver(rgba: string, bgHex: string): string {
+  const m = rgba.match(/rgba\((\d+),(\d+),(\d+),([\d.]+)\)/);
+  if (!m) return rgba;
+  const [r, g, b, a] = [Number(m[1]), Number(m[2]), Number(m[3]), Number(m[4])];
+  const bg = bgHex.replace('#', '');
+  const [br, bgc, bb] = [0, 2, 4].map((i) => parseInt(bg.slice(i, i + 2), 16));
+  const mix = (fg: number, back: number) =>
+    Math.round(fg * a + back * (1 - a))
+      .toString(16)
+      .padStart(2, '0');
+  return `#${mix(r, br)}${mix(g, bgc)}${mix(b, bb)}`;
+}
+
+describe.each(['light', 'dark'] as const)('featured card text (%s)', (scheme) => {
+  test('textOnFeatured reaches 4.5:1 on every gradient stop', () => {
+    for (const stop of featuredGradient[scheme]) {
+      expect(contrastRatio(textOnFeatured[scheme], stop)).toBeGreaterThanOrEqual(4.5);
+    }
+  });
+
+  test('dimOnFeatured (composited) reaches 4.5:1 on every gradient stop', () => {
+    for (const stop of featuredGradient[scheme]) {
+      const solid = compositeOver(dimOnFeatured[scheme], stop);
+      expect(contrastRatio(solid, stop)).toBeGreaterThanOrEqual(4.5);
+    }
+  });
+});
+
+describe.each(['light', 'dark'] as const)('tajweed colors (%s)', (scheme) => {
+  // Tajweed runs render at Quranic sizes (≥28pt) → WCAG large-text 3:1.
+  // `silent` is EXEMPT by design: it marks unpronounced letters and must read
+  // as muted — its reduced salience is the semantic (documented in tokens.ts).
+  const canvases =
+    scheme === 'light'
+      ? [palette.light.bgCanvas, palette.light.bgSurface]
+      : [palette.dark.bgCanvas, palette.nightWarm.bgCanvas];
+
+  test('every pronounced rule reaches 3:1 on its reading canvases', () => {
+    const { silent: _silent, ...pronounced } = tajweedColors[scheme];
+    for (const [rule, color] of Object.entries(pronounced)) {
+      for (const bg of canvases) {
+        const ratio = contrastRatio(color, bg);
+        expect({ rule, bg, ok: ratio >= 3 }).toEqual({ rule, bg, ok: true });
+      }
+    }
   });
 });

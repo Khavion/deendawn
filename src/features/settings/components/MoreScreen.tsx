@@ -2,7 +2,16 @@ import { useRouter } from 'expo-router';
 import * as Updates from 'expo-updates';
 import React, { useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Alert, DevSettings, Modal, ScrollView, StyleSheet, Switch, View } from 'react-native';
+import {
+  AccessibilityInfo,
+  Alert,
+  DevSettings,
+  Modal,
+  ScrollView,
+  StyleSheet,
+  Switch,
+  View,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
@@ -180,6 +189,9 @@ export function MoreScreen() {
     const next = stepReadingScale(readingScale, dir);
     setReadingScale(next);
     saveReadingScale(store, next);
+    AccessibilityInfo.announceForAccessibility(
+      `${t('more.readingSize')} ${Math.round(next * 100)}%`
+    );
   };
   const minScale = READING_SCALES[0];
   const maxScale = READING_SCALES[READING_SCALES.length - 1];

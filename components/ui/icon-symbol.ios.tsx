@@ -15,7 +15,12 @@ export function IconSymbol({
   weight?: SymbolWeight;
 }) {
   return (
+    // Decorative glyph: never a VoiceOver stop — controls carry their own
+    // labels (parity with the Android/web fallback implementation).
     <SymbolView
+      accessible={false}
+      accessibilityElementsHidden
+      importantForAccessibility="no"
       weight={weight}
       tintColor={color}
       resizeMode="scaleAspectFit"
