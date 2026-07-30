@@ -13,11 +13,16 @@ module.exports = defineConfig([
     ignores: ['dist/*', 'content-pipeline/data/**', 'assets/db/**', '.claude/hooks/**'],
   },
   {
-    // Node-only tooling: the content pipeline and repo scripts run under Node,
-    // not the React Native runtime, so they need Node globals. eslint-config-expo
-    // grants these to metro.config.js only; everything else gets browser/RN
-    // globals, which is why `Buffer` tripped no-undef here.
-    files: ['scripts/**/*.{js,mjs,cjs}', 'content-pipeline/**/*.{js,mjs,cjs}'],
+    // Node-only tooling: the content pipeline, repo scripts, and Expo config
+    // plugins run under Node, not the React Native runtime, so they need Node
+    // globals. eslint-config-expo grants these to metro.config.js only;
+    // everything else gets browser/RN globals, which is why `Buffer` tripped
+    // no-undef here.
+    files: [
+      'scripts/**/*.{js,mjs,cjs}',
+      'content-pipeline/**/*.{js,mjs,cjs}',
+      'plugins/**/*.{js,mjs,cjs}',
+    ],
     languageOptions: {
       globals: globals.node,
     },
