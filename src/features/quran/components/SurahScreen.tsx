@@ -32,7 +32,16 @@ import { TAJWEED_ENABLED } from '../tajweedFlag';
 import { AppText } from '@/src/components/ui';
 import { SurahAudioBar } from '@/src/features/audio/components/SurahAudioBar';
 import { useSettings } from '@/src/features/settings/SettingsContext';
-import { fonts, fontSize, quranType, radius, spacing, tajweedColors } from '@/src/lib/theme/tokens';
+import {
+  fonts,
+  fontScaleCaps,
+  fontSize,
+  MAX_ARABIC_EFFECTIVE_SCALE,
+  quranType,
+  radius,
+  spacing,
+  tajweedColors,
+} from '@/src/lib/theme/tokens';
 import { useTokens } from '@/src/lib/theme/useTokens';
 
 // Base translation type (latinType.reading) — scaled by the reader size pref.
@@ -72,6 +81,10 @@ export function SurahScreen() {
   // settled — otherwise the top-of-surah render fires first and overwrites the
   // very position we deep-linked to (continue-reading / bookmark / verse).
   const trackReadingRef = useRef(targetAyah === null);
+
+  // The reader's own A−/A+ scale and system Dynamic Type both enlarge this
+  // text; cap their PRODUCT so stacking the two never explodes the layout.
+  const arabicCap = Math.min(fontScaleCaps.content, MAX_ARABIC_EFFECTIVE_SCALE / readingScale);
 
   const initialIndex = targetAyah
     ? Math.max(
@@ -243,6 +256,7 @@ export function SurahScreen() {
             >
               <AppText
                 accessibilityLanguage="ar"
+                maxFontSizeMultiplier={arabicCap}
                 style={[
                   styles.arabic,
                   {
@@ -267,6 +281,7 @@ export function SurahScreen() {
               {showTranslation && (
                 <AppText
                   variant="reading"
+                  maxFontSizeMultiplier={arabicCap}
                   style={[
                     styles.translation,
                     {

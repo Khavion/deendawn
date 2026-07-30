@@ -10,7 +10,7 @@ import { searchSections } from '../repo';
 import { useDebouncedValue } from '@/src/lib/useDebouncedValue';
 import { THINKERS } from '../thinkers';
 import { AppText, Skeleton } from '@/src/components/ui';
-import { radius, spacing } from '@/src/lib/theme/tokens';
+import { fontScaleCaps, radius, spacing } from '@/src/lib/theme/tokens';
 import { useTokens } from '@/src/lib/theme/useTokens';
 
 export function LibraryScreen() {
@@ -45,7 +45,7 @@ export function LibraryScreen() {
         placeholder={tr('library.searchPlaceholder')}
         placeholderTextColor={t.icon}
         autoCorrect={false}
-        maxFontSizeMultiplier={1.4}
+        maxFontSizeMultiplier={fontScaleCaps.content}
         style={[styles.input, { color: t.textPrimary, borderColor: t.border }]}
       />
       {searching && !db ? (

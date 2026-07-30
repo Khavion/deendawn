@@ -10,7 +10,7 @@ import { askLibrary, LibraryAskResponse, sectionSnippet } from '../libraryAsk';
 import { openLibraryDb } from '../../library/libraryDb';
 import { AyahRow, QuranDb } from '../../quran/repo';
 import { AppText, Skeleton } from '@/src/components/ui';
-import { fonts, fontSize, radius, spacing } from '@/src/lib/theme/tokens';
+import { fonts, fontScaleCaps, fontSize, radius, spacing } from '@/src/lib/theme/tokens';
 import { useTokens } from '@/src/lib/theme/useTokens';
 
 type AskSource = 'quran' | 'library';
@@ -114,7 +114,7 @@ export function AskScreen() {
         placeholder={tr('ask.placeholder')}
         placeholderTextColor={t.icon}
         autoCorrect={false}
-        maxFontSizeMultiplier={1.4}
+        maxFontSizeMultiplier={fontScaleCaps.content}
         style={[styles.input, { color: t.textPrimary, borderColor: t.border }]}
       />
 

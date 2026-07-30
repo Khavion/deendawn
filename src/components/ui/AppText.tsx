@@ -1,8 +1,22 @@
 import { useTranslation } from 'react-i18next';
 import { Text, type TextProps } from 'react-native';
 
-import { fonts, latinType, MAX_FONT_SCALE, URDU_LINE_HEIGHT_FACTOR } from '@/src/lib/theme/tokens';
+import { fonts, fontScaleCaps, latinType, URDU_LINE_HEIGHT_FACTOR } from '@/src/lib/theme/tokens';
 import { useTokens } from '@/src/lib/theme/useTokens';
+
+/** HIG-aligned Dynamic Type caps: content scales fully, chrome scales less. */
+const VARIANT_CAP: Record<AppTextVariant, number> = {
+  display: fontScaleCaps.heading,
+  displayAccent: fontScaleCaps.heading,
+  title: fontScaleCaps.heading,
+  subtitle: fontScaleCaps.heading,
+  reading: fontScaleCaps.content,
+  body: fontScaleCaps.content,
+  bodyStrong: fontScaleCaps.content,
+  link: fontScaleCaps.label,
+  eyebrow: fontScaleCaps.label,
+  caption: fontScaleCaps.content,
+};
 
 export type AppTextVariant =
   | 'display'
@@ -51,7 +65,7 @@ export function AppText({ variant = 'body', color, style, ...rest }: AppTextProp
 
   return (
     <Text
-      maxFontSizeMultiplier={MAX_FONT_SCALE}
+      maxFontSizeMultiplier={VARIANT_CAP[variant]}
       style={[spec, { color: color ?? defaultColor }, urdu, style]}
       {...rest}
     />

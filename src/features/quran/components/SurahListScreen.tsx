@@ -14,6 +14,7 @@ import { useDebouncedValue } from '@/src/lib/useDebouncedValue';
 import {
   elevation,
   featuredGradient,
+  fontScaleCaps,
   radius,
   richMode,
   spacing,
@@ -84,6 +85,7 @@ export function SurahListScreen() {
         placeholder={t('quran.searchPlaceholder')}
         placeholderTextColor={tk.icon}
         autoCorrect={false}
+        maxFontSizeMultiplier={fontScaleCaps.content}
         style={[styles.input, { color: tk.textPrimary, borderColor: tk.border }]}
       />
 

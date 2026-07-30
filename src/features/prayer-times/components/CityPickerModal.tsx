@@ -6,7 +6,7 @@ import { Modal, Pressable, StyleSheet, TextInput, View } from 'react-native';
 import { AppText } from '@/src/components/ui';
 import { City } from '@/src/features/settings/cities';
 import { searchCities } from '@/src/features/settings/citySearch';
-import { radius, spacing } from '@/src/lib/theme/tokens';
+import { fontScaleCaps, radius, spacing } from '@/src/lib/theme/tokens';
 import { useTokens } from '@/src/lib/theme/useTokens';
 
 export function CityPickerModal({
@@ -49,6 +49,7 @@ export function CityPickerModal({
           placeholderTextColor={tk.icon}
           autoFocus
           autoCorrect={false}
+          maxFontSizeMultiplier={fontScaleCaps.content}
           style={[styles.input, { color: tk.textPrimary, borderColor: tk.border }]}
         />
         <FlashList

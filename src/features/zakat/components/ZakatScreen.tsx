@@ -23,6 +23,7 @@ import {
   elevation,
   featuredGradient,
   fonts,
+  fontScaleCaps,
   fontSize,
   radius,
   richMode,
@@ -95,7 +96,7 @@ export function ZakatScreen() {
         keyboardType="decimal-pad"
         placeholder="0"
         placeholderTextColor={t.icon}
-        maxFontSizeMultiplier={1.4}
+        maxFontSizeMultiplier={fontScaleCaps.content}
         style={[styles.fieldInput, { color: t.textPrimary, borderColor: t.border }]}
       />
     </View>

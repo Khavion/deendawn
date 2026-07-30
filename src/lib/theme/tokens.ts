@@ -243,8 +243,28 @@ export const quranType = {
 /** Motion durations (ms) — transform/opacity only, ease-in-out. */
 export const duration = { fast: 200, normal: 250, slow: 300 } as const;
 
-/** Cap Dynamic Type scaling so layouts degrade gracefully, not brokenly. */
-export const MAX_FONT_SCALE = 1.4;
+/**
+ * Per-role Dynamic Type caps (HIG: prioritize content; chrome scales less).
+ * iOS Fabric multiplies lineHeight together with the font multiplier, so
+ * scaled text keeps its leading — the caps exist for layout sanity, not to
+ * dodge clipping. `content` deliberately reaches Apple's 200% accessibility
+ * sizes; labels/chrome stay recognizable instead of exploding.
+ */
+export const fontScaleCaps = {
+  /** Reading/body content, inputs — the text people came for. */
+  content: 2.0,
+  /** Headings and display serif — large already, scale gently. */
+  heading: 1.6,
+  /** Eyebrows, captions-as-chrome, header controls. */
+  label: 1.4,
+} as const;
+
+/**
+ * Ceiling for the PRODUCT of the reader's own A−/A+ scale × system Dynamic
+ * Type on Quranic Arabic — either control alone reaches it; stacked they
+ * don't compound past it (28pt base → ~73pt max).
+ */
+export const MAX_ARABIC_EFFECTIVE_SCALE = 2.6;
 
 // --- Rich design tokens (docs/RICH_DESIGN_SPEC.md) ------------------------
 // Warmer/richer evolution: soft depth, dawn-sky ambient gradients, a gold

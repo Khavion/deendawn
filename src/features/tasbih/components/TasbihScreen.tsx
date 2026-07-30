@@ -15,7 +15,7 @@ import {
 import { useSettings } from '../../settings/SettingsContext';
 import { AppText, Gradient } from '@/src/components/ui';
 import { useHaptics } from '@/src/lib/haptics';
-import { ambientGradient, elevation, fonts, radius, richMode, spacing } from '@/src/lib/theme/tokens';
+import { ambientGradient, elevation, fonts, fontScaleCaps, radius, richMode, spacing } from '@/src/lib/theme/tokens';
 import { useThemeMode } from '@/src/lib/theme/ThemeProvider';
 import { useTokens } from '@/src/lib/theme/useTokens';
 import { useDeviceTier } from '@/src/lib/theme/useDeviceTier';
@@ -76,7 +76,7 @@ export function TasbihScreen() {
         placeholderTextColor={t.icon}
         maxLength={60}
         style={[styles.label, { color: t.textSecondary }]}
-        maxFontSizeMultiplier={1.4}
+        maxFontSizeMultiplier={fontScaleCaps.content}
       />
 
       <Pressable
