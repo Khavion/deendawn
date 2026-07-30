@@ -577,3 +577,52 @@ pass on the release build.
   verified against three Umm al-Qura sources.
 - The prompt ends with an implementation-kickoff prompt for the follow-on build session (expects the
   design saved at `docs/design-source/pristine.dc.html`).
+
+## 2026-07-30 — Android phase 0 findings (emulator-verified)
+
+- **library.db wiped-container race (REAL BUG, fixed, was latent on iOS too):**
+  expo-file-system's `File.copy()` became ASYNC in SDK 57; `openLibraryDb` fired it without
+  await → `openDatabaseSync` created an EMPTY library.db first, every Books query failed
+  ("NativeDatabase.prepareSync rejected"), and the late copy rejected "Destination already
+  exists". Fixed: awaited `copy(dest, { overwrite: true })` + single-flight promise cache +
+  5 regression tests. Found because Android's timing loses the race deterministically from a
+  wiped container; iOS had been winning it by luck.
+- **NativeTabs Android icons:** expo-router 57.0.9 has NO `md` prop (docs describe a newer
+  version); the supported channels are `sf` (iOS), `drawable` (needs res assets), and `src`.
+  Adopted the official `NativeTabs.Trigger.VectorIcon family={MaterialIcons}` as `src`,
+  Android-only — same glyph names as icon-symbol.tsx, zero bundled assets, bar applies its
+  own tint. Verified rendering on emulator (light theme; dark pending the insets sweep).
+- **`role="search"` on the Ask trigger is now iOS-only.** Kept from the iOS 26 design; on
+  Android it contributed to tab-switch failures under animation-scale changes and has no
+  Material affordance. (Removing it did not fix the deadness below — gating it is hygiene,
+  not the fix.)
+- **NativeTabs tab switching dies when `transition_animation_scale=0` on Android** (all five
+  tabs, deterministic, dev build): the fragment transition seemingly never completes. This is
+  what users with the "Remove animations" accessibility setting would hit. OPEN INVESTIGATION:
+  re-test on a release build during Phase 3; if it reproduces, escalate upstream
+  (expo-router/react-native-screens) with a repro. Harness workaround: the e2e driver zeroes
+  only window+animator scales.
+- **Maestro 2.6.1 env precedence:** a flow-file `env:` block OVERRIDES both `-e` CLI params
+  and a wrapper flow's env (verified empirically) — so flows now carry NO env defaults, and
+  ALL runner-controlled values (screenshot dir, localized tab labels from the locale JSON)
+  are injected by scripts/e2e-android.sh / scripts/e2e-ios.sh. This also satisfies the
+  NO-AI-ZONE hook (no Arabic literals in YAML). Locales suite now does the full
+  EN→UR→AR→EN round trip incl. both RTL restarts — PASSING on Android emulator; the
+  in-process Updates.reloadAsync restart survives a Maestro session as designed.
+- **expo-modules-core EventEmitter SIGSEGV (intermittent, dev-only so far):** hit twice
+  during early Android e2e (null-deref in EventEmitter::Listeners::call on the JS thread).
+  Research verdict: no known fix upstream (matching report closed unfixed); Android emit path
+  lacks the runtime-teardown guard iOS got in 57.0.4; likeliest trigger is an event landing
+  during dev-reload teardown. Mitigation: Phase 3 e2e/evidence runs on RELEASE builds; if it
+  ever reproduces on release, build expo-modules-core from source for symbols and file
+  upstream with the tombstone. NOT upgrading to expo 57.0.9/RN 0.86.2: no fix exists there,
+  and the iOS precompiled stack locks RN at 0.86.0 (`npx expo install --fix` is FORBIDDEN —
+  it would bump RN and break iOS; see 2026-07-29 entry).
+- **FlashList 2.0.2 → 2.3.2** (above Expo's pin, deliberate): 2.3.2 disables
+  removeClippedSubviews to prevent a known Android crash; JS-only package so the precompiled
+  native lock doesn't apply. Full suite green; deep-link scrollToIndex re-verify happens in
+  the Phase 1 list QA pass; revert only on regression.
+- **Android channel model (notification arch commit 1):** pure `channels.ts` —
+  `{stream}.{prayer}.{soundFamily}.v{N}` IDs, fullAdhan→clip mapping (zero churn), per-family
+  version table for the future real-recordings swap, IMPORTANCE_HIGH everywhere, ALARM usage
+  on audible channels, prefix-guarded deletes. 16 tests. Wiring lands in the next commits.
