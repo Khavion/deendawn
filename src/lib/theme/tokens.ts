@@ -247,6 +247,20 @@ export const quranType = {
 export const duration = { fast: 200, normal: 250, slow: 300 } as const;
 
 /**
+ * Content measures for wide screens (iPad, landscape). Applied as
+ * `maxWidth + alignSelf:'center' + width:'100%'` — inert on phones, keeps
+ * text and forms at a readable width everywhere else.
+ */
+export const measure = {
+  /** General content: settings rows, forms, cards. */
+  content: 640,
+  /** Long-form reading: Quran rows, book sections. */
+  reading: 680,
+  /** The hijri month grid — cells stay near-square. */
+  grid: 520,
+} as const;
+
+/**
  * Per-role Dynamic Type caps (HIG: prioritize content; chrome scales less).
  * iOS Fabric multiplies lineHeight together with the font multiplier, so
  * scaled text keeps its leading — the caps exist for layout sanity, not to
@@ -297,14 +311,50 @@ export function richMode(mode: ThemeMode): 'light' | 'dark' {
  */
 export const elevation: Record<'light' | 'dark', Record<ElevationStep, Shadow>> = {
   light: {
-    e1: { shadowColor: '#20242A', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.05, shadowRadius: 3, elevation: 1 },
-    e2: { shadowColor: '#20242A', shadowOffset: { width: 0, height: 6 }, shadowOpacity: 0.1, shadowRadius: 14, elevation: 4 },
-    e3: { shadowColor: '#1C372C', shadowOffset: { width: 0, height: 12 }, shadowOpacity: 0.2, shadowRadius: 22, elevation: 9 },
+    e1: {
+      shadowColor: '#20242A',
+      shadowOffset: { width: 0, height: 1 },
+      shadowOpacity: 0.05,
+      shadowRadius: 3,
+      elevation: 1,
+    },
+    e2: {
+      shadowColor: '#20242A',
+      shadowOffset: { width: 0, height: 6 },
+      shadowOpacity: 0.1,
+      shadowRadius: 14,
+      elevation: 4,
+    },
+    e3: {
+      shadowColor: '#1C372C',
+      shadowOffset: { width: 0, height: 12 },
+      shadowOpacity: 0.2,
+      shadowRadius: 22,
+      elevation: 9,
+    },
   },
   dark: {
-    e1: { shadowColor: '#000000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.3, shadowRadius: 3, elevation: 2 },
-    e2: { shadowColor: '#000000', shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.4, shadowRadius: 22, elevation: 6 },
-    e3: { shadowColor: '#000000', shadowOffset: { width: 0, height: 16 }, shadowOpacity: 0.5, shadowRadius: 28, elevation: 12 },
+    e1: {
+      shadowColor: '#000000',
+      shadowOffset: { width: 0, height: 1 },
+      shadowOpacity: 0.3,
+      shadowRadius: 3,
+      elevation: 2,
+    },
+    e2: {
+      shadowColor: '#000000',
+      shadowOffset: { width: 0, height: 8 },
+      shadowOpacity: 0.4,
+      shadowRadius: 22,
+      elevation: 6,
+    },
+    e3: {
+      shadowColor: '#000000',
+      shadowOffset: { width: 0, height: 16 },
+      shadowOpacity: 0.5,
+      shadowRadius: 28,
+      elevation: 12,
+    },
   },
 };
 

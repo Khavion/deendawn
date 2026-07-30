@@ -19,6 +19,7 @@ import {
   dimOnFeatured,
   elevation,
   featuredGradient,
+  measure,
   fonts,
   fontSize,
   radius,
@@ -287,7 +288,14 @@ export function TodayScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   ambient: { position: 'absolute', top: 0, left: 0, right: 0 },
-  scroll: { paddingHorizontal: spacing.xl, paddingTop: spacing.m, paddingBottom: spacing.l },
+  scroll: {
+    paddingHorizontal: spacing.xl,
+    paddingTop: spacing.m,
+    paddingBottom: spacing.l,
+    maxWidth: measure.content,
+    width: '100%',
+    alignSelf: 'center',
+  },
   empty: { alignItems: 'center', justifyContent: 'center', padding: spacing.xxl, gap: spacing.m },
   emptyTitle: { textAlign: 'center' },
   emptyBody: { textAlign: 'center' },

@@ -48,8 +48,6 @@ describe('VerseOfDayCard', () => {
   test('tapping opens that verse in the reader', async () => {
     const view = await render(wrap());
     await fireEvent.press(view.getByTestId('verse-of-day'));
-    expect(mockRouterPush).toHaveBeenCalledWith(
-      `/surah/${expected.surah}?ayah=${expected.ayah}`
-    );
+    expect(mockRouterPush).toHaveBeenCalledWith(`/surah/${expected.surah}?ayah=${expected.ayah}`);
   });
 });

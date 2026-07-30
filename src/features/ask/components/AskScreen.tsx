@@ -10,7 +10,7 @@ import { askLibrary, LibraryAskResponse, sectionSnippet } from '../libraryAsk';
 import { openLibraryDb } from '../../library/libraryDb';
 import { AyahRow, QuranDb } from '../../quran/repo';
 import { AppText, Skeleton } from '@/src/components/ui';
-import { fonts, fontScaleCaps, fontSize, radius, spacing } from '@/src/lib/theme/tokens';
+import { fonts, fontScaleCaps, fontSize, measure, radius, spacing } from '@/src/lib/theme/tokens';
 import { useTokens } from '@/src/lib/theme/useTokens';
 
 type AskSource = 'quran' | 'library';
@@ -146,6 +146,7 @@ export function AskScreen() {
         contentInsetAdjustmentBehavior="automatic"
         contentContainerStyle={styles.scroll}
         keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="on-drag"
       >
         {response === null && libResponse === null && !libLoading && (
           <AppText variant="reading" style={[styles.hint, { color: t.textSecondary }]}>
@@ -255,7 +256,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  scroll: { paddingBottom: spacing.l },
+  scroll: {
+    paddingBottom: spacing.l,
+    maxWidth: measure.content,
+    width: '100%',
+    alignSelf: 'center',
+  },
   hint: { textAlign: 'center', marginTop: spacing.xl, opacity: 0.9 },
   countAnswer: {
     fontFamily: fonts.serifMedium,

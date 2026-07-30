@@ -6,7 +6,7 @@ import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { keyDatesFor, toHijri } from '../hijri';
 import { AppText } from '@/src/components/ui';
 import { useSettings } from '@/src/features/settings/SettingsContext';
-import { elevation, radius, richMode, spacing } from '@/src/lib/theme/tokens';
+import { elevation, measure, radius, richMode, spacing } from '@/src/lib/theme/tokens';
 import { useThemeMode } from '@/src/lib/theme/ThemeProvider';
 import { useTokens } from '@/src/lib/theme/useTokens';
 import { useDeviceTier } from '@/src/lib/theme/useDeviceTier';
@@ -89,7 +89,7 @@ export function CalendarScreen({ initialDate }: { initialDate?: Date }) {
   return (
     <View style={[styles.container, { backgroundColor: t.bgCanvas }]}>
       <Stack.Screen options={{ title: tr('calendar.title') }} />
-      <ScrollView contentContainerStyle={styles.scroll}>
+      <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={styles.scroll}>
         <View style={styles.header}>
           <Pressable
             accessibilityRole="button"
@@ -136,36 +136,36 @@ export function CalendarScreen({ initialDate }: { initialDate?: Date }) {
           ]}
         >
           <View style={styles.grid} testID="calendar-grid">
-          {cells.map((cell, i) => (
-            <View
-              key={i}
-              style={[
-                styles.cell,
-                cell?.isToday && { backgroundColor: t.accentSoft, borderRadius: radius.control },
-              ]}
-              testID={cell ? `cell-${cell.gregorianDay}` : undefined}
-            >
-              {cell && (
-                <>
-                  <AppText
-                    variant={cell.isToday ? 'bodyStrong' : 'body'}
-                    style={cell.isToday ? { color: t.textOnAccentSoft } : undefined}
-                  >
-                    {cell.gregorianDay}
-                  </AppText>
-                  <AppText variant="caption" style={{ color: t.textSecondary }}>
-                    {cell.hijriDay}
-                  </AppText>
-                  {cell.isKeyDate && (
-                    <View
-                      style={[styles.dot, { backgroundColor: t.ochre }]}
-                      testID={`key-${cell.gregorianDay}`}
-                    />
-                  )}
-                </>
-              )}
-            </View>
-          ))}
+            {cells.map((cell, i) => (
+              <View
+                key={i}
+                style={[
+                  styles.cell,
+                  cell?.isToday && { backgroundColor: t.accentSoft, borderRadius: radius.control },
+                ]}
+                testID={cell ? `cell-${cell.gregorianDay}` : undefined}
+              >
+                {cell && (
+                  <>
+                    <AppText
+                      variant={cell.isToday ? 'bodyStrong' : 'body'}
+                      style={cell.isToday ? { color: t.textOnAccentSoft } : undefined}
+                    >
+                      {cell.gregorianDay}
+                    </AppText>
+                    <AppText variant="caption" style={{ color: t.textSecondary }}>
+                      {cell.hijriDay}
+                    </AppText>
+                    {cell.isKeyDate && (
+                      <View
+                        style={[styles.dot, { backgroundColor: t.ochre }]}
+                        testID={`key-${cell.gregorianDay}`}
+                      />
+                    )}
+                  </>
+                )}
+              </View>
+            ))}
           </View>
         </View>
 
@@ -183,10 +183,7 @@ export function CalendarScreen({ initialDate }: { initialDate?: Date }) {
         )}
 
         <View
-          style={[
-            styles.disclaimer,
-            { backgroundColor: t.bgElevated, borderLeftColor: t.ochre },
-          ]}
+          style={[styles.disclaimer, { backgroundColor: t.bgElevated, borderLeftColor: t.ochre }]}
         >
           <AppText variant="caption" style={{ color: t.textSecondary }}>
             {tr('calendar.disclaimer')}
@@ -199,7 +196,13 @@ export function CalendarScreen({ initialDate }: { initialDate?: Date }) {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  scroll: { padding: spacing.xl, paddingBottom: spacing.xxl },
+  scroll: {
+    padding: spacing.xl,
+    paddingBottom: spacing.l,
+    maxWidth: measure.content,
+    width: '100%',
+    alignSelf: 'center',
+  },
   header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   headerTitles: { flex: 1, gap: 2 },
   centerText: { textAlign: 'center' },
@@ -209,6 +212,10 @@ const styles = StyleSheet.create({
     borderWidth: StyleSheet.hairlineWidth,
     overflow: 'hidden',
     padding: spacing.xs,
+    // Cells stay near-square on wide screens instead of stretching to bars.
+    maxWidth: measure.grid,
+    width: '100%',
+    alignSelf: 'center',
   },
   grid: { flexDirection: 'row', flexWrap: 'wrap' },
   cell: {

@@ -54,7 +54,14 @@ import i18n, {
   needsRtlRestart,
   saveLanguage,
 } from '@/src/lib/i18n';
-import { elevation, fontScaleCaps, radius, richMode, spacing } from '@/src/lib/theme/tokens';
+import {
+  elevation,
+  fontScaleCaps,
+  measure,
+  radius,
+  richMode,
+  spacing,
+} from '@/src/lib/theme/tokens';
 import { useThemeMode } from '@/src/lib/theme/ThemeProvider';
 import { useTokens } from '@/src/lib/theme/useTokens';
 import { useDeviceTier } from '@/src/lib/theme/useDeviceTier';
@@ -548,7 +555,13 @@ export function MoreScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  scroll: { paddingHorizontal: spacing.l, paddingBottom: spacing.l },
+  scroll: {
+    paddingHorizontal: spacing.l,
+    paddingBottom: spacing.l,
+    maxWidth: measure.content,
+    width: '100%',
+    alignSelf: 'center',
+  },
   title: { marginBottom: spacing.s },
   sectionHint: { marginBottom: spacing.m },
   sectionRule: { marginTop: spacing.xl, marginBottom: spacing.s },

@@ -1,7 +1,15 @@
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FlashList } from '@shopify/flash-list';
-import { Modal, Pressable, StyleSheet, TextInput, View } from 'react-native';
+import {
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
+  Pressable,
+  StyleSheet,
+  TextInput,
+  View,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AppText } from '@/src/components/ui';
@@ -34,7 +42,11 @@ export function CityPickerModal({
       presentationStyle="pageSheet"
       onRequestClose={onClose}
     >
-      <View style={[styles.container, { backgroundColor: tk.bgCanvas, paddingTop: spacing.l }]}>
+      {/* padding-KAV: the autoFocus keyboard otherwise covers the results list. */}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        style={[styles.container, { backgroundColor: tk.bgCanvas, paddingTop: spacing.l }]}
+      >
         <View style={styles.header}>
           <AppText variant="subtitle">{t('cityPicker.title')}</AppText>
           <Pressable accessibilityRole="button" testID="close-picker" onPress={onClose}>
@@ -56,6 +68,7 @@ export function CityPickerModal({
           data={results}
           keyExtractor={(c) => c.id}
           keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="on-drag"
           contentContainerStyle={{ paddingBottom: insets.bottom + spacing.l }}
           ListEmptyComponent={
             <AppText style={styles.hint}>
@@ -76,7 +89,7 @@ export function CityPickerModal({
             </Pressable>
           )}
         />
-      </View>
+      </KeyboardAvoidingView>
     </Modal>
   );
 }

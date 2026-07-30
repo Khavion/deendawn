@@ -30,6 +30,7 @@ import {
   fontScaleCaps,
   fontSize,
   MAX_ARABIC_EFFECTIVE_SCALE,
+  measure,
   quranType,
   radius,
   spacing,
@@ -348,7 +349,13 @@ const styles = StyleSheet.create({
   sizeLarge: { fontSize: 20 },
   sizeDisabled: { opacity: 0.35 },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  audioWrap: { paddingHorizontal: spacing.xl, paddingTop: spacing.s },
+  audioWrap: {
+    paddingHorizontal: spacing.xl,
+    paddingTop: spacing.s,
+    maxWidth: measure.reading,
+    width: '100%',
+    alignSelf: 'center',
+  },
   list: { paddingHorizontal: spacing.xl, paddingTop: spacing.s },
   devBadge: {
     borderRadius: radius.control,
@@ -366,6 +373,10 @@ const styles = StyleSheet.create({
   legendItem: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
   legendDot: { width: 12, height: 12, borderRadius: 6 },
   ayahBlock: {
+    // One shared reading measure for Arabic + translation on wide screens.
+    maxWidth: measure.reading,
+    width: '100%',
+    alignSelf: 'center',
     paddingVertical: spacing.l,
     gap: spacing.m,
     borderBottomWidth: StyleSheet.hairlineWidth,

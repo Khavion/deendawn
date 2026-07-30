@@ -25,6 +25,7 @@ import {
   fonts,
   fontScaleCaps,
   fontSize,
+  measure,
   radius,
   richMode,
   spacing,
@@ -108,7 +109,11 @@ export function ZakatScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <Stack.Screen options={{ title: tr('zakat.title') }} />
-      <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
+      <ScrollView
+        contentInsetAdjustmentBehavior="automatic"
+        contentContainerStyle={styles.scroll}
+        keyboardShouldPersistTaps="handled"
+      >
         <GoldFrameCard
           gradientColors={featuredGradient[rm]}
           style={styles.resultCard}
@@ -151,10 +156,7 @@ export function ZakatScreen() {
         <View style={elevatedCard}>{PRICE_FIELDS.map(field)}</View>
 
         <View
-          style={[
-            styles.disclaimer,
-            { backgroundColor: t.ochreSoft, borderLeftColor: t.ochre },
-          ]}
+          style={[styles.disclaimer, { backgroundColor: t.ochreSoft, borderLeftColor: t.ochre }]}
         >
           <AppText variant="caption" style={{ color: t.ochre }}>
             {tr('zakat.disclaimer')}
@@ -167,7 +169,13 @@ export function ZakatScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  scroll: { padding: spacing.xl, paddingBottom: spacing.xxl },
+  scroll: {
+    padding: spacing.xl,
+    paddingBottom: spacing.l,
+    maxWidth: measure.content,
+    width: '100%',
+    alignSelf: 'center',
+  },
   resultCard: {
     borderRadius: radius.card,
     padding: spacing.xl,

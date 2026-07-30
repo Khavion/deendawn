@@ -8,7 +8,7 @@ import { StyleSheet, View } from 'react-native';
 import { openLibraryDb } from '../libraryDb';
 import { getWork, listSections, SectionRow, WorkRow } from '../repo';
 import { AppText, Skeleton } from '@/src/components/ui';
-import { radius, spacing } from '@/src/lib/theme/tokens';
+import { measure, radius, spacing } from '@/src/lib/theme/tokens';
 import { useTokens } from '@/src/lib/theme/useTokens';
 
 export function WorkReaderScreen() {
@@ -46,7 +46,12 @@ export function WorkReaderScreen() {
       <Stack.Screen options={{ title: work?.title ?? '' }} />
       {!loaded ? (
         <View style={styles.list} testID="work-loading">
-          <Skeleton width="60%" height={13} radius={radius.control} style={styles.skelAttribution} />
+          <Skeleton
+            width="60%"
+            height={13}
+            radius={radius.control}
+            style={styles.skelAttribution}
+          />
           {[0, 1, 2, 3].map((block) => (
             <View key={block} style={styles.skelBlock}>
               <Skeleton width={40} height={12} />
@@ -94,9 +99,15 @@ export function WorkReaderScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  list: { padding: spacing.xl, paddingBottom: spacing.xxl },
+  list: { padding: spacing.xl, paddingBottom: spacing.xxl + spacing.xl },
   attribution: { marginBottom: spacing.l, textAlign: 'center' },
-  sectionBlock: { gap: spacing.xs, marginBottom: spacing.l },
+  sectionBlock: {
+    maxWidth: measure.reading,
+    width: '100%',
+    alignSelf: 'center',
+    gap: spacing.xs,
+    marginBottom: spacing.l,
+  },
   skelAttribution: { alignSelf: 'center', marginBottom: spacing.l },
   skelBlock: { gap: spacing.s, marginBottom: spacing.xl },
 });

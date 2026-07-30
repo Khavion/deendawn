@@ -68,10 +68,7 @@ export function getAyahByOrdinal(db: QuranDb, ordinal: number): AyahRow | null {
  * order and dropping any ref not found. Used by the bookmarks browser to
  * render saved verses with their text.
  */
-export function getAyahsByRefs(
-  db: QuranDb,
-  refs: { surah: number; ayah: number }[]
-): AyahRow[] {
+export function getAyahsByRefs(db: QuranDb, refs: { surah: number; ayah: number }[]): AyahRow[] {
   const rows: AyahRow[] = [];
   for (const ref of refs) {
     const row = getAyah(db, ref.surah, ref.ayah);

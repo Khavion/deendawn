@@ -72,9 +72,9 @@ describe('BookmarksScreen', () => {
     });
     const view = await render(wrap(store));
     const dbText = (
-      raw
-        .prepare('SELECT text_uthmani FROM ayahs WHERE surah=1 AND ayah=1')
-        .get() as { text_uthmani: string }
+      raw.prepare('SELECT text_uthmani FROM ayahs WHERE surah=1 AND ayah=1').get() as {
+        text_uthmani: string;
+      }
     ).text_uthmani;
     const arabicStyle = StyleSheet.flatten(view.getByText(dbText).props.style);
     expect(arabicStyle.fontSize).toBeCloseTo(28 * 1.3);

@@ -15,6 +15,7 @@ import {
   fonts,
   fontScaleCaps,
   MAX_ARABIC_EFFECTIVE_SCALE,
+  measure,
   quranType,
   spacing,
 } from '@/src/lib/theme/tokens';
@@ -128,6 +129,9 @@ const styles = StyleSheet.create({
   },
   emptyText: { textAlign: 'center' },
   row: {
+    maxWidth: measure.reading,
+    width: '100%',
+    alignSelf: 'center',
     paddingVertical: spacing.l,
     gap: spacing.m,
     borderBottomWidth: StyleSheet.hairlineWidth,

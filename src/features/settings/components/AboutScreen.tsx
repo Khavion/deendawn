@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/src/components/ui';
-import { radius, spacing } from '@/src/lib/theme/tokens';
+import { measure, radius, spacing } from '@/src/lib/theme/tokens';
 import { useTokens } from '@/src/lib/theme/useTokens';
 import attribution from '@/assets/attribution.json';
 
@@ -31,7 +31,7 @@ export function AboutScreen() {
   return (
     <View style={[styles.container, { backgroundColor: t.bgCanvas }]}>
       <Stack.Screen options={{ title: tr('about.title') }} />
-      <ScrollView contentContainerStyle={styles.scroll}>
+      <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={styles.scroll}>
         <AppText variant="title">Deen Dawn</AppText>
         <AppText variant="caption" style={{ color: t.textSecondary }}>
           {tr('about.version', { version })}
@@ -76,7 +76,14 @@ export function AboutScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  scroll: { padding: spacing.xl, paddingBottom: spacing.xxl, gap: spacing.xs },
+  scroll: {
+    padding: spacing.xl,
+    paddingBottom: spacing.l,
+    gap: spacing.xs,
+    maxWidth: measure.content,
+    width: '100%',
+    alignSelf: 'center',
+  },
   card: { borderRadius: radius.card, padding: spacing.l, gap: spacing.s, marginTop: spacing.l },
   section: { marginTop: spacing.xl, marginBottom: spacing.s },
   sourceRow: {

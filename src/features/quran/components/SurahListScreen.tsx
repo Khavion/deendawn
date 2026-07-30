@@ -95,6 +95,7 @@ export function SurahListScreen() {
             data={results}
             keyExtractor={(a) => String(a.id)}
             keyboardShouldPersistTaps="handled"
+            keyboardDismissMode="on-drag"
             contentInsetAdjustmentBehavior="automatic"
             contentContainerStyle={styles.listContent}
             ListEmptyComponent={<AppText style={styles.hint}>{t('quran.noMatches')}</AppText>}

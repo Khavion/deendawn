@@ -10,7 +10,7 @@ import { searchSections } from '../repo';
 import { useDebouncedValue } from '@/src/lib/useDebouncedValue';
 import { THINKERS } from '../thinkers';
 import { AppText, Skeleton } from '@/src/components/ui';
-import { fontScaleCaps, radius, spacing } from '@/src/lib/theme/tokens';
+import { fontScaleCaps, measure, radius, spacing } from '@/src/lib/theme/tokens';
 import { useTokens } from '@/src/lib/theme/useTokens';
 
 export function LibraryScreen() {
@@ -63,6 +63,8 @@ export function LibraryScreen() {
           data={results}
           keyExtractor={(s) => String(s.id)}
           keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="on-drag"
+          contentContainerStyle={styles.listContent}
           ListEmptyComponent={
             <AppText style={[styles.hint, { color: t.textSecondary }]}>
               {tr('library.noMatches')}
@@ -88,6 +90,7 @@ export function LibraryScreen() {
         <FlashList
           data={THINKERS}
           keyExtractor={(th) => th.key}
+          contentContainerStyle={styles.listContent}
           ListHeaderComponent={
             <View style={[styles.reviewNote, { backgroundColor: t.ochreSoft }]}>
               <AppText variant="caption" style={{ color: t.ochre, textAlign: 'center' }}>
@@ -116,6 +119,7 @@ export function LibraryScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, paddingHorizontal: spacing.xl },
+  listContent: { paddingBottom: spacing.xxl },
   input: {
     borderWidth: 1,
     borderRadius: radius.control,
@@ -126,6 +130,9 @@ const styles = StyleSheet.create({
   },
   hint: { textAlign: 'center', marginTop: spacing.xl },
   row: {
+    maxWidth: measure.content,
+    width: '100%',
+    alignSelf: 'center',
     paddingVertical: spacing.m,
     gap: spacing.xs,
     borderBottomWidth: StyleSheet.hairlineWidth,

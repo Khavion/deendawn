@@ -8,7 +8,7 @@ import { openLibraryDb } from '../libraryDb';
 import { WorkRow, worksByAuthor } from '../repo';
 import { THINKERS } from '../thinkers';
 import { AppText } from '@/src/components/ui';
-import { radius, spacing } from '@/src/lib/theme/tokens';
+import { measure, radius, spacing } from '@/src/lib/theme/tokens';
 import { useTokens } from '@/src/lib/theme/useTokens';
 
 export function ThinkerScreen() {
@@ -42,7 +42,7 @@ export function ThinkerScreen() {
   return (
     <View style={[styles.container, { backgroundColor: t.bgCanvas }]}>
       <Stack.Screen options={{ title: thinker.name }} />
-      <ScrollView contentContainerStyle={styles.scroll}>
+      <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={styles.scroll}>
         <AppText variant="title">{thinker.name}</AppText>
         <AppText variant="caption" style={{ color: t.textSecondary }}>
           {thinker.era}
@@ -109,7 +109,14 @@ export function ThinkerScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  scroll: { padding: spacing.xl, paddingBottom: spacing.xxl, gap: spacing.xs },
+  scroll: {
+    padding: spacing.xl,
+    paddingBottom: spacing.l,
+    gap: spacing.xs,
+    maxWidth: measure.content,
+    width: '100%',
+    alignSelf: 'center',
+  },
   section: { marginTop: spacing.xl, marginBottom: spacing.s },
   ideaRow: {
     flexDirection: 'row',

@@ -16,8 +16,20 @@ jest.mock('react-native-safe-area-context', () => ({
 const mockDb = {
   getFirstSync: (sql: string) =>
     sql.includes('surahs')
-      ? { number: 1, name_transliteration: 'Al-Faatiha', name_english: 'The Opening', ayah_count: 7 }
-      : { id: 1, surah: 1, ayah: 1, juz: 1, text_uthmani: '[arabic]', text_translation: 'In the name of Allah.' },
+      ? {
+          number: 1,
+          name_transliteration: 'Al-Faatiha',
+          name_english: 'The Opening',
+          ayah_count: 7,
+        }
+      : {
+          id: 1,
+          surah: 1,
+          ayah: 1,
+          juz: 1,
+          text_uthmani: '[arabic]',
+          text_translation: 'In the name of Allah.',
+        },
   getAllSync: () => [],
 };
 jest.mock('expo-sqlite', () => ({ useSQLiteContext: () => mockDb }));

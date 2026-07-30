@@ -14,12 +14,17 @@ import { useHaptics } from '@/src/lib/haptics';
 import { elevation, fonts, fontSize, radius, richMode, spacing } from '@/src/lib/theme/tokens';
 import { useThemeMode } from '@/src/lib/theme/ThemeProvider';
 import { useTokens } from '@/src/lib/theme/useTokens';
+import { useLayout } from '@/src/lib/theme/useLayout';
 import { useDeviceTier } from '@/src/lib/theme/useDeviceTier';
 
 const RING_SIZE = 280;
 
 export function QiblaScreen() {
   const insets = useSafeAreaInsets();
+  const { wide } = useLayout();
+  // The dial scales up on tablet-class widths; useWindowDimensions keeps it
+  // live across iPad window resizes.
+  const ringSize = wide ? 360 : RING_SIZE;
   const t = useTokens();
   const mode = useThemeMode();
   const rm = richMode(mode);
@@ -152,6 +157,9 @@ export function QiblaScreen() {
             style={[
               styles.ring,
               {
+                width: ringSize,
+                height: ringSize,
+                borderRadius: ringSize / 2,
                 backgroundColor: rel?.aligned ? t.accentSoft : t.bgSurface,
                 borderColor: rel?.aligned ? t.success : t.border,
               },
@@ -170,7 +178,13 @@ export function QiblaScreen() {
               style={[styles.needleWrap, { transform: [{ rotate: `${needleRotation}deg` }] }]}
             >
               <View
-                style={[styles.needle, { backgroundColor: rel?.aligned ? t.success : t.accent }]}
+                style={[
+                  styles.needle,
+                  {
+                    backgroundColor: rel?.aligned ? t.success : t.accent,
+                    height: ringSize / 2 - spacing.xl,
+                  },
+                ]}
               />
               <View style={[styles.needleDot, { backgroundColor: t.ochre }]} />
             </View>
@@ -233,9 +247,6 @@ const styles = StyleSheet.create({
   header: { marginBottom: spacing.l },
   compassArea: { alignItems: 'center', gap: spacing.l, marginTop: spacing.xl },
   ring: {
-    width: RING_SIZE,
-    height: RING_SIZE,
-    borderRadius: RING_SIZE / 2,
     borderWidth: 2,
     alignItems: 'center',
     justifyContent: 'center',
@@ -260,7 +271,6 @@ const styles = StyleSheet.create({
   },
   needle: {
     width: 4,
-    height: RING_SIZE / 2 - spacing.xl,
     borderRadius: 2,
     marginTop: spacing.xl,
   },
