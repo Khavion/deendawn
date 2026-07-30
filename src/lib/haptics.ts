@@ -1,7 +1,4 @@
 import * as Haptics from 'expo-haptics';
-import { useMemo } from 'react';
-
-import { useDeviceTier } from './theme/useDeviceTier';
 
 /**
  * The app's haptic vocabulary — one named verb per interaction meaning, so
@@ -15,8 +12,10 @@ import { useDeviceTier } from './theme/useDeviceTier';
  * - warning: a cautionary notification (destructive / blocked action)
  * - error:   a failure notification (an action could not complete)
  *
- * All calls are fire-and-forget; callers use `void h.select()`. Reduce Motion
- * (which also forces the essential device tier) silences them via `useHaptics`.
+ * All calls are fire-and-forget; callers use `void h.select()`. The user's
+ * haptics setting (More ▸ default on) silences them at fire time — NOT Reduce
+ * Motion: motion is visual, haptics are physical, and Apple treats them as
+ * separate accessibility choices (System Haptics has its own switch).
  */
 const verbs = {
   press: () => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light),
@@ -30,25 +29,34 @@ const verbs = {
 export type HapticVerb = keyof typeof verbs;
 export type Haptic = Record<HapticVerb, () => void>;
 
-/** The raw, always-firing vocabulary (use `useHaptics` in components to respect Reduce Motion). */
+/** The raw, always-firing vocabulary (bypasses the user setting — avoid). */
 export const haptic: Haptic = verbs;
 
-const silent: Haptic = {
-  press: () => {},
-  detent: () => {},
-  select: () => {},
-  success: () => {},
-  warning: () => {},
-  error: () => {},
+// Module-level flag, synchronized from the persisted setting by
+// SettingsProvider (write-through on toggle). Checked at FIRE time, so every
+// mounted screen honors a change instantly — no re-render round trip, no
+// per-fire storage read.
+let hapticsEnabled = true;
+
+/** Called by the settings layer on load and on toggle. */
+export function setHapticsEnabled(enabled: boolean): void {
+  hapticsEnabled = enabled;
+}
+
+const gated: Haptic = {
+  press: () => hapticsEnabled && void verbs.press(),
+  detent: () => hapticsEnabled && void verbs.detent(),
+  select: () => hapticsEnabled && void verbs.select(),
+  success: () => hapticsEnabled && void verbs.success(),
+  warning: () => hapticsEnabled && void verbs.warning(),
+  error: () => hapticsEnabled && void verbs.error(),
 };
 
 /**
- * Reduce-Motion-aware haptics. Returns no-op verbs when the user has Reduce
- * Motion on (accessibility + battery comfort); otherwise the real vocabulary.
- * Gated on Reduce Motion — NOT the full device tier — because even low-end
- * phones have a taptic engine and users expect touch feedback there.
+ * Setting-aware haptics — the only entry point components should use. Verbs
+ * no-op while the user has haptics off. (Deliberately NOT gated on Reduce
+ * Motion; see the header note — that was the old, semantically wrong gate.)
  */
 export function useHaptics(): Haptic {
-  const { reduceMotion } = useDeviceTier();
-  return useMemo(() => (reduceMotion ? silent : verbs), [reduceMotion]);
+  return gated;
 }

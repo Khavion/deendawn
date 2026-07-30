@@ -23,6 +23,8 @@ export interface AppSettings {
   hijriOffset: -1 | 0 | 1;
   /** Minutes before Fajr for the Ramadan suhoor reminder; null = off. */
   suhoorReminderMinutes: number | null;
+  /** Touch feedback (haptics) — user-disableable, on by default. */
+  hapticsEnabled: boolean;
 }
 
 export const DEFAULT_SETTINGS: AppSettings = {
@@ -32,6 +34,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   highLatRule: 'auto',
   hijriOffset: 0,
   suhoorReminderMinutes: null,
+  hapticsEnabled: true,
 };
 
 const KEY = 'settings.v1';
@@ -77,6 +80,7 @@ export function parseSettings(raw: string | null): AppSettings {
   ) {
     out.suhoorReminderMinutes = o.suhoorReminderMinutes as number | null;
   }
+  if (typeof o.hapticsEnabled === 'boolean') out.hapticsEnabled = o.hapticsEnabled;
   return out;
 }
 

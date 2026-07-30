@@ -1,6 +1,7 @@
-import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
 import { AppSettings, loadSettings, saveSettings } from './settingsStore';
+import { setHapticsEnabled } from '../../lib/haptics';
 import { getUserKVStore, KVStore } from '../../lib/kvStore';
 
 interface SettingsContextValue {
@@ -22,6 +23,12 @@ export function SettingsProvider({
 }) {
   const kv = useMemo(() => store ?? getUserKVStore(), [store]);
   const [settings, setSettings] = useState<AppSettings>(() => loadSettings(kv));
+
+  // Sync the fire-time haptics flag (src/lib/haptics.ts) on load + toggle so
+  // every mounted screen honors the setting instantly.
+  useEffect(() => {
+    setHapticsEnabled(settings.hapticsEnabled);
+  }, [settings.hapticsEnabled]);
 
   const update = useCallback(
     (patch: Partial<AppSettings>) => {

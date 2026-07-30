@@ -3,7 +3,9 @@ import React from 'react';
 
 import { MoreScreen } from '../MoreScreen';
 import { createMemoryKVStore } from '../../../../lib/kvStore';
+import { loadSettings } from '../../settingsStore';
 import { SettingsProvider } from '../../SettingsContext';
+import { AppThemeProvider } from '@/src/lib/theme/ThemeProvider';
 
 jest.mock('expo-localization', () => ({
   getLocales: () => [{ languageTag: 'en-US' }],
@@ -76,6 +78,31 @@ describe('MoreScreen', () => {
     await fireEvent.press(view.getByTestId('reading-size-inc'));
     expect(view.getByTestId('reading-size-value').props.children).toBe('115%');
     expect(store.get('quran.readingScale.v1')).toBe('1.15');
+  });
+
+  test('haptics toggle persists the setting', async () => {
+    const { store, view } = await renderMore();
+    expect(loadSettings(store).hapticsEnabled).toBe(true);
+    await fireEvent(view.getByTestId('haptics-toggle'), 'valueChange', false);
+    expect(loadSettings(store).hapticsEnabled).toBe(false);
+    await fireEvent(view.getByTestId('haptics-toggle'), 'valueChange', true);
+    expect(loadSettings(store).hapticsEnabled).toBe(true);
+  });
+
+  test('theme row (with a theme provider) opens the picker and applies a pref', async () => {
+    const store = createMemoryKVStore();
+    const view = await render(
+      <SettingsProvider store={store}>
+        <AppThemeProvider store={store}>
+          <MoreScreen />
+        </AppThemeProvider>
+      </SettingsProvider>
+    );
+    expect(view.getByText('System')).toBeOnTheScreen();
+    await fireEvent.press(view.getByTestId('setting-theme'));
+    await fireEvent.press(view.getByTestId('option-dark'));
+    expect(store.get('theme.pref.v1')).toBe('dark');
+    expect(view.getByText('Dark')).toBeOnTheScreen();
   });
 
   test('setting location through the city picker persists the city', async () => {

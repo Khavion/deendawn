@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import * as Updates from 'expo-updates';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert, DevSettings, Modal, ScrollView, StyleSheet, Switch, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -36,6 +36,7 @@ import { resolveLocation } from '../settingsStore';
 import { CityPickerModal } from '../../prayer-times/components/CityPickerModal';
 import { HighLatRuleKey, MadhabKey, METHOD_KEYS, MethodKey } from '../../prayer-times/types';
 import { AppPressable, AppText, GoldFrameCard, SectionRule } from '@/src/components/ui';
+import { setHapticsEnabled, useHaptics } from '@/src/lib/haptics';
 import i18n, {
   applyRtlForNextStart,
   LanguageCode,
@@ -53,7 +54,7 @@ import {
   richMode,
   spacing,
 } from '@/src/lib/theme/tokens';
-import { useThemeMode } from '@/src/lib/theme/ThemeProvider';
+import { ThemeContext, useThemeMode } from '@/src/lib/theme/ThemeProvider';
 import { useTokens } from '@/src/lib/theme/useTokens';
 import { useDeviceTier } from '@/src/lib/theme/useDeviceTier';
 
@@ -138,6 +139,9 @@ export function MoreScreen() {
   const mode = useThemeMode();
   const rm = richMode(mode);
   const { flat } = useDeviceTier();
+  // Nullable on purpose: screen tests render without AppThemeProvider.
+  const theme = useContext(ThemeContext);
+  const h = useHaptics();
   const { t } = useTranslation();
   const router = useRouter();
   const groupCard = [
@@ -147,7 +151,7 @@ export function MoreScreen() {
   ];
   const { settings, update, store } = useSettings();
   const [open, setOpen] = useState<
-    null | 'city' | 'method' | 'madhab' | 'highlat' | 'language' | 'hijri' | 'suhoor'
+    null | 'city' | 'method' | 'madhab' | 'highlat' | 'language' | 'hijri' | 'suhoor' | 'theme'
   >(null);
   const [prefs, setPrefs] = useState(() => loadNotificationPrefs(store));
   const [nightWarm, setNightWarm] = useState(() => loadNightWarm(store));
@@ -341,8 +345,12 @@ export function MoreScreen() {
               </AppPressable>
               <Switch
                 testID={`notif-${prayer}`}
+                accessibilityLabel={t(`prayers.${prayer}`)}
                 value={prefs.enabled[prayer]}
-                onValueChange={(v) => void togglePrayer(prayer, v)}
+                onValueChange={(v) => {
+                  h.select();
+                  void togglePrayer(prayer, v);
+                }}
               />
             </View>
           ))}
@@ -409,8 +417,10 @@ export function MoreScreen() {
             </View>
             <Switch
               testID="night-warm"
+              accessibilityLabel={t('more.nightWarm')}
               value={nightWarm}
               onValueChange={(v) => {
+                h.select();
                 setNightWarm(v);
                 saveNightWarm(store, v);
               }}
@@ -426,14 +436,55 @@ export function MoreScreen() {
               </View>
               <Switch
                 testID="tajweed-toggle"
+                accessibilityLabel={t('more.tajweed')}
                 value={tajweed}
                 onValueChange={(v) => {
+                  h.select();
                   setTajweed(v);
                   saveTajweed(store, v);
                 }}
               />
             </View>
           )}
+        </View>
+        <SectionRule label={t('more.appearance')} style={styles.sectionRule} />
+        <View style={groupCard}>
+          {theme && (
+            <AppPressable
+              accessibilityRole="button"
+              testID="setting-theme"
+              onPress={() => setOpen('theme')}
+              style={[styles.settingRow, { borderBottomColor: tk.border }]}
+            >
+              <AppText variant="bodyStrong">{t('more.theme')}</AppText>
+              <AppText style={[styles.settingValue, { color: tk.textSecondary }]}>
+                {theme.pref === 'system'
+                  ? t('more.themeSystem')
+                  : theme.pref === 'dark' || theme.pref === 'nightWarm'
+                    ? t('more.themeDark')
+                    : t('more.themeLight')}
+              </AppText>
+            </AppPressable>
+          )}
+          <View style={[styles.settingRowInline, { borderBottomColor: tk.border }]}>
+            <View style={styles.rowText}>
+              <AppText variant="bodyStrong">{t('more.haptics')}</AppText>
+              <AppText style={[styles.settingValue, { color: tk.textSecondary }]}>
+                {t('more.hapticsDesc')}
+              </AppText>
+            </View>
+            <Switch
+              testID="haptics-toggle"
+              accessibilityLabel={t('more.haptics')}
+              value={settings.hapticsEnabled}
+              onValueChange={(v) => {
+                // Flip the fire-time flag first so enabling gives its own tick.
+                setHapticsEnabled(v);
+                if (v) h.select();
+                update({ hapticsEnabled: v });
+              }}
+            />
+          </View>
         </View>
         {/* Tier B (on-device AI answers). GATE 7: TierBCard self-gates on
             TIER_B_ENABLED and renders nothing until Zohaib + scholar sign-off.
@@ -479,6 +530,25 @@ export function MoreScreen() {
         options={MADHABS.map((k) => ({ key: k, label: t(`more.madhab_${k}`) }))}
         selected={settings.madhab}
         onSelect={(madhab) => update({ madhab })}
+        onClose={() => setOpen(null)}
+      />
+      <PickerModal
+        visible={open === 'theme'}
+        title={t('more.theme')}
+        closeLabel={t('common.close')}
+        options={[
+          { key: 'system' as const, label: t('more.themeSystem') },
+          { key: 'light' as const, label: t('more.themeLight') },
+          { key: 'dark' as const, label: t('more.themeDark') },
+        ]}
+        selected={
+          theme
+            ? theme.pref === 'nightWarm'
+              ? ('dark' as const)
+              : (theme.pref as 'system' | 'light' | 'dark')
+            : ('system' as const)
+        }
+        onSelect={(pref) => theme?.setPref(pref)}
         onClose={() => setOpen(null)}
       />
       <PickerModal

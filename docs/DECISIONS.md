@@ -369,6 +369,30 @@ Result: eslint 0 errors / 6 warnings (the 6 are pre-existing and unchanged), tsc
   moved off pure white/black to the canvas tokens (`#F7F6F2` / `#15181D`) — pure black violated the
   app's own halation rule.
 
+## 2026-07-29 — Feel: AppPressable everywhere, haptics as a user setting, theme picker
+
+- **AppPressable** is the one interactive primitive (press-scale on the node itself so caller
+  layout survives; asymmetric 80/140ms timing; opt-in haptic verb; Android ripple = the entire
+  Android feel budget). All 41 dead Pressables converted. Haptic placement rule: verbs fire where a
+  VALUE changes (steppers, toggles, stars, target/source/city/month/option selection), never on
+  plain navigation — Apple's semantics, and it keeps lists quiet.
+- **Haptics moved off the Reduce-Motion gate onto a user setting** (More ▸ Appearance & feel,
+  default on). Motion is visual, haptics are physical — Apple treats them as separate accessibility
+  choices; the old gate silenced feedback for exactly the users who may rely on it. Implementation:
+  a module-level fire-time flag synced by SettingsProvider (instant app-wide effect, no re-render
+  round trip, no per-fire storage read). `error` verb added; every Switch now ticks on toggle.
+- **Theme picker shipped** (System / Light / Dark row in More): `setPref` finally has a shipping
+  caller — it previously existed only in the dev-only theme-preview screen. Reader night-warm stays
+  its own reader-scoped toggle (two competing "night" switches would confuse; the global nightWarm
+  pref value remains dev-only). Nullable ThemeContext in MoreScreen keeps provider-less screen
+  tests valid.
+- **a11y tooling substitution:** eslint-plugin-react-native-a11y pins eslint ≤8 (repo runs 9;
+  adopting it would force repo-wide legacy-peer-deps). Installed react-native-accessibility-engine
+  (clean peers, jest-time render assertions — the brief's named alternative) instead; wired in
+  Phase 7.
+- New i18n keys (appearance/theme×4/haptics×2): en ships; ur/ar machine-drafted under the blanket
+  gate-8 @draft status in TRANSLATION_REVIEW.md.
+
 ## 2026-07-29 — Dark-mode oscillation: root cause + fix (and an RN version-pin lesson)
 
 - **Root cause (research, source-verified):** RN 0.86 recomputes the JS color scheme from whichever

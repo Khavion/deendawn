@@ -141,7 +141,15 @@
     "library": "Thinkers & books",
     "about": "About & attributions",
     "tajweed": "Tajweed colors",
-    "tajweedDesc": "Color the Quran by pronunciation rules (draft — pending review)"
+    "tajweedDesc": "Color the Quran by pronunciation rules (draft — pending review)",
+    "appearance": "Appearance & feel",
+    "theme": "Theme",
+    "themeDesc": "Follow the system or pick light / dark",
+    "themeSystem": "System",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "haptics": "Touch feedback",
+    "hapticsDesc": "Gentle taps confirm actions"
   },
   "methods": {
     "MuslimWorldLeague": "Muslim World League",

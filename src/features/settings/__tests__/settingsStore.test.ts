@@ -31,6 +31,7 @@ describe('parseSettings', () => {
       highLatRule: 'middleofthenight',
       hijriOffset: 1,
       suhoorReminderMinutes: 30,
+      hapticsEnabled: false,
     });
     expect(loadSettings(store)).toEqual({
       location: { type: 'manual', cityId: 'houston-us' },
@@ -39,6 +40,7 @@ describe('parseSettings', () => {
       highLatRule: 'middleofthenight',
       hijriOffset: 1,
       suhoorReminderMinutes: 30,
+      hapticsEnabled: false,
     });
   });
 
