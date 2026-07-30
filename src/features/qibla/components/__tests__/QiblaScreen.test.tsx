@@ -68,6 +68,9 @@ describe('QiblaScreen', () => {
     expect(view.getByTestId('qibla-choose-city')).toBeOnTheScreen();
   });
 
+  // Explicit timeout: this test runs ~4.8s under parallel workers on a cold
+  // cache — the 5s default made the whole file flake (timeout here cascades
+  // into the sibling tests' shared mocks).
   test('turn guidance updates with the mocked heading stream and aligns with haptics', async () => {
     const Haptics = jest.requireMock('expo-haptics');
     const { view } = await renderQibla({ 'settings.v1': HOUSTON_SETTINGS });
@@ -89,7 +92,7 @@ describe('QiblaScreen', () => {
     expect(view.getByTestId('qibla-status').props.children).toMatch(/left/);
     // Success haptic stays once-per-session.
     expect(Haptics.notificationAsync).toHaveBeenCalledTimes(1);
-  });
+  }, 15000);
 
   test('magnetic fallback shows the caveat chip; calibration chip on low accuracy', async () => {
     const { view } = await renderQibla({ 'settings.v1': HOUSTON_SETTINGS });
