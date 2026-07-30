@@ -55,7 +55,6 @@ export function Button({
           variant="body"
           color={primary ? t.onPrimary : t.textPrimary}
           style={styles.label}
-          numberOfLines={1}
         >
           {title}
         </AppText>
@@ -73,7 +72,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  label: { fontFamily: fonts.sansSemiBold },
+  // Labels wrap (never truncate) at large Dynamic Type; minHeight lets rows grow.
+  label: { fontFamily: fonts.sansSemiBold, textAlign: 'center' },
   pressed: { opacity: 0.85 },
   disabled: { opacity: 0.5 },
 });

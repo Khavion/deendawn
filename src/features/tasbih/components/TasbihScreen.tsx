@@ -94,7 +94,11 @@ export function TasbihScreen() {
             !flat && milestone === 'round' && { shadowColor: t.success, ...styles.ringGlow },
           ]}
         >
-          <AppText style={[styles.count, { color: t.textPrimary }]} testID="tasbih-count">
+          <AppText
+            maxFontSizeMultiplier={fontScaleCaps.label}
+            style={[styles.count, { color: t.textPrimary }]}
+            testID="tasbih-count"
+          >
             {displayCount}
           </AppText>
           <AppText variant="caption" style={{ color: t.textSecondary }}>
@@ -173,13 +177,18 @@ const styles = StyleSheet.create({
   },
   tapArea: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: spacing.l },
   ring: {
-    width: 260,
-    height: 260,
-    borderRadius: 130,
+    // Min-dims + aspectRatio keep the circle while letting large Dynamic Type
+    // grow it instead of clipping the numeral (borderRadius 999 stays circular
+    // at any size).
+    minWidth: 260,
+    minHeight: 260,
+    aspectRatio: 1,
+    borderRadius: 999,
     borderWidth: 3,
     alignItems: 'center',
     justifyContent: 'center',
     gap: spacing.xs,
+    padding: spacing.l,
   },
   ringGlow: { shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.55, shadowRadius: 24, elevation: 12 },
   count: { fontFamily: fonts.serifSemiBold, fontSize: 80, lineHeight: 96 },

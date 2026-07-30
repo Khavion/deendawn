@@ -54,7 +54,7 @@ import i18n, {
   needsRtlRestart,
   saveLanguage,
 } from '@/src/lib/i18n';
-import { elevation, radius, richMode, spacing } from '@/src/lib/theme/tokens';
+import { elevation, fontScaleCaps, radius, richMode, spacing } from '@/src/lib/theme/tokens';
 import { useThemeMode } from '@/src/lib/theme/ThemeProvider';
 import { useTokens } from '@/src/lib/theme/useTokens';
 import { useDeviceTier } from '@/src/lib/theme/useDeviceTier';
@@ -370,7 +370,9 @@ export function MoreScreen() {
                   readingScale <= minScale && styles.stepDisabled,
                 ]}
               >
-                <AppText style={styles.stepSmall}>{sizeGlyph}</AppText>
+                <AppText maxFontSizeMultiplier={fontScaleCaps.label} style={styles.stepSmall}>
+                  {sizeGlyph}
+                </AppText>
               </Pressable>
               <AppText
                 variant="caption"
@@ -391,7 +393,9 @@ export function MoreScreen() {
                   readingScale >= maxScale && styles.stepDisabled,
                 ]}
               >
-                <AppText style={styles.stepLarge}>{sizeGlyph}</AppText>
+                <AppText maxFontSizeMultiplier={fontScaleCaps.label} style={styles.stepLarge}>
+                  {sizeGlyph}
+                </AppText>
               </Pressable>
             </View>
           </View>
@@ -563,12 +567,13 @@ const styles = StyleSheet.create({
   rowText: { flex: 1, paddingRight: spacing.m, gap: 2 },
   stepper: { flexDirection: 'row', alignItems: 'center', gap: spacing.s },
   stepBtn: {
-    width: 44,
-    height: 44,
+    minWidth: 44,
+    minHeight: 44,
     borderRadius: radius.control,
     borderWidth: StyleSheet.hairlineWidth,
     alignItems: 'center',
     justifyContent: 'center',
+    paddingHorizontal: spacing.xs,
   },
   stepDisabled: { opacity: 0.35 },
   stepSmall: { fontSize: 13 },

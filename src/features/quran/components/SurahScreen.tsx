@@ -166,8 +166,9 @@ export function SurahScreen() {
                 testID="toggle-translation"
                 onPress={onToggleTranslation}
                 hitSlop={8}
+                style={styles.headerToggle}
               >
-                <AppText variant="link">
+                <AppText variant="link" numberOfLines={1}>
                   {showTranslation ? tr('quran.arabicOnly') : tr('quran.translation')}
                 </AppText>
               </Pressable>
@@ -341,7 +342,10 @@ export function SurahScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  headerControls: { flexDirection: 'row', alignItems: 'center', gap: spacing.m },
+  // flexShrink lets the native header compress the cluster (long ur/ar words,
+  // large Dynamic Type) instead of colliding with the title.
+  headerControls: { flexDirection: 'row', alignItems: 'center', gap: spacing.m, flexShrink: 1 },
+  headerToggle: { flexShrink: 1 },
   sizeSmall: { fontSize: 14 },
   sizeLarge: { fontSize: 20 },
   sizeDisabled: { opacity: 0.35 },

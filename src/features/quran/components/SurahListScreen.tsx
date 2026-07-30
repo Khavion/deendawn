@@ -143,7 +143,9 @@ export function SurahListScreen() {
                   style={[styles.row, { borderBottomColor: tk.border }]}
                 >
                   <View style={[styles.numberBadge, { borderColor: tk.accent }]}>
-                    <AppText style={{ color: tk.accent }}>{item.number}</AppText>
+                    <AppText maxFontSizeMultiplier={fontScaleCaps.label} style={{ color: tk.accent }}>
+                      {item.number}
+                    </AppText>
                   </View>
                   <View style={styles.names}>
                     <AppText variant="bodyStrong">{item.name_transliteration}</AppText>
@@ -203,9 +205,10 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
   numberBadge: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+    minWidth: 36,
+    minHeight: 36,
+    aspectRatio: 1,
+    borderRadius: 999,
     borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',

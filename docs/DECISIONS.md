@@ -369,6 +369,21 @@ Result: eslint 0 errors / 6 warnings (the 6 are pre-existing and unchanged), tsc
   moved off pure white/black to the canvas tokens (`#F7F6F2` / `#15181D`) — pure black violated the
   app's own halation rule.
 
+## 2026-07-29 — Dynamic Type: per-role caps + the deliberate exceptions
+
+- `fontScaleCaps` (content 2.0 / heading 1.6 / label 1.4) replaces the global 1.4 cap. Content
+  reaches Apple's 200% accessibility sizes; chrome scales less (HIG: prioritize content). iOS
+  Fabric multiplies lineHeight with the font multiplier, so leading survives scaling.
+- **Deliberate label-cap (1.4) exceptions on content-adjacent text**, each because the information
+  is duplicated at full scale elsewhere or the element is a giant display numeral:
+  - PeriodEyebrow ("Fajr · Dawn" status on Today) — the featured card repeats it at content scale.
+  - Tasbih count numeral — 80pt base; 1.4 → 112pt stays enormous while keeping the ring circular
+    (ring is now min-dims + aspectRatio so it grows instead of clipping).
+  - Surah-list Arabic names + number badges — navigation chrome; the reader is the reading surface.
+- Compound rule: reader A−/A+ × system Dynamic Type on Quranic text is clamped at
+  `MAX_ARABIC_EFFECTIVE_SCALE` 2.6 (28pt base → ~73pt ceiling), in the reader AND bookmarks.
+- Button labels now wrap instead of truncating (numberOfLines removed; minHeight grows).
+
 ## 2026-07-29 — Expo SDK 54 → 57 in one jump (owner pre-authorized; research-backed)
 
 - **Why:** SDK 57 (RN 0.86) is the current SDK; 56 carries the one breaking change (expo-router
