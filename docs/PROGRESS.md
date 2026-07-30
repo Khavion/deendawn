@@ -577,3 +577,19 @@ sweep, 16KB+manifest gates) → Phase 4 Play store prep + READY FOR HUMAN SUBMIT
 Six research briefs completed (SDK 57 baseline, expo-notifications/audio internals, widget
 libs, Play policy, 16KB) + repo re-audit at HEAD; full plan in the session plan file, key
 facts logged to DECISIONS as they land. Starting: JDK pin, app.json hygiene, fresh prebuild.
+
+## Session 2026-07-30 (parallel) — Claude Design mega-brief (owner directive)
+
+Plan:
+
+1. Full screen/state audit: code inventory (Explore subagent) + release-capture review + docs (RICH_DESIGN_SPEC, DESIGN_AUDIT, mandate).
+2. Deep-research ×3 (parallel): Islamic app aesthetics/aniconism/competitor teardown; 2026 motion + iOS/Android platform specs; worship-screen UI patterns + Arabic typography.
+3. Write the comprehensive Claude Design prompt (every screen, every loading/empty/error state, motion spec, reverence constraints, verbatim sample data, single-HTML deliverable contract) + an implementation-kickoff prompt for the follow-on build session.
+4. Deliver to Zohaib with plain-English click-by-click usage steps; docs-only commit.
+
+Done:
+
+- Full audit complete: 19 routes + every state/string inventoried (Explore agent), release captures reviewed, rich-design docs digested.
+- 3 deep-research reports landed (Islamic design norms + competitor teardown; 2026 iOS-26/M3-Expressive motion+platform numbers; worship-screen patterns + Arabic/Urdu typography). Notables: Pillars-ADA claim debunked; scripture-off-widgets adab; no-chimes ruling; calm-countdown research; 16 Safar 1448 verified ×3.
+- `docs/CLAUDE_DESIGN_PROMPT.md` written (12 sections + verbatim sample appendix + kickoff prompt). Arabic samples injected mechanically from quran.db (guard hook correctly blocked hand-typing — placeholders in repo copy, filled copy delivered to Zohaib). DECISIONS logged.
+- Docs-only commit; Android-phase working tree untouched.

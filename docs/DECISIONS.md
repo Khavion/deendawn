@@ -549,3 +549,31 @@ pass on the release build.
   AGP 8.12/Kotlin 2.1.20 are tested on 17/21 and EAS's sdk-57 image is JDK 17 — system Temurin 25
   stays off the build path. NDK stays at RN 0.86's pinned 27.1.12297006 (RN injects the 16 KB
   alignment flag for it; forcing NDK 28.x is a known crash pattern — skia #3392).
+
+## 2026-07-30 — "Pristine" design pass: Claude Design mega-prompt (owner directive, parallel session)
+
+- **Owner asked for a comprehensive Claude Design prompt** covering every screen/loading/empty/error
+  state on both platforms, "pristine, professional, perfect, but not over the top so as to not breach
+  islamic traditions." Deliverable: `docs/CLAUDE_DESIGN_PROMPT.md` (repo copy holds placeholders —
+  see below) + the filled copy handed to Zohaib directly. Grounded in: full code inventory (routes,
+  states, exact i18n strings, primitives), the release-capture sweep, and three deep-research reports.
+- **Religious-text handling**: the prompt's §11 sample block (ayahs 1:1–1:3, surah names 1–5, native
+  language names) is injected MECHANICALLY from `assets/db/quran.db` + locale `meta.nativeName` —
+  never typed by hand (rule 1; the guard hook correctly blocked a hand-written draft). Regenerate the
+  filled copy with: python3 sqlite3 read-only on quran.db → replace `[[AR_SAMPLES]]`,
+  `[[SURAH_ROWS]]`, `[[LANG_NAMES]]` in the repo doc. The filled copy is NOT committed (keeps
+  hand-off files with Arabic out of the repo; db remains the single source).
+- **Key research verdicts baked into the prompt** (deep-research, 2026-07-30): Pillars is NOT an
+  Apple Design Award finalist (folklore — corrected); scripture never on widgets/lock-screen/
+  notifications (wallpaper-adab rulings) and never as background texture ("reminding, not
+  adornment"); no melodic chimes anywhere (bells hadith — silence+haptics only); zero
+  worship-gamification (riya sensitivity); flat stylized Kaaba glyph is acceptable qibla iconography
+  (prayer-rug precedent), no 3D/photoreal; countdown = minutes granularity, seconds only in the final
+  five minutes (anxiety research); M3 motion tokens + iOS spring numbers embedded (350ms push,
+  standard/emphasized beziers, ≤15% bounce); Android splash is icon-only (fade is iOS-only);
+  predictive back stays off (matches existing decision); Moti avoided (broken on Reanimated 4);
+  Tier-B download must use the new `File.createDownloadTask` API (legacy FileSystem API throws on
+  SDK 57); app nisab constants confirmed 85g/595g and quoted as-is. Hijri sample date 16 Safar 1448
+  verified against three Umm al-Qura sources.
+- The prompt ends with an implementation-kickoff prompt for the follow-on build session (expects the
+  design saved at `docs/design-source/pristine.dc.html`).
