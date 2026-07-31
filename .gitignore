@@ -53,3 +53,6 @@ modules/*/android/build/
 
 # recitation audio files (verbatim from pinned sources; hashes committed in audio.lock)
 content-pipeline/audio/data/
+
+# Play service-account key location referenced by eas.json — must never be committed
+secrets/
