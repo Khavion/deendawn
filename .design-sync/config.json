@@ -27,7 +27,14 @@
     "SectionRule": "src/components/ui/SectionRule.tsx",
     "Skeleton": "src/components/ui/Skeleton.tsx",
     "Marker": "src/components/ui/Marker.tsx",
-    "TabBar": "src/components/ui/TabBar.tsx"
+    "TabBar": "src/components/ui/TabBar.tsx",
+    "ListRow": "src/components/ui/ListRow.tsx",
+    "SelectionRow": "src/components/ui/SelectionRow.tsx",
+    "SegmentedRow": "src/components/ui/SegmentedRow.tsx",
+    "MoneyText": "src/components/ui/MoneyText.tsx",
+    "Countdown": "src/components/ui/Countdown.tsx",
+    "Sheet": "src/components/ui/Sheet.tsx",
+    "ProgressRing": "src/components/ui/ProgressRing.tsx"
   },
   "guidelinesGlob": [
     "docs/DESIGN.md"

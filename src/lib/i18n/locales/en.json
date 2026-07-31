@@ -42,6 +42,10 @@
     "countdown": "in {{time}}",
     "hoursMinutes": "{{hours}}h {{minutes}}m",
     "minutesSeconds": "{{minutes}}m {{seconds}}s",
+    "countdownNow": "now",
+    "countdownMinutes_one": "in {{count}} minute",
+    "countdownMinutes_other": "in {{count}} minutes",
+    "countdownHoursMinutes": "in {{hours}} h {{minutes}} min",
     "suhoorEnds": "Suhoor ends",
     "iftar": "Iftar"
   },

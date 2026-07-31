@@ -43,6 +43,10 @@
     "countdown": "{{time}} میں",
     "hoursMinutes": "{{hours}} گھنٹے {{minutes}} منٹ",
     "minutesSeconds": "{{minutes}} منٹ {{seconds}} سیکنڈ",
+    "countdownNow": "ابھی",
+    "countdownMinutes_one": "{{count}} منٹ میں",
+    "countdownMinutes_other": "{{count}} منٹ میں",
+    "countdownHoursMinutes": "{{hours}} گھنٹے {{minutes}} منٹ میں",
     "suhoorEnds": "سحری ختم",
     "iftar": "افطار"
   },
