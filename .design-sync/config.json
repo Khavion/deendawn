@@ -34,7 +34,11 @@
     "MoneyText": "src/components/ui/MoneyText.tsx",
     "Countdown": "src/components/ui/Countdown.tsx",
     "Sheet": "src/components/ui/Sheet.tsx",
-    "ProgressRing": "src/components/ui/ProgressRing.tsx"
+    "ProgressRing": "src/components/ui/ProgressRing.tsx",
+    "AyahBlock": "src/components/ui/AyahBlock.tsx",
+    "TransportMark": "src/components/ui/TransportMark.tsx",
+    "ListenBar": "src/components/ui/ListenBar.tsx",
+    "CompassDial": "src/components/ui/CompassDial.tsx"
   },
   "guidelinesGlob": [
     "docs/DESIGN.md"
