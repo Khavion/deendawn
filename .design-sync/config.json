@@ -1,0 +1,35 @@
+{
+  "projectId": "6d2273e5-1671-48ce-ab90-d942e48ad530",
+  "shape": "package",
+  "pkg": "deendawn",
+  "globalName": "DeenDawnDS",
+  "srcDir": "src/components/ui",
+  "tsconfig": ".design-sync/ds-web/tsconfig.json",
+  "extraEntries": [
+    "./.design-sync/ds-web/preview-support.tsx"
+  ],
+  "provider": {
+    "component": "DSPreviewRoot"
+  },
+  "extraFonts": [
+    ".design-sync/ds-web/fonts.css"
+  ],
+  "componentSrcMap": {
+    "AppText": "src/components/ui/AppText.tsx",
+    "AppPressable": "src/components/ui/AppPressable.tsx",
+    "Button": "src/components/ui/Button.tsx",
+    "Card": "src/components/ui/Card.tsx",
+    "Divider": "src/components/ui/Divider.tsx",
+    "Gradient": "src/components/ui/Gradient.tsx",
+    "GoldFrameCard": "src/components/ui/GoldFrameCard.tsx",
+    "PeriodEyebrow": "src/components/ui/PeriodEyebrow.tsx",
+    "Screen": "src/components/ui/Screen.tsx",
+    "SectionRule": "src/components/ui/SectionRule.tsx",
+    "Skeleton": "src/components/ui/Skeleton.tsx"
+  },
+  "guidelinesGlob": [
+    "docs/DESIGN.md"
+  ],
+  "cssEntry": ".design-sync/ds-web/tokens.css",
+  "readmeHeader": ".design-sync/conventions.md"
+}

@@ -1,0 +1,89 @@
+/* GENERATED from src/lib/theme/tokens.ts by gen-tokens.mjs — do not edit. */
+:root {
+  --color-bg-canvas: #F7F6F2;
+  --color-bg-surface: #FFFFFF;
+  --color-bg-elevated: #F0EEE7;
+  --color-text-primary: #20242A;
+  --color-text-secondary: #6B675C;
+  --color-text-on-accent: #F7F6F2;
+  --color-accent: #274D3D;
+  --color-accent-soft: #B9CDC2;
+  --color-text-on-accent-soft: #20242A;
+  --color-ochre: #8A6430;
+  --color-ochre-soft: #F4ECDE;
+  --color-success: #2E6A48;
+  --color-border: #DCD9D0;
+  --color-icon: #8B8677;
+  --color-primary: #274D3D;
+  --color-on-primary: #F7F6F2;
+  --color-primary-soft: #B9CDC2;
+}
+[data-theme="dark"] {
+  --color-bg-canvas: #15181D;
+  --color-bg-surface: #1B1F25;
+  --color-bg-elevated: #232830;
+  --color-text-primary: #F4F3EE;
+  --color-text-secondary: #9AA1AA;
+  --color-text-on-accent: #15181D;
+  --color-accent: #6FA28B;
+  --color-accent-soft: #24352E;
+  --color-text-on-accent-soft: #F4F3EE;
+  --color-ochre: #C69B5F;
+  --color-ochre-soft: #2A2519;
+  --color-success: #7FB98F;
+  --color-border: #343A43;
+  --color-icon: #8E96A0;
+  --color-primary: #6FA28B;
+  --color-on-primary: #15181D;
+  --color-primary-soft: #24352E;
+}
+[data-theme="nightWarm"] {
+  --color-bg-canvas: #16130D;
+  --color-bg-surface: #1E1A12;
+  --color-bg-elevated: #251F16;
+  --color-text-primary: #ECE3D2;
+  --color-text-secondary: #AEA286;
+  --color-text-on-accent: #16130D;
+  --color-accent: #C69B5F;
+  --color-accent-soft: #2A2417;
+  --color-text-on-accent-soft: #ECE3D2;
+  --color-ochre: #C69B5F;
+  --color-ochre-soft: #2A2417;
+  --color-success: #9DB58F;
+  --color-border: #322A1E;
+  --color-icon: #9C8B72;
+  --color-primary: #C69B5F;
+  --color-on-primary: #16130D;
+  --color-primary-soft: #2A2417;
+}
+:root {
+  --spacing-xs: 4px;
+  --spacing-s: 8px;
+  --spacing-m: 12px;
+  --spacing-l: 16px;
+  --spacing-xl: 24px;
+  --spacing-xxl: 32px;
+  --spacing-xxxl: 48px;
+  --radius-card: 8px;
+  --radius-control: 6px;
+  --font-size-display: 32px;
+  --font-size-title: 22px;
+  --font-size-h1: 22px;
+  --font-size-h2: 18px;
+  --font-size-body: 16px;
+  --font-size-callout: 15px;
+  --font-size-caption: 13px;
+  --font-size-micro: 11px;
+  --font-serif: 'Newsreader_400Regular';
+  --font-serif-medium: 'Newsreader_500Medium';
+  --font-serif-semi-bold: 'Newsreader_600SemiBold';
+  --font-serif-bold: 'Newsreader_700Bold';
+  --font-serif-italic: 'Newsreader_400Regular_Italic';
+  --font-serif-light: 'Newsreader_300Light';
+  --font-sans: 'PublicSans_400Regular';
+  --font-sans-medium: 'PublicSans_500Medium';
+  --font-sans-semi-bold: 'PublicSans_600SemiBold';
+  --font-sans-bold: 'PublicSans_700Bold';
+  --font-quran: 'AmiriQuran';
+  --font-nastaliq: 'NotoNastaliqUrdu';
+}

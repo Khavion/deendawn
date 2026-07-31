@@ -1,0 +1,16 @@
+/* Brand fonts for design-system previews. Family names match the exact
+   fontFamily strings in src/lib/theme/tokens.ts (react-native-web passes
+   them through verbatim). Sources: @expo-google-fonts packages + bundled
+   assets/fonts. */
+@font-face { font-family: 'Newsreader_300Light'; src: url('../../node_modules/@expo-google-fonts/newsreader/300Light/Newsreader_300Light.ttf'); }
+@font-face { font-family: 'Newsreader_400Regular'; src: url('../../node_modules/@expo-google-fonts/newsreader/400Regular/Newsreader_400Regular.ttf'); }
+@font-face { font-family: 'Newsreader_400Regular_Italic'; src: url('../../node_modules/@expo-google-fonts/newsreader/400Regular_Italic/Newsreader_400Regular_Italic.ttf'); }
+@font-face { font-family: 'Newsreader_500Medium'; src: url('../../node_modules/@expo-google-fonts/newsreader/500Medium/Newsreader_500Medium.ttf'); }
+@font-face { font-family: 'Newsreader_600SemiBold'; src: url('../../node_modules/@expo-google-fonts/newsreader/600SemiBold/Newsreader_600SemiBold.ttf'); }
+@font-face { font-family: 'Newsreader_700Bold'; src: url('../../node_modules/@expo-google-fonts/newsreader/700Bold/Newsreader_700Bold.ttf'); }
+@font-face { font-family: 'PublicSans_400Regular'; src: url('../../node_modules/@expo-google-fonts/public-sans/400Regular/PublicSans_400Regular.ttf'); }
+@font-face { font-family: 'PublicSans_500Medium'; src: url('../../node_modules/@expo-google-fonts/public-sans/500Medium/PublicSans_500Medium.ttf'); }
+@font-face { font-family: 'PublicSans_600SemiBold'; src: url('../../node_modules/@expo-google-fonts/public-sans/600SemiBold/PublicSans_600SemiBold.ttf'); }
+@font-face { font-family: 'PublicSans_700Bold'; src: url('../../node_modules/@expo-google-fonts/public-sans/700Bold/PublicSans_700Bold.ttf'); }
+@font-face { font-family: 'AmiriQuran'; src: url('../../assets/fonts/AmiriQuran.ttf'); }
+@font-face { font-family: 'NotoNastaliqUrdu'; src: url('../../assets/fonts/NotoNastaliqUrdu-Regular.ttf'); }

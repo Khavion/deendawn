@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "baseUrl": "../..",
+    "paths": {
+      "react-native": [
+        "node_modules/react-native-web/dist/index.js"
+      ],
+      "expo-sqlite": [
+        ".design-sync/ds-web/stubs/expo-sqlite.ts"
+      ],
+      "expo-haptics": [
+        ".design-sync/ds-web/stubs/expo-haptics.ts"
+      ],
+      "@/*": [
+        "*"
+      ],
+      "react-native-safe-area-context": [
+        ".design-sync/ds-web/stubs/safe-area-context.tsx"
+      ]
+    }
+  }
+}
