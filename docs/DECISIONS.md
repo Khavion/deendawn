@@ -941,3 +941,21 @@ home-screen widget cannot be driven headlessly — widget rendering,
 tap-through, and dark mode are TESTPLAN device-pass items, and EAS
 provisioning of the extension still waits on Zohaib's Apple account
 (BLOCKERS).
+
+## 2026-07-31 — Motion-commission ledger at the handoff phase's close
+
+Shipped through the handoff build: #5 qibla ceremony (hysteresis + single
+detent + glow/bloom), #6a reader focus mode, #7 audio presence (ListenBar +
+Sheet player + Skia ring), #8 transitions pass (formSheet reserved,
+fullScreenGesture on the reader, predictive back off), #9 onboarding
+(3 value-first steps <30s), #11 widgets (iOS timeline countdown + Android
+alignment), and the structural halves of #4 (tasbih ring/celebration) and
+#10 (Skeleton in the buffering slot). DEFERRED to a dedicated motion-polish
+session, with the tokens/geometry already in place: #1 time-aware hero
+Skia shader, #2 dawn-arc path reveal (BrandMark ships static), #3 ambient
+SkSL glow, the animated half of #4 (bead pulse, count-up tick), #6b ayah
+highlight-follow (blocked on the pinned QUL segments artifact) and #6c
+verse-share cards, #12's digit roll + pull-to-refresh arc. Rationale: every
+deferred item is additive animation on shipped geometry; rushing them
+untested at the end of this session risks the 60fps floor and Reduce Motion
+guarantees the constitution requires.

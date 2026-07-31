@@ -748,3 +748,15 @@ custom TabBar, Tasbih replaces Ask in the tab row.
   list (5 rows per design); countdown shows calm minute forms; tasbih is a
   guided 3-round set now; calendar pages by hijri month; zakat result moved
   below the form with Save/export.
+- Phase 5 DONE: offline recitation downloads (manifest drift-locked to
+  audio.lock, hash-verified state machine mirroring Tier-B, streamed
+  hashing, keep-offline control in the player). Phase 6 close-out: DESIGN.md
+  now documents the full 26-primitive system + motion vocabulary; motion-
+  commission ledger in DECISIONS (7 shipped structurally, 6 animation-layer
+  items deferred to a dedicated motion session with rationale); Android
+  8-cell evidence sweep re-run on the restyled release build (captures in
+  docs/screens/android/final, reviewed).
+- FOR ZOHAIB (nothing blocking): two notes in BLOCKERS §0 — the iPhone
+  widget waits on your Apple account for its signing check, and tasbih
+  volume-button counting is Android-only (App Review safety). Everything
+  else shipped without needing you.

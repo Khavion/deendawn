@@ -74,3 +74,46 @@ renders through its own Amiri components, never AppText.
 
 - Manuscript-art editorial moments (onboarding, empty states) — CC0 only, aniconism-safe, scholar sign-off (Gate #5).
 - Screen-reader: code-level pass DONE (Arabic `accessibilityLanguage`, icon-only labels, decorative-icon hiding, selected states, live tasbih value; asserted in unit tests). On-device VoiceOver/TalkBack speech verification remains a device-pass item (docs/TESTPLAN.md).
+
+## Handoff design system (2026-07-31 — the Claude Design spec, implemented)
+
+The eight screens now follow `DeenDawn-Handoff.html` (§2 register, §3 tokens,
+§5 component register, §6 screen specs, §7 verbatim copy). The register in
+force: at most ONE GoldFrameCard per screen; the rotated-square diamond
+(`Marker`) is the only mark (no icon set until Gate #5); celebration = glow +
+bloom + ONE detent, ≤300ms, never particles/sound; copy tells the truth and
+never guilts; night mutes the featured fill; identical pixels on both
+platforms (custom TabBar; only the OS's own chrome remains).
+
+New tokens (`src/lib/theme/tokens.ts`): `withAlpha()` / `flattenOver()`
+(src/lib/color.ts — the only sanctioned way to derive washes/tracks/scrims),
+`periodWash` (dawn 11% / dusk 15%→11% light per AA / night 9%, keyed by the
+prayer-named DayPeriod), `heroWash` (17/22/10% on the featured fill),
+`celebration` (glow 46px gold @55%, bloom 24%→0 @460px, maxDuration 300),
+`latinType.numeral` (Newsreader Light 88/92, −1, tabular), `onFeaturedTokens`
+(the palette a filled GoldFrameCard provides to its subtree — AA-proven on
+the gradient). All contrast-tested; deviations logged in DECISIONS.
+
+Component inventory (`src/components/ui/`, all in the design-sync map):
+AppPressable · AppText (11 variants incl. numeral) · AyahBlock (the ONLY
+mushaf vessel — closed prop surface) · BrandMark (dawn arc) · Button ·
+CalendarGrid/DayCell · Card · CompassDial · Countdown (shared
+countdownFormat thresholds with the widgets) · Divider (+onFeatured/inset) ·
+Gradient · GoldFrameCard (+contentTone, night fill-drop) · ListCard/ListRow
+(marked/past states) · ListenBar · Marker · MoneyText · PeriodEyebrow ·
+ProgressRing (Skia; RTL counter-clockwise; dashed buffering) · RadioRow/
+CheckRow · Screen · SectionRule · SegmentedRow · Sheet (in-house) ·
+Skeleton · TabBar (66pt, diamond active mark) · TransportMark
+(GATE-5-PLACEHOLDER) · WeekBars.
+
+Motion vocabulary (current): 200–300ms ease-in-out, transform/opacity only,
+Reduce Motion + flat-tier degrade everywhere. Sheet settles ≤300ms with
+swipe/scrim dismiss; reader chrome hides on scroll-down past 24pt and
+returns on scroll-up (250ms, off the a11y tree while hidden); ProgressRing
+buffering rotates at duration.slow (opacity pulse under Reduce Motion);
+celebration follows the §2 grammar (steady glow while a state holds, one
+detent on entry, hysteresis re-arm on the qibla). The Skia ANIMATION polish
+layer (dawn-arc path reveal, hero SkSL shader, tasbih bead pulse, countdown
+digit roll, pull-to-refresh arc, verse-share cards) is DECISIONS-deferred to
+a dedicated motion session — the geometry and tokens it will animate are in
+place.
