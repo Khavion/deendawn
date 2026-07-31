@@ -76,7 +76,17 @@ function AudioBarInner({
       if (positionRef.current > 0) {
         saveResumePosition(store, source.reciterId, surah, positionRef.current);
       }
-      player.clearLockScreenControls();
+      try {
+        player.clearLockScreenControls();
+      } catch {
+        // expo-modules-core releases the native player BEFORE this cleanup
+        // runs (its internal effect registers first), so this call can hit a
+        // freed shared object — a hard crash on plain back-navigation after
+        // playing (reproduced live on iOS, review finding). The OS tears the
+        // lock-screen controls down with the player, so swallowing is
+        // correct; the resume-position save above is JS-only and always
+        // lands first.
+      }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
