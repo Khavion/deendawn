@@ -1,5 +1,16 @@
 # DECISIONS — non-obvious choices with rationale
 
+## 2026-07-31 — Standing authorization: deendawn.org website maintenance is ungated
+
+Zohaib, in-session, after the site went live and with full knowledge that the Wrangler access
+lets me publish deployments headlessly: "No need to be strict, it's just a website with
+information, I already approved it." So: content updates, fixes, and redeploys of the
+deendawn.org static site (source in `website/`) proceed autonomously — this narrows Human
+Gate #2 for THIS website only. Everything else in Gate #2 (store listings, other sites,
+posts, repo visibility) and all other gates are unchanged. Anything that changes the
+*meaning* of the Privacy Policy still gets flagged to him before deploy, since the stores
+and users rely on it.
+
 ## 2026-07-31 — Domain CORRECTION: the real domain is deendawn.org (GoDaddy), and it hosts everything
 
 Zohaib actually bought **deendawn.org** — not deendawn.com as the two earlier entries planned —
