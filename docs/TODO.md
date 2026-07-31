@@ -175,3 +175,22 @@ The polish backlog below is post-wrap work — none of it blocks the closed test
       hardware check stays in the TESTPLAN device pass.
 - [ ] Final evidence re-sweep (8 cells) on the release build once R2 audio is live — refreshes
       the store screenshot source with the polish fixes in place.
+
+## Design-handoff follow-ups (2026-07-31 — post phases 0–6)
+
+- [ ] Motion-polish session (DECISIONS ledger): dawn-arc path reveal, hero
+      SkSL shader, ambient glow, tasbih bead pulse + count-up tick,
+      countdown digit roll, pull-to-refresh arc, verse-share Skia cards.
+- [ ] MoreScreen adoption of the DS rows (RadioRow/ListRow/Sheet replacing
+      PickerModal) + streak opt-in toggle + a Downloads row (per-surah
+      delete list, total storage).
+- [ ] Ayah-timing artifact (QUL segments) as a pinned pipeline artifact →
+      unlocks seek-by-ayah, "Ayah 3 of 7", play-from-here, reciting-follow.
+- [ ] GPS-once onboarding option (manual city stays the baseline).
+- [ ] Widget follow-ups: Forest palette variant, OS configuration UI
+      (pinned prayer), Ramadan suhoor/iftar variant, Newsreader embedding
+      in the extension; device-pass: widget render/tap-through/dark mode.
+- [ ] iOS evidence sweep (8 cells) on a fresh release build; Android done
+      2026-07-31.
+- [ ] Ramadan card on Today: restyle to ListCard rows (kept load-bearing
+      as-is this pass).
