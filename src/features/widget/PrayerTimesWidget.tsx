@@ -23,6 +23,8 @@ export interface WidgetPrayerRow {
   /** Formatted local time, e.g. "5:27 AM". */
   time: string;
   isNext: boolean;
+  /** Already fired today (§6: past columns recede to the icon color). */
+  isPast?: boolean;
 }
 
 export interface PrayerTimesWidgetProps {
@@ -99,7 +101,8 @@ export function PrayerTimesWidget({
               maxLines={1}
               style={{
                 fontSize: 11,
-                color: (p.isNext ? c.accent : c.secondary) as `#${string}`,
+                color: (p.isNext ? c.gold : c.secondary) as `#${string}`,
+                ...(p.isNext ? { fontWeight: 'bold' as const } : {}),
               }}
             />
             <TextWidget
@@ -108,7 +111,7 @@ export function PrayerTimesWidget({
               style={{
                 fontSize: 13,
                 fontWeight: 'bold',
-                color: c.text as `#${string}`,
+                color: (p.isNext ? c.gold : p.isPast ? c.secondary : c.text) as `#${string}`,
                 marginTop: 2,
               }}
             />

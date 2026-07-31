@@ -434,7 +434,13 @@
     "skipBack": "Skip back 15 seconds",
     "skipForward": "Skip forward 15 seconds",
     "expand": "Open player",
-    "positionOf": "{{position}} / {{duration}}"
+    "positionOf": "{{position}} / {{duration}}",
+    "preparingOffline": "Preparing recitation — plays offline after",
+    "keepOffline": "Keep offline · {{size}} MB",
+    "keptOffline": "Kept offline",
+    "removeDownload": "Remove download",
+    "downloadingPct": "Downloading… {{pct}}%",
+    "downloadFailed": "Download failed — try again on a better connection"
   },
   "notFound": {
     "title": "Screen not found",

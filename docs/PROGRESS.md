@@ -739,3 +739,12 @@ custom TabBar, Tasbih replaces Ask in the tab row.
   with hero/zakat/continue-chip migrated off hand-passed colors; Divider
   tones/inset. Verified live on iOS sim (visual parity) + Android emulator
   (reader healthy). 546/546 tests green.
+- Phase 4 (screens): 01 Today, 04 Qibla, 05 Tasbih (+round machine), 02/03
+  Reader+Player, 06 Onboarding, 08 Calendar+Zakat all restyled per §6 with
+  copy per §7, one atomic commit each, tests updated in-commit, live iOS
+  sim verification per screen. 07 widgets: iOS NextPrayer widget (expo-
+  widgets + @expo/ui, timeline unit-tested, native offline countdown) +
+  Android §6 alignment. Visible changes for Zohaib: sunrise left the Today
+  list (5 rows per design); countdown shows calm minute forms; tasbih is a
+  guided 3-round set now; calendar pages by hijri month; zakat result moved
+  below the form with Save/export.

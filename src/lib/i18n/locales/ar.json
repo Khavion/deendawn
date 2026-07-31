@@ -459,7 +459,13 @@
     "skipBack": "رجوع 15 ثانية",
     "skipForward": "تقدم 15 ثانية",
     "expand": "افتح المشغل",
-    "positionOf": "{{position}} / {{duration}}"
+    "positionOf": "{{position}} / {{duration}}",
+    "preparingOffline": "يتم تجهيز التلاوة — تعمل دون اتصال بعدها",
+    "keepOffline": "احتفظ بها دون اتصال · {{size}} م.ب",
+    "keptOffline": "محفوظة دون اتصال",
+    "removeDownload": "إزالة التنزيل",
+    "downloadingPct": "جارٍ التنزيل… {{pct}}%",
+    "downloadFailed": "فشل التنزيل — حاول مجدداً باتصال أفضل"
   },
   "notFound": {
     "title": "الصفحة غير موجودة",

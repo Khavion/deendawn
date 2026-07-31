@@ -58,6 +58,7 @@ export function buildPrayerWidgetTree(now: Date = new Date()): React.ReactElemen
       name: i18n.t(`prayers.${key}`),
       time: isValidTime(t) ? formatTimeInZone(t, { locale: digitLocale(language) }) : '—',
       isNext: next?.key === key,
+      isPast: isValidTime(t) && t.getTime() <= now.getTime() && next?.key !== key,
     };
   });
 

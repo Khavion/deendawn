@@ -916,3 +916,28 @@ prev/next semantics; shipped as ±15s skips with truthful a11y labels),
 "Ayah 3 of 7" in the position caption, play-from-here and repeat-AYAH in
 the actions sheet, and the reciting-ayah gold frame + "Reciting" caption
 (audio-follow highlighting). Repeat is repeat-SURAH, labeled as such.
+
+## 2026-07-31 — iOS NextPrayer widget shipped app-side (handoff screen 07)
+
+Route: official expo-widgets (57.0.7) + @expo/ui (57.0.8) for the SwiftUI
+tree — @bacons/apple-targets remains the documented escape hatch
+(docs/WIDGET.md), never both. The widget extension has NO i18n runtime, so
+the timeline (src/features/widget/timeline.ts, unit-tested incl. high-lat
+and midnight-crossing) precomputes every localized string into entry props;
+one entry per prayer boundary, and the countdown is a native timerInterval
+Text — it ticks offline with zero refresh budget, so gap 28's "never stale
+>1 min" is beaten outright. Registration + refresh live in
+nextPrayerWidget.ts, called from the same reschedule pass as the Android
+refresh; both are lazy, platform-guarded, silent no-ops when absent.
+Families: systemSmall/Medium + accessoryRectangular/Inline. Palettes: Paper
+(light) / Night gold (dark) via the environment scheme; the Forest variant,
+the OS configuration UI (pinned prayer), and the Ramadan variant are logged
+follow-ups. Fonts: system SERIF design stands in for Newsreader inside the
+extension (custom-font embedding is a documented alpha gap). Android widget
+aligned to §6: next column gold semibold, past columns recede; absolute
+times stay (no live-countdown primitive in RemoteViews — decided earlier).
+VERIFICATION LIMIT: simulator builds compile the extension, but placing a
+home-screen widget cannot be driven headlessly — widget rendering,
+tap-through, and dark mode are TESTPLAN device-pass items, and EAS
+provisioning of the extension still waits on Zohaib's Apple account
+(BLOCKERS).

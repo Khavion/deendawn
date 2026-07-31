@@ -17,6 +17,15 @@ import {
   type RateChoice,
   type SleepChoice,
 } from '../sleepTimer';
+import {
+  deleteSurahAudio,
+  downloadBytes,
+  ensureSurahAudio,
+  isMarkedDownloaded,
+  markDownloaded,
+  type AudioDownloadState,
+} from '../downloads/downloadManager';
+import { resolvePlayableUri } from '../downloads/resolveSource';
 import { surahAudioUrl } from '../urls';
 import {
   AppPressable,
@@ -33,6 +42,17 @@ import { useTokens } from '@/src/lib/theme/useTokens';
 
 const SAVE_INTERVAL_SECONDS = 5;
 const SKIP_SECONDS = 15;
+
+/** Documents dir via lazy expo-file-system (absent in jest — downloads off). */
+function getDocumentsDir(): string | null {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports -- lazy native
+    const { Paths } = require('expo-file-system');
+    return String(Paths.document.uri).replace(/\/+$/, '');
+  } catch {
+    return null;
+  }
+}
 
 /**
  * Streaming player for one surah (handoff §6 screens 02/03): the collapsed
@@ -73,7 +93,11 @@ function AudioBarInner({
   const t = useTokens(nightWarm ? 'nightWarm' : undefined);
   const { t: tr } = useTranslation();
   const { store } = useSettings();
-  const url = surahAudioUrl(source.baseUrl, source.reciterId, surah, source.fileExt);
+  // Local-first: a kept-offline surah plays from its verified file.
+  const documentsDir = getDocumentsDir();
+  const url = documentsDir
+    ? resolvePlayableUri(source, surah, store, documentsDir).uri
+    : surahAudioUrl(source.baseUrl, source.reciterId, surah, source.fileExt);
   const player = useAudioPlayer({ uri: url });
   const status = useAudioPlayerStatus(player);
   const [started, setStarted] = useState(false);
@@ -82,6 +106,8 @@ function AudioBarInner({
   const [repeatOn, setRepeatOn] = useState(false);
   const [rate, setRate] = useState<RateChoice>(1);
   const [sleep, setSleep] = useState<SleepChoice>(0);
+  const [kept, setKept] = useState(() => isMarkedDownloaded(store, source.reciterId, surah));
+  const [dl, setDl] = useState<AudioDownloadState>({ phase: 'idle' });
   const sleepAtRef = useRef<Date | null>(null);
   const startedRef = useRef(false);
   const lastSavedRef = useRef(0);
@@ -206,6 +232,35 @@ function AudioBarInner({
     const next = nextSleepChoice(sleep);
     setSleep(next);
     sleepAtRef.current = sleepDeadline(next, new Date());
+  };
+
+  // Keep offline (owner decision: streaming + saved copies). Consent is the
+  // size shown in the control itself; the download verifies against the
+  // pinned audio.lock hash before it is ever marked kept.
+  const dir = getDocumentsDir();
+  const canDownload = !!dir && !source.placeholder && downloadBytes(source.reciterId, surah) !== null;
+  const sizeMb = Math.max(1, Math.round((downloadBytes(source.reciterId, surah) ?? 0) / 1_000_000));
+  const toggleOffline = async () => {
+    if (!dir) return;
+    // eslint-disable-next-line @typescript-eslint/no-require-imports -- lazy native
+    const { expoAudioDownloadPlatform } = require('../downloads/platform');
+    if (kept) {
+      await deleteSurahAudio(source.reciterId, surah, { documentsDir: dir }, expoAudioDownloadPlatform, store);
+      setKept(false);
+      setDl({ phase: 'idle' });
+      return;
+    }
+    const final = await ensureSurahAudio(
+      source.reciterId,
+      surah,
+      { baseUrl: source.baseUrl, documentsDir: dir, allowCellular: true },
+      expoAudioDownloadPlatform,
+      setDl
+    );
+    if (final.phase === 'ready') {
+      markDownloaded(store, source.reciterId, surah, true);
+      setKept(true);
+    }
   };
 
   const busy = started && (status.isBuffering || !status.isLoaded);
@@ -354,6 +409,29 @@ function AudioBarInner({
               </AppText>
             </AppPressable>
           </View>
+
+          {canDownload && (
+            <AppPressable
+              accessibilityRole="button"
+              accessibilityState={{ selected: kept }}
+              testID="player-keep-offline"
+              haptic="select"
+              hitSlop={8}
+              onPress={() => void toggleOffline()}
+            >
+              <AppText variant="caption" color={kept ? t.ochre : t.textSecondary}>
+                {dl.phase === 'downloading'
+                  ? tr('audio.downloadingPct', {
+                      pct: dl.totalBytes > 0 ? Math.round((dl.receivedBytes / dl.totalBytes) * 100) : 0,
+                    })
+                  : dl.phase === 'failed'
+                    ? tr('audio.downloadFailed')
+                    : kept
+                      ? `${tr('audio.keptOffline')} · ${tr('audio.removeDownload')}`
+                      : tr('audio.keepOffline', { size: sizeMb })}
+              </AppText>
+            </AppPressable>
+          )}
         </View>
       </Sheet>
     </>

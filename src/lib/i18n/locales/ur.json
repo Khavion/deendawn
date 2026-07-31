@@ -435,7 +435,13 @@
     "skipBack": "15 سیکنڈ پیچھے",
     "skipForward": "15 سیکنڈ آگے",
     "expand": "پلیئر کھولیں",
-    "positionOf": "{{position}} / {{duration}}"
+    "positionOf": "{{position}} / {{duration}}",
+    "preparingOffline": "تلاوت تیار ہو رہی ہے — اس کے بعد آف لائن چلے گی",
+    "keepOffline": "آف لائن رکھیں · {{size}} MB",
+    "keptOffline": "آف لائن محفوظ",
+    "removeDownload": "ڈاؤن لوڈ ہٹائیں",
+    "downloadingPct": "ڈاؤن لوڈ ہو رہا ہے… {{pct}}%",
+    "downloadFailed": "ڈاؤن لوڈ ناکام — بہتر کنکشن پر دوبارہ کوشش کریں"
   },
   "notFound": {
     "title": "صفحہ نہیں ملا",
