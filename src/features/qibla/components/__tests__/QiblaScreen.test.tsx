@@ -23,7 +23,9 @@ jest.mock('expo-location', () => ({
 }));
 jest.mock('expo-haptics', () => ({
   selectionAsync: jest.fn(async () => {}),
+  impactAsync: jest.fn(async () => {}),
   notificationAsync: jest.fn(async () => {}),
+  ImpactFeedbackStyle: { Light: 'light', Medium: 'medium' },
   NotificationFeedbackType: { Success: 'success' },
 }));
 jest.mock('react-native-safe-area-context', () => ({
@@ -79,20 +81,25 @@ describe('QiblaScreen', () => {
     // Facing north (0°): qibla ≈ 43° to the right.
     await emit({ trueHeading: 0, magHeading: 0, accuracy: 3 });
     expect(view.getByTestId('qibla-status').props.children).toMatch(/right/);
-    expect(Haptics.selectionAsync).not.toHaveBeenCalled();
+    expect(Haptics.impactAsync).not.toHaveBeenCalled();
 
     // Rotate straight at the qibla — smoothing needs a few samples to converge.
     for (let i = 0; i < 24; i++) await emit({ trueHeading: 43, magHeading: 43, accuracy: 3 });
-    expect(view.getByTestId('qibla-status').props.children).toMatch(/Facing the qibla/);
-    expect(Haptics.selectionAsync).toHaveBeenCalled();
-    expect(Haptics.notificationAsync).toHaveBeenCalledTimes(1);
+    expect(view.getByTestId('qibla-status').props.children).toMatch(/You are facing the qibla/);
+    // Celebration grammar (§2): exactly ONE detent, no other haptic.
+    expect(Haptics.impactAsync).toHaveBeenCalledTimes(1);
+    expect(Haptics.impactAsync).toHaveBeenCalledWith('medium');
+    expect(Haptics.notificationAsync).not.toHaveBeenCalled();
 
-    // Overshoot far right: guidance flips to the left.
+    // Overshoot far right: guidance flips to the left and the detent re-arms.
     for (let i = 0; i < 40; i++) await emit({ trueHeading: 100, magHeading: 100, accuracy: 3 });
     expect(view.getByTestId('qibla-status').props.children).toMatch(/left/);
-    // Success haptic stays once-per-session.
-    expect(Haptics.notificationAsync).toHaveBeenCalledTimes(1);
-  }, 15000);
+    expect(Haptics.impactAsync).toHaveBeenCalledTimes(1);
+
+    // Return to alignment: the re-armed detent fires exactly once more.
+    for (let i = 0; i < 40; i++) await emit({ trueHeading: 43, magHeading: 43, accuracy: 3 });
+    expect(Haptics.impactAsync).toHaveBeenCalledTimes(2);
+  }, 20000);
 
   test('magnetic fallback shows the caveat chip; calibration chip on low accuracy', async () => {
     const { view } = await renderQibla({ 'settings.v1': HOUSTON_SETTINGS });

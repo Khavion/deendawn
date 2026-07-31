@@ -53,3 +53,39 @@ export function relativeQibla(bearing: number, heading: number, tolerance = 3): 
     direction: aligned ? 'ahead' : turn > 0 ? 'right' : 'left',
   };
 }
+
+/**
+ * Alignment with hysteresis (handoff gap 17): enter at ±3°, exit only past
+ * ±5°, so the celebration never flutters at the boundary and the detent
+ * re-arms only after a real departure.
+ */
+export function alignedWithHysteresis(
+  wasAligned: boolean,
+  turn: number,
+  enter = 3,
+  exit = 5
+): boolean {
+  const abs = Math.abs(turn);
+  return wasAligned ? abs <= exit : abs <= enter;
+}
+
+const EARTH_RADIUS_KM = 6371;
+
+/** Great-circle distance from `from` to the Kaaba, in km (haversine). */
+export function distanceToKaabaKm(from: GeoCoordinates): number {
+  const phi1 = rad(from.latitude);
+  const phi2 = rad(KAABA.latitude);
+  const dPhi = rad(KAABA.latitude - from.latitude);
+  const dLon = rad(KAABA.longitude - from.longitude);
+  const a =
+    Math.sin(dPhi / 2) ** 2 + Math.cos(phi1) * Math.cos(phi2) * Math.sin(dLon / 2) ** 2;
+  return 2 * EARTH_RADIUS_KM * Math.asin(Math.sqrt(a));
+}
+
+export type CompassPoint = 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw';
+
+/** Nearest 8-point compass word for a bearing (no-compass guidance text). */
+export function compassPoint(bearing: number): CompassPoint {
+  const points: CompassPoint[] = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw'];
+  return points[Math.round((((bearing % 360) + 360) % 360) / 45) % 8];
+}

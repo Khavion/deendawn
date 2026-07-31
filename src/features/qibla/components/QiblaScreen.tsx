@@ -1,69 +1,64 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AccessibilityInfo, ScrollView, StyleSheet, View } from 'react-native';
-import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
+import { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { qiblaBearing, relativeQibla } from '../bearing';
+import {
+  alignedWithHysteresis,
+  compassPoint,
+  distanceToKaabaKm,
+  qiblaBearing,
+  relativeQibla,
+} from '../bearing';
 import { useHeading } from '../useHeading';
 import { CityPickerModal } from '../../prayer-times/components/CityPickerModal';
 import { useSettings } from '../../settings/SettingsContext';
 import { resolveLocation } from '../../settings/settingsStore';
-import { AppPressable, AppText } from '@/src/components/ui';
-import { IconSymbol } from '@/components/ui/icon-symbol';
+import { AppPressable, AppText, CompassDial, Marker } from '@/src/components/ui';
+import { digitLocale, localizeNumber } from '@/src/lib/i18n/format';
 import { useHaptics } from '@/src/lib/haptics';
-import { elevation, fonts, fontSize, radius, richMode, spacing } from '@/src/lib/theme/tokens';
-import { useThemeMode } from '@/src/lib/theme/ThemeProvider';
+import { celebration, radius, spacing } from '@/src/lib/theme/tokens';
 import { useScrollInsets } from '@/src/lib/theme/useScrollInsets';
 import { useTokens } from '@/src/lib/theme/useTokens';
 import { useLayout } from '@/src/lib/theme/useLayout';
 import { useDeviceTier } from '@/src/lib/theme/useDeviceTier';
 
-const RING_SIZE = 280;
+const RING_SIZE = 292;
 
 export function QiblaScreen() {
   const insets = useSafeAreaInsets();
   const { wide } = useLayout();
-  // The dial scales up on tablet-class widths; useWindowDimensions keeps it
-  // live across iPad window resizes.
+  // The dial scales up on tablet-class widths.
   const ringSize = wide ? 360 : RING_SIZE;
   const t = useTokens();
   // top:true — unlike the other tab screens, Qibla's MAIN state has no
-  // insets.top container padding (only its empty/permission branches do);
-  // the sweep caught the title under the status bar in all 8 cells.
+  // insets.top container padding (only its empty/permission branches do).
   const androidInsets = useScrollInsets({
     top: true,
     bottom: 'tabs',
     baseTop: spacing.m,
     baseBottom: spacing.l,
   });
-  const mode = useThemeMode();
-  const rm = richMode(mode);
   const { flat } = useDeviceTier();
   const h = useHaptics();
-  const { t: tr } = useTranslation();
+  const { t: tr, i18n } = useTranslation();
   const { settings, update } = useSettings();
   const [pickerOpen, setPickerOpen] = useState(false);
   const location = resolveLocation(settings);
   // Rotation lives on the UI thread at full sensor rate (Reanimated shared
   // values) — React state below only updates at the hook's throttled cadence
   // for logic (alignment styling, chips, haptics). Values are direct
-  // assignments, not springs: the needle TRACKS the sensor (functional
+  // assignments, not springs: the rose TRACKS the sensor (functional
   // motion), so Reduce Motion needs no special casing here.
   const roseSv = useSharedValue(0);
-  const needleSv = useSharedValue(0);
-  const bearingRef = useRef<number | null>(null);
-  const { heading, trueNorth, accuracy, permission, available, requestPermission } = useHeading((deg) => {
-    roseSv.value = -deg;
-    if (bearingRef.current !== null) {
-      needleSv.value = relativeQibla(bearingRef.current, deg).turn;
+  const { heading, trueNorth, accuracy, permission, available, requestPermission } = useHeading(
+    (deg) => {
+      roseSv.value = -deg;
     }
-  });
+  );
   const roseStyle = useAnimatedStyle(() => ({
     transform: [{ rotate: `${roseSv.value}deg` }],
-  }));
-  const needleStyle = useAnimatedStyle(() => ({
-    transform: [{ rotate: `${needleSv.value}deg` }],
   }));
 
   const bearing = useMemo(
@@ -71,27 +66,35 @@ export function QiblaScreen() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [location?.latitude, location?.longitude]
   );
-  useEffect(() => {
-    bearingRef.current = bearing;
-  }, [bearing]);
+  const distanceKm = useMemo(
+    () => (location ? Math.round(distanceToKaabaKm(location) / 10) * 10 : null),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [location?.latitude, location?.longitude]
+  );
 
   const rel = bearing !== null && heading !== null ? relativeQibla(bearing, heading) : null;
 
-  // Haptics: edge-triggered tick on entering the ±3° window; one Success per mount.
-  const wasAligned = useRef(false);
-  const celebrated = useRef(false);
+  // Alignment with hysteresis (handoff gap 17): enter ±3°, exit past ±5° —
+  // the celebration cannot flutter, and the single detent re-arms only after
+  // a real departure.
+  const [aligned, setAligned] = useState(false);
   useEffect(() => {
-    if (!rel) return;
-    if (rel.aligned && !wasAligned.current) {
-      h.select();
-      AccessibilityInfo.announceForAccessibility(tr('qibla.alignedAnnounce'));
-      if (!celebrated.current) {
-        celebrated.current = true;
-        h.success();
-      }
+    if (!rel) {
+      setAligned(false);
+      return;
     }
-    wasAligned.current = rel.aligned;
-  }, [rel?.aligned]); // eslint-disable-line react-hooks/exhaustive-deps
+    setAligned((prev) => alignedWithHysteresis(prev, rel.turn));
+  }, [rel?.turn]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Celebration grammar (§2): exactly ONE detent on entering alignment.
+  const wasAligned = useRef(false);
+  useEffect(() => {
+    if (aligned && !wasAligned.current) {
+      h.detent();
+      AccessibilityInfo.announceForAccessibility(tr('qibla.alignedAnnounce'));
+    }
+    wasAligned.current = aligned;
+  }, [aligned]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!location) {
     return (
@@ -102,7 +105,7 @@ export function QiblaScreen() {
           { backgroundColor: t.bgCanvas, paddingTop: insets.top },
         ]}
       >
-        <IconSymbol name="safari.fill" size={44} color={t.accent} />
+        <Marker size={12} tone="ochre" />
         <AppText variant="title" style={styles.centerText}>
           {tr('qibla.title')}
         </AppText>
@@ -140,7 +143,7 @@ export function QiblaScreen() {
           { backgroundColor: t.bgCanvas, paddingTop: insets.top },
         ]}
       >
-        <IconSymbol name="safari.fill" size={44} color={t.accent} />
+        <Marker size={12} tone="ochre" />
         <AppText variant="reading" style={[styles.centerText, { color: t.textSecondary }]}>
           {tr('qibla.permissionNeeded')}
         </AppText>
@@ -158,105 +161,137 @@ export function QiblaScreen() {
     );
   }
 
-  const statusText = rel
-    ? rel.aligned
-      ? tr('qibla.aligned')
-      : rel.direction === 'right'
-        ? tr('qibla.turnRight', { degrees: Math.round(Math.abs(rel.turn)) })
-        : tr('qibla.turnLeft', { degrees: Math.round(Math.abs(rel.turn)) })
-    : undefined;
+  const noSensor = available === false;
+  const guidance = noSensor
+    ? tr('qibla.noCompassTitle')
+    : rel
+      ? aligned
+        ? tr('qibla.facingFull')
+        : rel.direction === 'right'
+          ? tr('qibla.turnGentleRight')
+          : tr('qibla.turnGentleLeft')
+      : tr('qibla.calibrate');
+  const guidanceCaption = noSensor
+    ? null
+    : rel
+      ? aligned
+        ? tr('qibla.holdSteady')
+        : tr('qibla.toGo', { degrees: localizeNumber(Math.round(Math.abs(rel.turn)), i18n.language) })
+      : null;
+
+  const cardinals = {
+    north: tr('qibla.northMarker'),
+    east: tr('qibla.eastMarker'),
+    south: tr('qibla.southMarker'),
+    west: tr('qibla.westMarker'),
+  };
 
   return (
     <View style={[styles.container, { backgroundColor: t.bgCanvas }]}>
-      {/* Scrollable so large type sizes degrade by scrolling instead of
-          pushing the calibration chips off-screen; `automatic` handles the
-          status-bar top and the floating tab bar bottom. */}
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         contentContainerStyle={[styles.scrollContent, androidInsets]}
       >
-        <AppText variant="title" style={styles.header}>
-          {tr('qibla.title')}
-        </AppText>
+        <View style={styles.header}>
+          <AppText variant="subtitle">{tr('qibla.title')}</AppText>
+          {bearing !== null && distanceKm !== null && (
+            <AppText variant="caption" style={{ color: t.textSecondary }}>
+              {tr('qibla.routeLine', {
+                city: location.label,
+                distance: new Intl.NumberFormat(digitLocale(i18n.language)).format(distanceKm),
+              })}
+            </AppText>
+          )}
+        </View>
 
         <View
           style={styles.compassArea}
           accessible
-          accessibilityLabel={statusText}
+          accessibilityLabel={guidance}
           testID="compass"
         >
-          <View
-            style={[
-              styles.ring,
-              {
-                width: ringSize,
-                height: ringSize,
-                borderRadius: ringSize / 2,
-                backgroundColor: rel?.aligned ? t.accentSoft : t.bgSurface,
-                borderColor: rel?.aligned ? t.success : t.border,
-              },
-              flat ? undefined : elevation[rm].e2,
-            ]}
-          >
-            {/* Compass rose: cardinal marks rotate opposite the device
-                heading, like a physical compass card. E/W are PHYSICAL
-                directions — absolute left/right on purpose, never flipped
-                by UI direction. */}
-            <Animated.View style={[styles.rose, roseStyle]}>
-              <AppText variant="caption" style={[styles.north, { color: t.textSecondary }]}>
-                {tr('qibla.northMarker')}
-              </AppText>
-              <View style={styles.eastWrap}>
-                <AppText variant="caption" style={{ color: t.icon }}>
-                  {tr('qibla.eastMarker')}
-                </AppText>
-              </View>
-              <View style={styles.southWrap}>
-                <AppText variant="caption" style={{ color: t.icon }}>
-                  {tr('qibla.southMarker')}
-                </AppText>
-              </View>
-              <View style={styles.westWrap}>
-                <AppText variant="caption" style={{ color: t.icon }}>
-                  {tr('qibla.westMarker')}
-                </AppText>
-              </View>
-            </Animated.View>
-            {/* Needle points toward the qibla relative to the device. Hidden
-                when there is no magnetometer — a needle that cannot move
-                contradicts the guidance text (sweep finding). */}
-            {available !== false && (
-              <Animated.View testID="needle" style={[styles.needleWrap, needleStyle]}>
-                <View
-                  style={[
-                    styles.needle,
-                    {
-                      backgroundColor: rel?.aligned ? t.success : t.accent,
-                      height: ringSize / 2 - spacing.xl,
-                    },
-                  ]}
-                />
-                <View style={[styles.needleDot, { backgroundColor: t.ochre }]} />
-              </Animated.View>
-            )}
-          </View>
-
-          <AppText
-            variant="bodyStrong"
-            testID="qibla-status"
-            style={[styles.status, rel?.aligned && { color: t.success }]}
-          >
-            {/* No heading events yet: calibration guidance while the sensor
-                warms up, or the explicit no-compass state when the hardware
-                is absent — never a bare dash (sweep findings). */}
-            {statusText ?? (available === false ? tr('qibla.noCompass') : tr('qibla.calibrate'))}
-          </AppText>
+          {/* Radial bloom behind the dial while aligned (celebration token). */}
+          {aligned && !flat && (
+            <View
+              pointerEvents="none"
+              style={[
+                styles.bloom,
+                {
+                  width: celebration.bloomSize,
+                  height: celebration.bloomSize,
+                  borderRadius: celebration.bloomSize / 2,
+                  backgroundColor: celebration.bloomColor,
+                },
+              ]}
+            />
+          )}
           {bearing !== null && (
+            <CompassDial
+              size={ringSize}
+              heading={heading}
+              bearing={bearing}
+              aligned={aligned}
+              noSensor={noSensor}
+              roseAnimatedStyle={noSensor ? undefined : roseStyle}
+              cardinals={cardinals}
+              testID="dial"
+            >
+              {noSensor ? (
+                <AppText variant="display" color={t.ochre} testID="qibla-bearing-big">
+                  {localizeNumber(Math.round(bearing), i18n.language)}°
+                </AppText>
+              ) : (
+                <>
+                  <AppText variant="title" testID="qibla-heading">
+                    {heading !== null ? `${localizeNumber(Math.round(heading), i18n.language)}°` : '·'}
+                  </AppText>
+                  <AppText
+                    variant="caption"
+                    color={aligned ? t.ochre : t.textSecondary}
+                    testID="qibla-center-caption"
+                  >
+                    {aligned
+                      ? tr('qibla.facing')
+                      : tr('qibla.bearingAt', {
+                          degrees: localizeNumber(Math.round(bearing), i18n.language),
+                        })}
+                  </AppText>
+                </>
+              )}
+            </CompassDial>
+          )}
+
+          {/* The no-compass card below carries its own title — no status echo. */}
+          {!noSensor && (
+            <AppText
+              variant="bodyStrong"
+              testID="qibla-status"
+              style={[styles.status, aligned && { color: t.success }]}
+            >
+              {guidance}
+            </AppText>
+          )}
+          {guidanceCaption && (
             <AppText variant="caption" style={{ color: t.textSecondary }}>
-              {tr('qibla.bearingLabel', { degrees: Math.round(bearing) })} · {location.label}
+              {guidanceCaption}
             </AppText>
           )}
         </View>
+
+        {noSensor && bearing !== null && (
+          <View
+            style={[styles.noCompassCard, { backgroundColor: t.bgSurface, borderColor: t.border }]}
+            testID="no-compass-card"
+          >
+            <AppText variant="bodyStrong">{tr('qibla.noCompassTitle')}</AppText>
+            <AppText variant="reading" style={{ color: t.textSecondary }}>
+              {tr('qibla.noCompassGuide', {
+                degrees: localizeNumber(Math.round(bearing), i18n.language),
+                point: tr(`qibla.points.${compassPoint(bearing)}`),
+              })}
+            </AppText>
+          </View>
+        )}
 
         <View style={styles.chips}>
           {heading !== null && !trueNorth && (
@@ -275,7 +310,7 @@ export function QiblaScreen() {
               testID="calibration-chip"
             >
               <AppText variant="caption" style={{ color: t.ochre }}>
-                {tr('qibla.calibrate')}
+                {accuracy <= 0 ? tr('qibla.interference') : tr('qibla.calibrate')}
               </AppText>
             </View>
           )}
@@ -298,65 +333,17 @@ const styles = StyleSheet.create({
     minHeight: 48,
     justifyContent: 'center',
   },
-  header: { marginBottom: spacing.l },
+  header: { marginBottom: spacing.l, gap: spacing.xs },
   compassArea: { alignItems: 'center', gap: spacing.l, marginTop: spacing.xl },
-  ring: {
-    borderWidth: 2,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  rose: {
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    alignItems: 'center',
-  },
-  north: { marginTop: spacing.s, fontFamily: fonts.sansSemiBold },
-  eastWrap: {
-    position: 'absolute',
-    right: spacing.s,
-    top: 0,
-    bottom: 0,
-    justifyContent: 'center',
-  },
-  southWrap: {
-    position: 'absolute',
-    bottom: spacing.s,
-    left: 0,
-    right: 0,
-    alignItems: 'center',
-  },
-  westWrap: {
-    position: 'absolute',
-    left: spacing.s,
-    top: 0,
-    bottom: 0,
-    justifyContent: 'center',
-  },
-  needleWrap: {
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-  },
-  needle: {
-    width: 4,
-    borderRadius: 2,
+  bloom: { position: 'absolute', alignSelf: 'center', top: -spacing.xxl },
+  status: { textAlign: 'center' },
+  noCompassCard: {
+    borderRadius: radius.card,
+    borderWidth: StyleSheet.hairlineWidth,
+    padding: spacing.l,
+    gap: spacing.s,
     marginTop: spacing.xl,
   },
-  needleDot: {
-    position: 'absolute',
-    top: spacing.xl - 6,
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-  },
-  status: { fontSize: fontSize.h2, lineHeight: 28 },
   chips: { alignItems: 'stretch', gap: spacing.s, marginTop: spacing.xl },
   chip: {
     borderRadius: radius.control,

@@ -71,3 +71,33 @@ describe('angle helpers', () => {
     expect(relativeQibla(10, 350)).toMatchObject({ direction: 'right' });
   });
 });
+
+describe('handoff additions', () => {
+  const { alignedWithHysteresis, distanceToKaabaKm, compassPoint } = require('../bearing');
+
+  test('hysteresis: enter at ±3, exit only past ±5', () => {
+    expect(alignedWithHysteresis(false, 2.9)).toBe(true);
+    expect(alignedWithHysteresis(false, 4)).toBe(false);
+    expect(alignedWithHysteresis(true, 4)).toBe(true); // holds inside exit band
+    expect(alignedWithHysteresis(true, 5.1)).toBe(false); // re-arms
+    expect(alignedWithHysteresis(true, -4.5)).toBe(true);
+  });
+
+  test('distance to Kaaba matches known city figures', () => {
+    // Lahore → Makkah ≈ 3,600 km great-circle (the handoff's example rounds
+    // to 3,620); zero at the Kaaba itself.
+    const lahore = distanceToKaabaKm({ latitude: 31.5204, longitude: 74.3587 });
+    expect(lahore).toBeGreaterThan(3550);
+    expect(lahore).toBeLessThan(3650);
+    const makkahLocal = distanceToKaabaKm({ latitude: 21.4225, longitude: 39.8262 });
+    expect(makkahLocal).toBeCloseTo(0, 5);
+  });
+
+  test('compassPoint maps bearings to 8-point words incl. wraparound', () => {
+    expect(compassPoint(0)).toBe('n');
+    expect(compassPoint(261)).toBe('w');
+    expect(compassPoint(226)).toBe('sw');
+    expect(compassPoint(359)).toBe('n');
+    expect(compassPoint(292.6)).toBe('nw');
+  });
+});

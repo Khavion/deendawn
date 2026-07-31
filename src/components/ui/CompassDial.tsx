@@ -1,5 +1,6 @@
 import React from 'react';
-import { Animated, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
+import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
+import Animated, { type AnimatedStyle } from 'react-native-reanimated';
 
 import { AppText } from './AppText';
 import { Gradient } from './Gradient';
@@ -32,8 +33,8 @@ export type CompassDialProps = {
   aligned: boolean;
   /** Static rose (N up) for devices without a magnetometer. */
   noSensor?: boolean;
-  /** Live rotation style from the caller's sensor pipeline. */
-  roseAnimatedStyle?: StyleProp<ViewStyle>;
+  /** Live rotation style from the caller's sensor pipeline (reanimated). */
+  roseAnimatedStyle?: StyleProp<AnimatedStyle<ViewStyle>>;
   cardinals: { north: string; east: string; south: string; west: string };
   /** Center overlay (live heading readout / bearing display). */
   children?: React.ReactNode;
@@ -60,7 +61,7 @@ export function CompassDial({
   const rm = richMode(mode);
 
   const staticRotation = noSensor || heading === null ? 0 : -heading;
-  const roseStyle: StyleProp<ViewStyle> =
+  const roseStyle: StyleProp<AnimatedStyle<ViewStyle>> =
     roseAnimatedStyle ?? { transform: [{ rotate: `${staticRotation}deg` }] };
 
   return (

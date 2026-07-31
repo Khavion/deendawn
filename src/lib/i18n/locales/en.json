@@ -106,7 +106,28 @@
     "eastMarker": "E",
     "southMarker": "S",
     "westMarker": "W",
-    "noCompass": "No compass sensor on this device — face the bearing below using a map or a physical compass"
+    "noCompass": "No compass sensor on this device — face the bearing below using a map or a physical compass",
+    "routeLine": "{{city}} → Makkah · {{distance}} km",
+    "bearingAt": "qibla at {{degrees}}°",
+    "turnGentleLeft": "Turn a little to your left",
+    "turnGentleRight": "Turn a little to your right",
+    "toGo": "{{degrees}}° to go · hold your phone flat",
+    "facing": "facing the qibla",
+    "facingFull": "You are facing the qibla",
+    "holdSteady": "Hold steady · one gentle detent confirmed it",
+    "noCompassTitle": "This device has no compass",
+    "noCompassGuide": "Face {{degrees}}° from north — {{point}}. Use a map or a physical compass to find it.",
+    "interference": "Move away from metal or magnets",
+    "points": {
+      "n": "roughly due north",
+      "ne": "roughly northeast",
+      "e": "roughly due east",
+      "se": "roughly southeast",
+      "s": "roughly due south",
+      "sw": "roughly southwest",
+      "w": "roughly due west",
+      "nw": "roughly northwest"
+    }
   },
   "more": {
     "title": "Settings",
