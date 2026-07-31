@@ -779,3 +779,11 @@ streams with sub-second start, HTTP 206 range requests confirmed. eas.json
 with audio ON; `production` deliberately stays unset until the custom
 domain exists (rule 2: our domain only). The account also holds an older
 `ummah-content-packs` bucket — untouched, flagged to Zohaib.
+
+## 2026-07-31 — Domain decided: deendawn.com (Zohaib)
+
+Zohaib will register deendawn.com and handle the Google Play account and all
+human reviewers himself. Audio custom domain will be a subdomain (plan:
+audio.deendawn.com) added as a Cloudflare zone → connected to the
+deendawn-upload bucket; production EXPO_PUBLIC_AUDIO_BASE_URL switches to it
+then. Until that lands, the r2.dev dev URL serves dev + closed test.
