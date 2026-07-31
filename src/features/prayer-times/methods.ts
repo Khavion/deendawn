@@ -27,10 +27,14 @@ export function isMethodKey(v: string): v is MethodKey {
 }
 
 /**
- * Default method by device locale: ISNA for US locale, MWL otherwise
- * (CLAUDE.md acceptance criterion 1). Region is taken from the BCP-47 tag.
+ * Default method by device locale (owner decision 2026-07-31, supersedes the
+ * ISNA-if-US-else-MWL rule): Karachi for Pakistan, ISNA for US/Canada, MWL
+ * everywhere else — always changeable in settings. Region is taken from the
+ * BCP-47 tag.
  */
 export function defaultMethodForLocale(locale: string | null | undefined): MethodKey {
   const region = (locale ?? '').split('-').map((p) => p.toUpperCase());
-  return region.includes('US') ? 'NorthAmerica' : 'MuslimWorldLeague';
+  if (region.includes('PK')) return 'Karachi';
+  if (region.includes('US') || region.includes('CA')) return 'NorthAmerica';
+  return 'MuslimWorldLeague';
 }

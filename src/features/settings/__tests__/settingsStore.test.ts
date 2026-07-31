@@ -73,9 +73,10 @@ describe('resolveLocation', () => {
 });
 
 describe('resolvePrayerConfig', () => {
-  test('auto method follows locale (US -> ISNA, PK -> MWL)', () => {
+  test('auto method follows locale (US -> ISNA, PK -> Karachi, GB -> MWL)', () => {
     expect(resolvePrayerConfig(DEFAULT_SETTINGS, 'en-US').method).toBe('NorthAmerica');
-    expect(resolvePrayerConfig(DEFAULT_SETTINGS, 'ur-PK').method).toBe('MuslimWorldLeague');
+    expect(resolvePrayerConfig(DEFAULT_SETTINGS, 'ur-PK').method).toBe('Karachi');
+    expect(resolvePrayerConfig(DEFAULT_SETTINGS, 'en-GB').method).toBe('MuslimWorldLeague');
   });
 
   test('explicit method wins over locale; other fields pass through', () => {

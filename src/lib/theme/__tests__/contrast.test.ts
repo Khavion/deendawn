@@ -5,12 +5,17 @@
  * A palette edit that breaks readability fails this suite.
  */
 import {
+  celebration,
   dimOnFeatured,
   featuredGradient,
+  heroWash,
+  latinType,
   palette,
+  periodWash,
   tajweedColors,
   textOnFeatured,
   ThemeMode,
+  withAlpha,
 } from '../tokens';
 
 function srgbChannel(v: number): number {
@@ -84,7 +89,7 @@ describe.each(MODES)('%s palette contrast', (mode) => {
 
 /** Alpha-composite an rgba() color over a hex background → hex. */
 function compositeOver(rgba: string, bgHex: string): string {
-  const m = rgba.match(/rgba\((\d+),(\d+),(\d+),([\d.]+)\)/);
+  const m = rgba.match(/rgba\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*([\d.]+)\s*\)/);
   if (!m) return rgba;
   const [r, g, b, a] = [Number(m[1]), Number(m[2]), Number(m[3]), Number(m[4])];
   const bg = bgHex.replace('#', '');
@@ -108,6 +113,73 @@ describe.each(['light', 'dark'] as const)('featured card text (%s)', (scheme) =>
       const solid = compositeOver(dimOnFeatured[scheme], stop);
       expect(contrastRatio(solid, stop)).toBeGreaterThanOrEqual(4.5);
     }
+  });
+});
+
+describe('handoff additions (design handoff 2026-07-31)', () => {
+  describe.each(MODES)('period washes (%s)', (mode) => {
+    const c = palette[mode];
+
+    test('text stays legible on every wash composited over the canvas', () => {
+      for (const spec of Object.values(periodWash[mode])) {
+        if (!spec) continue;
+        const washed = compositeOver(spec.color, c.bgCanvas);
+        expect(contrastRatio(c.textPrimary, washed)).toBeGreaterThanOrEqual(7);
+        expect(contrastRatio(c.textSecondary, washed)).toBeGreaterThanOrEqual(4.5);
+      }
+    });
+  });
+
+  // The hero fill only appears in light mode (dark/nightWarm drop the
+  // gradient per §2), so the wash-over-gradient legibility check is light-only.
+  test('hero text survives the period wash over every featured stop (light)', () => {
+    for (const wash of Object.values(heroWash)) {
+      if (!wash) continue;
+      for (const stop of featuredGradient.light) {
+        const washed = compositeOver(wash, stop);
+        expect(contrastRatio(textOnFeatured.light, washed)).toBeGreaterThanOrEqual(4.5);
+        const dim = compositeOver(dimOnFeatured.light, washed);
+        expect(contrastRatio(dim, washed)).toBeGreaterThanOrEqual(4.5);
+      }
+    }
+  });
+
+  // The hero countdown renders in ochre(dark) at `title` size (22pt serif —
+  // WCAG large text, 3:1). It sits in the hero's lower half, i.e. on the
+  // BOTTOM gradient stop; components must not move it onto the top stop,
+  // where the gold falls below 3:1.
+  test('countdown gold reaches 3:1 (large text) on the washed bottom stop', () => {
+    const bottomStop = featuredGradient.light[featuredGradient.light.length - 1];
+    for (const wash of Object.values(heroWash)) {
+      if (!wash) continue;
+      const washed = compositeOver(wash, bottomStop);
+      expect(contrastRatio(palette.dark.ochre, washed)).toBeGreaterThanOrEqual(3);
+    }
+  });
+
+  describe.each(MODES)('progress tracks (%s)', (mode) => {
+    const c = palette[mode];
+
+    test('solid ochre arc reaches 3:1 against its own faint track', () => {
+      for (const trackAlpha of [0.14, 0.16]) {
+        for (const bg of [c.bgCanvas, c.bgSurface]) {
+          const track = compositeOver(withAlpha(c.ochre, trackAlpha), bg);
+          expect(contrastRatio(c.ochre, track)).toBeGreaterThanOrEqual(3);
+        }
+      }
+    });
+  });
+
+  // The glow itself is decorative redundancy — the celebration's state is
+  // carried by the solid-ochre ring (covered by the ochre tests), the success
+  // caption, and the detent. Assert the grammar's hard limits instead.
+  test('celebration stays inside the register limits', () => {
+    expect(celebration.maxDuration).toBeLessThanOrEqual(300);
+    expect(celebration.glow.shadowColor).toBe(palette.dark.ochre);
+  });
+
+  test('numeral role keeps tabular figures (digits must not jitter)', () => {
+    expect(latinType.numeral.fontVariant).toContain('tabular-nums');
   });
 });
 

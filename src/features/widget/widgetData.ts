@@ -1,3 +1,4 @@
+import { isValidTime } from '../prayer-times/engine';
 import type { DayPrayerTimes } from '../prayer-times/types';
 
 /**
@@ -34,6 +35,10 @@ export interface WidgetSnapshot {
  * Build the snapshot from today's times + tomorrow's fajr. Including tomorrow's
  * fajr guarantees there is always a "next" prayer after isha, so the widget
  * never shows an empty state late at night.
+ *
+ * Extreme latitudes can yield Invalid Date for individual prayers (engine.ts);
+ * those entries are skipped — `.toISOString()` on them throws, which used to
+ * kill every widget refresh for Stockholm/Anchorage-class users.
  */
 export function buildWidgetSnapshot(
   today: DayPrayerTimes,
@@ -42,11 +47,11 @@ export function buildWidgetSnapshot(
   timeZone: string,
   now: Date
 ): WidgetSnapshot {
-  const prayers: WidgetPrayer[] = WIDGET_PRAYER_KEYS.map((key) => ({
-    key,
-    iso: today[key].toISOString(),
-  }));
-  prayers.push({ key: 'fajr', iso: tomorrowFajr.toISOString() });
+  const prayers: WidgetPrayer[] = [];
+  for (const key of WIDGET_PRAYER_KEYS) {
+    if (isValidTime(today[key])) prayers.push({ key, iso: today[key].toISOString() });
+  }
+  if (isValidTime(tomorrowFajr)) prayers.push({ key: 'fajr', iso: tomorrowFajr.toISOString() });
   return {
     cityLabel,
     timeZone,

@@ -702,3 +702,23 @@ functional with openly-licensed audio.
 - Waiting on Zohaib (BLOCKERS): enable R2 (card) + .env → I upload with the
   ready audio:upload script; reciter gate-5 sign-off (rec: Alafasy);
   custom domain decision for production streaming.
+
+## Session 2026-07-31 — DESIGN HANDOFF IMPLEMENTATION (phase 0 begun)
+
+Plan: implement the Claude Design handoff (8 screens, 31 components, copy
+deck) merged with the premium motion phase, per the approved 6-phase plan
+(~/.claude/plans/users-zohaibkhawaja-downloads-deendawn-elegant-owl.md).
+Six owner decisions locked (see DECISIONS 2026-07-31): streaming+downloads
+audio, transliteration-first tasbih, PK→Karachi defaults, merged scope,
+custom TabBar, Tasbih replaces Ask in the tab row.
+
+- Phase 0 DONE: withAlpha/flattenOver color helpers; periodWash/heroWash/
+  celebration/numeral tokens + AppText numeral variant; contrast suite
+  extended (2 handoff alphas AA-corrected — see DECISIONS); widget token
+  pack with drift guard + Android widget migrated off stale hexes; widget
+  high-latitude crash fixed (review finding 1); method defaults updated;
+  shared countdownFormat lib (gap 07/28 thresholds). Gates: tsc clean,
+  lint 0 errors, jest 533/533, tokens.css regenerated.
+- NOTE for Zohaib (visible change): the Today countdown will move from
+  per-second ("in 41m 30s") to the design's calmer minute forms
+  ("in 41 minutes"); "now" appears under a minute.

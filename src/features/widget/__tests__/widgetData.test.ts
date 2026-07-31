@@ -37,6 +37,34 @@ describe('buildWidgetSnapshot', () => {
     expect(s.cityLabel).toBe('Houston');
     expect(s.timeZone).toBe('America/Chicago');
   });
+
+  it('skips invalid times instead of throwing (high-latitude summer)', () => {
+    // Stockholm-class midsummer: no true night — the engine yields Invalid
+    // Date for isha (and sometimes fajr). The snapshot must simply omit them.
+    const stockholm = day({
+      fajr: 'invalid',
+      sunrise: '2026-06-21T01:30:00Z',
+      dhuhr: '2026-06-21T10:52:00Z',
+      asr: '2026-06-21T15:20:00Z',
+      maghrib: '2026-06-21T20:08:00Z',
+      isha: 'invalid',
+    });
+    const s = buildWidgetSnapshot(
+      stockholm,
+      new Date('2026-06-22T00:45:00Z'),
+      'Stockholm',
+      'Europe/Stockholm',
+      new Date()
+    );
+    expect(s.prayers.map((p) => p.key)).toEqual(['dhuhr', 'asr', 'maghrib', 'fajr']);
+    expect(nextFromSnapshot(s, new Date('2026-06-21T21:00:00Z'))?.key).toBe('fajr');
+  });
+
+  it('skips an invalid tomorrow-fajr (Anchorage polar edge)', () => {
+    const s = buildWidgetSnapshot(today, new Date('invalid'), 'Anchorage', 'America/Anchorage', new Date());
+    expect(s.prayers).toHaveLength(5);
+    expect(s.prayers.every((p) => !Number.isNaN(new Date(p.iso).getTime()))).toBe(true);
+  });
 });
 
 describe('nextFromSnapshot', () => {

@@ -16,6 +16,7 @@ const VARIANT_CAP: Record<AppTextVariant, number> = {
   link: fontScaleCaps.label,
   eyebrow: fontScaleCaps.label,
   caption: fontScaleCaps.content,
+  numeral: fontScaleCaps.content,
 };
 
 export type AppTextVariant =
@@ -28,7 +29,8 @@ export type AppTextVariant =
   | 'bodyStrong'
   | 'link'
   | 'eyebrow'
-  | 'caption';
+  | 'caption'
+  | 'numeral';
 
 export type AppTextProps = TextProps & {
   variant?: AppTextVariant;
@@ -58,8 +60,10 @@ export function AppText({ variant = 'body', color, style, ...rest }: AppTextProp
         ? t.textSecondary
         : t.textPrimary;
 
+  // `numeral` renders digits only — Urdu pins Latin digits (DECISIONS
+  // 2026-07-30 digit policy), so it keeps the serif face and tight leading.
   const urdu =
-    i18n.language === 'ur'
+    i18n.language === 'ur' && variant !== 'numeral'
       ? { fontFamily: fonts.nastaliq, lineHeight: spec.lineHeight * URDU_LINE_HEIGHT_FACTOR }
       : undefined;
 

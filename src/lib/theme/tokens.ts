@@ -15,6 +15,10 @@
  * `primarySoft` are added as clear aliases for the new UI primitives.
  */
 
+import { withAlpha } from '../color';
+
+export { withAlpha };
+
 export type ThemeMode = 'light' | 'dark' | 'nightWarm';
 
 export interface ColorTokens {
@@ -129,6 +133,7 @@ export const fontSize = {
   callout: 15,
   caption: 13,
   micro: 11,
+  numeral: 88,
 } as const;
 
 /**
@@ -226,6 +231,20 @@ export const latinType = {
     fontSize: fontSize.caption,
     lineHeight: 18,
     letterSpacing: 0.1,
+  },
+  /**
+   * The one glanceable number per screen (tasbih count; widget countdown at
+   * reduced size). Newsreader Light with tabular figures so digits don't
+   * jitter as they change (handoff §1/§3).
+   */
+  numeral: {
+    fontFamily: fonts.serifLight,
+    fontSize: fontSize.numeral,
+    lineHeight: 92,
+    letterSpacing: -1,
+    // Mutable array on purpose: RN's TextStyle.fontVariant type rejects
+    // readonly arrays.
+    fontVariant: ['tabular-nums'] as 'tabular-nums'[],
   },
 } as const;
 
@@ -380,6 +399,81 @@ export const ambientGradient: Record<'light' | 'dark', Record<DayPeriod, string[
   },
 };
 
+/**
+ * Period wash (handoff §5 gap 01) — a quiet vertical tint pinned to the top of
+ * the canvas, fading to transparent over `height` px. Keyed by the existing
+ * prayer-named DayPeriod: fajr carries the handoff's "dawn" wash, maghrib its
+ * "dusk", isha its "night"; day AND asr are deliberately washless (§6 screen 01
+ * defines exactly four hero states — the wash stays a rarity). Vertical only,
+ * so RTL needs no fork. Render with `Gradient` + pointerEvents="none".
+ */
+export interface PeriodWashSpec {
+  /** Top-stop color (alpha already applied); render as [color, transparent]. */
+  color: string;
+  /** Vertical extent of the fade, in px. */
+  height: number;
+}
+
+export const periodWash: Record<ThemeMode, Record<DayPeriod, PeriodWashSpec | null>> = (
+  ['light', 'dark', 'nightWarm'] as const
+).reduce(
+  (acc, mode) => {
+    acc[mode] = {
+      fajr: { color: withAlpha(palette[mode].ochre, 0.11), height: 400 },
+      day: null,
+      asr: null,
+      // Handoff states 15%, but light-mode textSecondary drops to 4.31:1 on
+      // the composited wash — 11% is the strongest dusk that keeps AA (the
+      // contrast suite enforces it). Dark/nightWarm keep the spec value.
+      maghrib: {
+        color: withAlpha(palette[mode].ochre, mode === 'light' ? 0.11 : 0.15),
+        height: 470,
+      },
+      // The night wash is the dark sage in every theme (spec: accent(dark) 9%).
+      isha: { color: withAlpha(palette.dark.accent, 0.09), height: 420 },
+    };
+    return acc;
+  },
+  {} as Record<ThemeMode, Record<DayPeriod, PeriodWashSpec | null>>,
+);
+
+/**
+ * Hero-interior wash — the period overlay ON the featured gradient fill
+ * (handoff §6 screen 01: 17/0/22/10%). Always the dark gold regardless of
+ * theme because it composites onto the green featured gradient.
+ */
+export const heroWash: Record<DayPeriod, string | null> = {
+  fajr: withAlpha(palette.dark.ochre, 0.17),
+  day: null,
+  asr: null,
+  maghrib: withAlpha(palette.dark.ochre, 0.22),
+  isha: withAlpha(palette.dark.ochre, 0.1),
+};
+
+/**
+ * Celebration grammar (handoff §2): qibla alignment and tasbih milestones share
+ * the exact same moment — ring/rim to solid ochre, this glow, a radial canvas
+ * bloom, ONE detent haptic, a success caption. ≤ duration.slow, opacity/
+ * transform only, never repeated while held, never particles or sound.
+ * Reduce Motion: crossfade only. The gold is the dark-gold literal in every
+ * mode (the spec states the rgba directly).
+ */
+export const celebration = {
+  /** Ring/rim glow — one RN shadow (0 0 46px rgba(198,155,95,.55)). */
+  glow: {
+    shadowColor: '#C69B5F',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.55,
+    shadowRadius: 46,
+    elevation: 12,
+  },
+  /** Radial canvas bloom behind the celebrating object (24% → transparent). */
+  bloomColor: withAlpha('#C69B5F', 0.24),
+  bloomSize: 460,
+  /** Hard ceiling for the whole moment. */
+  maxDuration: duration.slow,
+} as const;
+
 /** The one featured card's gradient fill + the text color that reads on it. */
 export const featuredGradient: Record<'light' | 'dark', string[]> = {
   light: ['#2C5646', '#23402F'],
@@ -390,7 +484,10 @@ export const textOnFeatured: Record<'light' | 'dark', string> = {
   dark: '#15181D',
 };
 export const dimOnFeatured: Record<'light' | 'dark', string> = {
-  light: 'rgba(247,246,242,0.75)',
+  // 0.75 composited to ~4.15:1 under the strongest hero period wash — below
+  // AA for the small featured-card captions. 0.82 clears 4.5:1 on every
+  // washed stop (contrast test enforces it) while still reading as secondary.
+  light: 'rgba(247,246,242,0.82)',
   // 0.66 composited to ~3.2:1 on the dark gradient stops — below AA for the
   // small featured-card captions. 0.88 clears 4.5:1 on both stops (contrast
   // test enforces it) while still reading as secondary.

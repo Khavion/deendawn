@@ -787,3 +787,49 @@ human reviewers himself. Audio custom domain will be a subdomain (plan:
 audio.deendawn.com) added as a Cloudflare zone → connected to the
 deendawn-upload bucket; production EXPO_PUBLIC_AUDIO_BASE_URL switches to it
 then. Until that lands, the r2.dev dev URL serves dev + closed test.
+
+## 2026-07-31 — Design handoff implementation begun (owner decisions locked)
+
+Claude Design delivered the full written spec (DeenDawn-Handoff.html: token
+contract, 31-gap component register, 8 screen specs, verbatim copy deck).
+Zohaib locked six decisions in-session: (1) audio stays R2 streaming AND
+gains per-surah offline downloads — audio remains the only network surface;
+(2) tasbih ships dhikr TRANSLITERATION now ("SubhanAllah — Glory be to
+Allah"), the Arabic slot is built but stays OFF until scholar gate #5;
+(3) method defaults become Karachi for PK, ISNA for US/CA, MWL elsewhere
+(supersedes ISNA-if-US-else-MWL; methods.ts + tests updated);
+(4) the handoff MERGES with the premium motion phase — handoff wins on
+layout/structure/copy, motion phase supplies animation; (5) the custom DS
+TabBar replaces NativeTabs (deliberate loss of iOS 26 Liquid Glass for
+pixel-identical platforms per handoff §2); (6) tabs become Today/Quran/
+Qibla/Tasbih/More with Ask relocated inside the Quran tab. Full plan:
+~/.claude/plans/users-zohaibkhawaja-downloads-deendawn-elegant-owl.md.
+
+## 2026-07-31 — Handoff phase 0: token deviations forced by the contrast gate
+
+Added withAlpha()/flattenOver() (src/lib/color.ts), periodWash/heroWash/
+celebration/numeral tokens, and extended the contrast suite. Two handoff
+values failed WCAG AA against real token math and were adjusted (the handoff
+itself mandates "the contrast test suite must keep passing"):
+- LIGHT dusk canvas wash 15% → 11% (textSecondary fell to 4.31:1 composited;
+  11% is the strongest dusk that holds AA). Dark/nightWarm keep 15%.
+- dimOnFeatured.light 0.75 → 0.82 (fell to 4.15:1 under the strongest hero
+  wash; same fix the dark side got on 2026-07-29). Hero wash intensities
+  (17/22/10%) are preserved as specced.
+- The hero countdown's ochre-gold is LARGE text (22pt title) and only clears
+  3:1 on the BOTTOM gradient stop — encoded as a contrast test; components
+  must keep the countdown in the hero's lower half.
+- Celebration glow is decorative redundancy (state = ochre ring + caption +
+  detent), so it carries no contrast requirement; a structural test pins the
+  ≤300ms ceiling instead.
+
+## 2026-07-31 — Widget token pack + high-latitude crash fix
+
+src/features/widget/widgetTokens.ts derives the three §6 widget palettes
+(Paper/Forest/Night) from tokens.ts with build-time alpha flattening
+(RemoteViews need solid hex); a drift-guard test pins pack values to their
+token sources. The Android widget previously shipped four stale hardcoded
+hexes — now impossible. Forest approximates the featured gradient with its
+top stop (RemoteViews cannot draw gradients). Also fixed the review-confirmed
+high-latitude crash: buildWidgetSnapshot now skips Invalid Date prayers
+(Stockholm/Anchorage fixtures added) instead of throwing on toISOString().

@@ -14,8 +14,11 @@ describe('defaultMethodForLocale', () => {
   test.each([
     ['en-US', 'NorthAmerica'],
     ['es-US', 'NorthAmerica'],
+    ['en-CA', 'NorthAmerica'],
+    ['fr-CA', 'NorthAmerica'],
+    ['ur-PK', 'Karachi'],
+    ['en-PK', 'Karachi'],
     ['en-GB', 'MuslimWorldLeague'],
-    ['ur-PK', 'MuslimWorldLeague'],
     ['ar-SA', 'MuslimWorldLeague'],
     ['fr', 'MuslimWorldLeague'],
     ['', 'MuslimWorldLeague'],

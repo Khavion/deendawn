@@ -47,6 +47,29 @@ export function toRgbaString({ r, g, b, a }: RGBA): string {
   return `rgba(${Math.round(r)}, ${Math.round(g)}, ${Math.round(b)}, ${Number(a.toFixed(3))})`;
 }
 
+/**
+ * A stated alpha of a token color (the only sanctioned way to derive a wash,
+ * track, or scrim from the palette — never hand-write an rgba literal).
+ * Replaces the input's own alpha rather than multiplying into it.
+ */
+export function withAlpha(color: string, alpha: number): string {
+  return toRgbaString({ ...parseColor(color), a: clamp01(alpha) });
+}
+
+/**
+ * Alpha-composite `color` over an opaque `base` and return a solid #rrggbb.
+ * For surfaces that cannot render alpha (Android RemoteViews widgets) — the
+ * stated-alpha token stays the source of truth, this flattens it at build
+ * time against the surface it will sit on.
+ */
+export function flattenOver(color: string, base: string): string {
+  const fg = parseColor(color);
+  const bg = parseColor(base);
+  const hex2 = (n: number) => Math.round(n).toString(16).padStart(2, '0');
+  const mix = (f: number, b: number) => f * fg.a + b * (1 - fg.a);
+  return `#${hex2(mix(fg.r, bg.r))}${hex2(mix(fg.g, bg.g))}${hex2(mix(fg.b, bg.b))}`.toUpperCase();
+}
+
 /** Linearly interpolate two colors; t in [0,1]. */
 export function mixColor(a: RGBA, b: RGBA, t: number): RGBA {
   const k = clamp01(t);
