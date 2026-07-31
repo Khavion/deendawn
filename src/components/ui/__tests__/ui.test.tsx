@@ -19,6 +19,7 @@ const VARIANTS = [
   'link',
   'eyebrow',
   'caption',
+  'numeral',
 ] as const;
 
 describe('AppText', () => {

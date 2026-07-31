@@ -16,11 +16,12 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
  *   const androidInsets = useScrollInsets({ baseTop: spacing.m, baseBottom: spacing.l });
  *
  * `top:false` for screens with a native header (the header already clears
- * the status bar). `bottom:'nav'` for pushed screens where the Material tab
- * bar is covered and only the gesture nav inset matters.
+ * the status bar). Bottom modes since the custom DS TabBar (in-flow, opaque,
+ * 66pt + safe area — handoff gap 03): `'tabs'` for screens inside the tab
+ * navigator, where the bar itself consumes the bottom inset so only the base
+ * padding is needed; `'nav'` for pushed screens that reach the screen bottom
+ * and must clear the gesture/nav area themselves.
  */
-export const ANDROID_TAB_BAR_CLEARANCE = 80;
-
 export function useScrollInsets(
   opts: {
     top?: boolean;
@@ -35,10 +36,7 @@ export function useScrollInsets(
   return {
     ...(top ? { paddingTop: insets.top + baseTop } : {}),
     ...(bottom
-      ? {
-          paddingBottom:
-            insets.bottom + (bottom === 'tabs' ? ANDROID_TAB_BAR_CLEARANCE : 0) + baseBottom,
-        }
+      ? { paddingBottom: (bottom === 'nav' ? insets.bottom : 0) + baseBottom }
       : {}),
   };
 }

@@ -11,7 +11,7 @@ OUT="${1:?usage: sweep.sh <outdir> [route ...]}"; shift || true
 mkdir -p "$OUT"
 ROUTES=("$@")
 [ ${#ROUTES[@]} -eq 0 ] && ROUTES=(
-  today quran "surah/1" "surah/2?ayah=255" ask qibla more
+  today quran "surah/1" "surah/2?ayah=255" "quran/ask" qibla more
   tasbih zakat calendar about bookmarks library "adhan-help"
 )
 

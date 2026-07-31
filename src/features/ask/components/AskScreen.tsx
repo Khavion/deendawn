@@ -20,7 +20,7 @@ type AskSource = 'quran' | 'library';
 export function AskScreen() {
   const insets = useSafeAreaInsets();
   const t = useTokens();
-  const androidInsets = useScrollInsets({ top: false, bottom: 'tabs', baseBottom: spacing.l });
+  const androidInsets = useScrollInsets({ top: false, bottom: 'nav', baseBottom: spacing.l });
   const { t: tr } = useTranslation();
   const router = useRouter();
   const db = useSQLiteContext();

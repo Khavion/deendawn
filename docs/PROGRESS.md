@@ -722,3 +722,10 @@ custom TabBar, Tasbih replaces Ask in the tab row.
 - NOTE for Zohaib (visible change): the Today countdown will move from
   per-second ("in 41m 30s") to the design's calmer minute forms
   ("in 41 minutes"); "now" appears under a minute.
+- Phase 1 DONE: custom DS TabBar (Marker extracted as its own primitive,
+  PeriodEyebrow refactored onto it), tab lineup Today/Quran/Qibla/Tasbih/
+  More, Ask nested under Quran with a header link, scroll-inset re-point,
+  FullAdhanPlayer exact clearance, reader full-screen back gesture, e2e/
+  sweep re-wired, tabs.tasbih strings (@draft ur/ar). Live-verified on iOS
+  sim; Android pass owed at the Phase-2 rebuild. Gates: tsc/lint/jest
+  541/541 green.

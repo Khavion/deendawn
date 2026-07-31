@@ -7,6 +7,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AdhanPrayer } from './scheduler';
 import { AppPressable, AppText } from '@/src/components/ui';
+import { TAB_BAR_HEIGHT } from '@/src/components/ui/TabBar';
 import { radius, spacing } from '@/src/lib/theme/tokens';
 import { useTokens } from '@/src/lib/theme/useTokens';
 
@@ -100,10 +101,10 @@ export function FullAdhanPlayer() {
 }
 
 // The banner mounts outside the navigation tree, so a top placement would sit
-// on pushed screens' native headers. Bottom-anchored it floats above the
-// floating tab bar (height not queryable with NativeTabs — a visual constant,
-// verified on-sim) and simply rides a little higher on pushed screens.
-const TAB_BAR_CLEARANCE = 64;
+// on pushed screens' native headers. Bottom-anchored it floats just above the
+// DS tab bar (exact height now that the bar is ours) and simply rides a
+// little higher on pushed screens.
+const TAB_BAR_CLEARANCE = TAB_BAR_HEIGHT + spacing.s;
 
 const styles = StyleSheet.create({
   banner: {

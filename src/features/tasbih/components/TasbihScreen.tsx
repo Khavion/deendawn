@@ -1,7 +1,7 @@
-import { Stack } from 'expo-router';
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AccessibilityInfo, ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
   loadTasbih,
@@ -32,7 +32,8 @@ import { useDeviceTier } from '@/src/lib/theme/useDeviceTier';
 
 export function TasbihScreen() {
   const t = useTokens();
-  const androidInsets = useScrollInsets({ top: false, bottom: 'nav', baseBottom: spacing.xl });
+  const insets = useSafeAreaInsets();
+  const androidInsets = useScrollInsets({ top: false, bottom: 'tabs', baseBottom: spacing.xl });
   const mode = useThemeMode();
   const rm = richMode(mode);
   const { flat } = useDeviceTier();
@@ -73,8 +74,11 @@ export function TasbihScreen() {
   const displayCount = milestone === 'round' ? state.target : state.count;
 
   return (
-    <View style={[styles.container, { backgroundColor: t.bgCanvas }]}>
-      <Stack.Screen options={{ title: tr('tasbih.title') }} />
+    // Tab screen with no header since the 2026-07-31 lineup change — the
+    // container clears the status bar itself on both platforms.
+    <View
+      style={[styles.container, { backgroundColor: t.bgCanvas, paddingTop: insets.top + spacing.m }]}
+    >
       <Gradient
         pointerEvents="none"
         colors={ambientGradient[rm].day}

@@ -24,3 +24,7 @@ Added 2026-07-30 (polish pass): `qibla.eastMarker/southMarker/westMarker`
 SHORTENED `quran.searchPlaceholder`, `library.searchPlaceholder`,
 `ask.placeholder`, `tasbih.labelPlaceholder` (font-scale-2.0 clipping fix) —
 ur + ar machine-drafted, covered by the blanket `@draft` rows above.
+
+Added 2026-07-31 (tab-lineup change): `tabs.tasbih` — ur "تسبیح" / ar
+"التسبيح", trimmed from the already-drafted `more.tasbih` compound ("Tasbih
+counter"); machine-drafted, covered by the blanket `@draft` rows above.

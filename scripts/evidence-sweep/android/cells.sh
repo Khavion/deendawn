@@ -68,7 +68,7 @@ for CELL in "${CELLS[@]}"; do
     e-fs20)    set_scale 2.0; "$SWEEP" "$BASE/$CELL" ;;
     e2-fs13)   set_scale 1.3; "$SWEEP" "$BASE/$CELL" "${KEY_ROUTES[@]}" ;;
     k-fs085)   set_scale 0.85; "$SWEEP" "$BASE/$CELL" "${KEY_ROUTES[@]}" ;;
-    f-ar)      switch_language ar; "$SWEEP" "$BASE/$CELL" today quran "surah/2?ayah=255" more qibla calendar zakat tasbih about ask
+    f-ar)      switch_language ar; "$SWEEP" "$BASE/$CELL" today quran "surah/2?ayah=255" more qibla calendar zakat tasbih about "quran/ask"
                switch_language en ;;
     g-ur)      switch_language ur; "$SWEEP" "$BASE/$CELL" "${KEY_ROUTES[@]}"
                switch_language en ;;

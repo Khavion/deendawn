@@ -25,7 +25,9 @@
     "PeriodEyebrow": "src/components/ui/PeriodEyebrow.tsx",
     "Screen": "src/components/ui/Screen.tsx",
     "SectionRule": "src/components/ui/SectionRule.tsx",
-    "Skeleton": "src/components/ui/Skeleton.tsx"
+    "Skeleton": "src/components/ui/Skeleton.tsx",
+    "Marker": "src/components/ui/Marker.tsx",
+    "TabBar": "src/components/ui/TabBar.tsx"
   },
   "guidelinesGlob": [
     "docs/DESIGN.md"

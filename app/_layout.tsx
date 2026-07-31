@@ -96,10 +96,16 @@ function ThemedNavigation() {
     <ThemeProvider value={navTheme}>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="surah/[id]" options={{ headerBackButtonDisplayMode: 'minimal' }} />
+        <Stack.Screen
+          name="surah/[id]"
+          options={{
+            headerBackButtonDisplayMode: 'minimal',
+            // Reader: whole-surface back swipe (transitions pass, motion #8).
+            fullScreenGestureEnabled: true,
+          }}
+        />
         <Stack.Screen name="bookmarks" options={{ headerBackButtonDisplayMode: 'minimal' }} />
         <Stack.Screen name="calendar" options={{ headerBackButtonDisplayMode: 'minimal' }} />
-        <Stack.Screen name="tasbih" options={{ headerBackButtonDisplayMode: 'minimal' }} />
         <Stack.Screen name="zakat" options={{ headerBackButtonDisplayMode: 'minimal' }} />
         <Stack.Screen name="library" options={{ headerBackButtonDisplayMode: 'minimal' }} />
         <Stack.Screen name="about" options={{ headerBackButtonDisplayMode: 'minimal' }} />

@@ -833,3 +833,25 @@ hexes — now impossible. Forest approximates the featured gradient with its
 top stop (RemoteViews cannot draw gradients). Also fixed the review-confirmed
 high-latitude crash: buildWidgetSnapshot now skips Invalid Date prayers
 (Stockholm/Anchorage fixtures added) instead of throwing on toISOString().
+
+## 2026-07-31 — Custom TabBar shipped (handoff phase 1)
+
+NativeTabs → expo-router js-tabs `Tabs` with the DS TabBar
+(src/components/ui/TabBar.tsx): 66pt + safe area on bgSurface, top hairline,
+caption labels, 7px ochre diamond as the only active mark (no icons until the
+Gate-#5 geometric set). Import path is `expo-router/js-tabs` — the plain
+'expo-router' Tabs export is deprecated in 57, and @react-navigation/
+bottom-tabs is NOT hoisted (expo-router vendors it), so BottomTabBarProps
+also comes from 'expo-router/js-tabs'. The bar is IN-FLOW and opaque, so
+`useScrollInsets` semantics changed: 'tabs' now pads only the base value
+(the bar consumes the bottom inset); ANDROID_TAB_BAR_CLEARANCE removed;
+FullAdhanPlayer clears the exact exported TAB_BAR_HEIGHT. Routes: tasbih
+moved into (tabs); quran became a nested stack (index + ask); the ask tab
+route was deleted; MoreScreen dropped its tasbih row; SurahListScreen gained
+the `quran-ask` header link. TasbihScreen (headerless tab now) pads its own
+status-bar inset. e2e drivers/flows swapped TAB_ASK → TAB_TASBIH; the sweep
+deep-links `quran/ask`. Verified live on iOS sim (iPhone 17 Pro Max, Metro):
+all five tabs navigate, Ask reachable via Quran, screenshots in scratchpad;
+Android live pass rides the Phase-2 rebuild (bar is fork-free JS).
+Transitions pass: `fullScreenGestureEnabled` on the reader route; predictive
+back stays OFF; formSheet applies when picker routes appear (none yet).

@@ -6,7 +6,10 @@ appId: com.khavion.deendawn
     visible:
       id: 'prayer-row-fajr'
     timeout: 20000
-- tapOn: ${TAB_ASK}
+# Ask lives inside the Quran tab since the tab-lineup change (2026-07-31).
+- tapOn: ${TAB_QURAN}
+- tapOn:
+    id: 'quran-ask'
 - extendedWaitUntil:
     visible:
       id: 'ask-input'

@@ -17,7 +17,7 @@ SUITES=("$@")
 
 EN_TODAY=$(node -p "require('./src/lib/i18n/locales/en.json').tabs.today")
 EN_QURAN=$(node -p "require('./src/lib/i18n/locales/en.json').tabs.quran")
-EN_ASK=$(node -p "require('./src/lib/i18n/locales/en.json').tabs.ask")
+EN_TASBIH=$(node -p "require('./src/lib/i18n/locales/en.json').tabs.tasbih")
 EN_QIBLA=$(node -p "require('./src/lib/i18n/locales/en.json').tabs.qibla")
 EN_MORE=$(node -p "require('./src/lib/i18n/locales/en.json').tabs.more")
 UR_MORE=$(node -p "require('./src/lib/i18n/locales/ur.json').tabs.more")
@@ -28,7 +28,7 @@ for SUITE in "${SUITES[@]}"; do
   echo "[e2e-ios] suite: $SUITE"
   if ! maestro test \
       -e "SCREENS_DIR=docs/screens" \
-      -e "TAB_TODAY=$EN_TODAY" -e "TAB_QURAN=$EN_QURAN" -e "TAB_ASK=$EN_ASK" \
+      -e "TAB_TODAY=$EN_TODAY" -e "TAB_QURAN=$EN_QURAN" -e "TAB_TASBIH=$EN_TASBIH" \
       -e "TAB_QIBLA=$EN_QIBLA" -e "TAB_MORE=$EN_MORE" \
       -e "TAB_MORE_UR=$UR_MORE" -e "TAB_MORE_AR=$AR_MORE" \
       "e2e/$SUITE.yaml"; then

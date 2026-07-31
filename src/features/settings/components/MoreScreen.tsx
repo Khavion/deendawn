@@ -270,12 +270,6 @@ export function MoreScreen() {
       onPress: () => setOpen('language'),
     },
     {
-      id: 'tasbih',
-      title: t('more.tasbih'),
-      value: t('tasbih.tapAnywhere'),
-      onPress: () => router.push('/tasbih'),
-    },
-    {
       id: 'about',
       title: t('more.about'),
       value: t('about.madeWith'),

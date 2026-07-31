@@ -73,7 +73,9 @@ appId: com.khavion.deendawn
     visible:
       id: 'prayer-row-fajr'
     timeout: 20000
-- tapOn: ${TAB_ASK}
+- tapOn: ${TAB_QURAN}
+- tapOn:
+    id: 'quran-ask'
 - extendedWaitUntil:
     visible:
       id: 'ask-input'
@@ -100,14 +102,7 @@ appId: com.khavion.deendawn
     visible:
       id: 'prayer-row-fajr'
     timeout: 20000
-- tapOn: ${TAB_MORE}
-- scrollUntilVisible:
-    element:
-      id: 'setting-tasbih'
-    direction: DOWN
-    centerElement: true
-- tapOn:
-    id: 'setting-tasbih'
+- tapOn: ${TAB_TASBIH}
 - extendedWaitUntil:
     visible:
       id: 'tasbih-tap'

@@ -76,16 +76,26 @@ export function SurahListScreen() {
         <AppText variant="title" style={styles.title}>
           {t('quran.title')}
         </AppText>
-        <AppPressable
-          accessibilityRole="button"
-          testID="quran-bookmarks"
-          onPress={() => router.push('/bookmarks')}
-          hitSlop={8}
-          style={styles.bookmarksLink}
-        >
-          <AppText style={{ color: tk.ochre }}>★</AppText>
-          <AppText variant="link">{t('quran.bookmarksTitle')}</AppText>
-        </AppPressable>
+        <View style={styles.headerLinks}>
+          <AppPressable
+            accessibilityRole="button"
+            testID="quran-ask"
+            onPress={() => router.push('/quran/ask')}
+            hitSlop={8}
+          >
+            <AppText variant="link">{t('tabs.ask')}</AppText>
+          </AppPressable>
+          <AppPressable
+            accessibilityRole="button"
+            testID="quran-bookmarks"
+            onPress={() => router.push('/bookmarks')}
+            hitSlop={8}
+            style={styles.bookmarksLink}
+          >
+            <AppText style={{ color: tk.ochre }}>★</AppText>
+            <AppText variant="link">{t('quran.bookmarksTitle')}</AppText>
+          </AppPressable>
+        </View>
       </View>
       <TextInput
         testID="quran-search"
@@ -222,6 +232,7 @@ const styles = StyleSheet.create({
     marginBottom: spacing.s,
   },
   title: {},
+  headerLinks: { flexDirection: 'row', alignItems: 'center', gap: spacing.l },
   bookmarksLink: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
   input: {
     borderWidth: 1,
