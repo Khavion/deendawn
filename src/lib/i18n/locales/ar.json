@@ -30,6 +30,10 @@
     "nextPrayer": "الصلاة التالية",
     "timesSection": "أوقات اليوم",
     "verseOfDay": "آية اليوم",
+    "adhanWillSound": "سيُرفع الأذان",
+    "muteToday": "كتم صوت اليوم",
+    "mutedToday": "مكتوم لليوم",
+    "openInReader": "افتح في القارئ",
     "periods": {
       "dawn": "سحر",
       "day": "نهار",

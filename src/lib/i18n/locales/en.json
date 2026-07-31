@@ -29,6 +29,10 @@
     "nextPrayer": "Next prayer",
     "timesSection": "Today's times",
     "verseOfDay": "Verse of the day",
+    "adhanWillSound": "Adhan will sound",
+    "muteToday": "Mute today",
+    "mutedToday": "Muted for today",
+    "openInReader": "Open in reader",
     "periods": {
       "dawn": "Dawn",
       "day": "Day",

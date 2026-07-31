@@ -6,33 +6,39 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { CityPickerModal } from './CityPickerModal';
 import { VerseOfDayCard } from '../../quran/components/VerseOfDayCard';
 import { isRamadan, toHijri } from '../../hijri/hijri';
+import { loadNotificationPrefs } from '../../notifications/prefsStore';
+import { silenceToday } from '../../notifications/silenceToday';
 import { computeDayTimes, isValidTime, nextPrayer } from '../engine';
 import { formatTimeInZone } from '../format';
 import { digitLocale, localizeNumber } from '@/src/lib/i18n/format';
-import { currentPeriod, periodPrayer, periodWord } from '../period';
-import { PRAYER_NAMES } from '../types';
+import { currentPeriod, periodWord } from '../period';
+import { PRAYER_NAMES, type PrayerName } from '../types';
 import {
   AppPressable,
   AppText,
+  Countdown,
+  Divider,
   GoldFrameCard,
   Gradient,
+  ListCard,
+  ListRow,
+  Marker,
   PeriodEyebrow,
   SectionRule,
 } from '@/src/components/ui';
-import { IconSymbol } from '@/components/ui/icon-symbol';
 import { useSettings } from '@/src/features/settings/SettingsContext';
 import { resolveLocation, resolvePrayerConfig } from '@/src/features/settings/settingsStore';
 import {
-  ambientGradient,
-  elevation,
   featuredGradient,
+  heroWash,
   measure,
   fonts,
-  fontSize,
+  periodWash,
   radius,
-  richMode,
   spacing,
+  type DayPeriod,
 } from '@/src/lib/theme/tokens';
+import { withAlpha } from '@/src/lib/color';
 import { useThemeMode } from '@/src/lib/theme/ThemeProvider';
 import { useScrollInsets } from '@/src/lib/theme/useScrollInsets';
 import { useTokens } from '@/src/lib/theme/useTokens';
@@ -62,51 +68,51 @@ function useMinuteNow(): Date {
   return now;
 }
 
-function countdownParts(ms: number) {
-  const total = Math.max(0, Math.floor(ms / 1000));
-  return {
-    hours: Math.floor(total / 3600),
-    minutes: Math.floor((total % 3600) / 60),
-    seconds: total % 60,
-  };
-}
-
-/** The one per-second surface: isolates the tick from the whole screen. */
-function Countdown({ target, color }: { target: Date; color?: string }) {
-  const { t: tr } = useTranslation();
-  const t = useTokens();
-  const [now, setNow] = useState(() => new Date());
-  useEffect(() => {
-    const id = setInterval(() => setNow(new Date()), 1000);
-    return () => clearInterval(id);
-  }, []);
-  const p = countdownParts(target.getTime() - now.getTime());
-  const time =
-    p.hours > 0
-      ? tr('today.hoursMinutes', { hours: p.hours, minutes: p.minutes })
-      : tr('today.minutesSeconds', { minutes: p.minutes, seconds: p.seconds });
-  return (
-    <AppText variant="body" style={{ color: color ?? t.textSecondary }}>
-      {tr('today.countdown', { time })}
-    </AppText>
-  );
-}
+/** The period a prayer belongs to, for the hero eyebrow's second word. */
+const PRAYER_PERIOD: Record<PrayerName, DayPeriod> = {
+  fajr: 'fajr',
+  sunrise: 'day',
+  dhuhr: 'day',
+  asr: 'asr',
+  maghrib: 'maghrib',
+  isha: 'isha',
+};
 
 /**
- * The featured hero. Interior colors come from the card's content tone
- * (handoff gap 02) — the body is a child component so its hooks resolve the
- * onFeatured palette, with zero hand-passed colors.
+ * The featured hero (handoff §6 screen 01). Interior colors come from the
+ * card's content tone (gap 02) — the body is a child component so its hooks
+ * resolve the onFeatured palette, with zero hand-passed colors. The period
+ * wash overlays the fill at the hero's own intensity.
  */
 function NextPrayerHero({
   next,
   timeLocale,
+  period,
+  muted,
+  adhanEnabled,
+  onMute,
 }: {
   next: NonNullable<ReturnType<typeof nextPrayer>>;
   timeLocale: string;
+  period: DayPeriod;
+  muted: boolean;
+  adhanEnabled: boolean;
+  onMute: () => void;
 }) {
+  const { flat } = useDeviceTier();
+  const wash = heroWash[period];
   return (
-    <GoldFrameCard gradientColors={featuredGradient.light} style={styles.nextCard}>
-      <NextPrayerHeroBody next={next} timeLocale={timeLocale} />
+    <GoldFrameCard gradientColors={featuredGradient.light} style={styles.nextCard} testID="next-hero">
+      {wash && !flat ? (
+        <View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: wash }]} />
+      ) : null}
+      <NextPrayerHeroBody
+        next={next}
+        timeLocale={timeLocale}
+        muted={muted}
+        adhanEnabled={adhanEnabled}
+        onMute={onMute}
+      />
     </GoldFrameCard>
   );
 }
@@ -114,26 +120,53 @@ function NextPrayerHero({
 function NextPrayerHeroBody({
   next,
   timeLocale,
+  muted,
+  adhanEnabled,
+  onMute,
 }: {
   next: NonNullable<ReturnType<typeof nextPrayer>>;
   timeLocale: string;
+  muted: boolean;
+  adhanEnabled: boolean;
+  onMute: () => void;
 }) {
   const { t: tr } = useTranslation();
   const t = useTokens();
+  const eyebrow = `${tr(`prayers.${next.prayer}`)} · ${tr(
+    `today.periods.${periodWord(PRAYER_PERIOD[next.prayer])}`
+  )}`;
   return (
     <>
-      <AppText variant="eyebrow" style={[styles.nextEyebrow, { color: t.textSecondary }]}>
-        {tr('today.nextPrayer')}
-      </AppText>
-      <AppText variant="title">
-        {next.isTomorrow
-          ? tr('today.tomorrow', { prayer: tr(`prayers.${next.prayer}`) })
-          : tr(`prayers.${next.prayer}`)}
-      </AppText>
-      <AppText style={styles.nextTime} color={t.textPrimary}>
+      <PeriodEyebrow label={eyebrow} labelColor={t.textSecondary} style={styles.nextEyebrow} />
+      <AppText variant="display" color={t.textPrimary} testID="next-time">
         {formatTimeInZone(next.time, { locale: timeLocale })}
       </AppText>
-      <Countdown target={next.time} />
+      <Countdown target={next.time} variant="title" color={t.ochre} testID="next-countdown" />
+      {adhanEnabled ? (
+        <>
+          <Divider style={styles.heroRule} />
+          <View style={styles.heroCaptionRow}>
+            <AppText variant="caption" color={t.textSecondary}>
+              {muted ? tr('today.mutedToday') : tr('today.adhanWillSound')}
+            </AppText>
+            {!muted && (
+              <AppPressable
+                accessibilityRole="button"
+                testID="mute-today"
+                hitSlop={8}
+                haptic="press"
+                onPress={onMute}
+              >
+                {/* Ivory, not the deck's gold: 13pt gold misses AA on the
+                    fill (same call as the hero eyebrow — DECISIONS). */}
+                <AppText variant="caption" color={t.textPrimary} style={styles.heroAction}>
+                  {tr('today.muteToday')}
+                </AppText>
+              </AppPressable>
+            )}
+          </View>
+        </>
+      ) : null}
     </>
   );
 }
@@ -143,11 +176,10 @@ export function TodayScreen() {
   const androidInsets = useScrollInsets({ baseTop: spacing.m, baseBottom: spacing.l });
   const t = useTokens();
   const mode = useThemeMode();
-  const rm = richMode(mode);
   const { flat } = useDeviceTier();
   const { t: tr, i18n } = useTranslation();
   const timeLocale = digitLocale(i18n.language);
-  const { settings, update } = useSettings();
+  const { settings, update, store } = useSettings();
   const [pickerOpen, setPickerOpen] = useState(false);
   const now = useMinuteNow();
 
@@ -164,6 +196,21 @@ export function TodayScreen() {
   const next = location ? nextPrayer(location, now, config) : null;
   const period = times ? currentPeriod(now, times) : 'day';
 
+  // "Mute today" (handoff §6/§7): cancels today's remaining adhans via the
+  // same path as the notification action. In-memory per local day — tomorrow
+  // resumes normally, matching what silenceToday actually does.
+  const [mutedDay, setMutedDay] = useState<string | null>(null);
+  const muted = mutedDay === dayKey;
+  const adhanEnabled = useMemo(() => {
+    if (!next || next.isTomorrow) return false;
+    const prefs = loadNotificationPrefs(store);
+    return prefs.enabled[next.prayer] && prefs.sound[next.prayer] !== 'silent';
+  }, [next, store]);
+  const onMute = () => {
+    setMutedDay(dayKey);
+    void silenceToday(now);
+  };
+
   if (!location) {
     return (
       <View
@@ -173,7 +220,7 @@ export function TodayScreen() {
           { backgroundColor: t.bgCanvas, paddingTop: insets.top + spacing.xl },
         ]}
       >
-        <IconSymbol name="location.fill" size={44} color={t.accent} />
+        <Marker size={12} tone="ochre" />
         <AppText variant="title" style={styles.emptyTitle}>
           {tr('today.greeting')}
         </AppText>
@@ -202,51 +249,50 @@ export function TodayScreen() {
     );
   }
 
-  const eyebrowLabel = `${tr(`prayers.${periodPrayer(period)}`)} · ${tr(`today.periods.${periodWord(period)}`)}`;
+  const wash = periodWash[mode][period];
+  const hijri = toHijri(now, settings.hijriOffset);
+  const hijriLabel = `${localizeNumber(hijri.day, i18n.language)} ${tr(hijri.monthKey)} ${localizeNumber(hijri.year, i18n.language)}`;
 
   return (
     <View style={[styles.container, { backgroundColor: t.bgCanvas }]}>
-      {/* Ambient dawn-sky gradient — reverent, behind the header + featured card only. */}
-      <Gradient
-        pointerEvents="none"
-        colors={ambientGradient[rm][period]}
-        flat={flat}
-        flatColor={t.bgCanvas}
-        style={[styles.ambient, { height: insets.top + 340 }]}
-      />
-      {/* iOS: `automatic` insets the content below the status bar and above
-          the floating native tab bar (whose height is unmeasurable by
-          design). Android: the prop is a no-op — androidInsets supplies the
-          status-bar + Material-bottom-bar clearance instead. */}
+      {/* Period wash (handoff gap 01): a quiet tint fading from the top —
+          dawn/dusk/night only; day renders nothing. Vertical, so RTL-free. */}
+      {wash && (
+        <Gradient
+          pointerEvents="none"
+          colors={[wash.color, withAlpha(wash.color, 0)]}
+          flat={flat}
+          flatColor={t.bgCanvas}
+          style={[styles.ambient, { height: insets.top + wash.height }]}
+        />
+      )}
+      {/* iOS: `automatic` insets the content below the status bar; the DS
+          tab bar is in-flow, so no bottom clearance is needed. Android:
+          androidInsets supplies the status-bar padding. */}
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         contentContainerStyle={[styles.scroll, androidInsets]}
       >
-        <PeriodEyebrow label={eyebrowLabel} style={styles.periodEyebrow} />
-
         <View style={styles.header}>
+          <AppText variant="subtitle" testID="hijri-date">
+            {hijriLabel}
+          </AppText>
           <AppPressable
             accessibilityRole="button"
             testID="change-city"
             onPress={() => setPickerOpen(true)}
-            style={styles.cityRow}
+            hitSlop={8}
           >
-            <IconSymbol name="location.fill" size={14} color={t.accent} />
-            <AppText variant="bodyStrong">{location.label}</AppText>
+            <AppText variant="link">{location.label}</AppText>
           </AppPressable>
-          <AppText variant="caption" style={{ color: t.textSecondary }}>
-            {now.toLocaleDateString(timeLocale, {
-              weekday: 'long',
-              month: 'long',
-              day: 'numeric',
-            })}
-            {' · '}
-            {(() => {
-              const h = toHijri(now, settings.hijriOffset);
-              return `${localizeNumber(h.day, i18n.language)} ${tr(h.monthKey)} ${localizeNumber(h.year, i18n.language)}`;
-            })()}
-          </AppText>
         </View>
+        <AppText variant="caption" style={[styles.gregorian, { color: t.textSecondary }]}>
+          {now.toLocaleDateString(timeLocale, {
+            weekday: 'long',
+            month: 'long',
+            day: 'numeric',
+          })}
+        </AppText>
 
         {times && isRamadan(now, settings.hijriOffset) && (
           <View
@@ -272,50 +318,37 @@ export function TodayScreen() {
           </View>
         )}
 
-        {next && <NextPrayerHero next={next} timeLocale={timeLocale} />}
+        {next && (
+          <NextPrayerHero
+            next={next}
+            timeLocale={timeLocale}
+            period={period}
+            muted={muted}
+            adhanEnabled={adhanEnabled}
+            onMute={onMute}
+          />
+        )}
 
         <SectionRule label={tr('today.timesSection')} style={styles.sectionRule} />
 
-        <View
-          style={[
-            styles.listCard,
-            { backgroundColor: t.bgSurface, borderColor: t.border },
-            flat ? undefined : elevation[rm].e2,
-          ]}
-        >
-          {times &&
-            PRAYER_NAMES.map((p) => {
+        {times && (
+          <ListCard>
+            {PRAYER_NAMES.filter((p) => p !== 'sunrise').map((p) => {
               const time = times[p];
               const isNext = next && !next.isTomorrow && next.prayer === p;
+              const isPast = isValidTime(time) && time.getTime() <= now.getTime() && !isNext;
               return (
-                <View
+                <ListRow
                   key={p}
                   testID={`prayer-row-${p}`}
-                  style={[
-                    styles.row,
-                    isNext && {
-                      backgroundColor: t.accentSoft,
-                      borderStartColor: t.ochre,
-                      borderStartWidth: 3,
-                    },
-                  ]}
-                >
-                  <AppText
-                    variant={isNext ? 'bodyStrong' : 'body'}
-                    style={isNext ? { color: t.textOnAccentSoft } : undefined}
-                  >
-                    {tr(`prayers.${p}`)}
-                  </AppText>
-                  <AppText
-                    variant={isNext ? 'bodyStrong' : 'body'}
-                    style={isNext ? { color: t.textOnAccentSoft } : { color: t.textSecondary }}
-                  >
-                    {isValidTime(time) ? formatTimeInZone(time, { locale: timeLocale }) : '—'}
-                  </AppText>
-                </View>
+                  label={tr(`prayers.${p}`)}
+                  value={isValidTime(time) ? formatTimeInZone(time, { locale: timeLocale }) : '—'}
+                  state={isNext ? 'marked' : isPast ? 'past' : 'default'}
+                />
               );
             })}
-        </View>
+          </ListCard>
+        )}
 
         <VerseOfDayCard date={now} />
       </ScrollView>
@@ -353,9 +386,13 @@ const styles = StyleSheet.create({
     minHeight: 48,
     justifyContent: 'center',
   },
-  periodEyebrow: { marginBottom: spacing.s },
-  header: { gap: spacing.xs, marginBottom: spacing.l },
-  cityRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.s - 2 },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: spacing.m,
+  },
+  gregorian: { marginTop: spacing.xs, marginBottom: spacing.l },
   ramadanCard: {
     borderRadius: radius.card,
     padding: spacing.l,
@@ -370,11 +407,16 @@ const styles = StyleSheet.create({
     marginBottom: spacing.l,
   },
   nextEyebrow: { marginBottom: spacing.xs },
-  nextTime: {
-    fontFamily: fonts.serifSemiBold,
-    fontSize: fontSize.display,
-    lineHeight: 44,
+  heroRule: { marginTop: spacing.m, width: '100%' },
+  heroCaptionRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
+    marginTop: spacing.s,
+    minHeight: 24,
   },
+  heroAction: { fontFamily: fonts.sansSemiBold },
   sectionRule: { marginBottom: spacing.s },
   listCard: {
     borderRadius: radius.card,
