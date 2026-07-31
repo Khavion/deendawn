@@ -24,9 +24,9 @@ appId: com.khavion.deendawn
       id: 'surah-audio-bar'
     timeout: 10000
 - assertVisible:
-    id: 'audio-dev-badge'
+    text: 'DEV audio.*'
 - tapOn:
-    id: 'surah-audio-toggle'
+    id: 'listen-bar-toggle'
 # Let it stream a few seconds, then the progress readout should show a clock.
 # (App-formatted mm:ss text, not a platform locale string; EN cells only.)
 - extendedWaitUntil:
@@ -35,5 +35,5 @@ appId: com.khavion.deendawn
     timeout: 15000
 - takeScreenshot: ${SCREENS_DIR}/audio-playing
 - tapOn:
-    id: 'surah-audio-toggle'
+    id: 'listen-bar-toggle'
 - takeScreenshot: ${SCREENS_DIR}/audio-paused

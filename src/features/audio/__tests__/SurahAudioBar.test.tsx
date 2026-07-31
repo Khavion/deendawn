@@ -22,6 +22,9 @@ let mockStatus = {
   didJustFinish: false,
 };
 
+jest.mock('react-native-safe-area-context', () => ({
+  useSafeAreaInsets: () => ({ top: 0, bottom: 0, left: 0, right: 0 }),
+}));
 jest.mock('expo-audio', () => ({
   useAudioPlayer: jest.fn(() => mockPlayer),
   useAudioPlayerStatus: jest.fn(() => mockStatus),
@@ -70,13 +73,13 @@ describe('SurahAudioBar', () => {
   });
 
   it('shows the placeholder dev badge so tones are never mistaken for recitation', async () => {
-    const { getByTestId } = await render(<SurahAudioBar surah={2} title="Al-Baqarah" />);
-    expect(getByTestId('audio-dev-badge')).toBeTruthy();
+    const { getByText } = await render(<SurahAudioBar surah={2} title="Al-Baqarah" />);
+    expect(getByText(/DEV audio/)).toBeTruthy();
   });
 
   it('starts playback with background audio mode and lock-screen metadata', async () => {
     const { getByTestId } = await render(<SurahAudioBar surah={2} title="Al-Baqarah" />);
-    await fireEvent.press(getByTestId('surah-audio-toggle'));
+    await fireEvent.press(getByTestId('listen-bar-toggle'));
     const audio = jest.requireMock('expo-audio');
     expect(audio.setAudioModeAsync).toHaveBeenCalledWith(
       expect.objectContaining({ playsInSilentMode: true, shouldPlayInBackground: true })
@@ -91,21 +94,21 @@ describe('SurahAudioBar', () => {
   it('seeks to the saved resume position on first play', async () => {
     saveResumePosition(mockStore, 'dev', 2, 120);
     const { getByTestId } = await render(<SurahAudioBar surah={2} title="Al-Baqarah" />);
-    await fireEvent.press(getByTestId('surah-audio-toggle'));
+    await fireEvent.press(getByTestId('listen-bar-toggle'));
     expect(mockPlayer.seekTo).toHaveBeenCalledWith(120);
   });
 
   it('does not seek when the saved position is trivially small', async () => {
     saveResumePosition(mockStore, 'dev', 2, 3);
     const { getByTestId } = await render(<SurahAudioBar surah={2} title="Al-Baqarah" />);
-    await fireEvent.press(getByTestId('surah-audio-toggle'));
+    await fireEvent.press(getByTestId('listen-bar-toggle'));
     expect(mockPlayer.seekTo).not.toHaveBeenCalled();
   });
 
   it('pausing saves the resume position', async () => {
     mockStatus = { ...mockStatus, playing: true, currentTime: 87.3 };
     const { getByTestId } = await render(<SurahAudioBar surah={2} title="Al-Baqarah" />);
-    await fireEvent.press(getByTestId('surah-audio-toggle'));
+    await fireEvent.press(getByTestId('listen-bar-toggle'));
     expect(mockPlayer.pause).toHaveBeenCalled();
     expect(getResumePosition(mockStore, 'dev', 2)).toBeCloseTo(87.3);
   });

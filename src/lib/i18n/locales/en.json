@@ -88,7 +88,14 @@
       "silent": "Silent",
       "attribution": "Tajweed data: cpfair/quran-tajweed (CC BY 4.0)"
     },
-    "continueShort": "Continue reading"
+    "continueShort": "Continue reading",
+    "backToSurahs": "‹ Surahs",
+    "aa": "Aa",
+    "reciting": "Reciting",
+    "ayat_one": "{{count}} ayah",
+    "ayat_other": "{{count}} ayat",
+    "surahSubtitle": "{{name}} · {{ayat}}",
+    "actionsTitle": "Ayah {{surah}}:{{ayah}}"
   },
   "qibla": {
     "title": "Qibla",
@@ -376,7 +383,17 @@
     "pause": "Pause",
     "streamed": "Streamed — nothing stored on your phone",
     "devBadge": "DEV audio — placeholder tone, not recitation",
-    "lockScreenArtist": "DeenDawn"
+    "lockScreenArtist": "DeenDawn",
+    "nowPlaying": "Now playing",
+    "preparing": "Preparing recitation",
+    "repeatSurah": "Repeat surah",
+    "speed": "Speed {{rate}}×",
+    "sleepOff": "Sleep off",
+    "sleepMin": "Sleep {{count}} min",
+    "skipBack": "Skip back 15 seconds",
+    "skipForward": "Skip forward 15 seconds",
+    "expand": "Open player",
+    "positionOf": "{{position}} / {{duration}}"
   },
   "notFound": {
     "title": "Screen not found",

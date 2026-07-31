@@ -893,3 +893,26 @@ zakat result / continue-reading chip dropped all hand-passed featured colors
 (their interiors became child components so hooks resolve the provided
 palette). Hero eyebrow stays dim-ivory (not the mockups' gold — 12pt gold on
 the fill fails AA; matches the previously approved hero look).
+
+## 2026-07-31 — Reader + player restyle (handoff screens 02/03); ayah-timing deferrals
+
+SurahScreen now owns its chrome (native header off): ReaderChrome top bar
+("‹ Surahs" / centered title + "The Opening · 7 ayat" / "Aa"), scroll-linked
+hide-on-down reveal-on-up (instant under Reduce Motion, off the a11y tree
+while hidden), and a persistent 2px ochre reading-progress hairline. Ayah
+cards render through AyahBlock inside Cards; per-ayah footers left the page
+— ayah press opens the quiet actions Sheet (bookmark, share). Reading prefs
+(size stepper, translation, night-warm) moved from header buttons into the
+"Aa" Sheet. Audio: SurahAudioBar rebuilt on ListenBar (docked over the
+canvas fade) + the expanded Sheet player (NOW PLAYING eyebrow, 96px Skia
+ring with 78px core, ±15s transports, position caption with
+tap-to-remaining, quiet Repeat-surah / Speed / Sleep row backed by
+unit-tested sleepTimer logic).
+
+DEFERRED until a per-ayah timing artifact (QUL segments) is adopted as a
+pinned content-pipeline artifact — the bucket serves per-surah files and no
+timing data exists, so these cannot be honest today: seek-BY-AYAH (deck's
+prev/next semantics; shipped as ±15s skips with truthful a11y labels),
+"Ayah 3 of 7" in the position caption, play-from-here and repeat-AYAH in
+the actions sheet, and the reciting-ayah gold frame + "Reciting" caption
+(audio-follow highlighting). Repeat is repeat-SURAH, labeled as such.

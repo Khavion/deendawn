@@ -89,7 +89,14 @@
       "silent": "خاموش",
       "attribution": "تجوید ڈیٹا: cpfair/quran-tajweed (CC BY 4.0)"
     },
-    "continueShort": "پڑھنا جاری رکھیں"
+    "continueShort": "پڑھنا جاری رکھیں",
+    "backToSurahs": "› سورتیں",
+    "aa": "Aa",
+    "reciting": "تلاوت جاری",
+    "ayat_one": "{{count}} آیت",
+    "ayat_other": "{{count}} آیات",
+    "surahSubtitle": "{{name}} · {{ayat}}",
+    "actionsTitle": "آیت {{surah}}:{{ayah}}"
   },
   "qibla": {
     "title": "قبلہ",
@@ -377,7 +384,17 @@
     "pause": "روکیں",
     "streamed": "سٹریم سے — آپ کے فون پر کچھ محفوظ نہیں ہوتا",
     "devBadge": "آزمائشی آواز — عارضی ٹون، تلاوت نہیں",
-    "lockScreenArtist": "دین ڈان"
+    "lockScreenArtist": "دین ڈان",
+    "nowPlaying": "اب چل رہا ہے",
+    "preparing": "تلاوت تیار ہو رہی ہے",
+    "repeatSurah": "سورت دہرائیں",
+    "speed": "رفتار {{rate}}×",
+    "sleepOff": "سلیپ بند",
+    "sleepMin": "سلیپ {{count}} منٹ",
+    "skipBack": "15 سیکنڈ پیچھے",
+    "skipForward": "15 سیکنڈ آگے",
+    "expand": "پلیئر کھولیں",
+    "positionOf": "{{position}} / {{duration}}"
   },
   "notFound": {
     "title": "صفحہ نہیں ملا",

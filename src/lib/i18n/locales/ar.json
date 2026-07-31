@@ -97,7 +97,18 @@
       "silent": "ساكن",
       "attribution": "بيانات التجويد: cpfair/quran-tajweed (CC BY 4.0)"
     },
-    "continueShort": "متابعة القراءة"
+    "continueShort": "متابعة القراءة",
+    "backToSurahs": "› السور",
+    "aa": "Aa",
+    "reciting": "يُتلى",
+    "ayat_zero": "{{count}} آية",
+    "ayat_one": "آية واحدة",
+    "ayat_two": "آيتان",
+    "ayat_few": "{{count}} آيات",
+    "ayat_many": "{{count}} آية",
+    "ayat_other": "{{count}} آية",
+    "surahSubtitle": "{{name}} · {{ayat}}",
+    "actionsTitle": "الآية {{surah}}:{{ayah}}"
   },
   "qibla": {
     "title": "القبلة",
@@ -397,7 +408,17 @@
     "pause": "إيقاف مؤقت",
     "streamed": "بث مباشر — لا يُحفظ شيء على هاتفك",
     "devBadge": "صوت تجريبي — نغمة مؤقتة، ليست تلاوة",
-    "lockScreenArtist": "دين دون"
+    "lockScreenArtist": "دين دون",
+    "nowPlaying": "يُتلى الآن",
+    "preparing": "يتم تجهيز التلاوة",
+    "repeatSurah": "تكرار السورة",
+    "speed": "السرعة {{rate}}×",
+    "sleepOff": "مؤقت النوم مغلق",
+    "sleepMin": "إيقاف بعد {{count}} دقيقة",
+    "skipBack": "رجوع 15 ثانية",
+    "skipForward": "تقدم 15 ثانية",
+    "expand": "افتح المشغل",
+    "positionOf": "{{position}} / {{duration}}"
   },
   "notFound": {
     "title": "الصفحة غير موجودة",

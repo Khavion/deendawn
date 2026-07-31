@@ -88,7 +88,7 @@ describe('SurahScreen', () => {
   test('renders all 7 ayahs of Al-Faatiha with Arabic and translation', async () => {
     const view = await render(wrap(<SurahScreen />));
     for (let a = 1; a <= 7; a++) expect(view.getByTestId(`ayah-1-${a}`)).toBeOnTheScreen();
-    expect(view.getByTestId('translation-1')).toBeOnTheScreen();
+    expect(view.getByTestId('ayah-block-1-translation')).toBeOnTheScreen();
     expect(view.getByTestId('dev-translation-badge')).toBeOnTheScreen();
     // Arabic text must be the exact db bytes.
     const dbText = (
@@ -102,14 +102,16 @@ describe('SurahScreen', () => {
     expect(arabic.props.accessibilityLanguage).toBe('ar');
   });
 
-  test('bookmark toggle persists and updates its accessible label', async () => {
+  test('bookmark toggle persists via the ayah actions sheet', async () => {
     const store = createMemoryKVStore();
     const view = await render(wrap(<SurahScreen />, store));
-    // Icon-only star: its meaning must come from an accessible label, not the glyph.
-    expect(view.getByTestId('bookmark-1').props.accessibilityLabel).toBe('Add bookmark');
+    // Ayah press opens the quiet actions sheet (handoff screen 02).
+    await fireEvent.press(view.getByTestId('ayah-1-1'));
+    expect(view.getByText('Add bookmark')).toBeOnTheScreen();
     await fireEvent.press(view.getByTestId('bookmark-1'));
     expect(JSON.parse(store.get('quran.bookmarks.v1')!)).toEqual([{ surah: 1, ayah: 1 }]);
-    expect(view.getByTestId('bookmark-1').props.accessibilityLabel).toBe('Remove bookmark');
+    await fireEvent.press(view.getByTestId('ayah-1-1'));
+    expect(view.getByText('Remove bookmark')).toBeOnTheScreen();
     await fireEvent.press(view.getByTestId('bookmark-1'));
     expect(JSON.parse(store.get('quran.bookmarks.v1')!)).toEqual([]);
   });
@@ -118,6 +120,7 @@ describe('SurahScreen', () => {
     const { Share } = jest.requireActual('react-native');
     const shareSpy = jest.spyOn(Share, 'share').mockResolvedValue({ action: 'sharedAction' });
     const view = await render(wrap(<SurahScreen />));
+    await fireEvent.press(view.getByTestId('ayah-1-1'));
     await fireEvent.press(view.getByTestId('share-1'));
     expect(shareSpy).toHaveBeenCalledTimes(1);
     const message = (shareSpy.mock.calls[0][0] as { message: string }).message;
@@ -141,7 +144,9 @@ describe('SurahScreen', () => {
     ).text_uthmani;
     const arabicStyle = StyleSheet.flatten(view.getByText(dbText).props.style);
     expect(arabicStyle.fontSize).toBeCloseTo(28 * 1.3);
-    const translationStyle = StyleSheet.flatten(view.getByTestId('translation-1').props.style);
+    const translationStyle = StyleSheet.flatten(
+      view.getByTestId('ayah-block-1-translation').props.style
+    );
     expect(translationStyle.fontSize).toBeCloseTo(16 * 1.3);
   });
 });
