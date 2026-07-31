@@ -55,6 +55,12 @@ export function planNotifications(opts: {
   /** Ramadan suhoor reminder: minutes before Fajr, null/undefined = off. */
   suhoorReminderMinutes?: number | null;
   hijriOffset?: -1 | 0 | 1;
+  /**
+   * A local calendar day (`2026-07-31`) the user silenced with the
+   * "Silence today" action. Every entry planned for that day is dropped, so
+   * a later reschedule cannot resurrect it (review 2026-07-31, notif 1).
+   */
+  silencedDate?: string | null;
 }): PlannedNotification[] {
   const { coords, settings, prefs, now } = opts;
   const days = opts.days ?? MIN_DAYS_COVERED + 1;
@@ -63,6 +69,7 @@ export function planNotifications(opts: {
   const planned: PlannedNotification[] = [];
   for (let offset = 0; offset < days; offset++) {
     const day = new Date(now.getFullYear(), now.getMonth(), now.getDate() + offset, 12);
+    if (opts.silencedDate && dateKey(day) === opts.silencedDate) continue;
     const times = computeDayTimes(coords, day, settings);
     for (const prayer of ADHAN_PRAYERS) {
       if (!prefs.enabled[prayer]) continue;

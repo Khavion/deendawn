@@ -60,14 +60,37 @@ const ASSET_FIELDS: FieldKey[] = [
 const PRICE_FIELDS: FieldKey[] = ['goldPricePerGram', 'silverPricePerGram'];
 
 /**
- * Accept Western and Arabic-Indic digits (U+0660-U+0669) plus either decimal
- * separator (comma or U+060C). Escapes only - no Arabic literals in code.
+ * Money parser. Accepts Western digits, Arabic-Indic digits (U+0660-U+0669)
+ * and Extended Arabic-Indic / Urdu-Persian digits (U+06F0-U+06F9), plus every
+ * decimal separator in play: '.', U+066B (Arabic decimal separator) and a
+ * comma when it is unambiguously decimal. Escapes only - no Arabic literals.
+ *
+ * Grouping vs decimal, the rule that matters for money (review finding 3):
+ * "10,000" is TEN THOUSAND, not ten. A comma (or U+060C / U+066C / thin
+ * space) is treated as a GROUPING mark whenever a real decimal separator is
+ * also present, or whenever it is followed by exactly three digits. Only a
+ * lone comma followed by one or two digits ("1234,56") is read as European
+ * decimal - the case the previous implementation was written for.
  */
 export function parseAmount(text: string): number {
-  const western = text
+  // 1. Digits -> Western.
+  let s = text
     .replace(/[\u0660-\u0669]/g, (d) => String(d.charCodeAt(0) - 0x0660))
-    .replace(/[,\u060C]/g, '.');
-  const n = Number.parseFloat(western);
+    .replace(/[\u06F0-\u06F9]/g, (d) => String(d.charCodeAt(0) - 0x06f0));
+
+  // 2. Unambiguous decimal separators -> '.'
+  s = s.replace(/\u066B/g, '.');
+
+  // 3. Grouping marks that are never decimal.
+  s = s.replace(/[\u066C\u2009\u202F\u00A0' ]/g, '');
+
+  // 4. The comma family: decimal only when it is the sole separator AND is
+  //    followed by one or two digits at the end of the number.
+  const hasDot = s.includes('.');
+  const commaDecimal = !hasDot && /[,\u060C]\d{1,2}$/.test(s.trim());
+  s = commaDecimal ? s.replace(/[,\u060C]/g, '.') : s.replace(/[,\u060C]/g, '');
+
+  const n = Number.parseFloat(s);
   return Number.isFinite(n) && n >= 0 ? n : 0;
 }
 

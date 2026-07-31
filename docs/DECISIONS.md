@@ -1,5 +1,68 @@
 # DECISIONS — non-obvious choices with rationale
 
+## 2026-07-31 — Store-release preflight: three release blockers fixed, and how each was made load-bearing
+
+The three blockers from `docs/reviews/CODEBASE_REVIEW_2026-07-31.md` are closed. Each fix carries
+a test that FAILS against the old code, so none of them can silently regress.
+
+**1. "Silence today" resurrected itself (notifications finding 1).** The action only cancelled the
+OS queue; nothing was written down. Any later `rescheduleAll` — app foreground, notification-
+received, Android AppState-active, or the 12h background task, i.e. *without the user ever opening
+the app* — replanned the day and re-armed it. Fix: `notifications.silencedDate.v1` is persisted by
+`silenceToday` (both the warm listener and the killed-state task reach it, since they call the same
+function), `planNotifications` takes an optional `silencedDate` and skips that local day outright,
+and `loadSilencedDate` is **self-clearing** — a stored key that isn't `now`'s day is deleted on
+read. That last property is why no separate "clear on date change" path exists: the marker cannot
+outlive its day, including across a timezone move, where the key simply stops matching. Chosen over
+filtering at the service layer because the planner is pure and already the tested seam.
+
+**2. iOS notification diff never matched (notifications finding 2).** The pending-queue reader
+parsed the trigger as `{type:'date', value}` — the ANDROID serialization. iOS serializes
+`timeInterval`/`seconds`, so `fireMs` was always undefined there, so `diffPlans` matched nothing,
+so every foreground cancelled and rescheduled all ~40 notifications (and a mid-loop rejection left
+the queue partially empty). Fix: `toContent` writes `fireMs` into `content.data` on both branches
+(adhan and suhoor) and `pendingPlanned` reads the payload first, keeping the Android trigger read
+as a legacy fallback for entries scheduled before this shipped. **The test mock was the thing
+hiding it**, so it was corrected too: `service.test.ts` now returns the honest iOS
+`timeInterval` shape, which makes the idempotency test ("second run is a no-op") genuinely
+load-bearing on the iOS path — it passes only because the payload round-trips.
+
+**3. Zakat `parseAmount` misparsed money (calculation finding 3).** `"10,000"` returned `10.0` — a
+1000× understatement of someone's zakat. Cause: comma was unconditionally rewritten to a decimal
+point for European input. The rule now is grouping-vs-decimal by evidence: a comma (or U+060C) is
+**decimal only when it is the sole separator AND is followed by one or two digits at the end** —
+so `1234,56` stays European decimal while `10,000` and `1,234,567` are grouped. U+066B (Arabic
+decimal separator) maps to `.`; U+066C, thin/nbsp/plain spaces are stripped as grouping; and
+U+06F0–06F9 (Urdu/Persian digits, previously parsing to 0) join U+0660–0669 in the digit
+normalization. All Arabic-range characters are written as escapes — no literals in code (rule 1
+guard hook).
+
+**Environment note, not a defect:** `eslint` and the 12 sqlite-backed suites cannot run in the
+Linux analysis sandbox — `node_modules` is installed for darwin/arm64, so `unrs-resolver` and
+`better-sqlite3` fail with "invalid ELF header" / "cannot find native binding". `tsc --noEmit` is
+clean and every pure-JS suite passes there. Both gates must be re-run on the Mac before the
+release build; nothing in this change set touches sqlite or import resolution.
+
+## 2026-07-31 — Domain: buy `deendawn.com` for audio; legal pages stay on `khavion.com`
+
+Owner named `deendawn.com` in-session. Split deliberately: the **audio bucket** gets
+`audio.deendawn.com` (the Cloudflare `*.r2.dev` test address is rate-limited and unfit for a public
+release), while the **Privacy Policy and Support pages** stay on `khavion.com/apps/deendawn/`,
+which the owner already owns and which is already recorded in the store metadata — moving them
+would cost money and rewrite metadata for zero benefit. Registrar recommendation: Cloudflare, at
+cost with free WHOIS privacy, because the R2 bucket already lives in that account, which makes the
+custom-domain binding a same-account operation instead of a nameserver migration.
+
+## 2026-07-31 — BLOCKERS.md restructured around ONE consolidated human checkpoint
+
+Per the owner's operating rule "never drip-feed me stops," everything humanly-his is now a single
+ordered section at the top of BLOCKERS.md ("THE ONE SITTING"): Google Play first because it starts
+the unskippable 14-day/12-tester clock, then tester recruitment (with a ready-to-forward message),
+then Apple, Expo token, ASC key, domain, web pages — with exact URLs, exact costs ($99 + $25 + ~$10
+= ~$134), and what to paste back. The older itemized list is kept below it, explicitly marked
+superseded, because it holds context (EU non-trader rationale, address-publication mechanics) that
+would be lost by deletion.
+
 ## 2026-07-12 — Phase 2 blocked/never list (from PHASE_2_DIRECTIVE §1e, owner-confirmed)
 
 Word-by-word Quran data: QUL/hablullah WBW is CC BY-NC-ND — unusable (tip jar = commercial-adjacent; ND blocks derivatives). Feature deferred until a permissive dataset is sourced. corpus.quran.com morphology is GPL — do not link or bundle. Hadith remains out of scope pending a sunnah.com agreement. Wikipedia bios (CC BY-SA), Nicholson Rumi translations (Gibb Trust copyright), Rosenthal's Muqaddimah (1958, copyrighted), Stanford Encyclopedia of Philosophy: never bundle. Android full-adhan foreground service: deferred to post-v1 (new permission surface); do not scaffold.

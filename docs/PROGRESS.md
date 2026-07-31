@@ -760,3 +760,27 @@ custom TabBar, Tasbih replaces Ask in the tab row.
   widget waits on your Apple account for its signing check, and tasbih
   volume-button counting is Android-only (App Review safety). Everything
   else shipped without needing you.
+
+## Session 2026-07-31 (later) — STORE RELEASE PHASE begins
+
+Mission: TestFlight + App Review, and into the Play closed test on the shortest real path.
+The Play 14-day tester clock is the long pole, so everything that starts it comes first.
+
+- **BLOCKERS.md now opens with ONE consolidated checkpoint ("THE ONE SITTING")** — every
+  human-only action in one ordered pass: Play account ($25, first, it starts the clock),
+  15 testers with a copy-paste recruitment message, Apple ($99), Expo token, ASC API key,
+  deendawn.com (~$10), and the two web pages onto khavion.com. ~45 min, ~$134.
+- **All three release-blocking defects from the codebase review are fixed, with tests that
+  fail against the old code** (see DECISIONS 2026-07-31): silence-today now persists
+  `notifications.silencedDate.v1` and the planner honours it (self-clearing at day rollover);
+  iOS notification diffing now round-trips `fireMs` through `content.data`, ending the
+  ~40-notification churn on every foreground — and `service.test.ts`'s mock was corrected to
+  the honest iOS `timeInterval` trigger shape, which was what hid the bug; zakat `parseAmount`
+  now reads `10,000` as ten thousand, honours U+066B, and parses Urdu/Persian digits.
+- Gates: `tsc --noEmit` clean; notifications 86/86 and zakat 15/15 green; all pure-JS suites
+  green. `eslint` and the 12 sqlite-backed suites cannot run in the Linux sandbox (darwin
+  node_modules — "invalid ELF header"); they must be re-run on the Mac before the release
+  build. No sqlite or import-resolution code was touched.
+- NEXT (no waiting on Zohaib): re-run lint + full jest on the Mac, production release builds
+  both platforms, re-run the offline e2e suite on release, then finish the Play listing /
+  data-safety / content-rating package and the Apple metadata + screenshot set.

@@ -16,7 +16,7 @@ import {
 } from './scheduleContext';
 import { ensureAdhanCategory } from './notificationTasks';
 import { diffPlans, planNotifications, PlannedNotification } from './scheduler';
-import { ADHAN_CATEGORY } from './silenceToday';
+import { ADHAN_CATEGORY, loadSilencedDate } from './silenceToday';
 import { loadStickyEnabled, syncStickyNextPrayer } from './stickyNextPrayer';
 import { log } from '../../lib/log';
 import { getUserKVStore, KVStore } from '../../lib/kvStore';
@@ -67,6 +67,7 @@ function toContent(
         plannedId: p.id,
         fullAdhan: false,
         soundKey: p.sound,
+        fireMs: p.fireDate.getTime(),
         ...(channelId ? { channelId } : {}),
       },
     };
@@ -99,6 +100,13 @@ function toContent(
       // entries (they were previously invisible — a sound change never
       // updated the ~8 already-scheduled days).
       soundKey: p.sound,
+      // Fire time round-trips in the payload because the TRIGGER shape is
+      // platform-specific: Android serializes {type:'date', value}, iOS
+      // serializes timeInterval/seconds (verified in NotificationRecords.swift).
+      // Reading the trigger alone left fireMs undefined on iOS, so diffPlans
+      // never matched and every foreground churned ~40 notifications
+      // (review 2026-07-31, notifications finding 2).
+      fireMs: p.fireDate.getTime(),
       ...(channelId ? { channelId } : {}),
     },
   };
@@ -145,6 +153,9 @@ export async function rescheduleAll(
       now,
       suhoorReminderMinutes: settings.suhoorReminderMinutes,
       hijriOffset: settings.hijriOffset,
+      // Honour "Silence today" across every reschedule path, including the
+      // ones that run without the app being opened (review 2026-07-31).
+      silencedDate: loadSilencedDate(store, now),
     });
 
     // Channels first — scheduling below points notifications at them, and
@@ -161,8 +172,17 @@ export async function rescheduleAll(
     const pending = await Notifications.getAllScheduledNotificationsAsync();
     const pendingPlanned = pending
       .map((n) => {
+        // Payload first (platform-neutral, written by toContent); the
+        // Android trigger read stays as a legacy fallback for entries
+        // scheduled before fireMs shipped.
         const trigger = n.trigger as { type?: string; value?: number } | null;
-        const fireMs = trigger && trigger.type === 'date' ? trigger.value : undefined;
+        const payloadMs = n.content.data?.fireMs as number | undefined;
+        const fireMs =
+          typeof payloadMs === 'number'
+            ? payloadMs
+            : trigger && trigger.type === 'date'
+              ? trigger.value
+              : undefined;
         return {
           id: (n.content.data?.plannedId as string) ?? n.identifier,
           identifier: n.identifier,

@@ -1,6 +1,7 @@
 import * as Notifications from 'expo-notifications';
 
 import { log } from '../../lib/log';
+import { getUserKVStore, KVStore } from '../../lib/kvStore';
 
 /**
  * "Silence today" — the Android notification action. Cancels every adhan /
@@ -26,7 +27,48 @@ export function idsForToday(ids: string[], now: Date): string[] {
   });
 }
 
-export async function silenceToday(now: Date = new Date()): Promise<number> {
+/**
+ * Persisted silence marker (review 2026-07-31, notifications finding 1).
+ * Cancelling the OS queue alone is not enough: ANY later `rescheduleAll`
+ * (app foreground, notification-received, Android AppState-active, or the
+ * 12h background task — i.e. without the user ever opening the app) replans
+ * today and re-arms exactly the adhans the user just silenced. The date is
+ * therefore written down and honoured by the planner until the day rolls
+ * over.
+ */
+export const SILENCED_DATE_KEY = 'notifications.silencedDate.v1';
+
+/** Local calendar day key, matching the planned-id date format. */
+export function silenceDateKey(now: Date): string {
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(
+    now.getDate()
+  ).padStart(2, '0')}`;
+}
+
+export function recordSilencedDate(store: KVStore, now: Date): void {
+  store.set(SILENCED_DATE_KEY, silenceDateKey(now));
+}
+
+/**
+ * The silenced day, or null. Self-clearing: a stored date that is not
+ * `now`'s local day is deleted, so the marker can never outlive its day
+ * (including across a timezone move, where the key simply stops matching).
+ */
+export function loadSilencedDate(store: KVStore, now: Date = new Date()): string | null {
+  const stored = store.get(SILENCED_DATE_KEY);
+  if (!stored) return null;
+  if (stored !== silenceDateKey(now)) {
+    store.delete(SILENCED_DATE_KEY);
+    return null;
+  }
+  return stored;
+}
+
+export async function silenceToday(
+  now: Date = new Date(),
+  store: KVStore = getUserKVStore()
+): Promise<number> {
+  recordSilencedDate(store, now);
   const pending = await Notifications.getAllScheduledNotificationsAsync();
   const byPlannedId = new Map(
     pending.map((n) => [(n.content.data?.plannedId as string) ?? n.identifier, n.identifier])

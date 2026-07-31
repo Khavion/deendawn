@@ -21,11 +21,22 @@ jest.mock('expo-notifications', () => ({
   setNotificationHandler: jest.fn(),
   getPermissionsAsync: jest.fn(async () => ({ granted: state.granted, canAskAgain: true })),
   requestPermissionsAsync: jest.fn(async () => ({ granted: state.granted })),
+  // iOS trigger shape, deliberately. expo serializes DATE triggers as
+  // timeInterval/seconds on iOS (NotificationRecords.swift) — NOT the
+  // Android {type:'date', value} shape this mock used to return. That
+  // mismatch is exactly what hid review finding 2 (fireMs always undefined
+  // on iOS -> the diff never matched -> ~40 notifications churned on every
+  // foreground). Keeping the honest shape here keeps the fix load-bearing:
+  // the service must read fireMs out of content.data.
   getAllScheduledNotificationsAsync: jest.fn(async () =>
     state.pending.map((p) => ({
       identifier: p.identifier,
       content: p.content,
-      trigger: { type: 'date', value: p.trigger.date.getTime() },
+      trigger: {
+        type: 'timeInterval',
+        repeats: false,
+        seconds: Math.round((p.trigger.date.getTime() - Date.now()) / 1000),
+      },
     }))
   ),
   scheduleNotificationAsync: jest.fn(async (req: Scheduled) => {
@@ -164,6 +175,32 @@ describe('rescheduleAll', () => {
     const fajr = state.pending.filter((p) => p.identifier.startsWith('fajr-'));
     expect(fajr).toHaveLength(8);
     for (const p of fajr) expect(p.content.data?.soundKey).toBe('clip');
+  });
+
+  // Review 2026-07-31, notifications finding 1: "Silence today" used to
+  // cancel the OS queue and nothing more, so the very next rescheduleAll —
+  // foreground, notification-received, or the 12h background task, i.e.
+  // WITHOUT the user opening the app — re-armed the day they just silenced.
+  test('a silenced day stays silent across a later reschedule; tomorrow survives', async () => {
+    const store = createMemoryKVStore({ 'settings.v1': HOUSTON_SETTINGS });
+    await rescheduleAll(NOW, store, 'ios');
+    expect(state.pending.some((p) => p.identifier.endsWith('2026-07-13'))).toBe(true);
+
+    store.set('notifications.silencedDate.v1', '2026-07-13');
+    await rescheduleAll(new Date(2026, 6, 13, 4, 0, 0), store, 'ios');
+
+    expect(state.pending.some((p) => p.identifier.endsWith('2026-07-13'))).toBe(false);
+    expect(state.pending.some((p) => p.identifier.endsWith('2026-07-14'))).toBe(true);
+  });
+
+  test('the silence marker expires with the day it named', async () => {
+    const store = createMemoryKVStore({
+      'settings.v1': HOUSTON_SETTINGS,
+      'notifications.silencedDate.v1': '2026-07-13',
+    });
+    await rescheduleAll(new Date(2026, 6, 14, 3, 0, 0), store, 'ios');
+    expect(state.pending.some((p) => p.identifier.endsWith('2026-07-14'))).toBe(true);
+    expect(store.get('notifications.silencedDate.v1')).toBeNull();
   });
 
   test('disabled prayer prefs are honored', async () => {

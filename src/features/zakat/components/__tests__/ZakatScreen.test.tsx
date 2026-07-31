@@ -45,6 +45,27 @@ describe('parseAmount', () => {
     expect(parseAmount('abc')).toBe(0);
     expect(parseAmount('-50')).toBe(0);
   });
+
+  // Review 2026-07-31, calculation finding 3: money must not be understated.
+  test('comma is a GROUPING mark, not a decimal, when the number says so', () => {
+    expect(parseAmount('10,000')).toBe(10000);
+    expect(parseAmount('1,234,567')).toBe(1234567);
+    expect(parseAmount('1,234.56')).toBe(1234.56);
+    expect(parseAmount('10 000')).toBe(10000);
+  });
+
+  test('Arabic decimal separator U+066B keeps its decimals', () => {
+    const sep = String.fromCharCode(0x066b);
+    expect(parseAmount(`1234${sep}56`)).toBe(1234.56);
+    const thousands = String.fromCharCode(0x066c);
+    expect(parseAmount(`10${thousands}000`)).toBe(10000);
+  });
+
+  test('Urdu / Persian digits U+06F0-U+06F9 parse', () => {
+    const urdu1234 = String.fromCharCode(0x06f1, 0x06f2, 0x06f3, 0x06f4);
+    expect(parseAmount(urdu1234)).toBe(1234);
+    expect(parseAmount(`${urdu1234}.5`)).toBe(1234.5);
+  });
 });
 
 describe('ZakatScreen (handoff screen 08)', () => {

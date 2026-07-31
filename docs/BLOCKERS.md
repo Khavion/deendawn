@@ -8,7 +8,142 @@ I keep building everything that doesn't need you.
 
 ---
 
-## WHAT NEEDS YOU
+# ⭐ THE ONE SITTING — everything I need from you, in order (31 Jul 2026)
+
+Read only this section. It is everything that is humanly yours to do, batched so you can do it
+once and be done. Total: about **45 minutes of clicking**, **$134 of spending**, and one text
+message to friends. After this I can run the rest and only come back to you for the final
+"publish" clicks.
+
+**Why the order matters:** step 3 (Google Play) starts a **14-day clock** that nothing can speed
+up. Do it first if you only have 10 minutes today. Apple has no such clock.
+
+**Total money: $99 Apple (per year) + $25 Google (once) + ~$10 domain (per year) = ~$134.**
+
+---
+
+### ① Google Play account — $25 — DO THIS FIRST (starts the 14-day clock)
+
+1. Go to **play.google.com/console** and sign in with **apps@khavion.com**.
+2. Choose account type **Personal** (not organization).
+3. Pay the **$25** one-time fee.
+4. Google will verify your identity: your legal name and your **real home address** (no PO boxes,
+   no mailbox stores — they reject those). They may ask for a photo of your ID or a utility bill.
+   **This address is never published**, because the app takes no money.
+5. Google also makes you prove you can use a real Android phone. Install the **Google Play Console**
+   app on any Android phone running Android 10 or newer (borrow a family member's for 5 minutes if
+   you only have an iPhone) and sign in with the same account. One-time, five minutes.
+6. **Tell me: "Play account created."**
+
+---
+
+### ② Recruit 15 testers — free — start the same day
+
+Google will not let the app go public until **12 people are signed up to a private test and stay
+signed up for 14 days in a row**. If it drops below 12, the clock restarts. So sign up **15** for
+slack.
+
+They can be anyone with a Google account — family, friends, people at the masjid. They do **not**
+need an Android phone to count.
+
+**Copy-paste this to 15 people now** (I will send you the real link once the account exists;
+send this first so people are ready):
+
+> Salam — I built a free, no-ads, no-tracking Islamic app called Deen Dawn (prayer times, adhan,
+> Quran, qibla, tasbih, zakat calculator). Google requires 12 people to be signed up as testers
+> for 14 days before it can go public. Would you help? It's one tap on a link I'll send, takes
+> 30 seconds, and you don't need an Android phone. **The only thing that matters: please don't
+> tap "Leave the test" for the next few weeks** — if we drop below 12 the clock restarts.
+> Just reply "in" and I'll send the link. JazakAllah khair.
+
+**Tell me: "testers lined up"** and roughly how many said yes.
+
+---
+
+### ③ Apple Developer Program — $99/year
+
+1. Go to **developer.apple.com/programs/enroll** and sign in with the Apple ID for
+   **apps@khavion.com**.
+2. Choose **Individual / Sole Proprietor** (NOT Organization). No D-U-N-S number is needed.
+3. Enter your name **exactly as it appears on your government ID**. ⚠️ **This becomes the public
+   seller name on your App Store page, permanently.** No nicknames, no "Khavion".
+4. Give a real street address (no PO boxes) and pay the **$99**.
+5. Approval is usually same-day to a couple of days. You'll get an email.
+6. **Tell me: "Apple approved."**
+
+---
+
+### ④ Free Expo account + one token — 2 minutes, no cost
+
+1. Go to **expo.dev** → **Sign up** (top right). Free.
+2. Click your avatar (top right) → **Account settings**.
+3. Left menu → **Access tokens** → **Create token**. Name it `DeenDawn`. Create.
+4. It shows a long secret string **once**. **Copy it and paste it to me.**
+
+*This is what lets me build the app on Expo's machines without you logging in every time.*
+
+---
+
+### ⑤ Apple upload key — 5 minutes, no cost — only after ③ is approved
+
+1. Go to **appstoreconnect.apple.com**, sign in.
+2. Top menu → **Users and Access** → **Integrations** tab → **App Store Connect API** on the left.
+3. Click the **＋** next to "Active."
+4. Name it `DeenDawn EAS`. For Role, pick **App Manager**. Click **Generate**.
+5. On the new row click **Download** — you get a small file ending in **.p8**.
+   ⚠️ **Apple lets you download it exactly once.** Save it, then send it to me.
+6. Also copy me two short codes from that same page: the **Key ID** (on the key's row) and the
+   **Issuer ID** (near the top, above the list).
+
+**So step ⑤ gives me three things: the .p8 file, the Key ID, the Issuer ID.**
+
+---
+
+### ⑥ Buy deendawn.com — ~$10-12/year — approve, then buy
+
+**Why:** the Quran recitation audio currently streams from a temporary Cloudflare test address
+that Cloudflare rate-limits. That's fine for you and the 15 testers, but it is **not** fine for a
+public release. Binding the audio to a domain you own (`audio.deendawn.com`) fixes it permanently
+and costs nothing beyond the domain.
+
+**My recommendation: YES — buy `deendawn.com`.** Buy it at **Cloudflare** (dash.cloudflare.com →
+Domain Registration → Register Domain), because your audio bucket is already in that account and
+Cloudflare sells domains at cost with free privacy protection. ~$10-12/year.
+
+Then **tell me "deendawn.com is bought"** and I'll do the rest of the wiring (I'll hand you the
+2-3 clicks inside Cloudflare that need your account).
+
+*Note: the app's Privacy Policy and Support pages do NOT need this domain — they go on
+**khavion.com**, which you already own, for free. See item 2 further down.*
+
+---
+
+### ⑦ Two web pages onto khavion.com — free, 5 minutes
+
+Both stores require a public Privacy Policy link and a Support link. I've already written them.
+Copy these three files from `docs/legal/` into your khavion.com repo at
+`public/apps/deendawn/`, then commit and push. Vercel deploys automatically.
+
+That's it. Full instructions are in `docs/legal/README.md`.
+
+---
+
+### What happens after you've done ①-⑦
+
+Say **"all done"** and I will, without stopping you again:
+- link the project to your Expo account and build DeenDawn on both platforms,
+- fill in the entire Google Play listing, data-safety form, content rating, and closed-test track,
+- hand you the one Android file Google makes you upload manually (their rule) and point at the button,
+- give you the tester link to send to your 15 people,
+- fill in the entire App Store listing, screenshots, keywords, privacy answers, and reviewer notes,
+- push a build to TestFlight so you can use the real app on your own phone.
+
+**The only things I will come back to you for after that** are the three buttons the rulebook says
+are yours alone: Google's "start rollout", Apple's "Submit for Review", and the final "publish".
+
+---
+
+## WHAT NEEDS YOU (the older, longer list — everything above supersedes it)
 
 ### 0 (new, 31 Jul). Two small notes from the design build — nothing to click yet
 
