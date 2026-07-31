@@ -255,7 +255,35 @@
     "tapArea": "Tasbih counter. Tap to count.",
     "reset": "Reset",
     "labelPlaceholder": "Label (optional)",
-    "roundAnnounce": "Round complete"
+    "roundAnnounce": "Round complete",
+    "roundEyebrow": "{{dhikr}} · Round {{round}} of {{total}}",
+    "completeEyebrow": "{{dhikr}} · Complete",
+    "ofTarget": "of {{target}}",
+    "dhikrLine": "{{name}} — {{gloss}}",
+    "dhikr": {
+      "subhanallah": "SubhanAllah",
+      "alhamdulillah": "Alhamdulillah",
+      "allahuakbar": "Allahu Akbar"
+    },
+    "gloss": {
+      "subhanallah": "Glory be to Allah",
+      "alhamdulillah": "All praise is due to Allah",
+      "allahuakbar": "Allah is the Greatest"
+    },
+    "tapHint": "Tap anywhere to count",
+    "tapHintVolume": "Tap anywhere to count · volume keys work too",
+    "custom": "Custom",
+    "customTitle": "Custom target",
+    "customApply": "Set target",
+    "lastSevenDays": "Last 7 days",
+    "weekTotal_one": "{{count}} this week",
+    "weekTotal_other": "{{count}} this week",
+    "todayLine": "today {{count}} · streak off",
+    "streakKept_one": "kept {{count}} day",
+    "streakKept_other": "kept {{count}} days",
+    "continueNext": "Continue — {{dhikr}}",
+    "keepTapping": "or keep tapping toward 99",
+    "weekSummary": "{{total}} counts in the last 7 days"
   },
   "zakat": {
     "title": "Zakat calculator",

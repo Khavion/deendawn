@@ -53,18 +53,17 @@ export function ProgressRing({
     [inset, size]
   );
 
-  const trackPath = useMemo(() => {
-    const p = Skia.Path.Make();
-    p.addArc(rect, 0, 360);
-    return p;
-  }, [rect]);
+  const trackPath = useMemo(
+    () => Skia.PathBuilder.Make().addArc(rect, 0, 360).detach(),
+    [rect]
+  );
 
   const arcPath = useMemo(() => {
     const sweep = clamp01(progress) * 360;
-    const p = Skia.Path.Make();
     // Start at 12 o'clock (-90°); mirror the sweep for RTL.
-    p.addArc(rect, -90, I18nManager.isRTL ? -sweep : sweep);
-    return p;
+    return Skia.PathBuilder.Make()
+      .addArc(rect, -90, I18nManager.isRTL ? -sweep : sweep)
+      .detach();
   }, [rect, progress]);
 
   // Buffering motion: rotate the dashed ring (or pulse under Reduce Motion).
@@ -153,13 +152,13 @@ function BufferingRing({
   color: string;
 }) {
   const path = useMemo(() => {
-    const p = Skia.Path.Make();
+    const b = Skia.PathBuilder.Make();
     const segments = 12;
     const sweep = 360 / segments;
     for (let i = 0; i < segments; i++) {
-      p.addArc(rect, i * sweep, sweep * 0.55);
+      b.addArc(rect, i * sweep, sweep * 0.55);
     }
-    return p;
+    return b.detach();
   }, [rect]);
   return <Path path={path} style="stroke" strokeWidth={strokeWidth} strokeCap="round" color={color} />;
 }

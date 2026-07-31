@@ -31,6 +31,12 @@ jest.mock('@shopify/react-native-skia', () => {
     Group: Noop,
     Skia: {
       Path: { Make: path },
+      PathBuilder: {
+        Make: () => {
+          const b = { addArc: () => b, detach: () => path() };
+          return b;
+        },
+      },
       XYWHRect: (x, y, width, height) => ({ x, y, width, height }),
       PathEffect: { MakeDash: () => null },
     },

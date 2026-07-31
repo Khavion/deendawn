@@ -256,7 +256,35 @@
     "tapArea": "تسبیح کاؤنٹر۔ گننے کے لیے دبائیں۔",
     "reset": "دوبارہ شروع",
     "labelPlaceholder": "لیبل (اختیاری)",
-    "roundAnnounce": "دور مکمل ہوا"
+    "roundAnnounce": "دور مکمل ہوا",
+    "roundEyebrow": "{{dhikr}} · دور {{round}} از {{total}}",
+    "completeEyebrow": "{{dhikr}} · مکمل",
+    "ofTarget": "{{target}} میں سے",
+    "dhikrLine": "{{name}} — {{gloss}}",
+    "dhikr": {
+      "subhanallah": "سبحان اللہ",
+      "alhamdulillah": "الحمد للہ",
+      "allahuakbar": "اللہ اکبر"
+    },
+    "gloss": {
+      "subhanallah": "اللہ پاک ہے",
+      "alhamdulillah": "تمام تعریفیں اللہ کے لیے ہیں",
+      "allahuakbar": "اللہ سب سے بڑا ہے"
+    },
+    "tapHint": "گننے کے لیے کہیں بھی دبائیں",
+    "tapHintVolume": "گننے کے لیے کہیں بھی دبائیں · والیوم بٹن بھی چلتے ہیں",
+    "custom": "اپنی مرضی",
+    "customTitle": "اپنا ہدف",
+    "customApply": "ہدف مقرر کریں",
+    "lastSevenDays": "گزشتہ 7 دن",
+    "weekTotal_one": "اس ہفتے {{count}}",
+    "weekTotal_other": "اس ہفتے {{count}}",
+    "todayLine": "آج {{count}} · سلسلہ بند",
+    "streakKept_one": "{{count}} دن جاری",
+    "streakKept_other": "{{count}} دن جاری",
+    "continueNext": "جاری رکھیں — {{dhikr}}",
+    "keepTapping": "یا 99 تک گنتے رہیں",
+    "weekSummary": "گزشتہ 7 دنوں میں {{total}} بار"
   },
   "zakat": {
     "title": "زکوٰۃ کیلکولیٹر",

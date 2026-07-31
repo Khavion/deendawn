@@ -38,7 +38,8 @@
     "AyahBlock": "src/components/ui/AyahBlock.tsx",
     "TransportMark": "src/components/ui/TransportMark.tsx",
     "ListenBar": "src/components/ui/ListenBar.tsx",
-    "CompassDial": "src/components/ui/CompassDial.tsx"
+    "CompassDial": "src/components/ui/CompassDial.tsx",
+    "WeekBars": "src/components/ui/WeekBars.tsx"
   },
   "guidelinesGlob": [
     "docs/DESIGN.md"

@@ -22,3 +22,4 @@ export { Sheet, type SheetProps } from './Sheet';
 export { Skeleton, type SkeletonProps } from './Skeleton';
 export { TabBar, TAB_BAR_HEIGHT } from './TabBar';
 export { TransportMark, type TransportKind } from './TransportMark';
+export { WeekBars, type WeekBarDay } from './WeekBars';

@@ -3,22 +3,30 @@ import React from 'react';
 
 import { TasbihScreen } from '../TasbihScreen';
 import { createMemoryKVStore } from '../../../../lib/kvStore';
+import { setStreakEnabled } from '../../tasbihState';
 import { SettingsProvider } from '../../../settings/SettingsContext';
 
 jest.mock('expo-haptics', () => ({
   selectionAsync: jest.fn(async () => {}),
   impactAsync: jest.fn(async () => {}),
   notificationAsync: jest.fn(async () => {}),
-  ImpactFeedbackStyle: { Medium: 'medium' },
+  ImpactFeedbackStyle: { Light: 'light', Medium: 'medium' },
   NotificationFeedbackType: { Success: 'success' },
 }));
 jest.mock('react-native-safe-area-context', () => ({
   useSafeAreaInsets: () => ({ top: 0, bottom: 0, left: 0, right: 0 }),
 }));
-jest.mock('expo-router', () => ({ Stack: { Screen: () => null } }));
+jest.mock('expo-router', () => ({
+  Stack: { Screen: () => null },
+  useFocusEffect: (cb: () => void | (() => void)) => {
+    const React = jest.requireActual('react');
+    React.useEffect(cb, []);
+  },
+}));
 
-const renderTasbih = async () => {
+const renderTasbih = async (setup?: (store: ReturnType<typeof createMemoryKVStore>) => void) => {
   const store = createMemoryKVStore();
+  setup?.(store);
   const view = await render(
     <SettingsProvider store={store}>
       <TasbihScreen />
@@ -27,75 +35,82 @@ const renderTasbih = async () => {
   return { store, view };
 };
 
+const tapN = async (view: Awaited<ReturnType<typeof renderTasbih>>['view'], n: number) => {
+  for (let i = 0; i < n; i++) await fireEvent.press(view.getByTestId('tasbih-tap'));
+};
+
 beforeEach(() => jest.clearAllMocks());
 
 describe('TasbihScreen', () => {
   test('taps count with a selection tick each time', async () => {
     const Haptics = jest.requireMock('expo-haptics');
     const { view } = await renderTasbih();
-    await fireEvent.press(view.getByTestId('tasbih-tap'));
-    await fireEvent.press(view.getByTestId('tasbih-tap'));
-    // Counts render as locale-formatted strings (digit policy, format.ts).
+    await tapN(view, 2);
     expect(view.getByTestId('tasbih-count').props.children).toBe('2');
     expect(Haptics.selectionAsync).toHaveBeenCalledTimes(2);
   });
 
-  test('33-target round completes with Success haptic and wraps to zero display of full round first', async () => {
+  test('starts on the guided set: SubhanAllah round 1 of 3, target 33', async () => {
+    const { view } = await renderTasbih();
+    expect(view.getByText(/SubhanAllah · Round 1 of 3/)).toBeOnTheScreen();
+    expect(view.getByText('of 33')).toBeOnTheScreen();
+    expect(view.getByText('SubhanAllah — Glory be to Allah')).toBeOnTheScreen();
+  });
+
+  test('33 completes the round: ONE detent, Continue button, no auto-advance', async () => {
     const Haptics = jest.requireMock('expo-haptics');
     const { view } = await renderTasbih();
-    for (let i = 0; i < 33; i++) await fireEvent.press(view.getByTestId('tasbih-tap'));
-    expect(Haptics.notificationAsync).toHaveBeenCalledTimes(1);
-    // Milestone flash shows the full round momentarily.
+    await tapN(view, 33);
+    expect(view.getByText(/SubhanAllah · Complete/)).toBeOnTheScreen();
+    expect(Haptics.impactAsync).toHaveBeenCalledTimes(1);
+    expect(Haptics.notificationAsync).not.toHaveBeenCalled();
+    // Held: further taps do not advance anything.
+    await tapN(view, 3);
+    expect(view.getByTestId('tasbih-count').props.children).toBe('33');
+    // Continue moves to Alhamdulillah.
+    await fireEvent.press(view.getByTestId('tasbih-continue'));
+    expect(view.getByText(/Alhamdulillah · Round 2 of 3/)).toBeOnTheScreen();
+    expect(view.getByTestId('tasbih-count').props.children).toBe('0');
+  });
+
+  test('"keep tapping toward 99" carries progress into the free 99', async () => {
+    const { view } = await renderTasbih();
+    await tapN(view, 33);
+    await fireEvent.press(view.getByTestId('tasbih-keep-tapping'));
+    expect(view.getByText('of 99')).toBeOnTheScreen();
     expect(view.getByTestId('tasbih-count').props.children).toBe('33');
   });
 
-  test('99-target hits the Medium detent at 33 and 66', async () => {
-    const Haptics = jest.requireMock('expo-haptics');
+  test('segmented row switches modes; reset clears', async () => {
     const { view } = await renderTasbih();
+    await tapN(view, 5);
     await fireEvent.press(view.getByTestId('target-99'));
-    for (let i = 0; i < 66; i++) await fireEvent.press(view.getByTestId('tasbih-tap'));
-    expect(Haptics.impactAsync).toHaveBeenCalledTimes(2);
-    expect(Haptics.notificationAsync).not.toHaveBeenCalled();
-  });
-
-  test('reset zeroes the count; label persists user text', async () => {
-    const { store, view } = await renderTasbih();
-    await fireEvent.press(view.getByTestId('tasbih-tap'));
+    expect(view.getByText('of 99')).toBeOnTheScreen();
+    expect(view.getByTestId('tasbih-count').props.children).toBe('0');
+    await tapN(view, 4);
     await fireEvent.press(view.getByTestId('tasbih-reset'));
     expect(view.getByTestId('tasbih-count').props.children).toBe('0');
-    await fireEvent.changeText(view.getByTestId('tasbih-label'), 'Morning dhikr');
-    expect(JSON.parse(store.get('tasbih.v1')!)).toMatchObject({ label: 'Morning dhikr' });
   });
 
-  test('announces the selected target and a live, bounded counter value', async () => {
+  test('custom opens the sheet and applies a target', async () => {
     const { view } = await renderTasbih();
-    // Default target 33 is selected; 99 is not — screen readers hear the choice.
-    expect(view.getByTestId('target-33').props.accessibilityState).toEqual({ selected: true });
-    expect(view.getByTestId('target-99').props.accessibilityState).toEqual({ selected: false });
-    // The counter exposes a live value (announced on change), not baked into its name.
-    expect(view.getByTestId('tasbih-tap').props.accessibilityValue).toEqual({
-      now: 0,
-      min: 0,
-      max: 33,
-    });
-    await fireEvent.press(view.getByTestId('tasbih-tap'));
-    expect(view.getByTestId('tasbih-tap').props.accessibilityValue.now).toBe(1);
-    // Selecting 99 moves the selection and the counter's upper bound.
-    await fireEvent.press(view.getByTestId('target-99'));
-    expect(view.getByTestId('target-99').props.accessibilityState).toEqual({ selected: true });
-    expect(view.getByTestId('target-33').props.accessibilityState).toEqual({ selected: false });
-    expect(view.getByTestId('tasbih-tap').props.accessibilityValue.max).toBe(99);
+    await fireEvent.press(view.getByTestId('target-custom'));
+    await fireEvent.changeText(view.getByTestId('tasbih-custom-input'), '500');
+    await fireEvent.press(view.getByTestId('tasbih-custom-apply'));
+    expect(view.getByText('of 500')).toBeOnTheScreen();
   });
 
-  test('daily history shows after taps', async () => {
+  test('history card shows the week total and streak-off caption by default', async () => {
     const { view } = await renderTasbih();
-    await fireEvent.press(view.getByTestId('tasbih-tap'));
-    await fireEvent.press(view.getByTestId('tasbih-tap'));
-    await fireEvent.press(view.getByTestId('tasbih-tap'));
-    // Today's row shows 3, dated with the localized short label ("Jul 30").
-    const today = new Date();
-    const label = new Intl.DateTimeFormat('en', { month: 'short', day: 'numeric' }).format(today);
-    expect(view.getByText(label)).toBeOnTheScreen();
-    expect(view.getAllByText('3').length).toBeGreaterThanOrEqual(1);
+    await tapN(view, 3);
+    expect(view.getByText('3 this week')).toBeOnTheScreen();
+    expect(view.getByText(/today 3 · streak off/)).toBeOnTheScreen();
+    expect(view.getByTestId('tasbih-weekbars')).toBeOnTheScreen();
+  });
+
+  test('opt-in streak shows the quiet kept caption', async () => {
+    const { view } = await renderTasbih((store) => setStreakEnabled(store, true));
+    await tapN(view, 1);
+    expect(view.getByText(/kept/)).toBeOnTheScreen();
   });
 });
