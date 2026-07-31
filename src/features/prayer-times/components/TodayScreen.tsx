@@ -138,7 +138,7 @@ function NextPrayerHeroBody({
   return (
     <>
       <PeriodEyebrow label={eyebrow} labelColor={t.textSecondary} style={styles.nextEyebrow} />
-      <AppText variant="display" color={t.textPrimary} testID="next-time">
+      <AppText variant="display" color={t.textPrimary} numberOfLines={1} testID="next-time">
         {formatTimeInZone(next.time, { locale: timeLocale })}
       </AppText>
       <Countdown target={next.time} variant="title" color={t.ochre} testID="next-countdown" />
