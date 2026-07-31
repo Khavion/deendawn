@@ -39,7 +39,8 @@
     "TransportMark": "src/components/ui/TransportMark.tsx",
     "ListenBar": "src/components/ui/ListenBar.tsx",
     "CompassDial": "src/components/ui/CompassDial.tsx",
-    "WeekBars": "src/components/ui/WeekBars.tsx"
+    "WeekBars": "src/components/ui/WeekBars.tsx",
+    "BrandMark": "src/components/ui/BrandMark.tsx"
   },
   "guidelinesGlob": [
     "docs/DESIGN.md"

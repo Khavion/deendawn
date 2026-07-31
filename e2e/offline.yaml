@@ -41,10 +41,18 @@ appId: com.khavion.deendawn
 - pressKey: Enter
 - extendedWaitUntil:
     visible:
+      id: 'ob-city-next'
+    timeout: 10000
+- tapOn:
+    id: 'ob-city-next'
+- extendedWaitUntil:
+    visible:
       id: 'ob-skip'
     timeout: 10000
 - tapOn:
     id: 'ob-skip'
+- tapOn:
+    id: 'ob-finish'
 # Prayer times from the on-device engine
 - extendedWaitUntil:
     visible:

@@ -1,6 +1,7 @@
 export { AppPressable, type AppPressableProps } from './AppPressable';
 export { AppText, type AppTextProps, type AppTextVariant } from './AppText';
 export { AyahBlock, type AyahBlockProps, type AyahRun } from './AyahBlock';
+export { BrandMark } from './BrandMark';
 export { Button, type ButtonProps } from './Button';
 export { Card } from './Card';
 export { CompassDial, type CompassDialProps } from './CompassDial';
