@@ -24,7 +24,6 @@ import { useSettings } from '@/src/features/settings/SettingsContext';
 import { resolveLocation, resolvePrayerConfig } from '@/src/features/settings/settingsStore';
 import {
   ambientGradient,
-  dimOnFeatured,
   elevation,
   featuredGradient,
   measure,
@@ -33,7 +32,6 @@ import {
   radius,
   richMode,
   spacing,
-  textOnFeatured,
 } from '@/src/lib/theme/tokens';
 import { useThemeMode } from '@/src/lib/theme/ThemeProvider';
 import { useScrollInsets } from '@/src/lib/theme/useScrollInsets';
@@ -74,8 +72,9 @@ function countdownParts(ms: number) {
 }
 
 /** The one per-second surface: isolates the tick from the whole screen. */
-function Countdown({ target, color }: { target: Date; color: string }) {
+function Countdown({ target, color }: { target: Date; color?: string }) {
   const { t: tr } = useTranslation();
+  const t = useTokens();
   const [now, setNow] = useState(() => new Date());
   useEffect(() => {
     const id = setInterval(() => setNow(new Date()), 1000);
@@ -87,9 +86,55 @@ function Countdown({ target, color }: { target: Date; color: string }) {
       ? tr('today.hoursMinutes', { hours: p.hours, minutes: p.minutes })
       : tr('today.minutesSeconds', { minutes: p.minutes, seconds: p.seconds });
   return (
-    <AppText variant="body" style={{ color }}>
+    <AppText variant="body" style={{ color: color ?? t.textSecondary }}>
       {tr('today.countdown', { time })}
     </AppText>
+  );
+}
+
+/**
+ * The featured hero. Interior colors come from the card's content tone
+ * (handoff gap 02) — the body is a child component so its hooks resolve the
+ * onFeatured palette, with zero hand-passed colors.
+ */
+function NextPrayerHero({
+  next,
+  timeLocale,
+}: {
+  next: NonNullable<ReturnType<typeof nextPrayer>>;
+  timeLocale: string;
+}) {
+  return (
+    <GoldFrameCard gradientColors={featuredGradient.light} style={styles.nextCard}>
+      <NextPrayerHeroBody next={next} timeLocale={timeLocale} />
+    </GoldFrameCard>
+  );
+}
+
+function NextPrayerHeroBody({
+  next,
+  timeLocale,
+}: {
+  next: NonNullable<ReturnType<typeof nextPrayer>>;
+  timeLocale: string;
+}) {
+  const { t: tr } = useTranslation();
+  const t = useTokens();
+  return (
+    <>
+      <AppText variant="eyebrow" style={[styles.nextEyebrow, { color: t.textSecondary }]}>
+        {tr('today.nextPrayer')}
+      </AppText>
+      <AppText variant="title">
+        {next.isTomorrow
+          ? tr('today.tomorrow', { prayer: tr(`prayers.${next.prayer}`) })
+          : tr(`prayers.${next.prayer}`)}
+      </AppText>
+      <AppText style={styles.nextTime} color={t.textPrimary}>
+        {formatTimeInZone(next.time, { locale: timeLocale })}
+      </AppText>
+      <Countdown target={next.time} />
+    </>
   );
 }
 
@@ -227,22 +272,7 @@ export function TodayScreen() {
           </View>
         )}
 
-        {next && (
-          <GoldFrameCard gradientColors={featuredGradient[rm]} style={styles.nextCard}>
-            <AppText variant="eyebrow" style={[styles.nextEyebrow, { color: dimOnFeatured[rm] }]}>
-              {tr('today.nextPrayer')}
-            </AppText>
-            <AppText variant="title" style={{ color: textOnFeatured[rm] }}>
-              {next.isTomorrow
-                ? tr('today.tomorrow', { prayer: tr(`prayers.${next.prayer}`) })
-                : tr(`prayers.${next.prayer}`)}
-            </AppText>
-            <AppText style={[styles.nextTime, { color: textOnFeatured[rm] }]}>
-              {formatTimeInZone(next.time, { locale: timeLocale })}
-            </AppText>
-            <Countdown target={next.time} color={dimOnFeatured[rm]} />
-          </GoldFrameCard>
-        )}
+        {next && <NextPrayerHero next={next} timeLocale={timeLocale} />}
 
         <SectionRule label={tr('today.timesSection')} style={styles.sectionRule} />
 

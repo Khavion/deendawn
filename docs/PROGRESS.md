@@ -729,3 +729,13 @@ custom TabBar, Tasbih replaces Ask in the tab row.
   sweep re-wired, tabs.tasbih strings (@draft ur/ar). Live-verified on iOS
   sim; Android pass owed at the Phase-2 rebuild. Gates: tsc/lint/jest
   541/541 green.
+- Phase 2 DONE (native batch A): Skia 2.10.1 + reanimated 4.5.3 +
+  120fps plist key + expo-widgets (App Group, push off, one NextPrayer
+  widget declared) + modules/volume-keys (Android). One prebuild each side;
+  iOS sim build + Android debug/release/AAB all green; 16KB gate PASSED;
+  perf baseline settled at 512ms cold / 0.23% jank (≈ pre-Skia); Play
+  download 43.8–75.0MB (<100MB). Also landed C1: GoldFrameCard contentTone
+  (onFeaturedTokens + useTokens honoring provider tokens, §2 night fill-drop)
+  with hero/zakat/continue-chip migrated off hand-passed colors; Divider
+  tones/inset. Verified live on iOS sim (visual parity) + Android emulator
+  (reader healthy). 546/546 tests green.

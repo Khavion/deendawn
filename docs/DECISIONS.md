@@ -855,3 +855,41 @@ all five tabs navigate, Ask reachable via Quran, screenshots in scratchpad;
 Android live pass rides the Phase-2 rebuild (bar is fork-free JS).
 Transitions pass: `fullScreenGestureEnabled` on the reader route; predictive
 back stays OFF; formSheet applies when picker routes appear (none yet).
+
+## 2026-07-31 — Native batch A landed (handoff phase 2)
+
+One batched native change, one prebuild per platform, both build gates green:
+- @shopify/react-native-skia 2.10.1 (research mandate ≥2.10.1; expo install
+  suggested 2.6.2 — overridden deliberately, build gates arbitrated and
+  passed; Ganesh backend only, never @next/Graphite; MIT, telemetry-free,
+  ~6MB iOS / ~4MB Android).
+- react-native-reanimated 4.5.0 → 4.5.3 (same validated 4.5.x line; RN 0.86
+  stale-value + exiting-animation crash fixes). Never downgrade past a Skia
+  install.
+- CADisableMinimumFrameDurationOnPhone=true (120fps ProMotion; battery check
+  added to the TESTPLAN device pass).
+- expo-widgets 57.0.7 with App Group group.com.khavion.deendawn,
+  enablePushNotifications=false forever, enableAndroid=false (Android keeps
+  react-native-android-widget); one declared widget "NextPrayer"
+  (systemSmall/Medium + accessoryRectangular/Inline). @bacons/apple-targets
+  stays the documented escape hatch (docs/WIDGET.md) — never both.
+- modules/volume-keys: Android-only local expo-module wrapping the activity
+  Window.Callback ONLY while the tasbih screen observes — volume is normal
+  everywhere else. iOS deliberately unimplemented (App Review 2.5.9 risk);
+  tasbih hint copy is platform-adjusted (BLOCKERS note for Zohaib).
+- 16KB gate PASSED on the release AAB (librnskia included). iOS xcodebuild
+  sim build + Android assembleDebug/bundleRelease/assembleRelease all green.
+
+## 2026-07-31 — GoldFrameCard content tone + §2 night rule (gap 02)
+
+`useTokens` now returns the nearest provider's tokens (was palette[mode]) so
+a filled GoldFrameCard can nest a ThemeContext carrying `onFeaturedTokens` —
+a dark palette re-based for AA on the light featured gradient (textSecondary
+maps to the proven dim-ivory: dark sage secondary reads ~2.5:1 on the fill
+and must never be used there; `ochre` stays the gold for LARGE text only).
+The card now also enforces "night mutes the featured fill": gradients render
+in light mode only; dark/nightWarm get the gold hairline on surface. Hero /
+zakat result / continue-reading chip dropped all hand-passed featured colors
+(their interiors became child components so hooks resolve the provided
+palette). Hero eyebrow stays dim-ivory (not the mockups' gold — 12pt gold on
+the fill fails AA; matches the previously approved hero look).

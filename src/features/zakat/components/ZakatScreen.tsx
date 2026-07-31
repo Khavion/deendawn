@@ -16,10 +16,10 @@ import {
   NISAB_GOLD_GRAMS,
   NISAB_SILVER_GRAMS,
   ZakatInputs,
+  ZakatResult,
 } from '../zakat';
 import { AppText, GoldFrameCard, SectionRule } from '@/src/components/ui';
 import {
-  dimOnFeatured,
   elevation,
   featuredGradient,
   fonts,
@@ -29,7 +29,6 @@ import {
   radius,
   richMode,
   spacing,
-  textOnFeatured,
 } from '@/src/lib/theme/tokens';
 import { useThemeMode } from '@/src/lib/theme/ThemeProvider';
 import { useScrollInsets } from '@/src/lib/theme/useScrollInsets';
@@ -57,6 +56,38 @@ export function parseAmount(text: string): number {
     .replace(/[,\u060C]/g, '.');
   const n = Number.parseFloat(western);
   return Number.isFinite(n) && n >= 0 ? n : 0;
+}
+
+/**
+ * The result card's interior — a child of the GoldFrameCard so its hooks
+ * resolve the onFeatured palette (handoff gap 02); no hand-passed colors.
+ */
+function ZakatResultBody({ result, fmt }: { result: ZakatResult; fmt: (n: number) => string }) {
+  const { t: tr } = useTranslation();
+  const t = useTokens();
+  return (
+    <>
+      {result.status === 'due' ? (
+        <>
+          <AppText variant="bodyStrong" color={t.textSecondary}>
+            {tr('zakat.due')}
+          </AppText>
+          <AppText style={styles.resultAmount} color={t.textPrimary}>
+            {fmt(result.zakatDue)}
+          </AppText>
+        </>
+      ) : (
+        <AppText variant="bodyStrong" style={styles.resultCentered}>
+          {tr(result.status === 'needPrices' ? 'zakat.needPrices' : 'zakat.belowNisab')}
+        </AppText>
+      )}
+      {result.nisabThreshold !== null && (
+        <AppText variant="caption" color={t.textSecondary}>
+          {tr('zakat.nisabLine', { amount: fmt(result.nisabThreshold) })}
+        </AppText>
+      )}
+    </>
+  );
 }
 
 export function ZakatScreen() {
@@ -118,32 +149,11 @@ export function ZakatScreen() {
         keyboardShouldPersistTaps="handled"
       >
         <GoldFrameCard
-          gradientColors={featuredGradient[rm]}
+          gradientColors={featuredGradient.light}
           style={styles.resultCard}
           testID="zakat-result"
         >
-          {result.status === 'due' ? (
-            <>
-              <AppText variant="bodyStrong" style={{ color: dimOnFeatured[rm] }}>
-                {tr('zakat.due')}
-              </AppText>
-              <AppText style={[styles.resultAmount, { color: textOnFeatured[rm] }]}>
-                {fmt(result.zakatDue)}
-              </AppText>
-            </>
-          ) : (
-            <AppText
-              variant="bodyStrong"
-              style={{ color: textOnFeatured[rm], textAlign: 'center' }}
-            >
-              {tr(result.status === 'needPrices' ? 'zakat.needPrices' : 'zakat.belowNisab')}
-            </AppText>
-          )}
-          {result.nisabThreshold !== null && (
-            <AppText variant="caption" style={{ color: dimOnFeatured[rm] }}>
-              {tr('zakat.nisabLine', { amount: fmt(result.nisabThreshold) })}
-            </AppText>
-          )}
+          <ZakatResultBody result={result} fmt={fmt} />
         </GoldFrameCard>
 
         <SectionRule label={tr('zakat.assets')} style={styles.sectionRule} />
@@ -187,6 +197,7 @@ const styles = StyleSheet.create({
     marginBottom: spacing.l,
   },
   resultAmount: { fontFamily: fonts.serifSemiBold, fontSize: fontSize.display, lineHeight: 44 },
+  resultCentered: { textAlign: 'center' },
   sectionRule: { marginTop: spacing.l, marginBottom: spacing.s },
   note: { marginBottom: spacing.s },
   groupCard: {

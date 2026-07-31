@@ -494,6 +494,23 @@ export const dimOnFeatured: Record<'light' | 'dark', string> = {
   dark: 'rgba(21,24,29,0.88)',
 };
 
+/**
+ * The palette a filled GoldFrameCard provides to its subtree (handoff §5 gap
+ * 02, `contentTone`): the dark palette re-based so every text role passes AA
+ * on the light featured gradient — textPrimary/secondary/icon come from the
+ * proven onFeatured pair (dark.textSecondary alone reads ~2.5:1 on the fill),
+ * and the border becomes the onFeatured hairline. `ochre` stays the dark
+ * gold: LARGE text only on the fill (the countdown; contrast test pins it to
+ * the bottom stop).
+ */
+export const onFeaturedTokens: ColorTokens = {
+  ...palette.dark,
+  textPrimary: textOnFeatured.light,
+  textSecondary: dimOnFeatured.light,
+  icon: dimOnFeatured.light,
+  border: withAlpha(palette.dark.ochre, 0.28),
+};
+
 /** Illuminated gold hairline rule (transparent → gold → transparent). */
 export const goldRuleGradient: Record<'light' | 'dark', string[]> = {
   light: ['rgba(138,100,48,0)', 'rgba(138,100,48,0.45)', 'rgba(138,100,48,0)'],

@@ -20,7 +20,6 @@ import {
   radius,
   richMode,
   spacing,
-  textOnFeatured,
 } from '@/src/lib/theme/tokens';
 import { listCellDirection } from '@/src/lib/theme/direction';
 import { localizeNumber } from '@/src/lib/i18n/format';
@@ -28,6 +27,12 @@ import { useThemeMode } from '@/src/lib/theme/ThemeProvider';
 import { useScrollInsets } from '@/src/lib/theme/useScrollInsets';
 import { useTokens } from '@/src/lib/theme/useTokens';
 import { useDeviceTier } from '@/src/lib/theme/useDeviceTier';
+
+/** Child of the featured chip so its hooks resolve the onFeatured palette. */
+function ContinueReadingLabel({ surah, ayah }: { surah: number; ayah: number }) {
+  const { t } = useTranslation();
+  return <AppText variant="bodyStrong">{t('quran.continueReading', { surah, ayah })}</AppText>;
+}
 
 export function SurahListScreen() {
   const insets = useSafeAreaInsets();
@@ -145,10 +150,8 @@ export function SurahListScreen() {
               testID="continue-reading"
               onPress={() => router.push(`/surah/${lastRead.surah}?ayah=${lastRead.ayah}`)}
             >
-              <GoldFrameCard gradientColors={featuredGradient[rm]} style={styles.continueChip}>
-                <AppText variant="bodyStrong" style={{ color: textOnFeatured[rm] }}>
-                  {t('quran.continueReading', { surah: lastRead.surah, ayah: lastRead.ayah })}
-                </AppText>
+              <GoldFrameCard gradientColors={featuredGradient.light} style={styles.continueChip}>
+                <ContinueReadingLabel surah={lastRead.surah} ayah={lastRead.ayah} />
               </GoldFrameCard>
             </AppPressable>
           )}

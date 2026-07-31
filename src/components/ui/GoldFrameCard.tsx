@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useContext, useMemo } from 'react';
 import { StyleSheet, View, type ViewProps } from 'react-native';
 
 import { Gradient } from './Gradient';
-import { useThemeMode } from '@/src/lib/theme/ThemeProvider';
+import { ThemeContext, useThemeMode } from '@/src/lib/theme/ThemeProvider';
 import {
   elevation,
+  onFeaturedTokens,
   radius,
   richMode,
   type ElevationStep,
@@ -25,48 +26,81 @@ export type GoldFrameCardProps = ViewProps & {
    * and elevation match a locally-themed surface. Defaults to the app mode.
    */
   mode?: ThemeMode;
+  /**
+   * Content theming when the gradient fill renders (handoff §5 gap 02):
+   * 'auto' provides the onFeatured palette to the subtree so AppText/
+   * PeriodEyebrow/Divider land legibly without hand-passed colors; 'none'
+   * opts out for callers that manage their own colors.
+   */
+  contentTone?: 'auto' | 'none';
 };
 
 /**
- * The ONE featured card per screen (docs/RICH_DESIGN_SPEC.md): a fine gold
- * frame with small gold corner brackets, an optional gradient fill, and the
- * green-tinted E3 elevation. On the essential tier the brackets and gradient
- * fall back to a plain border + flat fill.
+ * The ONE featured card per screen (handoff §2): a fine gold frame with small
+ * gold corner brackets, an optional gradient fill, and the green-tinted E3
+ * elevation. Night mutes the featured fill — in dark/nightWarm the gradient
+ * is DROPPED (a lit block is the loudest thing in a dark room) and the card
+ * reads as a gold hairline on the surface. On the essential tier the brackets
+ * and gradient fall back to a plain border + flat fill.
  */
 export function GoldFrameCard({
   gradientColors,
   step = 'e3',
   corners = true,
   mode,
+  contentTone = 'auto',
   style,
   children,
   ...rest
 }: GoldFrameCardProps) {
   const appMode = useThemeMode();
   const t = useTokens(mode);
+  const parentCtx = useContext(ThemeContext);
   const { flat } = useDeviceTier();
   const rm = richMode(mode ?? appMode);
   const shadow = flat ? undefined : elevation[rm][step];
   const showCorners = corners && !flat;
+  // §2 "night mutes the featured fill": the gradient only renders in light.
+  const fillShown = !!gradientColors && rm === 'light';
+
+  const featuredCtx = useMemo(
+    () =>
+      parentCtx
+        ? { ...parentCtx, mode: 'dark' as const, tokens: onFeaturedTokens }
+        : {
+            mode: 'dark' as const,
+            pref: 'system' as const,
+            setPref: () => {},
+            tokens: onFeaturedTokens,
+          },
+    [parentCtx]
+  );
+
+  const content =
+    fillShown && contentTone === 'auto' ? (
+      <ThemeContext.Provider value={featuredCtx}>{children}</ThemeContext.Provider>
+    ) : (
+      children
+    );
 
   return (
     <View
       style={[
         styles.card,
-        { borderColor: t.ochre, backgroundColor: gradientColors ? 'transparent' : t.bgSurface },
+        { borderColor: t.ochre, backgroundColor: fillShown ? 'transparent' : t.bgSurface },
         shadow,
         style,
       ]}
       {...rest}
     >
-      {gradientColors ? (
+      {fillShown ? (
         <Gradient
           colors={gradientColors}
           flat={flat}
           style={[StyleSheet.absoluteFill, styles.fill]}
         />
       ) : null}
-      {children}
+      {content}
       {showCorners ? <Corners color={t.ochre} /> : null}
     </View>
   );

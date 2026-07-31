@@ -26,7 +26,8 @@
           "en",
           "ur",
           "ar"
-        ]
+        ],
+        "CADisableMinimumFrameDurationOnPhone": true
       }
     },
     "android": {
@@ -139,7 +140,29 @@
       "expo-status-bar",
       "expo-web-browser",
       "./plugins/withAppearanceHardening",
-      "expo-quick-actions"
+      "expo-quick-actions",
+      [
+        "expo-widgets",
+        {
+          "groupIdentifier": "group.com.khavion.deendawn",
+          "enablePushNotifications": false,
+          "enableAndroid": false,
+          "widgets": [
+            {
+              "name": "NextPrayer",
+              "displayName": "Next prayer",
+              "description": "Countdown to the next prayer, with today's times.",
+              "supportedFamilies": [
+                "systemSmall",
+                "systemMedium",
+                "accessoryRectangular",
+                "accessoryInline"
+              ],
+              "contentMarginsDisabled": false
+            }
+          ]
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

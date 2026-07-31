@@ -10,6 +10,25 @@ I keep building everything that doesn't need you.
 
 ## WHAT NEEDS YOU
 
+### 0 (new, 31 Jul). Two small notes from the design build — nothing to click yet
+
+**What this is:** I started building the new design (the one from the design
+tool). Two things you should know about, neither needs action today:
+
+1. **iPhone home-screen widget is coming.** The app now contains the Apple
+   widget machinery ("app extension" + a shared storage group). It builds and
+   tests fine on my side, but Apple's signing for it can only be fully proven
+   by a cloud build once your Apple Developer account exists (that's already
+   item 1 below). When that account lands, the very first cloud build will
+   validate the widget automatically — I'll check it and tell you the result.
+2. **Tasbih counting with the volume buttons works on Android only.** On
+   iPhone, Apple rejects apps that repurpose the volume buttons, so the
+   tasbih hint text will say "Tap anywhere to count" on iPhone and "…volume
+   keys work too" on Android. The design document wanted identical text on
+   both — this is the one deliberate deviation, made to protect the App
+   Store review. Fine to just know about; reply only if you disagree.
+
+
 ### 1. Publish DeenDawn so people can download it — the developer-account setup
 
 **Goal:** get DeenDawn onto the App Store (and Google Play) so anyone can download it, free, and
