@@ -8,10 +8,11 @@ Everything needed to fill out the Play Console listing. Store text lives in
 - **Short description (≤80):** `Prayer times, adhan, Quran, qibla — free forever, no ads, no tracking.` (72)
 - **Full description (≤4000):** see `fastlane/metadata/android/en-US/full_description.txt` (~1.9k)
 - **Category:** Lifestyle (or Books & Reference). **Tags:** prayer, quran, islam.
-- **Contact email:** apps@khavion.com
-- **Privacy policy URL (REQUIRED):** `https://khavion.com/apps/deendawn/privacy.html`
-- **Support/website URL:** `https://khavion.com/apps/deendawn/support.html`
-  (both hosted from the khavion.com Next.js site — see `docs/legal/README.md`)
+- **Contact email:** support@deendawn.org
+- **Privacy policy URL (REQUIRED):** `https://deendawn.org/privacy`
+- **Support/website URL:** `https://deendawn.org/support`
+  (hosted on Cloudflare Pages from this repo's `website/` — see `website/README.md`;
+  updated 2026-07-31 when deendawn.org replaced the khavion.com plan)
 
 ## Graphic assets (Play requirements)
 | Asset | Requirement | Status |

@@ -8,6 +8,23 @@ I keep building everything that doesn't need you.
 
 ---
 
+# 📌 FINAL DOMAIN FACTS (31 Jul 2026) — for the store-listing session
+
+Everything below is live, verified, and free of ongoing cost beyond the ~$24/yr GoDaddy renewal:
+
+- **Website:** https://deendawn.org (also https://www.deendawn.org)
+- **Privacy Policy URL (both stores):** https://deendawn.org/privacy
+- **Support URL (both stores):** https://deendawn.org/support
+- **Support email (both stores):** support@deendawn.org → forwards to Zohaib's Gmail
+  (Cloudflare Email Routing, free; reply from Gmail as normal)
+- **Audio streaming (production):** https://audio.deendawn.org (R2 bucket `deendawn-upload`)
+- Site source lives in `website/` in this repo; deploy with
+  `npx wrangler pages deploy website --project-name=deendawn`.
+- Domain registrar: GoDaddy (renews Jul 31, 2027). DNS + hosting + email: Zohaib's personal
+  Cloudflare account (free plan).
+
+---
+
 # ⭐ THE ONE SITTING — everything I need from you, in order (31 Jul 2026)
 
 Read only this section. It is everything that is humanly yours to do, batched so you can do it
@@ -99,32 +116,23 @@ send this first so people are ready):
 
 ---
 
-### ⑥ Buy deendawn.com — ~$10-12/year — approve, then buy
+### ⑥ ~~Buy deendawn.com~~ — DONE: you bought **deendawn.org** (31 Jul) — I'm wiring it up now
 
-**Why:** the Quran recitation audio currently streams from a temporary Cloudflare test address
-that Cloudflare rate-limits. That's fine for you and the 15 testers, but it is **not** fine for a
-public release. Binding the audio to a domain you own (`audio.deendawn.com`) fixes it permanently
-and costs nothing beyond the domain.
-
-**My recommendation: YES — buy `deendawn.com`.** Buy it at **Cloudflare** (dash.cloudflare.com →
-Domain Registration → Register Domain), because your audio bucket is already in that account and
-Cloudflare sells domains at cost with free privacy protection. ~$10-12/year.
-
-Then **tell me "deendawn.com is bought"** and I'll do the rest of the wiring (I'll hand you the
-2-3 clicks inside Cloudflare that need your account).
-
-*Note: the app's Privacy Policy and Support pages do NOT need this domain — they go on
-**khavion.com**, which you already own, for free. See item 2 further down.*
+You bought **deendawn.org** at GoDaddy. That covers everything this item wanted (the exact
+spelling — .org instead of .com — changes nothing). I'm doing all the wiring in this session:
+moving the domain's traffic control to your Cloudflare account, binding `audio.deendawn.org`
+to the audio storage, hosting the website on it, and setting up a free support@deendawn.org
+email that forwards to your Gmail. The only things I need from you are two quick logins in my
+browser pane and one verification-email click — I'll ask for each at the right moment.
 
 ---
 
-### ⑦ Two web pages onto khavion.com — free, 5 minutes
+### ⑦ ~~Two web pages onto khavion.com~~ — CHANGED: the pages now live on deendawn.org, and I host them (nothing for you to do)
 
-Both stores require a public Privacy Policy link and a Support link. I've already written them.
-Copy these three files from `docs/legal/` into your khavion.com repo at
-`public/apps/deendawn/`, then commit and push. Vercel deploys automatically.
-
-That's it. Full instructions are in `docs/legal/README.md`.
+Since you bought deendawn.org, the Privacy Policy and Support pages go on it directly — nicer
+URLs, and zero work for you (the old plan needed you to copy files into the khavion.com repo).
+The site source now lives in this project under `website/`. Final URLs will be listed in the
+"FINAL DOMAIN FACTS" block near the top of this file once everything is verified.
 
 ---
 
@@ -309,7 +317,7 @@ start collecting your 12 testers immediately. iOS doesn't wait for any of this.*
 
 ---
 
-### 2. The two required web pages — written, and they'll live on khavion.com
+### 2. ~~The two required web pages on khavion.com~~ — ✅ DONE differently 2026-07-31: they live on deendawn.org now, nothing for you to do (see FINAL DOMAIN FACTS at the top). Original text kept below for history.
 
 **What this is:** Both stores require a public **Privacy Policy** link and a **Support** link.
 **I've written both** (plus a small Deen Dawn app page), styled in the app's colours, with your
@@ -551,15 +559,14 @@ demo video, and export the final screenshot set.
 location. Ours is the easiest case (on-device only, never sent anywhere, manual city works
 without it) — I'll draft the answers when the form appears.
 
-## Turn on the audio bucket (Cloudflare R2) — DONE 2026-07-30 except step 7 (domain)
+## Turn on the audio bucket (Cloudflare R2) — ✅ FULLY DONE 2026-07-31 (step 7 closed)
 
-**Steps 1-6 are complete** (you did the card + bucket + `allow`; I did the
-token, upload of all 114 recitations, and verified streaming end-to-end).
-The test web address works for us and for the closed test. **Step 7 — a
-custom domain — is still the one thing needed before the PUBLIC release**,
-because the test address is rate-limited by Cloudflare. My recommendation
-stands: one domain (~$10/year), tell me which name you like and I prepare
-everything for you to click.
+**Steps 1-7 are all complete.** Step 7 (the custom domain) closed on 31 Jul:
+you bought **deendawn.org**, I connected `audio.deendawn.org` to the bucket
+in your Cloudflare account, verified it end-to-end (correct file bytes,
+seek/skip requests working), and switched BOTH build profiles (internal
+testing and production) to stream from it. The rate-limited test address is
+no longer used by any build. Nothing left here.
 
 ### (original instructions, kept for reference)
 

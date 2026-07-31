@@ -1,5 +1,30 @@
 # DECISIONS — non-obvious choices with rationale
 
+## 2026-07-31 — Domain CORRECTION: the real domain is deendawn.org (GoDaddy), and it hosts everything
+
+Zohaib actually bought **deendawn.org** — not deendawn.com as the two earlier entries planned —
+and bought it at **GoDaddy**, not Cloudflare (whois + `dig NS` confirm: GoDaddy registrar,
+`ns65/ns66.domaincontrol.com` nameservers). Both earlier domain entries are annotated as
+superseded. Consequences, all owner-directed this session:
+
+- **The domain moves into the personal Cloudflare account** (the one holding the `deendawn-upload`
+  R2 bucket) as a free zone, with a nameserver change at GoDaddy — required because R2 custom
+  domains only bind to zones in the same account. DNS propagation may take hours; work continues
+  around it.
+- **Audio custom domain is `audio.deendawn.org`**; production `EXPO_PUBLIC_AUDIO_BASE_URL`
+  switches to it once verified (preview follows after).
+- **The privacy/support pages move from the khavion.com plan to deendawn.org itself** (owner
+  directive, supersedes "legal pages stay on khavion.com"): a small static site — index, /privacy,
+  /support — deployed to Cloudflare Pages (free) and bound to deendawn.org + www. Store metadata
+  URLs updated accordingly.
+- **Site source lives in `website/` in THIS repo**, not the "separate repo later" from CLAUDE.md's
+  stack notes — a folder is simpler, versions the store-facing legal text next to the app, and a
+  separate marketing-site repo can still happen later without conflict. The site is three
+  dependency-free HTML files (no fonts, scripts, or third-party anything — same privacy posture as
+  the app). The website copies of the legal pages drop the 21-July "optional tip" wording, which
+  predated the 2026-07-29 zero-monetization decision; contact becomes support@deendawn.org
+  (Cloudflare Email Routing → Gmail, free).
+
 ## 2026-07-31 — Store-release preflight: three release blockers fixed, and how each was made load-bearing
 
 The three blockers from `docs/reviews/CODEBASE_REVIEW_2026-07-31.md` are closed. Each fix carries
@@ -43,7 +68,7 @@ Linux analysis sandbox — `node_modules` is installed for darwin/arm64, so `unr
 clean and every pure-JS suite passes there. Both gates must be re-run on the Mac before the
 release build; nothing in this change set touches sqlite or import resolution.
 
-## 2026-07-31 — Domain: buy `deendawn.com` for audio; legal pages stay on `khavion.com`
+## 2026-07-31 — Domain: buy `deendawn.com` for audio; legal pages stay on `khavion.com` — SUPERSEDED same day: he bought deendawn.ORG at GoDaddy, and the legal pages now live on it (see the correction entry at the top)
 
 Owner named `deendawn.com` in-session. Split deliberately: the **audio bucket** gets
 `audio.deendawn.com` (the Cloudflare `*.r2.dev` test address is rate-limited and unfit for a public
@@ -843,7 +868,7 @@ with audio ON; `production` deliberately stays unset until the custom
 domain exists (rule 2: our domain only). The account also holds an older
 `ummah-content-packs` bucket — untouched, flagged to Zohaib.
 
-## 2026-07-31 — Domain decided: deendawn.com (Zohaib)
+## 2026-07-31 — Domain decided: deendawn.com (Zohaib) — SUPERSEDED same day: actual purchase was deendawn.ORG at GoDaddy (see the correction entry at the top)
 
 Zohaib will register deendawn.com and handle the Google Play account and all
 human reviewers himself. Audio custom domain will be a subdomain (plan:

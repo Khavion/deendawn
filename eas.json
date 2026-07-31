@@ -17,7 +17,7 @@
     "preview": {
       "distribution": "internal",
       "env": {
-        "EXPO_PUBLIC_AUDIO_BASE_URL": "https://pub-6fc7a1cfcf304ac9864b4e2eb4a4012d.r2.dev"
+        "EXPO_PUBLIC_AUDIO_BASE_URL": "https://audio.deendawn.org"
       },
       "android": {
         "buildType": "apk"
@@ -25,6 +25,9 @@
     },
     "production": {
       "autoIncrement": true,
+      "env": {
+        "EXPO_PUBLIC_AUDIO_BASE_URL": "https://audio.deendawn.org"
+      },
       "android": {
         "buildType": "app-bundle"
       }

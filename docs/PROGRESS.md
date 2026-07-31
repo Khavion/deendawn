@@ -770,6 +770,8 @@ The Play 14-day tester clock is the long pole, so everything that starts it come
   human-only action in one ordered pass: Play account ($25, first, it starts the clock),
   15 testers with a copy-paste recruitment message, Apple ($99), Expo token, ASC API key,
   deendawn.com (~$10), and the two web pages onto khavion.com. ~45 min, ~$134.
+  *(Correction, later that day: Zohaib bought deendawn.ORG at GoDaddy, and the web pages
+  moved onto it — see DECISIONS 2026-07-31 "Domain CORRECTION".)*
 - **All three release-blocking defects from the codebase review are fixed, with tests that
   fail against the old code** (see DECISIONS 2026-07-31): silence-today now persists
   `notifications.silencedDate.v1` and the planner honours it (self-clearing at day rollover);
@@ -784,3 +786,26 @@ The Play 14-day tester clock is the long pole, so everything that starts it come
 - NEXT (no waiting on Zohaib): re-run lint + full jest on the Mac, production release builds
   both platforms, re-run the offline e2e suite on release, then finish the Play listing /
   data-safety / content-rating package and the Apple metadata + screenshot set.
+
+## 2026-07-31 (late) — Domain setup phase: deendawn.org goes productive
+
+Plan (owner directive, in-session):
+- Correct the record: the real domain is deendawn.ORG at GoDaddy (not .com) — fix docs.
+- Website (index//privacy//support) built in website/, deployed to Cloudflare Pages, bound
+  to deendawn.org + www; store metadata URLs switched to it.
+- audio.deendawn.org bound to the deendawn-upload R2 bucket; production audio URL switched.
+- support@deendawn.org via Cloudflare Email Routing → owner's Gmail.
+- Zone added to the personal Cloudflare account; GoDaddy nameservers switched (owner approved).
+
+Results (same session):
+- DONE: zone active on the personal Cloudflare account; GoDaddy nameservers switched
+  (owner approved in-session). deendawn.org / www / privacy / support all serve 200 over
+  HTTPS from Cloudflare Pages (project `deendawn`, source in website/).
+- DONE: audio.deendawn.org bound to deendawn-upload; verified HTTP 206 range requests and
+  content-length byte-match vs audio.lock (001.mp3 = 1,420,155). BOTH eas.json profiles
+  (preview + production) now bake https://audio.deendawn.org.
+- DONE: support@deendawn.org → Gmail (destination pre-verified — no click needed); MX/DKIM
+  records installed. Store metadata (privacy_url/support_url/PLAY_LISTING) → deendawn.org.
+- Gates: tsc clean; quran-golden checksum suite 12/12. No app code touched.
+- PENDING (cosmetic): live streaming spot-check in the iOS simulator once the Mac's DNS
+  cache picks up the new nameservers (global DNS already correct; local cache ≤1h).
