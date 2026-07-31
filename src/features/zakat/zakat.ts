@@ -35,14 +35,22 @@ export const EMPTY_INPUTS: ZakatInputs = {
   silverPricePerGram: 0,
 };
 
+/**
+ * Which metal's nisab applies (handoff §1: silver — the lower, safer
+ * threshold — is the default and is stated in the result card).
+ */
+export type NisabBasis = 'silver' | 'gold';
+
 export interface ZakatResult {
   totalAssets: number;
   zakatableWealth: number;
   /** null when that metal's price is not provided. */
   nisabGoldValue: number | null;
   nisabSilverValue: number | null;
-  /** The applicable threshold (lower of the available ones), or null. */
+  /** The threshold for the CHOSEN basis (fallback: the other one), or null. */
   nisabThreshold: number | null;
+  /** The basis the threshold actually came from (after fallback). */
+  basisUsed: NisabBasis | null;
   status: 'needPrices' | 'belowNisab' | 'due';
   zakatDue: number;
 }
@@ -50,7 +58,7 @@ export interface ZakatResult {
 const round2 = (n: number) => Math.round(n * 100) / 100;
 const clamp = (n: number) => (Number.isFinite(n) && n > 0 ? n : 0);
 
-export function computeZakat(raw: ZakatInputs): ZakatResult {
+export function computeZakat(raw: ZakatInputs, basis: NisabBasis = 'silver'): ZakatResult {
   const inp = Object.fromEntries(
     Object.entries(raw).map(([k, v]) => [k, clamp(v as number)])
   ) as unknown as ZakatInputs;
@@ -65,8 +73,11 @@ export function computeZakat(raw: ZakatInputs): ZakatResult {
   const nisabSilverValue =
     inp.silverPricePerGram > 0 ? round2(NISAB_SILVER_GRAMS * inp.silverPricePerGram) : null;
 
-  const thresholds = [nisabGoldValue, nisabSilverValue].filter((v): v is number => v !== null);
-  const nisabThreshold = thresholds.length > 0 ? Math.min(...thresholds) : null;
+  const preferred = basis === 'silver' ? nisabSilverValue : nisabGoldValue;
+  const fallback = basis === 'silver' ? nisabGoldValue : nisabSilverValue;
+  const nisabThreshold = preferred ?? fallback;
+  const basisUsed: NisabBasis | null =
+    preferred !== null ? basis : fallback !== null ? (basis === 'silver' ? 'gold' : 'silver') : null;
 
   if (nisabThreshold === null) {
     return {
@@ -75,6 +86,7 @@ export function computeZakat(raw: ZakatInputs): ZakatResult {
       nisabGoldValue,
       nisabSilverValue,
       nisabThreshold,
+      basisUsed,
       status: 'needPrices',
       zakatDue: 0,
     };
@@ -87,6 +99,7 @@ export function computeZakat(raw: ZakatInputs): ZakatResult {
     nisabGoldValue,
     nisabSilverValue,
     nisabThreshold,
+    basisUsed,
     status: meets ? 'due' : 'belowNisab',
     zakatDue: meets ? round2(zakatableWealth * ZAKAT_RATE) : 0,
   };

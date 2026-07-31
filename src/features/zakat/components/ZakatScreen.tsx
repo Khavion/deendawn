@@ -5,6 +5,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  Share,
   StyleSheet,
   TextInput,
   View,
@@ -16,24 +17,36 @@ import {
   NISAB_GOLD_GRAMS,
   NISAB_SILVER_GRAMS,
   ZakatInputs,
-  ZakatResult,
+  type NisabBasis,
 } from '../zakat';
-import { AppText, GoldFrameCard, SectionRule } from '@/src/components/ui';
+import { buildExportText, saveCalculation } from '../zakatStore';
 import {
-  elevation,
+  AppText,
+  Button,
+  Divider,
+  GoldFrameCard,
+  ListCard,
+  ListRow,
+  MoneyText,
+  PeriodEyebrow,
+  SectionRule,
+  SegmentedRow,
+  Sheet,
+  formatMoney,
+} from '@/src/components/ui';
+import { useSettings } from '@/src/features/settings/SettingsContext';
+import { localizeNumber } from '@/src/lib/i18n/format';
+import {
   featuredGradient,
   fonts,
   fontScaleCaps,
   fontSize,
   measure,
   radius,
-  richMode,
   spacing,
 } from '@/src/lib/theme/tokens';
-import { useThemeMode } from '@/src/lib/theme/ThemeProvider';
 import { useScrollInsets } from '@/src/lib/theme/useScrollInsets';
 import { useTokens } from '@/src/lib/theme/useTokens';
-import { useDeviceTier } from '@/src/lib/theme/useDeviceTier';
 
 type FieldKey = keyof ZakatInputs;
 
@@ -62,29 +75,61 @@ export function parseAmount(text: string): number {
  * The result card's interior — a child of the GoldFrameCard so its hooks
  * resolve the onFeatured palette (handoff gap 02); no hand-passed colors.
  */
-function ZakatResultBody({ result, fmt }: { result: ZakatResult; fmt: (n: number) => string }) {
-  const { t: tr } = useTranslation();
+function ZakatResultBody({
+  result,
+  inputs,
+  fmt,
+  onSave,
+}: {
+  result: ReturnType<typeof computeZakat>;
+  inputs: ZakatInputs;
+  fmt: (n: number) => string;
+  onSave: () => void;
+}) {
+  const { t: tr, i18n } = useTranslation();
   const t = useTokens();
+  const basisLabel = tr(result.basisUsed === 'gold' ? 'zakat.basisGold' : 'zakat.basisSilver');
+  const basisGrams = result.basisUsed === 'gold' ? NISAB_GOLD_GRAMS : NISAB_SILVER_GRAMS;
+  const basisPrice =
+    result.basisUsed === 'gold' ? inputs.goldPricePerGram : inputs.silverPricePerGram;
   return (
     <>
+      <PeriodEyebrow label={tr('zakat.dueEyebrow')} labelColor={t.textSecondary} />
       {result.status === 'due' ? (
         <>
-          <AppText variant="bodyStrong" color={t.textSecondary}>
-            {tr('zakat.due')}
-          </AppText>
-          <AppText style={styles.resultAmount} color={t.textPrimary}>
+          <AppText style={styles.resultAmount} color={t.textPrimary} testID="zakat-amount">
             {fmt(result.zakatDue)}
+          </AppText>
+          <Divider style={styles.resultRule} />
+          <AppText variant="caption" color={t.textSecondary} style={styles.resultCentered}>
+            {tr('zakat.workingLine', {
+              wealth: fmt(result.zakatableWealth),
+              basis: basisLabel,
+              nisab: result.nisabThreshold !== null ? fmt(result.nisabThreshold) : '—',
+              grams: localizeNumber(basisGrams, i18n.language),
+              price: fmt(basisPrice),
+            })}
           </AppText>
         </>
       ) : (
-        <AppText variant="bodyStrong" style={styles.resultCentered}>
-          {tr(result.status === 'needPrices' ? 'zakat.needPrices' : 'zakat.belowNisab')}
-        </AppText>
+        <>
+          <AppText variant="bodyStrong" style={styles.resultCentered}>
+            {tr(result.status === 'needPrices' ? 'zakat.needPrices' : 'zakat.belowNisab')}
+          </AppText>
+          {result.nisabThreshold !== null && (
+            <AppText variant="caption" color={t.textSecondary}>
+              {tr('zakat.nisabLine', { amount: fmt(result.nisabThreshold) })}
+            </AppText>
+          )}
+        </>
       )}
-      {result.nisabThreshold !== null && (
-        <AppText variant="caption" color={t.textSecondary}>
-          {tr('zakat.nisabLine', { amount: fmt(result.nisabThreshold) })}
-        </AppText>
+      {result.status === 'due' && (
+        <>
+          <Button title={tr('zakat.saveCalc')} testID="zakat-save" onPress={onSave} />
+          <AppText variant="caption" color={t.textSecondary}>
+            {tr('zakat.keptOnDevice')}
+          </AppText>
+        </>
       )}
     </>
   );
@@ -93,18 +138,14 @@ function ZakatResultBody({ result, fmt }: { result: ZakatResult; fmt: (n: number
 export function ZakatScreen() {
   const t = useTokens();
   const androidInsets = useScrollInsets({ top: false, bottom: 'nav', baseBottom: spacing.l });
-  const mode = useThemeMode();
-  const rm = richMode(mode);
-  const { flat } = useDeviceTier();
   const { t: tr, i18n } = useTranslation();
-  const elevatedCard = [
-    styles.groupCard,
-    { backgroundColor: t.bgSurface, borderColor: t.border },
-    flat ? undefined : elevation[rm].e2,
-  ];
+  const { store } = useSettings();
   const [raw, setRaw] = useState<Record<FieldKey, string>>(
     Object.fromEntries(Object.keys(EMPTY_INPUTS).map((k) => [k, ''])) as Record<FieldKey, string>
   );
+  const [basis, setBasis] = useState<NisabBasis>('silver');
+  const [editing, setEditing] = useState<FieldKey | null>(null);
+  const [aboutOpen, setAboutOpen] = useState(false);
 
   const inputs = useMemo(
     () =>
@@ -113,28 +154,63 @@ export function ZakatScreen() {
       ) as unknown as ZakatInputs,
     [raw]
   );
-  const result = useMemo(() => computeZakat(inputs), [inputs]);
+  const result = useMemo(() => computeZakat(inputs, basis), [inputs, basis]);
 
-  const fmt = (n: number) =>
-    new Intl.NumberFormat(i18n.language, { maximumFractionDigits: 2 }).format(n);
+  const fmt = (n: number) => formatMoney(n, i18n.language);
 
-  const field = (key: FieldKey) => (
-    <View style={styles.fieldRow} key={key}>
-      <AppText style={[styles.fieldLabel, { color: t.textSecondary }]}>
-        {tr(`zakat.fields.${key}`)}
-      </AppText>
-      <TextInput
-        testID={`zakat-${key}`}
-        accessibilityLabel={tr(`zakat.fields.${key}`)}
-        value={raw[key]}
-        onChangeText={(text) => setRaw((prev) => ({ ...prev, [key]: text }))}
-        keyboardType="decimal-pad"
-        placeholder="0"
-        placeholderTextColor={t.icon}
-        maxFontSizeMultiplier={fontScaleCaps.content}
-        style={[styles.fieldInput, { color: t.textPrimary, borderColor: t.border }]}
-      />
-    </View>
+  const onSave = () => {
+    const saved = saveCalculation(store, { basis, inputs, result });
+    const text = buildExportText(
+      saved,
+      {
+        title: tr('zakat.exportTitle'),
+        wealth: tr('zakat.whatYouHold'),
+        nisab: tr('zakat.aboutNisab'),
+        due: tr('zakat.due'),
+        ratesNote: tr('zakat.ratesByHand'),
+      },
+      fmt
+    );
+    void Share.share({ message: text });
+  };
+
+  const metalRowValue = (gramsKey: 'goldGrams' | 'silverGrams') => {
+    const priceKey = gramsKey === 'goldGrams' ? 'goldPricePerGram' : 'silverPricePerGram';
+    const grams = inputs[gramsKey];
+    const price = inputs[priceKey];
+    if (grams > 0 && price > 0) {
+      return tr('zakat.goldWorking', {
+        grams: localizeNumber(grams, i18n.language),
+        price: fmt(price),
+      });
+    }
+    return localizeNumber(grams, i18n.language);
+  };
+
+  const assetRow = (key: FieldKey) => (
+    <ListRow
+      key={key}
+      label={tr(`zakat.fields.${key}`)}
+      onPress={() => setEditing(key)}
+      haptic="select"
+      testID={`zakat-${key}`}
+      trailing={
+        key === 'goldGrams' || key === 'silverGrams' ? (
+          <AppText variant="bodyStrong" color={t.textSecondary}>
+            {metalRowValue(key)}
+          </AppText>
+        ) : key === 'liabilities' ? (
+          <MoneyText
+            amount={inputs[key]}
+            signed={inputs[key] > 0}
+            variant="body"
+            color={t.textSecondary}
+          />
+        ) : (
+          <MoneyText amount={inputs[key]} variant="bodyStrong" />
+        )
+      }
+    />
   );
 
   return (
@@ -148,25 +224,52 @@ export function ZakatScreen() {
         contentContainerStyle={[styles.scroll, androidInsets]}
         keyboardShouldPersistTaps="handled"
       >
+        <View style={styles.headerRow}>
+          <AppText variant="subtitle">{tr('zakat.title')}</AppText>
+          <AppText
+            variant="link"
+            onPress={() => setAboutOpen(true)}
+            accessibilityRole="button"
+            testID="zakat-about"
+          >
+            {tr('zakat.aboutNisab')}
+          </AppText>
+        </View>
+        <AppText variant="caption" color={t.textSecondary} style={styles.privacyLine}>
+          {tr('zakat.privacyLine')}
+        </AppText>
+
+        <SectionRule label={tr('zakat.whatYouHold')} style={styles.sectionRule} />
+        <ListCard>{ASSET_FIELDS.map(assetRow)}</ListCard>
+
+        <SectionRule label={tr('zakat.liabilitiesSection')} style={styles.sectionRule} />
+        <ListCard>{assetRow('liabilities')}</ListCard>
+
+        <SectionRule label={tr('zakat.prices')} style={styles.sectionRule} />
+        <AppText variant="caption" style={[styles.note, { color: t.textSecondary }]}>
+          {tr('zakat.pricesNote', { gold: NISAB_GOLD_GRAMS, silver: NISAB_SILVER_GRAMS })} ·{' '}
+          {tr('zakat.ratesByHand')}
+        </AppText>
+        <ListCard>{PRICE_FIELDS.map(assetRow)}</ListCard>
+
+        <SegmentedRow<NisabBasis>
+          options={[
+            { key: 'silver', label: tr('zakat.nisabSilverSeg'), testID: 'nisab-silver' },
+            { key: 'gold', label: tr('zakat.nisabGoldSeg'), testID: 'nisab-gold' },
+          ]}
+          value={basis}
+          onChange={setBasis}
+          accessibilityLabel={tr('zakat.aboutNisab')}
+          style={styles.segmented}
+        />
+
         <GoldFrameCard
           gradientColors={featuredGradient.light}
           style={styles.resultCard}
           testID="zakat-result"
         >
-          <ZakatResultBody result={result} fmt={fmt} />
+          <ZakatResultBody result={result} inputs={inputs} fmt={fmt} onSave={onSave} />
         </GoldFrameCard>
-
-        <SectionRule label={tr('zakat.assets')} style={styles.sectionRule} />
-        <View style={elevatedCard}>{ASSET_FIELDS.map(field)}</View>
-
-        <SectionRule label={tr('zakat.liabilitiesSection')} style={styles.sectionRule} />
-        <View style={elevatedCard}>{field('liabilities')}</View>
-
-        <SectionRule label={tr('zakat.prices')} style={styles.sectionRule} />
-        <AppText variant="caption" style={[styles.note, { color: t.textSecondary }]}>
-          {tr('zakat.pricesNote', { gold: NISAB_GOLD_GRAMS, silver: NISAB_SILVER_GRAMS })}
-        </AppText>
-        <View style={elevatedCard}>{PRICE_FIELDS.map(field)}</View>
 
         <View
           style={[styles.disclaimer, { backgroundColor: t.ochreSoft, borderStartColor: t.ochre }]}
@@ -176,6 +279,51 @@ export function ZakatScreen() {
           </AppText>
         </View>
       </ScrollView>
+
+      <Sheet
+        visible={editing !== null}
+        onClose={() => setEditing(null)}
+        accessibilityLabel={tr('zakat.editTitle')}
+        testID="zakat-edit-sheet"
+      >
+        <AppText variant="subtitle" style={styles.sheetTitle}>
+          {editing ? tr(`zakat.fields.${editing}`) : tr('zakat.editTitle')}
+        </AppText>
+        {editing && (
+          <TextInput
+            testID="zakat-edit-input"
+            autoFocus
+            value={raw[editing]}
+            onChangeText={(text) => setRaw((prev) => ({ ...prev, [editing]: text }))}
+            keyboardType="decimal-pad"
+            placeholder="0"
+            placeholderTextColor={t.icon}
+            accessibilityLabel={tr(`zakat.fields.${editing}`)}
+            maxFontSizeMultiplier={fontScaleCaps.content}
+            style={[styles.sheetInput, { color: t.textPrimary, borderColor: t.border }]}
+          />
+        )}
+        <Button
+          title={tr('zakat.apply')}
+          testID="zakat-edit-done"
+          onPress={() => setEditing(null)}
+        />
+      </Sheet>
+
+      <Sheet
+        visible={aboutOpen}
+        onClose={() => setAboutOpen(false)}
+        accessibilityLabel={tr('zakat.aboutNisab')}
+        testID="zakat-about-sheet"
+      >
+        <AppText variant="subtitle" style={styles.sheetTitle}>
+          {tr('zakat.aboutNisab')}
+        </AppText>
+        {/* SCHOLAR-REVIEW: nisab explainer (docs/SCHOLAR_REVIEW.md) */}
+        <AppText variant="reading" color={t.textSecondary} style={styles.aboutBody}>
+          {tr('zakat.aboutNisabBody')}
+        </AppText>
+      </Sheet>
     </KeyboardAvoidingView>
   );
 }
@@ -189,44 +337,40 @@ const styles = StyleSheet.create({
     width: '100%',
     alignSelf: 'center',
   },
-  resultCard: {
-    borderRadius: radius.card,
-    padding: spacing.xl,
-    alignItems: 'center',
-    gap: spacing.xs,
-    marginBottom: spacing.l,
-  },
-  resultAmount: { fontFamily: fonts.serifSemiBold, fontSize: fontSize.display, lineHeight: 44 },
-  resultCentered: { textAlign: 'center' },
-  sectionRule: { marginTop: spacing.l, marginBottom: spacing.s },
-  note: { marginBottom: spacing.s },
-  groupCard: {
-    borderRadius: radius.card,
-    borderWidth: StyleSheet.hairlineWidth,
-    paddingHorizontal: spacing.l,
-    paddingVertical: spacing.xs,
-  },
-  fieldRow: {
+  headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     gap: spacing.m,
-    paddingVertical: spacing.xs,
   },
-  fieldLabel: { flex: 1 },
-  fieldInput: {
-    borderWidth: 1,
-    borderRadius: radius.control,
-    paddingHorizontal: spacing.m,
-    paddingVertical: spacing.s,
-    minWidth: 120,
-    textAlign: 'right',
-    fontSize: fontSize.body,
+  privacyLine: { marginTop: spacing.xs },
+  sectionRule: { marginTop: spacing.l, marginBottom: spacing.s },
+  note: { marginBottom: spacing.s },
+  segmented: { marginTop: spacing.l },
+  resultCard: {
+    borderRadius: radius.card,
+    padding: spacing.xl,
+    alignItems: 'center',
+    gap: spacing.m,
+    marginTop: spacing.l,
   },
+  resultAmount: { fontFamily: fonts.serifSemiBold, fontSize: fontSize.display, lineHeight: 44 },
+  resultRule: { width: '100%' },
+  resultCentered: { textAlign: 'center' },
   disclaimer: {
-    marginTop: spacing.xl,
     borderRadius: radius.control,
     borderStartWidth: 3,
     padding: spacing.m,
+    marginTop: spacing.l,
   },
+  sheetTitle: { marginBottom: spacing.m },
+  sheetInput: {
+    borderWidth: StyleSheet.hairlineWidth,
+    borderRadius: radius.control,
+    paddingHorizontal: spacing.l,
+    paddingVertical: spacing.m,
+    marginBottom: spacing.m,
+    fontSize: 16,
+  },
+  aboutBody: { paddingBottom: spacing.l },
 });

@@ -2,6 +2,9 @@ import { fireEvent, render } from '@testing-library/react-native';
 import React from 'react';
 
 import { parseAmount, ZakatScreen } from '../ZakatScreen';
+import { loadSavedCalculations } from '../../zakatStore';
+import { createMemoryKVStore } from '../../../../lib/kvStore';
+import { SettingsProvider } from '../../../settings/SettingsContext';
 import i18n from '@/src/lib/i18n';
 
 jest.mock('react-native-safe-area-context', () => ({
@@ -9,40 +12,91 @@ jest.mock('react-native-safe-area-context', () => ({
 }));
 jest.mock('expo-router', () => ({ Stack: { Screen: () => null } }));
 
+// Arabic-Indic "1234" built from char codes (guard hook: no Arabic literals).
+const ARABIC_1234 = String.fromCharCode(0x0661, 0x0662, 0x0663, 0x0664);
+
+const renderZakat = async () => {
+  const store = createMemoryKVStore();
+  const view = await render(
+    <SettingsProvider store={store}>
+      <ZakatScreen />
+    </SettingsProvider>
+  );
+  return { store, view };
+};
+
+/** Rows open the numeric Sheet (handoff screen 08); type there, then Done. */
+const enter = async (
+  view: Awaited<ReturnType<typeof renderZakat>>['view'],
+  field: string,
+  value: string
+) => {
+  await fireEvent.press(view.getByTestId(`zakat-${field}`));
+  await fireEvent.changeText(view.getByTestId('zakat-edit-input'), value);
+  await fireEvent.press(view.getByTestId('zakat-edit-done'));
+};
+
 describe('parseAmount', () => {
   test('western, arabic-indic digits, and both decimal separators', () => {
     expect(parseAmount('1234.56')).toBe(1234.56);
     expect(parseAmount('1234,56')).toBe(1234.56);
-    // Arabic-Indic 1234 (escapes only per guard policy)
-    expect(parseAmount('\u0661\u0662\u0663\u0664')).toBe(1234);
+    expect(parseAmount(ARABIC_1234)).toBe(1234);
     expect(parseAmount('')).toBe(0);
     expect(parseAmount('abc')).toBe(0);
     expect(parseAmount('-50')).toBe(0);
   });
 });
 
-describe('ZakatScreen', () => {
-  test('walks from need-prices to a live 2.5% result', async () => {
-    const view = await render(<ZakatScreen />);
+describe('ZakatScreen (handoff screen 08)', () => {
+  test('walks from need-prices to a live 2.5% result via the edit Sheet', async () => {
+    const { view } = await renderZakat();
     expect(view.getByText(/Enter at least one metal price/)).toBeOnTheScreen();
 
-    await fireEvent.changeText(view.getByTestId('zakat-cash'), '10000');
-    await fireEvent.changeText(view.getByTestId('zakat-silverPricePerGram'), '1');
-    expect(view.getByText(/Zakat due/)).toBeOnTheScreen();
+    await enter(view, 'cash', '10000');
+    await enter(view, 'silverPricePerGram', '1');
+    // Result card (the screen's ONE gold object, last) shows the working.
+    expect(view.getByTestId('zakat-amount')).toBeOnTheScreen();
     expect(view.getByText('250')).toBeOnTheScreen();
-    expect(view.getByText(/Nisab threshold: 595/)).toBeOnTheScreen();
+    expect(view.getByText(/silver nisab of 595/)).toBeOnTheScreen();
 
     // Liabilities pull below nisab.
-    await fireEvent.changeText(view.getByTestId('zakat-liabilities'), '9600');
+    await enter(view, 'liabilities', '9600');
     expect(view.getByText(/below the nisab/)).toBeOnTheScreen();
+  });
+
+  test('nisab basis toggles between silver (default) and gold', async () => {
+    const { view } = await renderZakat();
+    await enter(view, 'cash', '100000');
+    await enter(view, 'silverPricePerGram', '1');
+    await enter(view, 'goldPricePerGram', '100');
+    expect(view.getByText(/silver nisab of 595/)).toBeOnTheScreen();
+    await fireEvent.press(view.getByTestId('nisab-gold'));
+    expect(view.getByText(/gold nisab of 8,500/)).toBeOnTheScreen();
+  });
+
+  test('save persists a timestamped calculation and shares the export text', async () => {
+    const { Share } = jest.requireActual('react-native');
+    const shareSpy = jest.spyOn(Share, 'share').mockResolvedValue({ action: 'sharedAction' });
+    const { store, view } = await renderZakat();
+    await enter(view, 'cash', '10000');
+    await enter(view, 'silverPricePerGram', '1');
+    await fireEvent.press(view.getByTestId('zakat-save'));
+    const saved = loadSavedCalculations(store);
+    expect(saved).toHaveLength(1);
+    expect(saved[0].basis).toBe('silver');
+    expect(saved[0].result.zakatDue).toBe(250);
+    expect(saved[0].savedAtIso).toMatch(/^\d{4}-\d{2}-\d{2}T/);
+    const message = (shareSpy.mock.calls[0][0] as { message: string }).message;
+    expect(message).toContain('250');
+    shareSpy.mockRestore();
   });
 
   test('renders long values in Arabic locale without crashing (3-locale layout check)', async () => {
     await i18n.changeLanguage('ar');
     try {
-      const view = await render(<ZakatScreen />);
-      await fireEvent.changeText(view.getByTestId('zakat-cash'), '123456789.99');
-      await fireEvent.changeText(view.getByTestId('zakat-goldPricePerGram'), '350');
+      const { view } = await renderZakat();
+      await enter(view, 'cash', '123456789.99');
+      await enter(view, 'goldPricePerGram', '350');
       expect(view.getByTestId('zakat-result')).toBeOnTheScreen();
     } finally {
       await i18n.changeLanguage('en');
@@ -50,7 +104,7 @@ describe('ZakatScreen', () => {
   });
 
   test('disclaimer is always visible', async () => {
-    const view = await render(<ZakatScreen />);
+    const { view } = await renderZakat();
     expect(view.getByText(/not a religious ruling/)).toBeOnTheScreen();
   });
 });

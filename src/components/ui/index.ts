@@ -3,6 +3,7 @@ export { AppText, type AppTextProps, type AppTextVariant } from './AppText';
 export { AyahBlock, type AyahBlockProps, type AyahRun } from './AyahBlock';
 export { BrandMark } from './BrandMark';
 export { Button, type ButtonProps } from './Button';
+export { CalendarGrid, type DayCellData } from './CalendarGrid';
 export { Card } from './Card';
 export { CompassDial, type CompassDialProps } from './CompassDial';
 export { Countdown, type CountdownProps } from './Countdown';

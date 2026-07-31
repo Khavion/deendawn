@@ -254,7 +254,9 @@
     "disclaimer": "Calculated (Umm al-Qura) — may differ from local moonsighting. You can adjust by ±1 day in Settings.",
     "today": "Today",
     "prevMonth": "Previous month",
-    "nextMonth": "Next month"
+    "nextMonth": "Next month",
+    "jumpToday": "Today",
+    "thisMonth": "This month"
   },
   "tasbih": {
     "title": "Tasbih",
@@ -312,7 +314,24 @@
     "belowNisab": "Your zakatable wealth is below the nisab threshold — no zakat is due.",
     "needPrices": "Enter at least one metal price to work out the nisab threshold.",
     "nisabLine": "Nisab threshold: {{amount}}",
-    "disclaimer": "This is a calculation aid, not a religious ruling. Situations differ — please confirm with a knowledgeable scholar."
+    "disclaimer": "This is a calculation aid, not a religious ruling. Situations differ — please confirm with a knowledgeable scholar.",
+    "aboutNisab": "About nisab",
+    "aboutNisabBody": "Nisab is the minimum wealth at which zakat becomes due. It is set by the value of either 595 g of silver or 85 g of gold — this calculator uses the silver figure by default, the lower and safer threshold. Please confirm your situation with a knowledgeable scholar.",
+    "privacyLine": "Calculated on your phone. Saved only if you say so.",
+    "whatYouHold": "What you hold",
+    "ratesByHand": "rates entered by hand",
+    "dueEyebrow": "Zakat due · 2.5%",
+    "goldWorking": "{{grams}} g × {{price}}",
+    "workingLine": "on {{wealth}} zakatable wealth — above the {{basis}} nisab of {{nisab}} ({{grams}} g × {{price}})",
+    "basisSilver": "silver",
+    "basisGold": "gold",
+    "nisabSilverSeg": "Silver nisab",
+    "nisabGoldSeg": "Gold nisab",
+    "saveCalc": "Save calculation",
+    "keptOnDevice": "kept on this device · export as text any time",
+    "exportTitle": "Zakat calculation",
+    "editTitle": "Enter amount",
+    "apply": "Done"
   },
   "ask": {
     "title": "Ask",

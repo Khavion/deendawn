@@ -40,7 +40,8 @@
     "ListenBar": "src/components/ui/ListenBar.tsx",
     "CompassDial": "src/components/ui/CompassDial.tsx",
     "WeekBars": "src/components/ui/WeekBars.tsx",
-    "BrandMark": "src/components/ui/BrandMark.tsx"
+    "BrandMark": "src/components/ui/BrandMark.tsx",
+    "CalendarGrid": "src/components/ui/CalendarGrid.tsx"
   },
   "guidelinesGlob": [
     "docs/DESIGN.md"

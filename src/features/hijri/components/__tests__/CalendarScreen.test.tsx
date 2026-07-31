@@ -1,4 +1,4 @@
-import { fireEvent, render } from '@testing-library/react-native';
+import { fireEvent, render, within } from '@testing-library/react-native';
 import React from 'react';
 
 import { CalendarScreen } from '../CalendarScreen';
@@ -24,31 +24,39 @@ const renderCalendar = async (initial: Record<string, string> = {}) => {
   );
 };
 
-describe('CalendarScreen', () => {
-  test('shows dual dates, hijri header, today line, and the disclaimer', async () => {
+describe('CalendarScreen (hijri-primary, handoff screen 08)', () => {
+  test('pages by hijri month: title, Gregorian range caption, observances', async () => {
     const view = await renderCalendar();
-    expect(view.getByText(/February 2026/)).toBeOnTheScreen();
-    expect(view.getAllByText(/Ramadan 1447/).length).toBeGreaterThanOrEqual(1);
-    expect(view.getByText(/Today: 3 Ramadan 1447/)).toBeOnTheScreen();
+    // Hijri month is the primary title now.
+    expect(view.getByTestId('hijri-month-title').props.children.join('')).toContain(
+      'Ramadan 1447'
+    );
+    // Gregorian range rides the caption (Ramadan 1447 spans Feb–Mar 2026).
+    expect(view.getByText(/February/)).toBeOnTheScreen();
     expect(view.getByText(/may differ from local moonsighting/)).toBeOnTheScreen();
-    // Feb 18 2026 = 1 Ramadan -> key-date dot on that cell.
-    expect(view.getByTestId('key-18')).toBeOnTheScreen();
+    // 1 Ramadan carries a filled observance on hijri cell 1.
+    expect(view.getByTestId('cell-1')).toBeOnTheScreen();
     expect(view.getByText('Ramadan begins')).toBeOnTheScreen();
+    // Today (3 Ramadan) exists as a cell.
+    expect(view.getByTestId('cell-3')).toBeOnTheScreen();
   });
 
-  test('navigates months and spans hijri months in the header', async () => {
+  test('navigates hijri months with labeled arrows and the Today jump', async () => {
     const view = await renderCalendar();
-    // Month arrows are ‹ › glyphs — screen readers need explicit labels.
     expect(view.getByTestId('prev-month').props.accessibilityLabel).toBe('Previous month');
     expect(view.getByTestId('next-month').props.accessibilityLabel).toBe('Next month');
     await fireEvent.press(view.getByTestId('next-month'));
-    expect(view.getByText(/March 2026/)).toBeOnTheScreen();
-    // March 2026 spans Ramadan -> Shawwal 1447 (Eid al-Fitr expected).
-    expect(view.getByText(/Shawwal 1447/)).toBeOnTheScreen();
+    expect(view.getByTestId('hijri-month-title').props.children.join('')).toContain(
+      'Shawwal 1447'
+    );
     expect(view.getByText('Eid al-Fitr')).toBeOnTheScreen();
+    await fireEvent.press(view.getByTestId('calendar-today'));
+    expect(view.getByTestId('hijri-month-title').props.children.join('')).toContain(
+      'Ramadan 1447'
+    );
   });
 
-  test('hijri offset shifts the calendar (+1 makes Feb 17 the first of Ramadan)', async () => {
+  test('hijri offset shifts the mapping (+1: 1 Ramadan falls on Feb 17)', async () => {
     const view = await renderCalendar({
       'settings.v1': JSON.stringify({
         location: null,
@@ -59,7 +67,17 @@ describe('CalendarScreen', () => {
         suhoorReminderMinutes: null,
       }),
     });
-    expect(view.getByText(/Today: 4 Ramadan 1447/)).toBeOnTheScreen();
-    expect(view.getByTestId('key-17')).toBeOnTheScreen();
+    // Cell 1 of Ramadan shows Gregorian day 17 as its secondary numeral.
+    expect(within(view.getByTestId('cell-1')).getByText('17')).toBeOnTheScreen();
+    expect(view.getByTestId('hijri-month-title').props.children.join('')).toContain(
+      'Ramadan 1447'
+    );
+  });
+
+  test('accessibility: one label per cell with hijri day, weekday', async () => {
+    const view = await renderCalendar();
+    const label = view.getByTestId('cell-3').props.accessibilityLabel as string;
+    expect(label).toContain('3 Ramadan');
+    expect(label).toContain('today');
   });
 });

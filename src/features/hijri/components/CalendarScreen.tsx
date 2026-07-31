@@ -3,96 +3,160 @@ import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
-import { keyDatesFor, toHijri } from '../hijri';
-import { AppPressable, AppText } from '@/src/components/ui';
+import { daysInHijriMonth, fromHijri, keyDatesFor, toHijri, type HijriOffset } from '../hijri';
+import {
+  AppPressable,
+  AppText,
+  CalendarGrid,
+  Card,
+  ListRow,
+  Marker,
+  SectionRule,
+  type DayCellData,
+} from '@/src/components/ui';
 import { digitLocale, localizeNumber } from '@/src/lib/i18n/format';
 import { useSettings } from '@/src/features/settings/SettingsContext';
-import { elevation, measure, radius, richMode, spacing } from '@/src/lib/theme/tokens';
-import { useThemeMode } from '@/src/lib/theme/ThemeProvider';
+import { measure, radius, spacing } from '@/src/lib/theme/tokens';
 import { useScrollInsets } from '@/src/lib/theme/useScrollInsets';
 import { useTokens } from '@/src/lib/theme/useTokens';
-import { useDeviceTier } from '@/src/lib/theme/useDeviceTier';
 
-interface Cell {
-  gregorianDay: number;
-  hijriDay: number;
-  hijriMonth: number;
-  isToday: boolean;
-  isKeyDate: boolean;
-  keyLabel?: string;
-}
+const FRIDAY = 5; // Date.getDay()
 
-function buildMonth(year: number, month: number, hijriOffset: -1 | 0 | 1, todayKey: string) {
-  const first = new Date(year, month, 1, 12);
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const leading = first.getDay(); // 0 = Sunday
-  const cells: (Cell | null)[] = Array.from({ length: leading }, () => null);
-  const hijriMonthsSeen = new Map<number, { month: number; year: number }>();
-
-  for (let d = 1; d <= daysInMonth; d++) {
-    const date = new Date(year, month, d, 12);
-    const h = toHijri(date, hijriOffset);
-    hijriMonthsSeen.set(h.month * 10000 + h.year, { month: h.month, year: h.year });
-    const key = keyDatesFor(h.month).find((k) => k.day === h.day);
+/**
+ * Hijri calendar (handoff §6 screen 08): pages by HIJRI month ("Muharram
+ * 1448" with the Gregorian range as the caption), dual-numeral DayCells
+ * (hijri primary), Friday's weekday letter in ochre, observances as filled
+ * diamonds (white days 13–15 outlined), and the month's observances listed
+ * under "THIS MONTH". Labeled calculated — may differ from moonsighting
+ * (existing disclaimer, SCHOLAR_REVIEW).
+ */
+function buildHijriMonth(
+  hYear: number,
+  hMonth: number,
+  offset: HijriOffset,
+  todayKey: string,
+  lang: string,
+  weekdayNames: Intl.DateTimeFormat,
+  monthName: string
+) {
+  const days = daysInHijriMonth(hYear, hMonth);
+  const first = fromHijri(hYear, hMonth, 1, offset);
+  const keyDates = keyDatesFor(hMonth);
+  const cells: (DayCellData | null)[] = Array.from({ length: first.getDay() }, () => null);
+  let firstGreg = first;
+  let lastGreg = first;
+  for (let d = 1; d <= days; d++) {
+    const date = new Date(first.getFullYear(), first.getMonth(), first.getDate() + (d - 1), 12);
+    if (d === days) lastGreg = date;
+    if (d === 1) firstGreg = date;
+    const key = keyDates.find((k) => k.day === d);
+    const isToday = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}` === todayKey;
     cells.push({
-      gregorianDay: d,
-      hijriDay: h.day,
-      hijriMonth: h.month,
-      isToday: `${year}-${month}-${d}` === todayKey,
-      isKeyDate: !!key,
-      keyLabel: key?.labelKey,
+      key: `${hYear}-${hMonth}-${d}`,
+      primary: localizeNumber(d, lang),
+      secondary: localizeNumber(date.getDate(), lang),
+      isToday,
+      observance: key ? (key.labelKey === 'hijriDates.whiteDay' ? 'outline' : 'filled') : undefined,
+      accessibilityLabel: [
+        `${localizeNumber(d, lang)} ${monthName}`,
+        weekdayNames.format(date),
+        isToday ? 'today' : null,
+      ]
+        .filter(Boolean)
+        .join(', '),
+      testID: `cell-${d}`,
     });
   }
   while (cells.length % 7 !== 0) cells.push(null);
-  return { cells, hijriMonths: [...hijriMonthsSeen.values()] };
+  return { cells, firstGreg, lastGreg, keyDates };
 }
 
 export function CalendarScreen({ initialDate }: { initialDate?: Date }) {
   const t = useTokens();
   const androidInsets = useScrollInsets({ top: false, bottom: 'nav', baseBottom: spacing.l });
-  const mode = useThemeMode();
-  const rm = richMode(mode);
-  const { flat } = useDeviceTier();
   const { t: tr, i18n } = useTranslation();
   const { settings } = useSettings();
   const today = useMemo(() => initialDate ?? new Date(), [initialDate]);
-  const [view, setView] = useState({ year: today.getFullYear(), month: today.getMonth() });
+  const todayHijri = toHijri(today, settings.hijriOffset);
+  const [view, setView] = useState({ hYear: todayHijri.year, hMonth: todayHijri.month });
 
   const todayKey = `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
-  const { cells, hijriMonths } = useMemo(
-    () => buildMonth(view.year, view.month, settings.hijriOffset, todayKey),
-    [view, settings.hijriOffset, todayKey]
+  const monthName = tr(`hijriMonths.${view.hMonth}`);
+  const weekdayLong = useMemo(
+    () => new Intl.DateTimeFormat(digitLocale(i18n.language), { weekday: 'long' }),
+    [i18n.language]
+  );
+  const { cells, firstGreg, lastGreg, keyDates } = useMemo(
+    () =>
+      buildHijriMonth(
+        view.hYear,
+        view.hMonth,
+        settings.hijriOffset,
+        todayKey,
+        i18n.language,
+        weekdayLong,
+        monthName
+      ),
+    [view, settings.hijriOffset, todayKey, i18n.language, weekdayLong, monthName]
   );
 
-  const gregorianTitle = new Date(view.year, view.month, 1).toLocaleDateString(
-    digitLocale(i18n.language),
-    { month: 'long', year: 'numeric' }
+  const weekdays = useMemo(() => {
+    const fmt = new Intl.DateTimeFormat(digitLocale(i18n.language), { weekday: 'narrow' });
+    // Week starts Sunday to match Date.getDay() padding above.
+    return Array.from({ length: 7 }, (_, i) => {
+      const d = new Date(2026, 7, 2 + i); // a known Sunday
+      return { label: fmt.format(d), emphasized: d.getDay() === FRIDAY };
+    });
+  }, [i18n.language]);
+
+  const rangeFmt = useMemo(
+    () => new Intl.DateTimeFormat(digitLocale(i18n.language), { month: 'long', day: 'numeric' }),
+    [i18n.language]
   );
-  const hijriTitle = hijriMonths
-    .map((m) => `${tr(`hijriMonths.${m.month}`)} ${localizeNumber(m.year, i18n.language)}`)
-    .join(' – ');
-  const todayHijri = toHijri(today, settings.hijriOffset);
+  const yearFmt = useMemo(
+    () => new Intl.DateTimeFormat(digitLocale(i18n.language), { year: 'numeric' }),
+    [i18n.language]
+  );
+  const gregorianRange = `${rangeFmt.format(firstGreg)} – ${rangeFmt.format(lastGreg)} ${yearFmt.format(lastGreg)}`;
 
   const move = (delta: number) => {
-    setView(({ year, month }) => {
-      const d = new Date(year, month + delta, 1);
-      return { year: d.getFullYear(), month: d.getMonth() };
+    setView(({ hYear, hMonth }) => {
+      let m = hMonth + delta;
+      let y = hYear;
+      if (m < 1) {
+        m = 12;
+        y -= 1;
+      } else if (m > 12) {
+        m = 1;
+        y += 1;
+      }
+      return { hYear: y, hMonth: m };
     });
   };
 
-  // Legend of key dates present in the viewed month
-  const legend = [
-    ...new Map(
-      cells
-        .filter((c): c is Cell => !!c && c.isKeyDate && c.keyLabel !== 'hijriDates.whiteDay')
-        .map((c) => [c.keyLabel!, c])
-    ).keys(),
-  ];
+  const legend = [...new Map(keyDates.filter((k) => k.labelKey !== 'hijriDates.whiteDay').map((k) => [k.labelKey, k]))].map(
+    ([, k]) => k
+  );
 
   return (
     <View style={[styles.container, { backgroundColor: t.bgCanvas }]}>
       <Stack.Screen options={{ title: tr('calendar.title') }} />
-      <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={[styles.scroll, androidInsets]}>
+      <ScrollView
+        contentInsetAdjustmentBehavior="automatic"
+        contentContainerStyle={[styles.scroll, androidInsets]}
+      >
+        <View style={styles.topRow}>
+          <AppText variant="subtitle">{tr('calendar.title')}</AppText>
+          <AppPressable
+            accessibilityRole="button"
+            testID="calendar-today"
+            hitSlop={8}
+            onPress={() => setView({ hYear: todayHijri.year, hMonth: todayHijri.month })}
+          >
+            <AppText variant="link">{tr('calendar.jumpToday')}</AppText>
+          </AppPressable>
+        </View>
+
         <View style={styles.header}>
           <AppPressable
             accessibilityRole="button"
@@ -101,17 +165,18 @@ export function CalendarScreen({ initialDate }: { initialDate?: Date }) {
             haptic="select"
             onPress={() => move(-1)}
             hitSlop={12}
+            style={styles.navTarget}
           >
             <AppText variant="title" style={{ color: t.accent }}>
               ‹
             </AppText>
           </AppPressable>
           <View style={styles.headerTitles}>
-            <AppText variant="subtitle" style={styles.centerText}>
-              {gregorianTitle}
+            <AppText variant="title" style={styles.centerText} testID="hijri-month-title">
+              {monthName} {localizeNumber(view.hYear, i18n.language)}
             </AppText>
             <AppText variant="caption" style={[styles.centerText, { color: t.textSecondary }]}>
-              {hijriTitle}
+              {gregorianRange}
             </AppText>
           </View>
           <AppPressable
@@ -121,6 +186,7 @@ export function CalendarScreen({ initialDate }: { initialDate?: Date }) {
             haptic="select"
             onPress={() => move(1)}
             hitSlop={12}
+            style={styles.navTarget}
           >
             <AppText variant="title" style={{ color: t.accent }}>
               ›
@@ -128,68 +194,28 @@ export function CalendarScreen({ initialDate }: { initialDate?: Date }) {
           </AppPressable>
         </View>
 
-        <AppText variant="caption" style={[styles.todayLine, { color: t.textSecondary }]}>
-          {tr('calendar.today')}: {localizeNumber(todayHijri.day, i18n.language)}{' '}
-          {tr(`hijriMonths.${todayHijri.month}`)} {localizeNumber(todayHijri.year, i18n.language)}
-        </AppText>
-
-        <View
-          style={[
-            styles.gridCard,
-            { backgroundColor: t.bgSurface, borderColor: t.border },
-            flat ? undefined : elevation[rm].e2,
-          ]}
-        >
-          <View style={styles.grid} testID="calendar-grid">
-            {cells.map((cell, i) => (
-              <View
-                key={i}
-                style={[
-                  styles.cell,
-                  cell?.isToday && { backgroundColor: t.accentSoft, borderRadius: radius.control },
-                ]}
-                testID={cell ? `cell-${cell.gregorianDay}` : undefined}
-              >
-                {cell && (
-                  <>
-                    <AppText
-                      variant={cell.isToday ? 'bodyStrong' : 'body'}
-                      style={cell.isToday ? { color: t.textOnAccentSoft } : undefined}
-                    >
-                      {localizeNumber(cell.gregorianDay, i18n.language)}
-                    </AppText>
-                    <AppText variant="caption" style={{ color: t.textSecondary }}>
-                      {localizeNumber(cell.hijriDay, i18n.language)}
-                    </AppText>
-                    {cell.isKeyDate && (
-                      <View
-                        style={[styles.dot, { backgroundColor: t.ochre }]}
-                        testID={`key-${cell.gregorianDay}`}
-                      />
-                    )}
-                  </>
-                )}
-              </View>
-            ))}
-          </View>
-        </View>
+        <Card style={styles.gridCard}>
+          <CalendarGrid cells={cells} weekdays={weekdays} testID="calendar-grid" />
+        </Card>
 
         {legend.length > 0 && (
-          <View style={styles.legend}>
-            {legend.map((key) => (
-              <View key={key} style={styles.legendRow}>
-                <View style={[styles.dot, { backgroundColor: t.ochre }]} />
-                <AppText variant="caption" style={{ color: t.textSecondary }}>
-                  {tr(key)}
-                </AppText>
-              </View>
-            ))}
-          </View>
+          <>
+            <SectionRule label={tr('calendar.thisMonth')} style={styles.sectionRule} />
+            <Card style={styles.legendCard}>
+              {legend.map((k) => (
+                <ListRow
+                  key={k.labelKey}
+                  label={tr(k.labelKey)}
+                  value={`${localizeNumber(k.day, i18n.language)} ${monthName}`}
+                  leading={<Marker size={7} tone="ochre" />}
+                  testID={`observance-${k.day}`}
+                />
+              ))}
+            </Card>
+          </>
         )}
 
-        <View
-          style={[styles.disclaimer, { backgroundColor: t.bgElevated, borderStartColor: t.ochre }]}
-        >
+        <View style={[styles.disclaimer, { borderStartColor: t.ochre }]}>
           <AppText variant="caption" style={{ color: t.textSecondary }}>
             {tr('calendar.disclaimer')}
           </AppText>
@@ -202,40 +228,35 @@ export function CalendarScreen({ initialDate }: { initialDate?: Date }) {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   scroll: {
-    padding: spacing.xl,
-    paddingBottom: spacing.l,
-    maxWidth: measure.content,
-    width: '100%',
-    alignSelf: 'center',
-  },
-  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  headerTitles: { flex: 1, gap: 2 },
-  centerText: { textAlign: 'center' },
-  todayLine: { textAlign: 'center', marginTop: spacing.s, marginBottom: spacing.l },
-  gridCard: {
-    borderRadius: radius.card,
-    borderWidth: StyleSheet.hairlineWidth,
-    overflow: 'hidden',
-    padding: spacing.xs,
-    // Cells stay near-square on wide screens instead of stretching to bars.
+    padding: spacing.l,
     maxWidth: measure.grid,
     width: '100%',
     alignSelf: 'center',
   },
-  grid: { flexDirection: 'row', flexWrap: 'wrap' },
-  cell: {
-    width: `${100 / 7}%`,
+  topRow: {
+    flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: spacing.s,
-    minHeight: 56,
+    justifyContent: 'space-between',
+    marginBottom: spacing.s,
   },
-  dot: { width: 6, height: 6, borderRadius: 3, marginTop: 2 },
-  legend: { gap: spacing.xs, marginTop: spacing.l },
-  legendRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.s },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: spacing.m,
+    marginBottom: spacing.m,
+  },
+  navTarget: { minWidth: 44, minHeight: 44, alignItems: 'center', justifyContent: 'center' },
+  headerTitles: { flex: 1, gap: 2 },
+  centerText: { textAlign: 'center' },
+  gridCard: { paddingVertical: spacing.m, paddingHorizontal: spacing.s },
+  sectionRule: { marginTop: spacing.l, marginBottom: spacing.s },
+  legendCard: { padding: 0 },
   disclaimer: {
-    marginTop: spacing.xl,
-    borderRadius: radius.control,
     borderStartWidth: 3,
-    padding: spacing.m,
+    borderRadius: radius.control,
+    paddingStart: spacing.m,
+    paddingVertical: spacing.s,
+    marginTop: spacing.l,
   },
 });
