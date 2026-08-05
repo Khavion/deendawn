@@ -1058,3 +1058,42 @@ verse-share cards, #12's digit roll + pull-to-refresh arc. Rationale: every
 deferred item is additive animation on shipped geometry; rushing them
 untested at the end of this session risks the 60fps floor and Reduce Motion
 guarantees the constitution requires.
+
+## 2026-08-05 — Apple enrollment: personal Apple ID, and the iPhone app path (not the web)
+
+Zohaib's daily driver is an iPhone 17 Pro Max and an Android device (Samsung
+Galaxy A16, 4GB RAM) lands today, so the store-registration phase opened. Two
+choices settled in-session, both superseding the older ③ plan in BLOCKERS.md.
+
+ACCOUNT: enroll with Zohaib's **personal Apple ID**, not a fresh
+apps@khavion.com one. Apple requires the Apple Account's first/last name to be
+the enrollee's legal name and publishes that name as the App Store seller name
+regardless, so a separate account bought no privacy or branding separation —
+only cost. Against that: a brand-new Apple ID with no purchase history draws
+extra scrutiny during identity verification, and his personal account already
+carries 2FA, legal name, a trusted device, and a payment method. He also
+re-confirmed the individual/zero-revenue posture in the same message, which
+keeps the EU **non-trader** declaration truthful and keeps his address off
+both public listings.
+
+PATH: enroll through the **Apple Developer app on the iPhone**, not the web.
+Verified live against developer.apple.com/programs/enroll and the enrolling-in-
+the-app help page (5 Aug 2026): individual enrollment needs a government photo
+ID capture plus Touch ID / Face ID / passcode on a *single device used for the
+entire process*, so the web path routes back to a device anyway. Side effect,
+and a desirable one: app enrollment bills the $99 as an auto-renewable annual
+subscription rather than a one-time charge, which removes the risk of a silent
+lapse pulling DeenDawn from the store. Same Apple ID on device and in the
+Developer app, so there is no purchase-account mismatch.
+
+BOUNDARY RESTATED: enrollment itself stays human-only — Apple ID password, 2FA,
+the ID photo, and the $99 Subscribe tap are Zohaib's, by the constitution's
+"no automated browser logins to Apple/Google" rule and by Apple's own design.
+Claude's role here is reading the live pages and narrating the screens.
+
+APP RECORD still waits on approval (1–3 days). Values already pinned for that
+step: bundle ID `com.khavion.deendawn`, name "Deen Dawn", privacy URL
+https://deendawn.org/privacy, support URL https://deendawn.org/support,
+metadata drafted in fastlane/metadata/. eas.json still carries the
+`REPLACE_WITH_APP_STORE_CONNECT_APP_ID` placeholder, filled once the record
+exists.

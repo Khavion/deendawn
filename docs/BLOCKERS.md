@@ -77,16 +77,48 @@ send this first so people are ready):
 
 ---
 
-### ③ Apple Developer Program — $99/year
+### ③ Apple Developer Program — $99/year — DO IT ON YOUR IPHONE, NOT THE WEBSITE
 
-1. Go to **developer.apple.com/programs/enroll** and sign in with the Apple ID for
-   **apps@khavion.com**.
-2. Choose **Individual / Sole Proprietor** (NOT Organization). No D-U-N-S number is needed.
-3. Enter your name **exactly as it appears on your government ID**. ⚠️ **This becomes the public
-   seller name on your App Store page, permanently.** No nicknames, no "Khavion".
-4. Give a real street address (no PO boxes) and pay the **$99**.
-5. Approval is usually same-day to a couple of days. You'll get an email.
-6. **Tell me: "Apple approved."**
+**Updated 5 Aug 2026.** Two things changed from the original plan, both decided with Zohaib in
+session: (a) use **your personal Apple ID** — the one already signed in on your iPhone — not a
+new apps@khavion.com one; (b) enroll in the **Apple Developer app on your iPhone**, not in a web
+browser. Apple's own enrollment page now leads with the app. For an individual, Apple requires a
+photo of your government ID plus a Face ID / passcode check on one device used start-to-finish,
+so the website just sends you back to your phone anyway.
+
+Why your personal Apple ID: it already has two-factor turned on, your legal name, and a payment
+method, and long-standing Apple accounts pass the identity check quickly — brand-new ones often
+get held for extra review. A separate account would buy nothing, because your public seller name
+is your legal name either way.
+
+**Have ready:** driver's license or passport, your real street address (no PO boxes), a working
+payment method on your Apple account.
+
+**Step 0 (30 seconds, do first):** iPhone **Settings → tap your name → Personal Information →
+Name.** It must read your real legal name exactly as printed on your ID. A mismatch here is the
+number-one cause of enrollment being held up.
+
+1. **App Store** → search **"Apple Developer"** → install Apple's free app (grey hammer-and-wrench).
+2. Open it → **Account** tab at the bottom.
+3. **Sign in** with your personal Apple ID.
+4. If the **Apple Developer Agreement** appears, tap **Agree**.
+5. Tap **Enroll Now** → read the benefits page → **Continue**.
+6. Enter **first name, last name, phone number**. Legal name only — no nicknames, no "Khavion".
+   ⚠️ **This becomes the public seller name on your App Store page, permanently.**
+7. **Identity check:** photograph your driver's license or passport when asked. Apple reads your
+   name and address off it, checks it's genuine, and does not keep the image.
+8. Review what you submitted → **Continue**.
+9. **Entity type → choose `Individual`.** ⚠️ The one screen where a wrong tap is expensive —
+   Organization demands a D-U-N-S number and weeks of waiting.
+10. Read the **Apple Developer Program License Agreement** → **Agree**.
+11. Review the yearly membership → **you tap Subscribe.** That's the $99, billed to the payment
+    method already on your Apple account.
+12. Approval usually arrives by email in **1–3 days**. Nothing can speed it up.
+13. **Tell me: "Apple approved."**
+
+*Note on the $99:* enrolling in the app makes it an auto-renewing yearly subscription. That is
+what you want — if the membership ever lapses, DeenDawn vanishes from the App Store until you
+re-pay. Cancellable any time in Settings up to a day before renewal.
 
 ---
 
